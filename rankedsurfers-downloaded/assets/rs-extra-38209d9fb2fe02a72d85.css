@@ -1,0 +1,47 @@
+.rank-progress--top .rank-progress-track>span{background:linear-gradient(90deg,#d99a06,#ffd84a)}
+.rank-progress--top .rank-progress-heading strong{color:#b07800}
+html[data-theme=dark] .rank-progress--top .rank-progress-heading strong{color:#ffd45c}
+.account-security{padding:20px 24px 22px}
+.account-security h2{font-size:18px;color:#237ba9;margin:0 0 4px}
+.account-security>p{font-size:13px;color:#66889e;margin:0 0 16px}
+.account-security form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 14px;align-items:end}
+.account-security label{margin-bottom:14px;color:#3d6c8c}
+.account-security input{display:block;width:100%;margin-top:6px;padding:10px 12px;border:2px solid #cfe3ef;border-radius:10px;background:#fff;color:#14324a;font-size:14px}
+.account-security input:focus{outline:none;border-color:#25a0d7;box-shadow:0 0 0 3px #25a0d733}
+.account-security .actions{grid-column:1/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.account-security .ok{color:#16794c;font-weight:800;font-size:13px}
+.account-security .err{color:#b3261e;font-weight:800;font-size:13px}
+.account-security .hint{font-size:11px;color:#7b96a9;font-weight:700}
+html[data-theme=dark] .account-security h2{color:#8ecef4}
+html[data-theme=dark] .account-security>p,html[data-theme=dark] .account-security .hint{color:#a4bdd0}
+html[data-theme=dark] .account-security label{color:#bcd6e9}
+html[data-theme=dark] .account-security .ok{color:#5be3a0}
+html[data-theme=dark] .account-security .err{color:#ff9b9b}
+.lobby-bar.rs-crowned{position:relative;overflow:hidden;background:linear-gradient(100deg,#fff8dc,#ffe69a 45%,#fff3c4)!important;border-color:#fff3c4!important;box-shadow:0 0 0 2px #f2c94c66 inset}
+.lobby-bar.rs-crowned::before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,#ffffffaa 50%,transparent 65%);transform:translateX(-100%);animation:rs-bar 4s ease-in-out infinite;pointer-events:none}
+@keyframes rs-bar{0%,30%{transform:translateX(-100%)}70%,100%{transform:translateX(100%)}}
+.lobby-bar.rs-crowned>*{position:relative}
+.rs-crowned .player-rank b,.rs-crowned .mode-label b{color:#8a5a00!important}
+.rs-crowned .player-rank span,.rs-crowned .mode-label span{color:#a37a20!important}
+.rs-top{display:flex;align-items:center;gap:10px;text-align:right;justify-self:end;margin-left:auto}
+.rs-top .big{font-size:30px;font-weight:1000;color:#b07800;line-height:1}
+.rs-top .lead{font-size:10px;font-weight:800;color:#8a6a1e;margin-top:3px;white-space:nowrap}
+html.rs-lock,html.rs-lock body{overflow:hidden!important}
+.rs-full{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;overflow:hidden;text-align:center;background:radial-gradient(circle at 50% 42%,#fff6cf,#ffd76a 45%,#e8960f)}
+.rs-full .rs-rays{position:absolute;inset:-50%;background:repeating-conic-gradient(from 0deg,#ffffff40 0 8deg,transparent 8deg 16deg);animation:rs-spin 18s linear infinite;pointer-events:none}
+@keyframes rs-spin{to{transform:rotate(360deg)}}
+.rs-full .inner{position:relative;padding:20px}
+.rs-full .rs-moment-badge{width:230px;height:208px;margin:0 auto 14px;display:block}
+.rs-full h1{margin:6px 0 8px;font-size:clamp(30px,6vw,52px);font-weight:1000;color:#5a3300;line-height:1.05}
+.rs-full p{margin:0 0 22px;font-weight:800;color:#7a4f00;font-size:16px}
+.rs-full .rs-continue{font-size:18px;padding:14px 34px}
+.rs-full .rs-conf{position:absolute;width:10px;height:14px;top:-14px;border-radius:2px;animation:rs-fall-full 2.8s linear infinite;pointer-events:none}
+@keyframes rs-fall-full{to{transform:translateY(110vh) rotate(720deg)}}
+
+.rank-grid .rs-split-row{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rank-grid .rs-split-row article.grand-champion-card{grid-column:auto}
+html:not([data-theme=dark]) .rank-grid article.grand-champion-card.rs-plain{background:linear-gradient(#fff,#e1f0fa);border-color:#fff;box-shadow:0 3px #b6d1e2}
+html[data-theme=dark] .rank-grid article.grand-champion-card.rs-plain{background:#172a3c;border-color:#30485e;box-shadow:0 3px #0b1826}
+.rank-grid .rs-gm h2{color:#94650a}
+html[data-theme=dark] .rank-grid .rs-gm h2{color:#ffd45c}
+@media (max-width:750px){.rank-grid .rs-split-row{gap:10px}}

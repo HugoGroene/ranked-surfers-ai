@@ -1,0 +1,8 @@
+html[data-theme=dark]{--review-line:#30485e}
+html[data-theme=dark] :is(.movement-review details,.replay-unavailable){background:#1b3146;border:1px solid #2c4560;color:#dceaf6}
+html[data-theme=dark] :is(.movement-graph,.review-stats>div,.lane-track){background:#12253a;border-color:#2c4560;color:#dceaf6}
+html[data-theme=dark] :is(.replay-evidence summary,.movement-review summary,.review-stats strong,.review-stats b){color:#dceaf6}
+html[data-theme=dark] :is(.review-stats span,.review-stats small,.movement-review .tiny,.evidence-readout){color:#a4bdd0}
+html[data-theme=dark] .lane-track>div{border-right-color:#3b5870}
+html[data-theme=dark] .movement-graph text{fill:#a4bdd0}
+html[data-theme=dark] .review-signal{background:#3a3020;color:#ffe2a8}

@@ -1,0 +1,9 @@
+{
+  "roi": [
+    0.31,
+    0.8,
+    0.4,
+    0.16
+  ],
+  "comment": "ROI should TIGHTLY frame the static FIND RANKED MATCH text; no animated background."
+}

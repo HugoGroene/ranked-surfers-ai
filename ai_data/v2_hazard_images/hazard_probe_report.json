@@ -1,0 +1,49 @@
+{
+  "classes": [
+    "coin",
+    "train",
+    "barrier",
+    "empty"
+  ],
+  "training_samples": 422,
+  "holdout_samples": 88,
+  "training_episodes": 7,
+  "heldout_episodes": 2,
+  "holdout_accuracy": 0.9886363636363636,
+  "macro_f1": 0.990566037735849,
+  "majority_baseline": 0.3409090909090909,
+  "per_class_f1": {
+    "coin": 0.9811320754716981,
+    "train": 1.0,
+    "barrier": 1.0,
+    "empty": 0.9811320754716981
+  },
+  "confusion_matrix": [
+    [
+      26,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      30,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      5,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      26
+    ]
+  ],
+  "best_epoch": 24,
+  "warning": "Diagnostic on MANUALLY CROPPED still images, not proof of autonomous obstacle recognition or safe maneuvers."
+}

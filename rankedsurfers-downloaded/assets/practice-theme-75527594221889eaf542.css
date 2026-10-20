@@ -1,0 +1,4 @@
+html[data-theme=dark] .play-actions .practice-preview-split .practice-preview-dropdown button{background:transparent;color:#daebf8}
+html[data-theme=dark] .play-actions .practice-preview-split .practice-preview-dropdown button:hover{background:#233c52}
+html[data-theme=dark] .play-actions .practice-preview-split .practice-preview-dropdown button[aria-selected=true]{background:#304d65;color:#a6ddff}
+html[data-theme=dark] .play-actions .practice-preview-split .practice-preview-dropdown button:focus-visible{outline:2px solid #8ecef4;outline-offset:-2px}

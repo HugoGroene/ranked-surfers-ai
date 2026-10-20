@@ -1,0 +1,5612 @@
+[
+  {
+    "image": "ep0002_frame00013.png",
+    "episode": "0002",
+    "class": "empty",
+    "box": [
+      123,
+      59,
+      133,
+      98
+    ]
+  },
+  {
+    "image": "ep0002_frame00013.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      24,
+      65,
+      91,
+      133
+    ]
+  },
+  {
+    "image": "ep0002_frame00013.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      96,
+      44,
+      106,
+      103
+    ]
+  },
+  {
+    "image": "ep0002_frame00013.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      108,
+      41,
+      117,
+      69
+    ]
+  },
+  {
+    "image": "ep0002_frame00013.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      150,
+      54,
+      162,
+      108
+    ]
+  },
+  {
+    "image": "ep0002_frame00013.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      127,
+      46,
+      136,
+      54
+    ]
+  },
+  {
+    "image": "ep0002_frame00013.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      139,
+      55,
+      144,
+      60
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      150,
+      73,
+      158,
+      82
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      144,
+      64,
+      150,
+      70
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      134,
+      60,
+      138,
+      66
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      124,
+      53,
+      130,
+      63
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      125,
+      48,
+      130,
+      52
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      135,
+      49,
+      141,
+      55
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      131,
+      49,
+      136,
+      57
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      1,
+      61,
+      99,
+      129
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      96,
+      41,
+      111,
+      86
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "empty",
+    "box": [
+      120,
+      67,
+      131,
+      114
+    ]
+  },
+  {
+    "image": "ep0002_frame00018.png",
+    "episode": "0002",
+    "class": "empty",
+    "box": [
+      150,
+      91,
+      187,
+      141
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      174,
+      107,
+      195,
+      131
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      143,
+      89,
+      156,
+      106
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      125,
+      52,
+      130,
+      57
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      133,
+      54,
+      136,
+      58
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      141,
+      56,
+      147,
+      65
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      135,
+      63,
+      142,
+      70
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "coin",
+    "box": [
+      125,
+      66,
+      131,
+      70
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      0,
+      51,
+      78,
+      143
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      80,
+      55,
+      92,
+      133
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "train",
+    "box": [
+      125,
+      39,
+      131,
+      47
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "empty",
+    "box": [
+      108,
+      49,
+      117,
+      77
+    ]
+  },
+  {
+    "image": "ep0002_frame00023.png",
+    "episode": "0002",
+    "class": "empty",
+    "box": [
+      149,
+      71,
+      158,
+      86
+    ]
+  },
+  {
+    "image": "ep0003_frame00012.png",
+    "episode": "0003",
+    "class": "empty",
+    "box": [
+      123,
+      66,
+      134,
+      96
+    ]
+  },
+  {
+    "image": "ep0003_frame00012.png",
+    "episode": "0003",
+    "class": "empty",
+    "box": [
+      134,
+      50,
+      150,
+      78
+    ]
+  },
+  {
+    "image": "ep0003_frame00012.png",
+    "episode": "0003",
+    "class": "train",
+    "box": [
+      125,
+      38,
+      131,
+      45
+    ]
+  },
+  {
+    "image": "ep0003_frame00012.png",
+    "episode": "0003",
+    "class": "train",
+    "box": [
+      155,
+      52,
+      254,
+      141
+    ]
+  },
+  {
+    "image": "ep0003_frame00012.png",
+    "episode": "0003",
+    "class": "train",
+    "box": [
+      3,
+      49,
+      92,
+      142
+    ]
+  },
+  {
+    "image": "ep0003_frame00012.png",
+    "episode": "0003",
+    "class": "train",
+    "box": [
+      94,
+      39,
+      116,
+      93
+    ]
+  },
+  {
+    "image": "ep0003_frame00012.png",
+    "episode": "0003",
+    "class": "coin",
+    "box": [
+      126,
+      49,
+      130,
+      63
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "empty",
+    "box": [
+      126,
+      56,
+      134,
+      99
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "empty",
+    "box": [
+      124,
+      57,
+      128,
+      98
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      0,
+      64,
+      88,
+      138
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      187,
+      79,
+      248,
+      143
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      148,
+      53,
+      170,
+      112
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      136,
+      41,
+      148,
+      63
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      85,
+      52,
+      105,
+      92
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      106,
+      44,
+      117,
+      65
+    ]
+  },
+  {
+    "image": "ep0004_frame00011.png",
+    "episode": "0004",
+    "class": "coin",
+    "box": [
+      124,
+      47,
+      130,
+      52
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "coin",
+    "box": [
+      126,
+      53,
+      130,
+      59
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "coin",
+    "box": [
+      126,
+      46,
+      130,
+      50
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "coin",
+    "box": [
+      120,
+      53,
+      123,
+      57
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "coin",
+    "box": [
+      116,
+      51,
+      119,
+      56
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      117,
+      40,
+      124,
+      48
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      126,
+      38,
+      130,
+      43
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      0,
+      50,
+      66,
+      143
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      67,
+      50,
+      97,
+      143
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      97,
+      43,
+      110,
+      95
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      157,
+      54,
+      255,
+      143
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "train",
+    "box": [
+      137,
+      42,
+      158,
+      82
+    ]
+  },
+  {
+    "image": "ep0004_frame00017.png",
+    "episode": "0004",
+    "class": "empty",
+    "box": [
+      120,
+      63,
+      136,
+      111
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "empty",
+    "box": [
+      119,
+      74,
+      136,
+      99
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "coin",
+    "box": [
+      123,
+      64,
+      133,
+      71
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "coin",
+    "box": [
+      124,
+      56,
+      132,
+      63
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "train",
+    "box": [
+      0,
+      50,
+      88,
+      143
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "train",
+    "box": [
+      150,
+      48,
+      253,
+      140
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "train",
+    "box": [
+      137,
+      39,
+      151,
+      67
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "train",
+    "box": [
+      88,
+      44,
+      107,
+      121
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "train",
+    "box": [
+      107,
+      41,
+      115,
+      71
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "coin",
+    "box": [
+      125,
+      46,
+      130,
+      51
+    ]
+  },
+  {
+    "image": "ep0005_frame00012.png",
+    "episode": "0005",
+    "class": "train",
+    "box": [
+      126,
+      38,
+      131,
+      45
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "empty",
+    "box": [
+      123,
+      53,
+      135,
+      108
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "train",
+    "box": [
+      4,
+      45,
+      79,
+      141
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "train",
+    "box": [
+      81,
+      45,
+      98,
+      126
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "train",
+    "box": [
+      149,
+      46,
+      175,
+      101
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "train",
+    "box": [
+      139,
+      39,
+      148,
+      68
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "train",
+    "box": [
+      133,
+      40,
+      139,
+      50
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "coin",
+    "box": [
+      126,
+      43,
+      130,
+      48
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "coin",
+    "box": [
+      122,
+      45,
+      125,
+      48
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "train",
+    "box": [
+      127,
+      37,
+      130,
+      41
+    ]
+  },
+  {
+    "image": "ep0006_frame00013.png",
+    "episode": "0006",
+    "class": "train",
+    "box": [
+      98,
+      44,
+      115,
+      76
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      124,
+      69,
+      132,
+      78
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      125,
+      61,
+      132,
+      67
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      133,
+      52,
+      136,
+      56
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      126,
+      48,
+      129,
+      51
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      126,
+      56,
+      131,
+      59
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      136,
+      49,
+      139,
+      53
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      131,
+      37,
+      138,
+      47
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      119,
+      37,
+      124,
+      45
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      1,
+      63,
+      87,
+      138
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      85,
+      47,
+      101,
+      116
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      102,
+      43,
+      111,
+      85
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      111,
+      43,
+      115,
+      69
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      139,
+      62,
+      162,
+      112
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      157,
+      102,
+      190,
+      142
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      120,
+      82,
+      135,
+      101
+    ]
+  },
+  {
+    "image": "ep00011_frame00025.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      119,
+      46,
+      123,
+      54
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      123,
+      76,
+      131,
+      85
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      121,
+      101,
+      134,
+      112
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      143,
+      59,
+      147,
+      65
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      138,
+      53,
+      144,
+      60
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      121,
+      43,
+      135,
+      63
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      86,
+      44,
+      110,
+      99
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      3,
+      53,
+      78,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      153,
+      52,
+      246,
+      138
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      121,
+      65,
+      134,
+      73
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      115,
+      87,
+      140,
+      99
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      115,
+      51,
+      119,
+      62
+    ]
+  },
+  {
+    "image": "ep00008_frame00089.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      141,
+      68,
+      147,
+      75
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      199,
+      23,
+      221,
+      45
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      176,
+      50,
+      255,
+      129
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      140,
+      38,
+      164,
+      62
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      130,
+      38,
+      141,
+      52
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      132,
+      33,
+      137,
+      37
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      114,
+      54,
+      130,
+      96
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      133,
+      67,
+      174,
+      141
+    ]
+  },
+  {
+    "image": "ep00012_frame00113.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      122,
+      43,
+      130,
+      50
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      131,
+      97,
+      148,
+      112
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      130,
+      74,
+      140,
+      86
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      128,
+      64,
+      138,
+      71
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      120,
+      55,
+      127,
+      61
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      129,
+      57,
+      135,
+      63
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      127,
+      38,
+      134,
+      51
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      1,
+      49,
+      111,
+      142
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "barrier",
+    "box": [
+      110,
+      37,
+      118,
+      46
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      119,
+      36,
+      124,
+      51
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      114,
+      52,
+      120,
+      60
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      123,
+      112,
+      156,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00154.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      125,
+      87,
+      147,
+      95
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      157,
+      43,
+      238,
+      115
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      110,
+      39,
+      125,
+      61
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "barrier",
+    "box": [
+      128,
+      38,
+      140,
+      52
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      103,
+      66,
+      125,
+      103
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      130,
+      71,
+      155,
+      101
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      139,
+      105,
+      160,
+      142
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      175,
+      118,
+      228,
+      142
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      133,
+      63,
+      142,
+      70
+    ]
+  },
+  {
+    "image": "ep00011_frame00057.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      132,
+      58,
+      140,
+      62
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      125,
+      68,
+      146,
+      102
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      125,
+      44,
+      140,
+      64
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      92,
+      39,
+      117,
+      48
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      94,
+      48,
+      109,
+      61
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      52,
+      111,
+      66,
+      130
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      50,
+      90,
+      61,
+      104
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      75,
+      71,
+      83,
+      81
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      95,
+      66,
+      102,
+      75
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      109,
+      62,
+      115,
+      69
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      117,
+      50,
+      122,
+      56
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      85,
+      76,
+      119,
+      136
+    ]
+  },
+  {
+    "image": "ep00008_frame00065.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      120,
+      37,
+      126,
+      45
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      118,
+      38,
+      131,
+      61
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      110,
+      64,
+      132,
+      103
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      138,
+      48,
+      229,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      152,
+      24,
+      170,
+      42
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      139,
+      16,
+      146,
+      23
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      149,
+      16,
+      160,
+      20
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      139,
+      26,
+      145,
+      32
+    ]
+  },
+  {
+    "image": "ep00012_frame00088.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      134,
+      40,
+      145,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00081.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      107,
+      42,
+      133,
+      93
+    ]
+  },
+  {
+    "image": "ep00010_frame00081.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      152,
+      65,
+      229,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00081.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      135,
+      45,
+      173,
+      101
+    ]
+  },
+  {
+    "image": "ep00010_frame00081.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      149,
+      38,
+      157,
+      45
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      91,
+      89,
+      104,
+      103
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      104,
+      71,
+      112,
+      81
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      108,
+      60,
+      117,
+      69
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      120,
+      60,
+      126,
+      65
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      130,
+      58,
+      134,
+      61
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      123,
+      53,
+      127,
+      57
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      117,
+      51,
+      121,
+      56
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      2,
+      52,
+      75,
+      139
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      112,
+      38,
+      119,
+      47
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      127,
+      38,
+      134,
+      51
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "barrier",
+    "box": [
+      121,
+      38,
+      126,
+      46
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      128,
+      64,
+      144,
+      99
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      85,
+      66,
+      96,
+      82
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      101,
+      56,
+      107,
+      66
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      110,
+      49,
+      116,
+      54
+    ]
+  },
+  {
+    "image": "ep00011_frame00033.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      79,
+      107,
+      108,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      120,
+      68,
+      127,
+      77
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      110,
+      64,
+      116,
+      71
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      102,
+      61,
+      107,
+      66
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      122,
+      53,
+      128,
+      57
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      115,
+      55,
+      120,
+      59
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      107,
+      56,
+      112,
+      61
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      111,
+      40,
+      118,
+      52
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      131,
+      39,
+      144,
+      56
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      133,
+      58,
+      156,
+      103
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      112,
+      80,
+      132,
+      110
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      53,
+      104,
+      89,
+      139
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      77,
+      81,
+      100,
+      101
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      95,
+      68,
+      105,
+      81
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      155,
+      111,
+      182,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      124,
+      38,
+      129,
+      44
+    ]
+  },
+  {
+    "image": "ep00008_frame00057.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      125,
+      46,
+      128,
+      50
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      125,
+      49,
+      131,
+      55
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      132,
+      51,
+      136,
+      56
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      126,
+      63,
+      130,
+      68
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      135,
+      58,
+      139,
+      65
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      153,
+      53,
+      251,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      15,
+      52,
+      102,
+      137
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      123,
+      74,
+      135,
+      100
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      107,
+      47,
+      123,
+      71
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      124,
+      37,
+      131,
+      45
+    ]
+  },
+  {
+    "image": "ep00012_frame00032.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      141,
+      67,
+      149,
+      74
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      138,
+      61,
+      161,
+      104
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      151,
+      98,
+      192,
+      142
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      2,
+      66,
+      90,
+      138
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      71,
+      49,
+      107,
+      94
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      100,
+      43,
+      117,
+      67
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      125,
+      37,
+      130,
+      45
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      119,
+      78,
+      135,
+      100
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      118,
+      45,
+      123,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      123,
+      67,
+      131,
+      75
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      124,
+      60,
+      131,
+      65
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      125,
+      53,
+      130,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      132,
+      51,
+      135,
+      54
+    ]
+  },
+  {
+    "image": "ep00010_frame00024.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      136,
+      50,
+      140,
+      54
+    ]
+  },
+  {
+    "image": "ep00011_frame00065.png",
+    "episode": "00011",
+    "class": "barrier",
+    "box": [
+      118,
+      42,
+      139,
+      57
+    ]
+  },
+  {
+    "image": "ep00011_frame00065.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      71,
+      47,
+      112,
+      85
+    ]
+  },
+  {
+    "image": "ep00011_frame00065.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      144,
+      45,
+      255,
+      143
+    ]
+  },
+  {
+    "image": "ep00011_frame00065.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      63,
+      103,
+      102,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      107,
+      51,
+      122,
+      78
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      143,
+      69,
+      156,
+      79
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      161,
+      115,
+      203,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      163,
+      94,
+      178,
+      107
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      140,
+      82,
+      150,
+      94
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      125,
+      65,
+      131,
+      70
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      135,
+      60,
+      141,
+      67
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      143,
+      58,
+      147,
+      63
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      139,
+      54,
+      144,
+      59
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      132,
+      53,
+      137,
+      57
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      125,
+      51,
+      130,
+      56
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      131,
+      39,
+      137,
+      45
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      120,
+      36,
+      125,
+      42
+    ]
+  },
+  {
+    "image": "ep00008_frame00033.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      0,
+      52,
+      102,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00064.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      134,
+      41,
+      168,
+      94
+    ]
+  },
+  {
+    "image": "ep00012_frame00064.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      172,
+      84,
+      200,
+      118
+    ]
+  },
+  {
+    "image": "ep00012_frame00064.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      189,
+      109,
+      247,
+      141
+    ]
+  },
+  {
+    "image": "ep00012_frame00064.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      147,
+      104,
+      187,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00064.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      116,
+      50,
+      129,
+      95
+    ]
+  },
+  {
+    "image": "ep00012_frame00064.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      123,
+      36,
+      130,
+      46
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      123,
+      38,
+      130,
+      51
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      116,
+      54,
+      130,
+      100
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      137,
+      66,
+      158,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      158,
+      71,
+      193,
+      141
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      194,
+      109,
+      231,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      156,
+      59,
+      162,
+      66
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      150,
+      55,
+      155,
+      60
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      147,
+      52,
+      151,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00057.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      134,
+      42,
+      149,
+      62
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      114,
+      38,
+      122,
+      50
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      132,
+      38,
+      144,
+      55
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "barrier",
+    "box": [
+      123,
+      38,
+      130,
+      44
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      112,
+      104,
+      123,
+      117
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      143,
+      66,
+      148,
+      73
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      130,
+      61,
+      137,
+      68
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      48,
+      76,
+      110,
+      143
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      154,
+      117,
+      189,
+      141
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      109,
+      50,
+      120,
+      59
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      122,
+      52,
+      130,
+      59
+    ]
+  },
+  {
+    "image": "ep00011_frame00041.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      124,
+      48,
+      128,
+      52
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      112,
+      61,
+      128,
+      99
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      135,
+      64,
+      150,
+      81
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      143,
+      52,
+      153,
+      63
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      153,
+      64,
+      167,
+      80
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      145,
+      109,
+      176,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      178,
+      100,
+      191,
+      112
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      224,
+      120,
+      254,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      148,
+      82,
+      160,
+      95
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      165,
+      82,
+      185,
+      93
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      135,
+      53,
+      141,
+      59
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      129,
+      53,
+      133,
+      57
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      122,
+      52,
+      127,
+      56
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      131,
+      44,
+      135,
+      47
+    ]
+  },
+  {
+    "image": "ep00008_frame00049.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      124,
+      38,
+      128,
+      48
+    ]
+  },
+  {
+    "image": "ep00012_frame00121.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      115,
+      57,
+      130,
+      93
+    ]
+  },
+  {
+    "image": "ep00012_frame00121.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      133,
+      64,
+      155,
+      97
+    ]
+  },
+  {
+    "image": "ep00012_frame00121.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      139,
+      95,
+      219,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00121.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      153,
+      44,
+      203,
+      87
+    ]
+  },
+  {
+    "image": "ep00012_frame00121.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      130,
+      39,
+      147,
+      58
+    ]
+  },
+  {
+    "image": "ep00012_frame00121.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      121,
+      45,
+      130,
+      53
+    ]
+  },
+  {
+    "image": "ep00012_frame00121.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      186,
+      17,
+      200,
+      28
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      39,
+      76,
+      102,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      106,
+      96,
+      113,
+      115
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      127,
+      60,
+      132,
+      68
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      148,
+      123,
+      178,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      107,
+      121,
+      129,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      117,
+      46,
+      120,
+      53
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      96,
+      61,
+      109,
+      78
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      130,
+      50,
+      136,
+      55
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      123,
+      52,
+      127,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00041.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      121,
+      39,
+      129,
+      49
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      121,
+      38,
+      131,
+      54
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "train",
+    "box": [
+      143,
+      40,
+      172,
+      66
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      149,
+      82,
+      157,
+      92
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      180,
+      94,
+      185,
+      108
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "coin",
+    "box": [
+      222,
+      115,
+      238,
+      133
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "barrier",
+    "box": [
+      131,
+      37,
+      140,
+      48
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      113,
+      56,
+      132,
+      101
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      135,
+      63,
+      148,
+      79
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      138,
+      99,
+      175,
+      143
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      158,
+      69,
+      180,
+      92
+    ]
+  },
+  {
+    "image": "ep00011_frame00049.png",
+    "episode": "00011",
+    "class": "empty",
+    "box": [
+      182,
+      112,
+      213,
+      142
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      124,
+      40,
+      133,
+      53
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      140,
+      46,
+      255,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      0,
+      45,
+      101,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      97,
+      40,
+      118,
+      73
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      111,
+      110,
+      151,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      125,
+      63,
+      131,
+      69
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      125,
+      57,
+      130,
+      61
+    ]
+  },
+  {
+    "image": "ep00008_frame00081.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      135,
+      48,
+      139,
+      55
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      55,
+      61,
+      146,
+      131
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      157,
+      56,
+      255,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      137,
+      39,
+      149,
+      52
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      130,
+      37,
+      137,
+      48
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      131,
+      49,
+      141,
+      59
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      121,
+      47,
+      129,
+      59
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      123,
+      41,
+      130,
+      46
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      159,
+      31,
+      164,
+      38
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      157,
+      24,
+      160,
+      27
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      148,
+      23,
+      151,
+      27
+    ]
+  },
+  {
+    "image": "ep00012_frame00105.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      146,
+      28,
+      150,
+      34
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      134,
+      74,
+      143,
+      90
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      142,
+      68,
+      158,
+      89
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      141,
+      53,
+      149,
+      66
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      120,
+      64,
+      128,
+      75
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      116,
+      79,
+      128,
+      105
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      140,
+      95,
+      174,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      196,
+      128,
+      209,
+      136
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      179,
+      120,
+      189,
+      127
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      131,
+      53,
+      141,
+      69
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "barrier",
+    "box": [
+      122,
+      58,
+      130,
+      62
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      129,
+      45,
+      133,
+      49
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      125,
+      47,
+      129,
+      53
+    ]
+  },
+  {
+    "image": "ep00010_frame00097.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      124,
+      54,
+      128,
+      57
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      85,
+      45,
+      105,
+      82
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      104,
+      43,
+      121,
+      65
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      145,
+      52,
+      205,
+      112
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      60,
+      95,
+      106,
+      140
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      168,
+      122,
+      204,
+      142
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      118,
+      90,
+      135,
+      98
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      126,
+      61,
+      130,
+      66
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      126,
+      56,
+      131,
+      60
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      126,
+      51,
+      131,
+      55
+    ]
+  },
+  {
+    "image": "ep00008_frame00073.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      124,
+      38,
+      131,
+      47
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      127,
+      49,
+      135,
+      63
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      115,
+      49,
+      124,
+      62
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      107,
+      58,
+      113,
+      64
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      19,
+      71,
+      136,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      116,
+      65,
+      136,
+      71
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      98,
+      67,
+      116,
+      71
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      134,
+      79,
+      148,
+      93
+    ]
+  },
+  {
+    "image": "ep00012_frame00186.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      136,
+      127,
+      171,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      115,
+      53,
+      129,
+      86
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      136,
+      60,
+      151,
+      72
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      138,
+      74,
+      167,
+      113
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      131,
+      45,
+      137,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      137,
+      48,
+      144,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      182,
+      98,
+      193,
+      110
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      192,
+      131,
+      204,
+      138
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      173,
+      78,
+      182,
+      88
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      167,
+      70,
+      173,
+      76
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      163,
+      67,
+      166,
+      72
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      159,
+      66,
+      162,
+      72
+    ]
+  },
+  {
+    "image": "ep00010_frame00089.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      151,
+      119,
+      183,
+      134
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      13,
+      77,
+      81,
+      139
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      64,
+      45,
+      115,
+      101
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      145,
+      84,
+      189,
+      139
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      223,
+      90,
+      252,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      121,
+      68,
+      137,
+      98
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      118,
+      48,
+      124,
+      53
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      148,
+      68,
+      154,
+      74
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      143,
+      59,
+      148,
+      66
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      133,
+      57,
+      138,
+      63
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      125,
+      53,
+      130,
+      60
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      132,
+      51,
+      136,
+      56
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      131,
+      38,
+      135,
+      45
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      121,
+      37,
+      126,
+      44
+    ]
+  },
+  {
+    "image": "ep00008_frame00024.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      135,
+      50,
+      141,
+      53
+    ]
+  },
+  {
+    "image": "ep00012_frame00194.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      126,
+      68,
+      146,
+      98
+    ]
+  },
+  {
+    "image": "ep00012_frame00194.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      42,
+      68,
+      124,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00194.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      105,
+      44,
+      121,
+      65
+    ]
+  },
+  {
+    "image": "ep00012_frame00194.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      125,
+      42,
+      138,
+      61
+    ]
+  },
+  {
+    "image": "ep00012_frame00194.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      128,
+      33,
+      133,
+      37
+    ]
+  },
+  {
+    "image": "ep00012_frame00194.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      94,
+      59,
+      99,
+      67
+    ]
+  },
+  {
+    "image": "ep00012_frame00194.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      101,
+      55,
+      105,
+      61
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      127,
+      67,
+      146,
+      96
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      0,
+      50,
+      85,
+      79
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      2,
+      83,
+      56,
+      114
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      73,
+      120,
+      91,
+      139
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      97,
+      80,
+      106,
+      95
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      107,
+      67,
+      112,
+      77
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      110,
+      60,
+      117,
+      67
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      120,
+      58,
+      126,
+      64
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      129,
+      53,
+      134,
+      62
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      122,
+      51,
+      128,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      117,
+      50,
+      121,
+      55
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      120,
+      37,
+      127,
+      46
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      90,
+      64,
+      103,
+      75
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      100,
+      57,
+      109,
+      62
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      110,
+      51,
+      115,
+      55
+    ]
+  },
+  {
+    "image": "ep00010_frame00032.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      80,
+      100,
+      113,
+      117
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      116,
+      54,
+      128,
+      82
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      183,
+      108,
+      224,
+      143
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      134,
+      72,
+      153,
+      95
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      149,
+      124,
+      172,
+      140
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "empty",
+    "box": [
+      139,
+      49,
+      147,
+      59
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      136,
+      38,
+      142,
+      46
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "train",
+    "box": [
+      123,
+      39,
+      127,
+      46
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      151,
+      104,
+      166,
+      117
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      163,
+      87,
+      174,
+      99
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      172,
+      76,
+      180,
+      87
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      159,
+      64,
+      166,
+      72
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      145,
+      60,
+      152,
+      68
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      135,
+      59,
+      142,
+      65
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      132,
+      48,
+      135,
+      52
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      127,
+      48,
+      130,
+      51
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      121,
+      48,
+      126,
+      51
+    ]
+  },
+  {
+    "image": "ep00008_frame00041.png",
+    "episode": "00008",
+    "class": "coin",
+    "box": [
+      130,
+      44,
+      133,
+      47
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      143,
+      82,
+      153,
+      95
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      155,
+      75,
+      162,
+      84
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      148,
+      65,
+      153,
+      72
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      136,
+      60,
+      141,
+      67
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      127,
+      54,
+      131,
+      59
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      126,
+      38,
+      133,
+      47
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      161,
+      104,
+      197,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      71,
+      98,
+      102,
+      139
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      118,
+      121,
+      134,
+      135
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      135,
+      48,
+      141,
+      55
+    ]
+  },
+  {
+    "image": "ep00012_frame00040.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      115,
+      46,
+      124,
+      55
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      130,
+      82,
+      143,
+      98
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      129,
+      132,
+      157,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      65,
+      131,
+      98,
+      141
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      86,
+      95,
+      111,
+      105
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      81,
+      108,
+      94,
+      124
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      100,
+      80,
+      107,
+      90
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      117,
+      73,
+      125,
+      81
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      131,
+      69,
+      137,
+      74
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      130,
+      61,
+      136,
+      66
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      130,
+      57,
+      134,
+      60
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      129,
+      53,
+      133,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      103,
+      46,
+      119,
+      66
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      1,
+      53,
+      75,
+      125
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      77,
+      44,
+      102,
+      74
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      122,
+      38,
+      126,
+      47
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      128,
+      38,
+      132,
+      46
+    ]
+  },
+  {
+    "image": "ep00010_frame00146.png",
+    "episode": "00010",
+    "class": "barrier",
+    "box": [
+      114,
+      38,
+      121,
+      42
+    ]
+  },
+  {
+    "image": "ep00012_frame00161.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      15,
+      46,
+      101,
+      122
+    ]
+  },
+  {
+    "image": "ep00012_frame00161.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      103,
+      79,
+      133,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00161.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      138,
+      63,
+      158,
+      98
+    ]
+  },
+  {
+    "image": "ep00012_frame00161.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      163,
+      117,
+      190,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00161.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      135,
+      50,
+      145,
+      64
+    ]
+  },
+  {
+    "image": "ep00010_frame00073.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      116,
+      38,
+      130,
+      66
+    ]
+  },
+  {
+    "image": "ep00010_frame00073.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      111,
+      69,
+      128,
+      100
+    ]
+  },
+  {
+    "image": "ep00010_frame00073.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      145,
+      69,
+      207,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00073.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      132,
+      47,
+      144,
+      78
+    ]
+  },
+  {
+    "image": "ep00010_frame00073.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      137,
+      39,
+      152,
+      52
+    ]
+  },
+  {
+    "image": "ep00010_frame00073.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      152,
+      53,
+      190,
+      70
+    ]
+  },
+  {
+    "image": "ep00010_frame00073.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      217,
+      76,
+      252,
+      96
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      119,
+      46,
+      128,
+      99
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      124,
+      38,
+      129,
+      44
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      132,
+      39,
+      140,
+      54
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      144,
+      55,
+      157,
+      66
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      157,
+      68,
+      173,
+      84
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      146,
+      106,
+      179,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      214,
+      112,
+      231,
+      126
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      170,
+      88,
+      188,
+      104
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      144,
+      79,
+      157,
+      89
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      141,
+      67,
+      149,
+      75
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      134,
+      56,
+      140,
+      61
+    ]
+  },
+  {
+    "image": "ep00012_frame00048.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      145,
+      93,
+      160,
+      100
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      138,
+      63,
+      150,
+      73
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      142,
+      75,
+      165,
+      103
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      158,
+      113,
+      190,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      122,
+      69,
+      135,
+      94
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      114,
+      47,
+      125,
+      59
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      111,
+      60,
+      120,
+      73
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      124,
+      50,
+      130,
+      56
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "barrier",
+    "box": [
+      75,
+      133,
+      109,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      78,
+      115,
+      89,
+      128
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      91,
+      98,
+      97,
+      110
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      97,
+      94,
+      103,
+      101
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      103,
+      93,
+      108,
+      100
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      108,
+      78,
+      119,
+      88
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      98,
+      109,
+      113,
+      126
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      134,
+      61,
+      138,
+      67
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      126,
+      64,
+      131,
+      68
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      132,
+      52,
+      137,
+      59
+    ]
+  },
+  {
+    "image": "ep00010_frame00122.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      126,
+      58,
+      131,
+      63
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "barrier",
+    "box": [
+      116,
+      51,
+      130,
+      63
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      139,
+      49,
+      160,
+      75
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      206,
+      67,
+      255,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      160,
+      46,
+      213,
+      90
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      141,
+      89,
+      179,
+      143
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "empty",
+    "box": [
+      116,
+      65,
+      129,
+      97
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      140,
+      30,
+      146,
+      38
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "coin",
+    "box": [
+      135,
+      33,
+      140,
+      38
+    ]
+  },
+  {
+    "image": "ep00012_frame00129.png",
+    "episode": "00012",
+    "class": "train",
+    "box": [
+      123,
+      38,
+      130,
+      48
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      72,
+      103,
+      120,
+      143
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      109,
+      82,
+      124,
+      101
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      127,
+      67,
+      136,
+      78
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      127,
+      79,
+      143,
+      97
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      92,
+      65,
+      106,
+      75
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      106,
+      52,
+      114,
+      60
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      86,
+      76,
+      101,
+      94
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      115,
+      74,
+      119,
+      78
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      117,
+      69,
+      121,
+      72
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      123,
+      63,
+      127,
+      66
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "coin",
+    "box": [
+      128,
+      53,
+      132,
+      63
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      117,
+      54,
+      124,
+      63
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "train",
+    "box": [
+      123,
+      45,
+      126,
+      50
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "barrier",
+    "box": [
+      118,
+      44,
+      121,
+      48
+    ]
+  },
+  {
+    "image": "ep00010_frame00130.png",
+    "episode": "00010",
+    "class": "empty",
+    "box": [
+      127,
+      44,
+      131,
+      51
+    ]
+  }
+]

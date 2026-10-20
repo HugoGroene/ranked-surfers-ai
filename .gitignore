@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.log
+
+ai_data/rl_v2_runs/
+ai_data/v2_yolo_dataset/predictions/
+
+chromium-profile/
+runs/

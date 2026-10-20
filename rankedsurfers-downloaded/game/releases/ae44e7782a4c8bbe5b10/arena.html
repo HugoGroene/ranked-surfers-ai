@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ranked Surfers</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #119bdd;
+      }
+      #game {
+        display: block;
+        width: 100%;
+        height: 100%;
+        outline: none;
+      }
+      #loading {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: white;
+        font: bold 18px system-ui;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game" tabindex="0"></canvas>
+    <div id="loading" role="status">Loading your track…</div>
+    <script type="module">
+      import {createCapeSkinPolicy} from "/game/releases/ae44e7782a4c8bbe5b10/cape-skins.mjs";
+
+      import {RenderBudget} from '/game/releases/a470c570db438c3e31be/render-budget.js';
+      const renderBudget=new RenderBudget();
+      let budgetFrame=0;
+      let instance;
+      const capeSkins = createCapeSkinPolicy(command => instance.SendMessage("RankedNet", "Receive", JSON.stringify(command)));
+
+
+      let pendingGameReady = false;
+      let parentVisible = true;
+      function updateVisibility() {
+        instance?.SendMessage(
+          "RankedNet",
+          "Receive",
+          JSON.stringify({
+            type: "visibility",
+            visible: parentVisible && !document.hidden,
+          }),
+        );
+      }
+      document.addEventListener("visibilitychange", updateVisibility);
+      function sampleRenderBudget(now){
+        const scale=renderBudget.sample(now,parentVisible&&!document.hidden);
+        if(scale!==renderScale){renderScale=scale;resizeGame();}
+        budgetFrame=renderBudget.enabled?requestAnimationFrame(sampleRenderBudget):0;
+      }
+      let renderScale = 1;
+      const gameCanvas = document.getElementById("game");
+      function focusGame(){
+        if(!parentVisible||document.hidden||parent.document.querySelector('dialog[open]'))return;
+        window.focus();
+        gameCanvas.focus({preventScroll:true});
+      }
+      function resizeGame() {
+        const box = gameCanvas.getBoundingClientRect();
+        if (!box.width || !box.height) return;
+        const scale = Math.min(
+          renderScale,
+          2560 / Math.max(box.width, box.height),
+        );
+        const width = Math.max(2, Math.round(box.width * scale));
+        const height = Math.max(2, Math.round(box.height * scale));
+        if (gameCanvas.width !== width || gameCanvas.height !== height) {
+          gameCanvas.width = width;
+          gameCanvas.height = height;
+        }
+      }
+      new ResizeObserver(resizeGame).observe(gameCanvas);
+      resizeGame();
+      const emit = (event) => {
+        // Unity's Start can fire before createUnityInstance resolves. Wait until
+        // commands can actually be delivered before asking the site for state.
+        if (event.type === "loaded" && !instance) { pendingGameReady=true; return; }
+        if (!capeSkins.event(event)) return;
+        parent.postMessage({ source: "ranked-game", event }, location.origin);
+      };
+      window.__rankedCapeGameEvent = emit;
+      const loading = document.getElementById("loading");
+      // Escape must also work while Unity is paused and no longer reads bindings.
+      document.addEventListener("keydown", (event) => {
+        // Browser shortcuts such as Ctrl+R must not also trigger practice R.
+        if (event.ctrlKey || event.metaKey || event.altKey) {
+          event.stopImmediatePropagation();
+          return;
+        }
+        if (event.code !== "Escape" || event.repeat) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        emit({type:"pause"});
+      }, true);
+      fetch("/game/releases/ae44e7782a4c8bbe5b10/manifest.json", { cache: "no-store" })
+        .then((r) => {
+          if (!r.ok) throw Error("Game manifest missing");
+          return r.json();
+        })
+        .then(async (manifest) => {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = manifest.loader;
+            script.onload = resolve;
+            script.onerror = () => reject(Error("Game loader failed"));
+            document.head.append(script);
+          });
+          instance = await createUnityInstance(
+            document.getElementById("game"),
+            {
+              dataUrl: manifest.dataUrl,
+              frameworkUrl: manifest.frameworkUrl,
+              codeUrl: manifest.codeUrl,
+              streamingAssetsUrl: "/game/releases/a470c570db438c3e31be/StreamingAssets",
+              companyName: "RankedSurfers",
+              productName: "Ranked Surfers",
+              productVersion: "clinical-1",
+              matchWebGLToCanvasSize: false,
+              autoSyncPersistentDataPath: true,
+              // Unity's loader reports every uncaught error or rejection on this
+              // page with a blocking browser alert(), even mid-run. Log instead,
+              // and only surface a site toast when the wasm runtime itself died.
+              errorHandler: (message, url, line) => {
+                console.error("[Unity error]", message, url || "", line || "");
+                if (/RuntimeError|abort\(|out of memory|Cannot enlarge memory|unreachable/i.test(String(message)))
+                  emit({ type: "error", message: "The game crashed. Reload the page to keep playing." });
+                return true;
+              },
+            },
+            (p) =>
+              (loading.textContent =
+                "Loading your track · " + Math.round(p * 100) + "%"),
+          );
+          loading.hidden = true;
+          loading.style.display = "none";
+          emit({ type: "loaded", bridgeReady: true });
+          if(pendingGameReady) { pendingGameReady=false; emit({type:"loaded"}); }
+          updateVisibility();
+        })
+        .catch((e) => {
+          loading.textContent = e.message;
+          emit({ type: "error", message: e.message });
+        });
+      window.addEventListener("message", (e) => {
+        if (
+          e.source !== parent ||
+          e.origin !== location.origin ||
+          e.data?.source !== "ranked-site" ||
+          !instance
+        )
+          return;
+        if (e.data.type === "bot" || e.data.type === "bot-visualization") return;
+        // what this player wears (the site only sends items the server says they own and equipped)
+        if (e.data.type === "accessory-preview") { instance.SendMessage("Saturn cape preview installer", "SetAccessory", ["cape","wings","none"].includes(e.data.accessory) ? e.data.accessory : "none"); return; }
+        if (e.data.type === "wing-style") { instance.SendMessage("Saturn cape preview installer", "SetWingStyle", String(Number(e.data.style) === 6 ? 6 : 0)); return; }
+        const d = capeSkins.command(e.data);
+        if (d.type === "visibility") {
+          parentVisible = d.visible;
+          updateVisibility();
+          return;
+        }
+        if (d.type === "preferences") {
+          const ceiling = Math.max(
+            0.5,
+            Math.min(1.5, (d.preferences.renderScale || 100) / 100),
+          );
+          renderBudget.configure(d.preferences.autoResolution===true,ceiling);
+          renderScale=renderBudget.scale;
+          if(renderBudget.enabled&&!budgetFrame)budgetFrame=requestAnimationFrame(sampleRenderBudget);
+          if(!renderBudget.enabled&&budgetFrame){cancelAnimationFrame(budgetFrame);budgetFrame=0;}
+          resizeGame();
+        }
+        if ((d.type === "settings-state" && !d.open) || d.type === "go" || d.type === "practice")
+          requestAnimationFrame(focusGame);
+
+
+        if (d.type === "preferences")
+          instance.SendMessage(
+            "RankedNet",
+            "ApplyPreferences",
+            JSON.stringify(d.preferences),
+          );
+        else if (d.type === "profile")
+          instance.SendMessage("RankedNet", "SetProfile", JSON.stringify(d));
+        else instance.SendMessage("RankedNet", "Receive", JSON.stringify(d));
+      });
+    </script>
+
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4c8ee8ecbe8b968',t:'MTc5MjM0MTA3MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
