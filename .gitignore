@@ -9,3 +9,10 @@ ai_data/v2_yolo_dataset/predictions/
 chromium-profile/
 runs/
 rankedsurfers-downloaded/cdn-cgi/
+
+# V4 generated experiment data
+/ai_data/v4_*/
+/ai_data/rl_v2_runs/
+/ai_data/*.log
+/ai_data/start_templates_ubuntu_backup/
+/rs_v4_jump_speed_package.zip

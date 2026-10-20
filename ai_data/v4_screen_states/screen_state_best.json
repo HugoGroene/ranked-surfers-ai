@@ -1,0 +1,39 @@
+{
+  "model": "ai_data\\v4_screen_states\\screen_state_best.pt",
+  "classes": [
+    "MENU",
+    "LOADING",
+    "GAMEPLAY"
+  ],
+  "train_count": 1417,
+  "validation_count": 492,
+  "validation_session": "sample_03,transitions_01",
+  "validation_sessions": [
+    "sample_03",
+    "transitions_01"
+  ],
+  "best_validation_accuracy": 0.9939,
+  "confusion_rows_truth_cols_pred": [
+    [
+      127,
+      0,
+      2
+    ],
+    [
+      0,
+      297,
+      0
+    ],
+    [
+      1,
+      0,
+      65
+    ]
+  ],
+  "class_order": [
+    "MENU",
+    "LOADING",
+    "GAMEPLAY"
+  ],
+  "warning": "A separate manual live watch test is required before allowing automated keyboard actions."
+}
