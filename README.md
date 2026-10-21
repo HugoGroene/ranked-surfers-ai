@@ -159,3 +159,70 @@ Recorded results on the Windows RTX 4060 Ti machine (same 512Ã—288 resolution):
 ## Version-control policy
 
 Track source files, documentation, selected small reference templates, and model checkpoints needed to reproduce the controller. **Do not indiscriminately `git add .`**: `ai_data/` contains screenshots, episode captures, logs, potentially sensitive browser imagery, and large generated outputs. Stage the intended trained classifier explicitly and keep the raw recordings backed up separately. See `README_RS_V4_JUMP_SPEED.md` and `README_RS_V4_SCREEN_STATES.md` for additional details.
+
+## V5.4 — Nine-Class Segmentation Checkpoint
+
+The V5.4 detector is a YOLO11n segmentation model trained on
+native-resolution Ranked Surfers gameplay screenshots.
+
+Classes:
+- coin
+- train_front
+- train_side
+- train_roof
+- ramp
+- barrier_jump
+- barrier_roll
+- barrier_either
+- tunnel_entrance
+
+The V5 detector distinguishes traversable ramps and train roofs
+from hazardous train fronts and different barrier geometries.
+
+### Trained model
+
+ai_data/v5_hazards/runs/segment_round04/weights/best.pt
+
+### Dataset
+
+139 manually reviewed and annotated images:
+- Training: 87 images (sessions 02 and 03)
+- Validation: 20 images (session 04)
+- Held-out test: 32 images (session 05)
+
+### Live benchmark
+
+Settings:
+- PPO image resolution: 512x288
+- Linear image resizing
+- 5 ms keyboard presses
+- Asynchronous YOLO segmentation at imgsz=960
+- Jump-only action override for repeatable speed testing
+
+Measured:
+- Gameplay decision rate: 31.7 Hz
+- Gameplay p95: 38.79 ms
+- Gameplay p99: 46.82 ms
+- YOLO inference median: 20.8 ms
+- Hazard age median: 64.4 ms
+- Startup guard failures: 0
+
+This is a shadow-segmentation benchmark. The new nine-class
+detections are not yet integrated into PPO observations.
+
+### Preview predictions
+
+.\.venv\Scripts\python.exe rs_v5_preview_predictions.py `
+  --model ai_data\v5_hazards\runs\segment_round04\weights\best.pt `
+  --source ai_data\v5_hazards\raw\v5_capture_04 `
+  --sample 12 --imgsz 960 --conf 0.20 --device 0 `
+  --output ai_data\v5_hazards\preview_round04
+
+See README_RS_V5_LIVE_SEG_BENCHMARK.md for the full live commands.
+
+### Next milestone
+
+Integrate the nine-class segmentation observations into PPO,
+redesign rewards, and train a new policy that can learn advanced
+movement and hazard anticipation.
+

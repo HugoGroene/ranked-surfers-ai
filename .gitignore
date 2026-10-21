@@ -16,3 +16,11 @@ rankedsurfers-downloaded/cdn-cgi/
 /ai_data/*.log
 /ai_data/start_templates_ubuntu_backup/
 /rs_v4_jump_speed_package.zip
+
+# V5 local environments and generated data
+/.venv-labelme/
+/ai_data/v5_hazards/
+/runs/
+/weights/
+/yolo11n-seg.pt
+/rs_v5_*.zip

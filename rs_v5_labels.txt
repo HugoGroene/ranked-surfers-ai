@@ -1,0 +1,9 @@
+coin
+train_front
+train_side
+train_roof
+ramp
+barrier_jump
+barrier_roll
+barrier_either
+tunnel_entrance
