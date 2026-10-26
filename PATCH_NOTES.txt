@@ -1,0 +1,35 @@
+V6.1.2 Episode 58 guard integration fix (2026-10-21)
+
+Files:
+  rs_v612_gameplay_guard.py
+  test_rs_v612_guard.py
+
+What changed:
+  * Keep existing episode 2 sustained high-confidence MENU path.
+  * Add a narrowly scoped six-frame path for title/menu animations that begin
+    UNCERTAIN and finish with confident MENU predictions. It requires:
+      - last frame: confident ML MENU and strong menu template
+      - last two frames: confident ML MENU
+      - at least two independent strong menu-template matches within six frames
+      - at least four moderately matching template readings within six frames
+      - no GAMEPLAY, LOADING, OTHER, PLAY or positive visual gameplay evidence
+  * Existing low-template false MENU case (episode 76) still ABORTS safely.
+  * Does not change the capture crop, V4 model, V5 model, or PPO configuration.
+
+Evidence checked:
+  * Human-reviewed episode 58 JPG: genuine FIND RANKED MATCH title menu.
+  * Saved episode 58 JSON: V4 MENU probabilities .479 -> .981,
+    template scores [.652,.999,.664,.472,.598,.734].
+  * Offline replay of the actual JSON: final decision TERMINAL instead of ABORT.
+  * 35 unit tests passing. This does not establish live-game safety.
+
+Install from ranked-surfers-ai project root (PowerShell):
+  $backup = 'v612_guard_backup_' + (Get-Date -Format 'yyyyMMdd_HHmmss')
+  New-Item -ItemType Directory -Path $backup | Out-Null
+  Copy-Item .\rs_v612_gameplay_guard.py, .\test_rs_v612_guard.py -Destination $backup
+  Expand-Archive '.\v612_episode58_guard_patch.zip' -DestinationPath '.' -Force
+  .\.venv\Scripts\python.exe -m unittest -v test_rs_v612_guard.py
+
+Don't overwrite or resume existing PPO training checkpoints for this install.
+After tests pass, validate with a short live smoke test and monitor any key
+sent on a real menu. On any new guard hard stop, inspect saved JPG and JSON.

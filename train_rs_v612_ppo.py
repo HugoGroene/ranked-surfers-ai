@@ -67,6 +67,8 @@ def build_env_class():
             self.guard_rechecks = 0
             self.guard_confirmed_menu = 0
             self.guard_aborts = 0
+            self.guard_ml_menu_disagreements = 0
+            self.guard_visual_recoveries = 0
             self._guard_forced_terminal = False
             self._guard_hard_stopped = False
             super().__init__(cfg, output, demos, detector, a=a)
@@ -137,10 +139,10 @@ def build_env_class():
             self.action_context.reset()
             return super().reset(seed=seed, options=options)
 
-        def _guard_diagnostic(self, readings, *, reason):
+        def _guard_diagnostic(self, readings, *, reason, name=None):
             """Write screen + full gating evidence for any fail-closed stop."""
             import cv2
-            target = self.output_dir / f'v612_guard_episode_{self.episode_number:04d}.jpg'
+            target = self.output_dir / (name or f'v612_guard_episode_{self.episode_number:04d}.jpg')
             if self._v2_last_bgra is not None:
                 cv2.imwrite(str(target), cv2.cvtColor(self._v2_last_bgra, cv2.COLOR_BGRA2BGR))
             write_json(target.with_suffix('.json'), {
@@ -162,16 +164,49 @@ def build_env_class():
             if self._guard_hard_stopped:
                 raise GuardUncertainError('[V612 GUARD] Inputs latched OFF after uncertain UI.')
 
+            # These two views are derived from the exact raw full-screen BGRA
+            # captures, not the PPO/YOLO game crop or a changed browser crop.
+            # Never treat moving scenery alone as gameplay: animated death
+            # screens can also move. The distance HUD must visibly advance.
+            previous_track = None
+            baseline_hud = None
+
             async def sample():
+                nonlocal previous_track, baseline_hud
+                import cv2
                 frame = await self._capture()
                 state, probs = self._read_screen_state()
+                track_motion = track_texture = 0.
+                hud_pixels = hud_changed_pixels = 0
+                shot = self._v2_last_bgra
+                if shot is not None:
+                    track = self._motion_view(shot, self.crop)
+                    hud = self._meter_mask(shot)
+                    track_texture = float(track.std())
+                    hud_pixels = int(cv2.countNonZero(hud))
+                    if previous_track is not None:
+                        track_motion = float(np.mean(cv2.absdiff(track, previous_track)))
+                        # Compare to the first HUD sample of this recovery
+                        # window, not just the last ~45ms sample: distance
+                        # digits need not tick on every captured frame.
+                        hud_changed_pixels = int(cv2.countNonZero(cv2.absdiff(hud, baseline_hud)))
+                    if baseline_hud is None:
+                        baseline_hud = hud
+                    previous_track = track
                 reading = screen_gate(state, probs, frame[1],
                                       confidence=self.state_confidence,
-                                      menu_threshold=self.args.threshold)
+                                      menu_threshold=self.args.threshold,
+                                      track_motion=track_motion,
+                                      track_texture=track_texture,
+                                      hud_pixels=hud_pixels,
+                                      hud_changed_pixels=hud_changed_pixels,
+                                      motion_threshold=self.startup_motion_threshold)
                 return frame, reading
 
             frame, first = await sample()
             readings = [first]
+            if first.ml_menu and not first.menu_evidence:
+                self.guard_ml_menu_disagreements += 1
             needs_recovery = first.verdict != 'PLAY' or self.suspected_since is not None
             if needs_recovery:
                 self.guard_rechecks += 1
@@ -180,6 +215,8 @@ def build_env_class():
                     await asyncio.sleep(.045)
                     frame, reading = await sample()
                     readings.append(reading)
+                    if reading.ml_menu and not reading.menu_evidence:
+                        self.guard_ml_menu_disagreements += 1
                     decision = sequence_decision(readings, max_frames=6)
                 if decision == 'TERMINAL':
                     self.guard_confirmed_menu += 1
@@ -202,7 +239,16 @@ def build_env_class():
                         f'States={[r.state for r in readings]}, '
                         f'menu_scores={[round(r.menu_score, 2) for r in readings]}. '
                         f'Diagnostics: {image}')
-                # Two affirmative GAMEPLAY frames permit the queued action.
+                # Two affirmative ML gameplay frames, OR two consecutive
+                # moving-track + advancing-distance-HUD pairs, permit action.
+                if (readings[-1].visual_gameplay and readings[-2].visual_gameplay and
+                        any(r.ml_menu and not r.menu_evidence for r in readings)):
+                    self.guard_visual_recoveries += 1
+                    if self.guard_visual_recoveries <= 6:
+                        self._guard_diagnostic(
+                            readings, reason='moving gameplay despite ML menu prediction',
+                            name=(f'v612_disagreement_episode_{self.episode_number:04d}_'
+                                  f'{self.guard_visual_recoveries:02d}.jpg'))
                 # The inherited _step_browser suppresses keys when it thinks
                 # menu detection is pending; clear that stale suspicion only
                 # after *two* verified GAMEPLAY captures.
@@ -211,7 +257,7 @@ def build_env_class():
                     self.menu_scores.clear()
                     self.clear_streak = 0
                 print(f'[V612 GUARD] Resumed after {len(readings)} captures: '
-                      'two consecutive GAMEPLAY confirmations.', flush=True)
+                      'two positive gameplay confirmations.', flush=True)
 
             self.guard_allowed += 1
             self.action_context.note_action(int(action), time.perf_counter())
@@ -256,6 +302,8 @@ def build_env_class():
                 'preflight_rechecks_on_transient': self.guard_rechecks,
                 'preflight_confirmed_menu': self.guard_confirmed_menu,
                 'uncertain_state_abort': self.guard_aborts,
+                'ml_menu_without_template': self.guard_ml_menu_disagreements,
+                'visual_gameplay_recoveries': self.guard_visual_recoveries,
                 'guard_hard_stopped': self._guard_hard_stopped,
                 'preflight_checks_every_decision': True,
                 'warning': 'One screenshot cannot prevent a game ending between capture and keypress.'
