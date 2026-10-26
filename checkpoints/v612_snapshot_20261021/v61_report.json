@@ -1,0 +1,2544 @@
+{
+  "mode": "train",
+  "feature_schema": {
+    "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+    "v6_base_version": "v6_seg9_3bands_2slots8_v1",
+    "classes": [
+      "coin",
+      "train_front",
+      "train_side",
+      "train_roof",
+      "ramp",
+      "barrier_jump",
+      "barrier_roll",
+      "barrier_either",
+      "tunnel_entrance"
+    ],
+    "image_frames": 4,
+    "image_channels": 12,
+    "v6_aux_dim": 467,
+    "screen_column_dim": 81,
+    "action_timing_dim": 5,
+    "commanded_lane_dim": 4,
+    "aux_dim": 557,
+    "warning": "Screen columns are NOT track lanes; commanded lane is unverified and disabled by default."
+  },
+  "ppo_actions_sent_only_when_gameplay_verified": true,
+  "input_note": "Actions sent through Playwright, Unity response not automatically verified.",
+  "no_demonstration_training": true,
+  "reward_terms": {
+    "survival_per_real_second": 0.8,
+    "milestone_bonus": 0.15,
+    "milestone_seconds": 0.5,
+    "confirmed_death_penalty": 1.0,
+    "reward_for_yolo_predictions": 0,
+    "reward_for_specific_actions": 0
+  },
+  "steps": 85120,
+  "wall_seconds": 5931.72,
+  "avg_steps_per_sec_including_resets": 14.35,
+  "episodes": 1630,
+  "mean_survival_seconds": 3.31,
+  "max_survival_seconds": 11.38,
+  "action_counts": {
+    "0": 15795,
+    "3": 36982,
+    "4": 7534,
+    "2": 16423,
+    "1": 8386
+  },
+  "gameplay_only_intervals_ms": {
+    "count": 82837,
+    "median_ms": 48.61,
+    "p95_ms": 62.41,
+    "p99_ms": 66.46,
+    "mean_ms": 49.78
+  },
+  "startup_guard_failures": 0,
+  "detector": {
+    "requests": 28989,
+    "completed": 28989,
+    "discarded_previous_episode": 48,
+    "busy_skips": 0,
+    "fresh_fraction": 0.952,
+    "inference_ms": {
+      "count": 1000,
+      "median": 20.6,
+      "p95": 27.4
+    },
+    "age_at_decision_ms": {
+      "count": 1000,
+      "median": 105.4,
+      "p95": 161.6
+    },
+    "detected_objects": {
+      "train_roof": 70854,
+      "train_front": 59724,
+      "coin": 191667,
+      "ramp": 12703,
+      "train_side": 37062,
+      "barrier_roll": 4934,
+      "barrier_either": 1303,
+      "barrier_jump": 2018,
+      "tunnel_entrance": 689
+    },
+    "v5_segmentation": {
+      "shadow_only": false,
+      "classes": [
+        "coin",
+        "train_front",
+        "train_side",
+        "train_roof",
+        "ramp",
+        "barrier_jump",
+        "barrier_roll",
+        "barrier_either",
+        "tunnel_entrance"
+      ],
+      "model_predict_wall_ms": {
+        "count": 28941,
+        "median_ms": 13.3,
+        "p95_ms": 16.28,
+        "p99_ms": 18.01,
+        "mean_ms": 13.43
+      },
+      "input_rgb_to_bgr_ms": {
+        "count": 28941,
+        "median_ms": 0.83,
+        "p95_ms": 1.2,
+        "p99_ms": 1.33,
+        "mean_ms": 0.88
+      },
+      "mask_and_box_extract_ms": {
+        "count": 28941,
+        "median_ms": 6.55,
+        "p95_ms": 11.71,
+        "p99_ms": 14.72,
+        "mean_ms": 6.83
+      },
+      "polygons_per_completed_inference": {
+        "count": 28941,
+        "mean": 13.16
+      },
+      "detections_by_vertical_image_region": {
+        "upper_frame": {
+          "coin": 132490,
+          "train_roof": 25306,
+          "ramp": 12472,
+          "train_front": 47795,
+          "barrier_roll": 4836,
+          "barrier_either": 1175,
+          "barrier_jump": 2005,
+          "train_side": 3959,
+          "tunnel_entrance": 689
+        },
+        "middle_frame": {
+          "train_front": 7209,
+          "coin": 49570,
+          "train_side": 1944,
+          "train_roof": 13544,
+          "ramp": 162,
+          "barrier_either": 128,
+          "barrier_roll": 89,
+          "barrier_jump": 13
+        },
+        "lower_frame": {
+          "train_roof": 32004,
+          "coin": 9607,
+          "train_front": 4720,
+          "train_side": 31159,
+          "ramp": 69,
+          "barrier_roll": 9
+        }
+      },
+      "region_warning": "Image regions are NOT real-world distance or collision risk.",
+      "fed_into_ppo": true,
+      "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+      "screen_column_nonzero_observations": 82551,
+      "assumed_lane_unverified": false,
+      "hazard_obs_total": 86751,
+      "hazard_obs_stale_or_missing": 4191,
+      "hazard_obs_nonzero": 82551
+    },
+    "v612_live_input_guard": {
+      "preflight_gameplay_allowed": 83937,
+      "preflight_rechecks_on_transient": 1184,
+      "preflight_confirmed_menu": 1183,
+      "uncertain_state_abort": 1,
+      "ml_menu_without_template": 1385,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": true,
+      "preflight_checks_every_decision": true,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    }
+  },
+  "observation_aux_dim": 557,
+  "observation_image_shape": [
+    12,
+    288,
+    512
+  ],
+  "reward_parts": {
+    "survival": 3563.455999997372,
+    "milestones": 1254.7500000000173,
+    "death": -1630.0
+  },
+  "first_25_mean_seconds": 4.577,
+  "last_25_mean_seconds": 3.412,
+  "policy_snapshots": [
+    {
+      "probabilities": [
+        0.69798,
+        0.00064,
+        0.00103,
+        0.25141,
+        0.04894
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.69798,
+      "entropy": 0.75752
+    },
+    {
+      "probabilities": [
+        0.4957,
+        0.0005,
+        0.00097,
+        0.45494,
+        0.04789
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.4957,
+      "entropy": 0.86225
+    },
+    {
+      "probabilities": [
+        0.39739,
+        0.00055,
+        0.00108,
+        0.52713,
+        0.07385
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.52713,
+      "entropy": 0.90818
+    },
+    {
+      "probabilities": [
+        0.39405,
+        0.00051,
+        0.00077,
+        0.53792,
+        0.06674
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.53792,
+      "entropy": 0.8906
+    },
+    {
+      "probabilities": [
+        0.51558,
+        0.00055,
+        0.00065,
+        0.43239,
+        0.05083
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.51558,
+      "entropy": 0.86445
+    },
+    {
+      "probabilities": [
+        0.43305,
+        0.00052,
+        0.00065,
+        0.52304,
+        0.04274
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.52304,
+      "entropy": 0.84484
+    },
+    {
+      "probabilities": [
+        0.28121,
+        0.00089,
+        0.00122,
+        0.63845,
+        0.07823
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.63845,
+      "entropy": 0.857
+    },
+    {
+      "probabilities": [
+        0.33985,
+        0.00175,
+        0.00197,
+        0.54157,
+        0.11487
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.54157,
+      "entropy": 0.97084
+    },
+    {
+      "probabilities": [
+        0.38522,
+        0.00122,
+        0.00143,
+        0.51135,
+        0.10079
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.51135,
+      "entropy": 0.95924
+    },
+    {
+      "probabilities": [
+        0.25801,
+        0.00119,
+        0.0012,
+        0.62588,
+        0.11373
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.62588,
+      "entropy": 0.90615
+    },
+    {
+      "probabilities": [
+        0.29266,
+        0.00077,
+        0.00076,
+        0.6,
+        0.10581
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.6,
+      "entropy": 0.91475
+    },
+    {
+      "probabilities": [
+        0.35501,
+        0.00296,
+        0.00274,
+        0.48363,
+        0.15566
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.48363,
+      "entropy": 1.04192
+    },
+    {
+      "probabilities": [
+        0.27761,
+        0.00194,
+        0.00209,
+        0.62304,
+        0.09532
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.62304,
+      "entropy": 0.8996
+    },
+    {
+      "probabilities": [
+        0.31462,
+        0.00083,
+        0.00115,
+        0.62561,
+        0.05779
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.62561,
+      "entropy": 0.83569
+    },
+    {
+      "probabilities": [
+        0.25613,
+        0.00129,
+        0.00172,
+        0.67381,
+        0.06705
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.67381,
+      "entropy": 0.81562
+    },
+    {
+      "probabilities": [
+        0.21058,
+        0.00118,
+        0.00157,
+        0.71679,
+        0.06987
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.71679,
+      "entropy": 0.77078
+    },
+    {
+      "probabilities": [
+        0.19494,
+        0.00105,
+        0.00143,
+        0.73868,
+        0.0639
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.73868,
+      "entropy": 0.73481
+    },
+    {
+      "probabilities": [
+        0.22838,
+        0.00109,
+        0.00167,
+        0.71929,
+        0.04957
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.71929,
+      "entropy": 0.74131
+    },
+    {
+      "probabilities": [
+        0.28291,
+        0.00413,
+        0.00573,
+        0.60387,
+        0.10335
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.60387,
+      "entropy": 0.94865
+    },
+    {
+      "probabilities": [
+        0.30086,
+        0.00107,
+        0.00158,
+        0.5978,
+        0.09868
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.5978,
+      "entropy": 0.91498
+    },
+    {
+      "probabilities": [
+        0.30385,
+        0.0006,
+        0.00122,
+        0.6239,
+        0.07043
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.6239,
+      "entropy": 0.85578
+    },
+    {
+      "probabilities": [
+        0.2463,
+        0.00047,
+        0.00092,
+        0.69268,
+        0.05963
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.69268,
+      "entropy": 0.7776
+    },
+    {
+      "probabilities": [
+        0.18812,
+        0.00037,
+        0.00072,
+        0.77139,
+        0.0394
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.77139,
+      "entropy": 0.65003
+    },
+    {
+      "probabilities": [
+        0.18596,
+        0.0004,
+        0.00077,
+        0.78352,
+        0.02935
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.78352,
+      "entropy": 0.6162
+    },
+    {
+      "probabilities": [
+        0.26002,
+        0.00071,
+        0.00101,
+        0.69632,
+        0.04194
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.69632,
+      "entropy": 0.74743
+    },
+    {
+      "probabilities": [
+        0.31309,
+        0.00217,
+        0.00356,
+        0.59032,
+        0.09086
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.59032,
+      "entropy": 0.92602
+    },
+    {
+      "probabilities": [
+        0.25,
+        0.00126,
+        0.00227,
+        0.66042,
+        0.08605
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.66042,
+      "entropy": 0.85387
+    },
+    {
+      "probabilities": [
+        0.29344,
+        0.00645,
+        0.00867,
+        0.51945,
+        0.172
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.51945,
+      "entropy": 1.07646
+    },
+    {
+      "probabilities": [
+        0.39089,
+        0.00374,
+        0.00518,
+        0.43579,
+        0.16439
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.43579,
+      "entropy": 1.07414
+    },
+    {
+      "probabilities": [
+        0.31885,
+        0.00109,
+        0.00141,
+        0.54935,
+        0.1293
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.54935,
+      "entropy": 0.9747
+    },
+    {
+      "probabilities": [
+        0.44567,
+        0.00484,
+        0.00499,
+        0.35543,
+        0.18907
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.44567,
+      "entropy": 1.09503
+    },
+    {
+      "probabilities": [
+        0.29419,
+        0.06449,
+        0.05413,
+        0.33366,
+        0.25353
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.33366,
+      "entropy": 1.40874
+    },
+    {
+      "probabilities": [
+        0.38188,
+        0.00968,
+        0.00724,
+        0.34542,
+        0.25578
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.38188,
+      "entropy": 1.16409
+    },
+    {
+      "probabilities": [
+        0.31408,
+        0.18754,
+        0.07403,
+        0.1467,
+        0.27764
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.31408,
+      "entropy": 1.50771
+    },
+    {
+      "probabilities": [
+        0.43061,
+        0.01397,
+        0.00632,
+        0.36209,
+        0.18701
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.43061,
+      "entropy": 1.13584
+    },
+    {
+      "probabilities": [
+        0.41385,
+        0.01069,
+        0.00436,
+        0.42396,
+        0.14713
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.42396,
+      "entropy": 1.08313
+    },
+    {
+      "probabilities": [
+        0.2813,
+        0.02546,
+        0.00925,
+        0.3698,
+        0.3142
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.3698,
+      "entropy": 1.22518
+    },
+    {
+      "probabilities": [
+        0.32657,
+        0.01459,
+        0.00624,
+        0.43332,
+        0.21927
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.43332,
+      "entropy": 1.15394
+    },
+    {
+      "probabilities": [
+        0.33092,
+        0.00162,
+        0.00129,
+        0.56003,
+        0.10615
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.56003,
+      "entropy": 0.94769
+    },
+    {
+      "probabilities": [
+        0.13838,
+        0.00021,
+        0.00041,
+        0.77105,
+        0.08995
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.77105,
+      "entropy": 0.69576
+    },
+    {
+      "probabilities": [
+        0.1061,
+        0.0001,
+        0.00026,
+        0.82138,
+        0.07216
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.82138,
+      "entropy": 0.59244
+    },
+    {
+      "probabilities": [
+        0.15681,
+        0.00033,
+        0.00073,
+        0.69535,
+        0.14678
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.69535,
+      "entropy": 0.83273
+    },
+    {
+      "probabilities": [
+        0.34067,
+        0.01287,
+        0.00813,
+        0.33611,
+        0.30222
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.34067,
+      "entropy": 1.19009
+    },
+    {
+      "probabilities": [
+        0.1443,
+        0.0003,
+        0.00078,
+        0.76524,
+        0.08938
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.76524,
+      "entropy": 0.70793
+    },
+    {
+      "probabilities": [
+        0.42022,
+        0.01067,
+        0.00857,
+        0.38877,
+        0.17176
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.42022,
+      "entropy": 1.12346
+    },
+    {
+      "probabilities": [
+        0.38257,
+        0.00719,
+        0.00774,
+        0.47675,
+        0.12574
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.47675,
+      "entropy": 1.05461
+    },
+    {
+      "probabilities": [
+        0.4168,
+        0.05436,
+        0.01879,
+        0.39247,
+        0.11758
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.4168,
+      "entropy": 1.21652
+    },
+    {
+      "probabilities": [
+        0.43709,
+        0.00016,
+        0.00039,
+        0.53872,
+        0.02364
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.53872,
+      "entropy": 0.78797
+    },
+    {
+      "probabilities": [
+        0.4477,
+        0.00048,
+        0.00108,
+        0.50971,
+        0.04102
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.50971,
+      "entropy": 0.84535
+    },
+    {
+      "probabilities": [
+        0.44783,
+        0.00178,
+        0.00247,
+        0.49605,
+        0.05186
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.49605,
+      "entropy": 0.88714
+    },
+    {
+      "probabilities": [
+        0.42852,
+        0.00229,
+        0.00861,
+        0.49504,
+        0.06554
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.49504,
+      "entropy": 0.94463
+    },
+    {
+      "probabilities": [
+        0.32031,
+        0.09703,
+        0.20253,
+        0.23049,
+        0.14963
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.32031,
+      "entropy": 1.53692
+    },
+    {
+      "probabilities": [
+        0.40304,
+        0.00205,
+        0.00555,
+        0.53345,
+        0.05591
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.53345,
+      "entropy": 0.9042
+    },
+    {
+      "probabilities": [
+        0.44833,
+        0.01947,
+        0.03152,
+        0.38889,
+        0.11178
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.44833,
+      "entropy": 1.15755
+    },
+    {
+      "probabilities": [
+        0.24698,
+        0.0427,
+        0.33951,
+        0.16632,
+        0.20449
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.33951,
+      "entropy": 1.46973
+    },
+    {
+      "probabilities": [
+        0.34821,
+        0.02734,
+        0.28068,
+        0.19338,
+        0.15038
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.34821,
+      "entropy": 1.42503
+    },
+    {
+      "probabilities": [
+        0.23395,
+        0.12579,
+        0.31552,
+        0.15764,
+        0.16709
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.31552,
+      "entropy": 1.55479
+    },
+    {
+      "probabilities": [
+        0.24673,
+        0.04994,
+        0.3504,
+        0.13995,
+        0.21299
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.3504,
+      "entropy": 1.467
+    },
+    {
+      "probabilities": [
+        0.34951,
+        0.0317,
+        0.24646,
+        0.16947,
+        0.20285
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.34951,
+      "entropy": 1.44645
+    },
+    {
+      "probabilities": [
+        0.20555,
+        0.02716,
+        0.38866,
+        0.07089,
+        0.30774
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.38866,
+      "entropy": 1.34073
+    },
+    {
+      "probabilities": [
+        0.19458,
+        0.0263,
+        0.3012,
+        0.05627,
+        0.42165
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.42165,
+      "entropy": 1.30168
+    },
+    {
+      "probabilities": [
+        0.10374,
+        0.06027,
+        0.51023,
+        0.04121,
+        0.28456
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.51023,
+      "entropy": 1.23673
+    },
+    {
+      "probabilities": [
+        0.8093,
+        0.00057,
+        0.00411,
+        0.12866,
+        0.05737
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.8093,
+      "entropy": 0.62583
+    },
+    {
+      "probabilities": [
+        0.19968,
+        0.10818,
+        0.24129,
+        0.09267,
+        0.35818
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.35818,
+      "entropy": 1.49352
+    },
+    {
+      "probabilities": [
+        0.06414,
+        0.07353,
+        0.59504,
+        0.02678,
+        0.24051
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.59504,
+      "entropy": 1.11667
+    },
+    {
+      "probabilities": [
+        0.07404,
+        0.07153,
+        0.46837,
+        0.03082,
+        0.35525
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.46837,
+      "entropy": 1.21154
+    },
+    {
+      "probabilities": [
+        0.06072,
+        0.04262,
+        0.52918,
+        0.02286,
+        0.34462
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.52918,
+      "entropy": 1.09488
+    },
+    {
+      "probabilities": [
+        0.06004,
+        0.12939,
+        0.29272,
+        0.02741,
+        0.49045
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.49045,
+      "entropy": 1.24109
+    },
+    {
+      "probabilities": [
+        0.31364,
+        0.06363,
+        0.12721,
+        0.1161,
+        0.37941
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.37941,
+      "entropy": 1.41895
+    },
+    {
+      "probabilities": [
+        0.06433,
+        0.06471,
+        0.38008,
+        0.01933,
+        0.47154
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.47154,
+      "entropy": 1.15212
+    },
+    {
+      "probabilities": [
+        0.9253,
+        0.0002,
+        0.00092,
+        0.04199,
+        0.03159
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.9253,
+      "entropy": 0.32221
+    },
+    {
+      "probabilities": [
+        0.00986,
+        0.71692,
+        0.2213,
+        0.01116,
+        0.04077
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.71692,
+      "entropy": 0.7985
+    },
+    {
+      "probabilities": [
+        0.05092,
+        0.44857,
+        0.30801,
+        0.03887,
+        0.15363
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.44857,
+      "entropy": 1.28796
+    },
+    {
+      "probabilities": [
+        0.70759,
+        0.00367,
+        0.00779,
+        0.13111,
+        0.14984
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.70759,
+      "entropy": 0.85397
+    },
+    {
+      "probabilities": [
+        0.16507,
+        0.02065,
+        0.14193,
+        0.0568,
+        0.61555
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.61555,
+      "entropy": 1.1162
+    },
+    {
+      "probabilities": [
+        0.16611,
+        0.0326,
+        0.17155,
+        0.07539,
+        0.55435
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.55435,
+      "entropy": 1.23415
+    },
+    {
+      "probabilities": [
+        0.68227,
+        0.00201,
+        0.00533,
+        0.21793,
+        0.09246
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.68227,
+      "entropy": 0.85339
+    },
+    {
+      "probabilities": [
+        0.03626,
+        0.10516,
+        0.37633,
+        0.02361,
+        0.45864
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.45864,
+      "entropy": 1.17087
+    },
+    {
+      "probabilities": [
+        0.0235,
+        0.16162,
+        0.43219,
+        0.023,
+        0.35969
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.43219,
+      "entropy": 1.1998
+    },
+    {
+      "probabilities": [
+        0.02487,
+        0.08149,
+        0.50481,
+        0.02248,
+        0.36634
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.50481,
+      "entropy": 1.09448
+    },
+    {
+      "probabilities": [
+        0.06129,
+        0.43888,
+        0.23374,
+        0.0897,
+        0.17638
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.43888,
+      "entropy": 1.39465
+    },
+    {
+      "probabilities": [
+        0.21152,
+        0.03123,
+        0.05675,
+        0.46977,
+        0.23073
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.46977,
+      "entropy": 1.29295
+    },
+    {
+      "probabilities": [
+        0.44736,
+        0.00112,
+        0.00224,
+        0.44603,
+        0.10325
+      ],
+      "max_action": "NONE",
+      "max_probability": 0.44736,
+      "entropy": 0.97565
+    },
+    {
+      "probabilities": [
+        0.01639,
+        0.15105,
+        0.50999,
+        0.0214,
+        0.30117
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.50999,
+      "entropy": 1.13999
+    },
+    {
+      "probabilities": [
+        0.05532,
+        0.08419,
+        0.2511,
+        0.20749,
+        0.4019
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.4019,
+      "entropy": 1.40815
+    },
+    {
+      "probabilities": [
+        0.01014,
+        0.07147,
+        0.77711,
+        0.01209,
+        0.1292
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.77711,
+      "entropy": 0.74885
+    },
+    {
+      "probabilities": [
+        0.01796,
+        0.08111,
+        0.6191,
+        0.02275,
+        0.25908
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.6191,
+      "entropy": 1.00877
+    },
+    {
+      "probabilities": [
+        0.02395,
+        0.04568,
+        0.44629,
+        0.0318,
+        0.45228
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.45228,
+      "entropy": 1.05893
+    },
+    {
+      "probabilities": [
+        0.08328,
+        0.00138,
+        0.00227,
+        0.77983,
+        0.13325
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.77983,
+      "entropy": 0.69239
+    },
+    {
+      "probabilities": [
+        0.04847,
+        0.00147,
+        0.00176,
+        0.84792,
+        0.10038
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.84792,
+      "entropy": 0.53809
+    },
+    {
+      "probabilities": [
+        0.01706,
+        0.07216,
+        0.59803,
+        0.02549,
+        0.28726
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.59803,
+      "entropy": 1.01847
+    },
+    {
+      "probabilities": [
+        0.02719,
+        0.19321,
+        0.32661,
+        0.26848,
+        0.18452
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.32661,
+      "entropy": 1.446
+    },
+    {
+      "probabilities": [
+        0.03528,
+        0.04982,
+        0.04561,
+        0.77483,
+        0.09447
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.77483,
+      "entropy": 0.82881
+    },
+    {
+      "probabilities": [
+        0.0381,
+        0.00486,
+        0.00818,
+        0.78424,
+        0.16462
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.78424,
+      "entropy": 0.67728
+    },
+    {
+      "probabilities": [
+        0.02423,
+        0.00071,
+        0.00095,
+        0.94638,
+        0.02773
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.94638,
+      "entropy": 0.2535
+    },
+    {
+      "probabilities": [
+        0.0077,
+        0.03271,
+        0.84905,
+        0.01285,
+        0.0977
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.84905,
+      "entropy": 0.57142
+    },
+    {
+      "probabilities": [
+        0.02311,
+        0.00111,
+        0.00153,
+        0.93686,
+        0.0374
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.93686,
+      "entropy": 0.28853
+    },
+    {
+      "probabilities": [
+        0.00641,
+        0.02446,
+        0.90279,
+        0.00884,
+        0.0575
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.90279,
+      "entropy": 0.42149
+    },
+    {
+      "probabilities": [
+        0.00464,
+        0.02528,
+        0.92555,
+        0.00546,
+        0.03906
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.92555,
+      "entropy": 0.34464
+    },
+    {
+      "probabilities": [
+        0.00291,
+        0.03142,
+        0.93948,
+        0.0035,
+        0.02268
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.93948,
+      "entropy": 0.29008
+    },
+    {
+      "probabilities": [
+        0.00186,
+        0.03552,
+        0.94733,
+        0.00158,
+        0.0137
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.94733,
+      "entropy": 0.25049
+    },
+    {
+      "probabilities": [
+        0.00322,
+        0.04412,
+        0.92134,
+        0.00374,
+        0.02758
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.92134,
+      "entropy": 0.35157
+    },
+    {
+      "probabilities": [
+        0.00357,
+        0.0455,
+        0.91615,
+        0.00504,
+        0.02974
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.91615,
+      "entropy": 0.37215
+    },
+    {
+      "probabilities": [
+        0.06695,
+        0.00031,
+        0.00021,
+        0.91523,
+        0.01731
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.91523,
+      "entropy": 0.33655
+    },
+    {
+      "probabilities": [
+        0.09369,
+        0.00056,
+        0.00051,
+        0.8815,
+        0.02374
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.8815,
+      "entropy": 0.42993
+    },
+    {
+      "probabilities": [
+        0.00341,
+        0.06334,
+        0.90656,
+        0.00304,
+        0.02365
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.90656,
+      "entropy": 0.38924
+    },
+    {
+      "probabilities": [
+        0.0143,
+        0.08422,
+        0.7772,
+        0.01901,
+        0.10527
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.7772,
+      "entropy": 0.77733
+    },
+    {
+      "probabilities": [
+        0.17159,
+        0.00661,
+        0.00838,
+        0.68072,
+        0.13269
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.68072,
+      "entropy": 0.90552
+    },
+    {
+      "probabilities": [
+        0.03928,
+        0.0876,
+        0.43129,
+        0.07122,
+        0.37061
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.43129,
+      "entropy": 1.2592
+    },
+    {
+      "probabilities": [
+        0.04425,
+        0.0683,
+        0.34944,
+        0.07575,
+        0.46226
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.46226,
+      "entropy": 1.24084
+    },
+    {
+      "probabilities": [
+        0.02891,
+        0.52715,
+        0.41648,
+        0.01203,
+        0.01543
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.52715,
+      "entropy": 0.9223
+    },
+    {
+      "probabilities": [
+        0.09733,
+        0.0024,
+        0.002,
+        0.82255,
+        0.07572
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.82255,
+      "entropy": 0.60974
+    },
+    {
+      "probabilities": [
+        0.07315,
+        0.25682,
+        0.31942,
+        0.19101,
+        0.1596
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.31942,
+      "entropy": 1.51404
+    },
+    {
+      "probabilities": [
+        0.00964,
+        0.14317,
+        0.79605,
+        0.0075,
+        0.04364
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.79605,
+      "entropy": 0.67797
+    },
+    {
+      "probabilities": [
+        0.01859,
+        0.08781,
+        0.65395,
+        0.0253,
+        0.21435
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.65395,
+      "entropy": 0.98859
+    },
+    {
+      "probabilities": [
+        0.00471,
+        0.08455,
+        0.87192,
+        0.00333,
+        0.0355
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.87192,
+      "entropy": 0.49107
+    },
+    {
+      "probabilities": [
+        0.17959,
+        0.00261,
+        0.00373,
+        0.74535,
+        0.06872
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.74535,
+      "entropy": 0.74781
+    },
+    {
+      "probabilities": [
+        0.14181,
+        0.0008,
+        0.00094,
+        0.80706,
+        0.04939
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.80706,
+      "entropy": 0.61081
+    },
+    {
+      "probabilities": [
+        0.12383,
+        0.09552,
+        0.08451,
+        0.63426,
+        0.06189
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.63426,
+      "entropy": 1.15277
+    },
+    {
+      "probabilities": [
+        0.00433,
+        0.02901,
+        0.9244,
+        0.00301,
+        0.03926
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.9244,
+      "entropy": 0.34348
+    },
+    {
+      "probabilities": [
+        0.10705,
+        0.00025,
+        0.00021,
+        0.86338,
+        0.0291
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.86338,
+      "entropy": 0.47285
+    },
+    {
+      "probabilities": [
+        0.00721,
+        0.02655,
+        0.92868,
+        0.00529,
+        0.03227
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.92868,
+      "entropy": 0.33916
+    },
+    {
+      "probabilities": [
+        0.00197,
+        0.02584,
+        0.9592,
+        0.00108,
+        0.01191
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.9592,
+      "entropy": 0.20688
+    },
+    {
+      "probabilities": [
+        0.11495,
+        0.00026,
+        0.00025,
+        0.86758,
+        0.01697
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.86758,
+      "entropy": 0.44529
+    },
+    {
+      "probabilities": [
+        0.13435,
+        0.00104,
+        0.0009,
+        0.84994,
+        0.01377
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.84994,
+      "entropy": 0.48034
+    },
+    {
+      "probabilities": [
+        0.08826,
+        0.00017,
+        0.0001,
+        0.8995,
+        0.01197
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.8995,
+      "entropy": 0.36489
+    },
+    {
+      "probabilities": [
+        0.36324,
+        0.00307,
+        0.00212,
+        0.59432,
+        0.03726
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.59432,
+      "entropy": 0.83046
+    },
+    {
+      "probabilities": [
+        0.00477,
+        0.02411,
+        0.91331,
+        0.004,
+        0.05382
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.91331,
+      "entropy": 0.37743
+    },
+    {
+      "probabilities": [
+        0.17152,
+        0.00114,
+        0.00086,
+        0.76936,
+        0.05712
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.76936,
+      "entropy": 0.68143
+    },
+    {
+      "probabilities": [
+        0.00214,
+        0.02797,
+        0.95384,
+        0.00139,
+        0.01465
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.95384,
+      "entropy": 0.22934
+    },
+    {
+      "probabilities": [
+        0.00263,
+        0.06531,
+        0.90798,
+        0.00248,
+        0.0216
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.90798,
+      "entropy": 0.37921
+    },
+    {
+      "probabilities": [
+        0.23033,
+        0.00991,
+        0.01067,
+        0.62082,
+        0.12826
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.62082,
+      "entropy": 0.99173
+    },
+    {
+      "probabilities": [
+        0.10959,
+        0.00133,
+        0.00113,
+        0.82229,
+        0.06565
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.82229,
+      "entropy": 0.59849
+    },
+    {
+      "probabilities": [
+        0.02426,
+        0.32966,
+        0.5427,
+        0.05808,
+        0.04531
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.5427,
+      "entropy": 1.09322
+    },
+    {
+      "probabilities": [
+        0.04812,
+        0.07914,
+        0.05869,
+        0.79172,
+        0.02232
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.79172,
+      "entropy": 0.78296
+    },
+    {
+      "probabilities": [
+        0.02967,
+        0.37111,
+        0.55768,
+        0.02329,
+        0.01825
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.55768,
+      "entropy": 0.95855
+    },
+    {
+      "probabilities": [
+        0.0988,
+        0.31886,
+        0.47747,
+        0.06694,
+        0.03794
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.47747,
+      "entropy": 1.25124
+    },
+    {
+      "probabilities": [
+        0.02243,
+        0.00219,
+        0.0007,
+        0.95439,
+        0.02029
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.95439,
+      "entropy": 0.22728
+    },
+    {
+      "probabilities": [
+        0.01614,
+        0.44333,
+        0.48981,
+        0.02553,
+        0.02519
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.48981,
+      "entropy": 0.9632
+    },
+    {
+      "probabilities": [
+        0.00694,
+        0.26038,
+        0.69808,
+        0.01044,
+        0.02417
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.69808,
+      "entropy": 0.77335
+    },
+    {
+      "probabilities": [
+        0.03309,
+        0.3992,
+        0.41689,
+        0.12206,
+        0.02876
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.41689,
+      "entropy": 1.20291
+    },
+    {
+      "probabilities": [
+        0.13143,
+        0.12588,
+        0.15559,
+        0.42282,
+        0.16427
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.42282,
+      "entropy": 1.47775
+    },
+    {
+      "probabilities": [
+        0.02864,
+        0.00019,
+        0.00011,
+        0.95844,
+        0.01262
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.95844,
+      "entropy": 0.20023
+    },
+    {
+      "probabilities": [
+        0.01933,
+        0.46717,
+        0.45415,
+        0.02899,
+        0.03037
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.46717,
+      "entropy": 0.99903
+    },
+    {
+      "probabilities": [
+        0.00561,
+        0.4671,
+        0.48993,
+        0.00889,
+        0.02847
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.48993,
+      "entropy": 0.87751
+    },
+    {
+      "probabilities": [
+        0.02968,
+        0.00309,
+        0.00071,
+        0.94954,
+        0.01697
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.94954,
+      "entropy": 0.24574
+    },
+    {
+      "probabilities": [
+        0.04203,
+        0.13789,
+        0.07105,
+        0.66585,
+        0.0832
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.66585,
+      "entropy": 1.07194
+    },
+    {
+      "probabilities": [
+        0.00842,
+        0.28214,
+        0.64697,
+        0.01906,
+        0.04341
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.64697,
+      "entropy": 0.89063
+    },
+    {
+      "probabilities": [
+        0.006,
+        0.35978,
+        0.58542,
+        0.01389,
+        0.03491
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.58542,
+      "entropy": 0.88846
+    },
+    {
+      "probabilities": [
+        0.00804,
+        0.2771,
+        0.67254,
+        0.0149,
+        0.02742
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.67254,
+      "entropy": 0.82249
+    },
+    {
+      "probabilities": [
+        0.06712,
+        0.00043,
+        0.00015,
+        0.91526,
+        0.01703
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.91526,
+      "entropy": 0.3364
+    },
+    {
+      "probabilities": [
+        0.13085,
+        0.00014,
+        8e-05,
+        0.85908,
+        0.00985
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.85908,
+      "entropy": 0.44413
+    },
+    {
+      "probabilities": [
+        0.02161,
+        0.25872,
+        0.63562,
+        0.04068,
+        0.04338
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.63562,
+      "entropy": 0.98705
+    },
+    {
+      "probabilities": [
+        0.07014,
+        0.10635,
+        0.09598,
+        0.6699,
+        0.05763
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.6699,
+      "entropy": 1.0825
+    },
+    {
+      "probabilities": [
+        0.03637,
+        9e-05,
+        0.00012,
+        0.95335,
+        0.01007
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.95335,
+      "entropy": 0.21426
+    },
+    {
+      "probabilities": [
+        0.04197,
+        0.17486,
+        0.06338,
+        0.65323,
+        0.06655
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.65323,
+      "entropy": 1.07135
+    },
+    {
+      "probabilities": [
+        0.0143,
+        0.33063,
+        0.4969,
+        0.08458,
+        0.07359
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.4969,
+      "entropy": 1.17511
+    },
+    {
+      "probabilities": [
+        0.03011,
+        0.00017,
+        0.00014,
+        0.95983,
+        0.00975
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.95983,
+      "entropy": 0.19267
+    },
+    {
+      "probabilities": [
+        0.02373,
+        0.00017,
+        9e-05,
+        0.96905,
+        0.00697
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.96905,
+      "entropy": 0.15613
+    },
+    {
+      "probabilities": [
+        0.02384,
+        0.36962,
+        0.39403,
+        0.16276,
+        0.04975
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.39403,
+      "entropy": 1.26869
+    },
+    {
+      "probabilities": [
+        0.02716,
+        0.31576,
+        0.35901,
+        0.25772,
+        0.04035
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.35901,
+      "entropy": 1.30867
+    },
+    {
+      "probabilities": [
+        0.10166,
+        0.01964,
+        0.00988,
+        0.82222,
+        0.0466
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.82222,
+      "entropy": 0.65904
+    },
+    {
+      "probabilities": [
+        0.04054,
+        0.00251,
+        0.00245,
+        0.94052,
+        0.01399
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.94052,
+      "entropy": 0.27707
+    },
+    {
+      "probabilities": [
+        0.00342,
+        0.62838,
+        0.3624,
+        0.0035,
+        0.0023
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.62838,
+      "entropy": 0.71298
+    },
+    {
+      "probabilities": [
+        0.0025,
+        0.50108,
+        0.49338,
+        0.00171,
+        0.00134
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.50108,
+      "entropy": 0.72948
+    },
+    {
+      "probabilities": [
+        0.02323,
+        0.53479,
+        0.10169,
+        0.33058,
+        0.00971
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.53479,
+      "entropy": 1.06548
+    },
+    {
+      "probabilities": [
+        0.02063,
+        0.50906,
+        0.09104,
+        0.37034,
+        0.00894
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.50906,
+      "entropy": 1.05197
+    },
+    {
+      "probabilities": [
+        0.00363,
+        0.58114,
+        0.41067,
+        0.00313,
+        0.00143
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.58114,
+      "entropy": 0.72875
+    },
+    {
+      "probabilities": [
+        0.00259,
+        0.84661,
+        0.1149,
+        0.03102,
+        0.00487
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.84661,
+      "entropy": 0.5387
+    },
+    {
+      "probabilities": [
+        0.01341,
+        0.38907,
+        0.18914,
+        0.39088,
+        0.01749
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.39088,
+      "entropy": 1.17803
+    },
+    {
+      "probabilities": [
+        0.00903,
+        0.13281,
+        0.0727,
+        0.77459,
+        0.01088
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.77459,
+      "entropy": 0.74822
+    },
+    {
+      "probabilities": [
+        0.00775,
+        0.56544,
+        0.35683,
+        0.06489,
+        0.00508
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.56544,
+      "entropy": 0.93208
+    },
+    {
+      "probabilities": [
+        0.00541,
+        0.66351,
+        0.20385,
+        0.11933,
+        0.00789
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.66351,
+      "entropy": 0.91652
+    },
+    {
+      "probabilities": [
+        0.01088,
+        0.10041,
+        0.1105,
+        0.76211,
+        0.0161
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.76211,
+      "entropy": 0.7969
+    },
+    {
+      "probabilities": [
+        0.00591,
+        0.0108,
+        0.01157,
+        0.9629,
+        0.00883
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.9629,
+      "entropy": 0.20897
+    },
+    {
+      "probabilities": [
+        0.00836,
+        0.07604,
+        0.14273,
+        0.75917,
+        0.01369
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.75917,
+      "entropy": 0.78172
+    },
+    {
+      "probabilities": [
+        0.00927,
+        0.0001,
+        6e-05,
+        0.98879,
+        0.00178
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.98879,
+      "entropy": 0.06728
+    },
+    {
+      "probabilities": [
+        0.10575,
+        0.03105,
+        0.0648,
+        0.75612,
+        0.04228
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.75612,
+      "entropy": 0.86785
+    },
+    {
+      "probabilities": [
+        0.07335,
+        0.00039,
+        0.0002,
+        0.92201,
+        0.00405
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.92201,
+      "entropy": 0.29358
+    },
+    {
+      "probabilities": [
+        0.00714,
+        0.05073,
+        0.07906,
+        0.84187,
+        0.0212
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.84187,
+      "entropy": 0.61375
+    },
+    {
+      "probabilities": [
+        0.04041,
+        0.0022,
+        0.00099,
+        0.95152,
+        0.00489
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.95152,
+      "entropy": 0.22323
+    },
+    {
+      "probabilities": [
+        0.00823,
+        0.11826,
+        0.13631,
+        0.70971,
+        0.02749
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.70971,
+      "entropy": 0.90579
+    },
+    {
+      "probabilities": [
+        0.15345,
+        0.00018,
+        9e-05,
+        0.84239,
+        0.0039
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.84239,
+      "entropy": 0.45609
+    },
+    {
+      "probabilities": [
+        0.00578,
+        0.03714,
+        0.02729,
+        0.9191,
+        0.01069
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.9191,
+      "entropy": 0.37644
+    },
+    {
+      "probabilities": [
+        0.36374,
+        0.00083,
+        0.00104,
+        0.60847,
+        0.02592
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.60847,
+      "entropy": 0.77788
+    },
+    {
+      "probabilities": [
+        0.01301,
+        0.6173,
+        0.3371,
+        0.02974,
+        0.00285
+      ],
+      "max_action": "LEFT",
+      "max_probability": 0.6173,
+      "entropy": 0.84207
+    },
+    {
+      "probabilities": [
+        0.00362,
+        0.06662,
+        0.06613,
+        0.85104,
+        0.0126
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.85104,
+      "entropy": 0.57279
+    },
+    {
+      "probabilities": [
+        0.03278,
+        0.00021,
+        0.00016,
+        0.96182,
+        0.00503
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.96182,
+      "entropy": 0.1793
+    },
+    {
+      "probabilities": [
+        0.0042,
+        0.30522,
+        0.68096,
+        0.00813,
+        0.00149
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.68096,
+      "entropy": 0.69569
+    },
+    {
+      "probabilities": [
+        0.00957,
+        0.32498,
+        0.2725,
+        0.38488,
+        0.00807
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.38488,
+      "entropy": 1.17044
+    },
+    {
+      "probabilities": [
+        0.00181,
+        0.08492,
+        0.87541,
+        0.03109,
+        0.00677
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.87541,
+      "entropy": 0.47904
+    },
+    {
+      "probabilities": [
+        0.05888,
+        0.00137,
+        0.00055,
+        0.93683,
+        0.00237
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.93683,
+      "entropy": 0.25536
+    },
+    {
+      "probabilities": [
+        0.29665,
+        0.0004,
+        0.00014,
+        0.69895,
+        0.00386
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.69895,
+      "entropy": 0.63669
+    },
+    {
+      "probabilities": [
+        0.00225,
+        0.01125,
+        0.0141,
+        0.9704,
+        0.002
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.9704,
+      "entropy": 0.16585
+    },
+    {
+      "probabilities": [
+        0.00102,
+        0.29269,
+        0.7036,
+        0.00137,
+        0.00132
+      ],
+      "max_action": "RIGHT",
+      "max_probability": 0.7036,
+      "entropy": 0.63176
+    },
+    {
+      "probabilities": [
+        0.00572,
+        0.13836,
+        0.13954,
+        0.70436,
+        0.01203
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.70436,
+      "entropy": 0.87802
+    }
+  ],
+  "completed_requested_steps": false,
+  "interrupted_or_time_limited": true
+}
