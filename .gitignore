@@ -24,3 +24,10 @@ rankedsurfers-downloaded/cdn-cgi/
 /weights/
 /yolo11n-seg.pt
 /rs_v5_*.zip
+
+# Local archives and uncaptured diagnostics
+/development/local/
+/ai_data/guard_backups/
+/ai_data/v612_*.zip
+/v612_*.zip
+/v612_guard_backup_*/

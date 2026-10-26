@@ -1,0 +1,35 @@
+V6.1.2 Episode 1631 menu-confirmation fix
+
+Affected files:
+- rs_v612_gameplay_guard.py
+- test_rs_v612_guard.py
+
+Evidence: long-run stop episode 1631, six ML MENU probabilities
+0.99748..0.99924; independent menu-template scores:
+[0.844585, 0.507645, 0.493694, 0.670043, 0.730008, 0.662002].
+Old sequence_decision returned ABORT. New rule returns TERMINAL.
+
+Additional six-frame confirmation requires ALL six high-confidence ML MENU
+votes with no independently verified gameplay, at least TWO strong template
+matches (including one in the final three captures), at least FOUR
+moderate corroborated captures, and TWO moderate corroborated final captures.
+No movement keys are authorized by this change; it only confirms terminal menus.
+Existing gameplay/weak-menu safeguards unchanged.
+
+Regression checks:
+- 41 unittest cases pass, including episode 1631 exact readings.
+- Original episode 76 false MENU still aborts, not TERMINAL.
+- Existing episodes 2 and 58 retain TERMINAL decisions.
+- Training checkpoint / classifier and browser crop are unchanged.
+
+Windows PowerShell installation from project root:
+  $zip = "$HOME\Downloads\v612_episode1631_menu_fix.zip"
+  Expand-Archive -LiteralPath $zip -DestinationPath . -Force
+  .\.venv\Scripts\python.exe -m unittest test_rs_v612_guard -v
+  git diff --check
+  git diff -- rs_v612_gameplay_guard.py test_rs_v612_guard.py
+  git add rs_v612_gameplay_guard.py test_rs_v612_guard.py
+  git commit -m "Fix episode 1631 menu confirmation false safety stop"
+  git push origin main
+
+If the ZIP is downloaded under a different name, adjust $zip accordingly.
