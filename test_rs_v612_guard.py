@@ -95,6 +95,52 @@ class V612GuardTests(unittest.TestCase):
                gate('MENU', .47), gate('MENU', .58), gate('MENU', .67)]
         self.assertEqual(sequence_decision(seq), 'ABORT')
 
+    def test_episode_1631_menu_with_moderate_final_template(self):
+        # Exact six-capture evidence from the long-run stop. The screenshot
+        # is the FIND RANKED MATCH menu, not active gameplay.
+        menu_probs = [.9974838495, .9980006814, .9983571172,
+                      .9986847043, .9989854693, .9992403984]
+        scores = [.8445847368, .5076446684, .4936935573,
+                  .6700425811, .7300076586, .6620018850]
+        seq = [screen_gate('MENU', {'MENU': p, 'GAMEPLAY': 1-p}, score,
+                           confidence=C, menu_threshold=T)
+               for p, score in zip(menu_probs, scores)]
+        for n in range(1, 6):
+            self.assertEqual(sequence_decision(seq[:n]), 'CONTINUE')
+        self.assertEqual([r.verdict for r in seq],
+                         ['MENU', 'BLOCK', 'BLOCK', 'BLOCK', 'MENU', 'BLOCK'])
+        self.assertEqual(sequence_decision(seq), 'TERMINAL')
+
+    def test_episode_1631_rejects_unconfirmed_final_frame(self):
+        # A late weak template reading must not be treated as a menu.
+        scores = [.845, .58, .49, .67, .73, .50]
+        self.assertEqual(sequence_decision([gate('MENU', x) for x in scores]),
+                         'ABORT')
+
+    def test_episode_1631_requires_strong_recent_template(self):
+        # Peaks only at the start cannot confirm the final UI state.
+        scores = [.84, .75, .58, .49, .65, .66]
+        self.assertEqual(sequence_decision([gate('MENU', x) for x in scores]),
+                         'ABORT')
+
+    def test_episode_1631_requires_two_strong_template_hits(self):
+        scores = [.845, .58, .49, .67, .66, .66]
+        self.assertEqual(sequence_decision([gate('MENU', x) for x in scores]),
+                         'ABORT')
+
+    def test_episode_1631_rejects_positive_gameplay_evidence(self):
+        seq = [gate('MENU', .845), gate('MENU', .58),
+               gate('MENU', .02, moving=True), gate('MENU', .67),
+               gate('MENU', .73), gate('MENU', .66)]
+        self.assertTrue(seq[2].visual_gameplay)
+        self.assertEqual(sequence_decision(seq), 'ABORT')
+
+    def test_episode_1631_rejects_intervening_unknown_state(self):
+        seq = [gate('MENU', .845), gate('MENU', .58),
+               gate('UNCERTAIN', .59), gate('MENU', .67),
+               gate('MENU', .73), gate('MENU', .66)]
+        self.assertEqual(sequence_decision(seq), 'ABORT')
+
     def test_episode_0058_menu_animation_uncertain_then_menu(self):
         # Exact six-frame evidence from episode 58, human verified as the
         # FIND RANKED MATCH menu. Previously ended with ABORT.

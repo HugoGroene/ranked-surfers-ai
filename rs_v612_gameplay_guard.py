@@ -96,6 +96,8 @@ def sequence_decision(readings, *, max_frames=6):
     intervening non-MENU or visual-gameplay frames. A separate six-frame rule
     handles a menu animation that begins UNCERTAIN and ends with confident
     MENU predictions, provided the independent template agrees repeatedly.
+    A stricter six-frame rule handles sustained confident MENU recognition
+    when the final template reading is moderate after earlier strong matches.
     ML-only MENU votes never confirm death. Otherwise wait and ultimately
     abort without movement.
     """
@@ -123,6 +125,25 @@ def sequence_decision(readings, *, max_frames=6):
             if (len(contiguous_menu) >= 5 and
                     sum(r.menu_evidence for r in contiguous_menu) >= 2 and
                     sum(r.ml_template_corroborated for r in contiguous_menu) >= 4):
+                return 'TERMINAL'
+        # Episode 1631: the new V4 classifier said MENU with >=99.7%
+        # confidence in all six captures, but an animated menu template
+        # fluctuated [.845, .508, .494, .670, .730, .662]. The final
+        # capture was moderately corroborated, not a strong hit. Confirm
+        # only with SIX uninterrupted high-confidence ML MENU votes, two
+        # independent strong template matches (one within the last three),
+        # at least four moderate template matches, and moderate agreement
+        # on BOTH final captures. No positive gameplay evidence may appear.
+        # In particular, ML-only MENU never suffices (episode 76).
+        if len(readings) >= max_frames:
+            window = readings[-max_frames:]
+            if (len(window) >= 6 and
+                    all(r.ml_menu and r.state == 'MENU' and
+                        not r.visual_gameplay for r in window) and
+                    sum(r.menu_evidence for r in window) >= 2 and
+                    any(r.menu_evidence for r in window[-3:]) and
+                    sum(r.ml_template_corroborated for r in window) >= 4 and
+                    all(r.ml_template_corroborated for r in window[-2:])):
                 return 'TERMINAL'
         # Episode 0058: title/menu animation began with three UNCERTAIN V4
         # frames, then three confident MENU frames. The menu template was
