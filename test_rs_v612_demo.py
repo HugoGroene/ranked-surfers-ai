@@ -6,7 +6,7 @@ import unittest
 
 import numpy as np
 
-from rs_v612_demo import parse_segments, action_labels, curate, save_replay, FEATURE_VERSION, AUX_DIM, nonzero_approved_actions
+from rs_v612_demo import parse_segments, action_labels, curate, save_replay, FEATURE_VERSION, AUX_DIM, nonzero_approved_actions, trusted_keydowns, make_preview_video, locate_canvas_in_desktop
 from rs_v612_demo_bc import approved_runs
 
 
@@ -35,6 +35,86 @@ class DemonstrationTests(unittest.TestCase):
                   for code in ('ArrowLeft','ArrowRight')]
         _, valid = action_labels(t, events)
         self.assertFalse(valid[0])
+
+    def test_wasd_space_and_dual_source_deduplication(self):
+        times = [10., 10.05, 10.10, 10.15, 10.20, 10.25]
+        events = [
+            {'at':10.025, 'type':'keydown', 'code':'KeyA',
+             'source':'win32_key_state', 'repeat':False},
+            {'at':10.032, 'type':'keydown', 'code':'ArrowLeft',
+             'source':'browser_dom', 'repeat':False},
+            {'at':10.125, 'type':'keydown', 'code':'Space',
+             'source':'win32_key_state', 'repeat':False},
+            {'at':10.175, 'type':'keydown', 'code':'KeyD',
+             'source':'win32_key_state', 'repeat':False},
+        ]
+        actions, valid = action_labels(times, events)
+        self.assertEqual(actions.tolist(), [1,0,3,2,0,0])
+        self.assertEqual(int(valid[:5].sum()), 5)
+        self.assertEqual(len(trusted_keydowns(events)), 3)
+
+    def test_win32_keydowns_override_delayed_browser_callback(self):
+        times = [5., 5.05, 5.10, 5.15, 5.20, 5.25, 5.30]
+        events = [
+            {'at':5.025, 'type':'keydown', 'code':'KeyA',
+             'repeat':False, 'source':'win32_key_state'},
+            # Browser callbacks can be >200ms behind real physical keydowns
+            # when the page is bogged down by screenshot capture.
+            {'at':5.245, 'type':'keydown', 'code':'KeyA',
+             'repeat':False, 'source':'browser_dom'},
+        ]
+        actions, valid = action_labels(times, events)
+        self.assertEqual(actions.tolist(),[1,0,0,0,0,0,0])
+        self.assertEqual(len(trusted_keydowns(events)),1)
+        self.assertTrue(valid[0])
+
+    def test_dom_only_fallback_without_win32(self):
+        times=[1.,1.05,1.10,1.15]
+        events=[{'at':1.02,'type':'keydown','code':'KeyD',
+                 'repeat':False,'source':'browser_dom'}]
+        actions, valid=action_labels(times,events)
+        self.assertEqual(actions.tolist(),[2,0,0,0])
+        self.assertTrue(valid[0])
+
+    def test_canvas_calibration_matches_real_pixels_not_x11_offsets(self):
+        import cv2
+        rng=np.random.default_rng(27)
+        # A fake Windows desktop with the game window at physical x,y.
+        desktop=rng.integers(0,256,size=(480,800,4),dtype=np.uint8)
+        reference=rng.integers(0,256,size=(280,440,3),dtype=np.uint8)
+        x,y=155,108
+        desktop[y:y+280,x:x+440,:3]=reference
+        region,score=locate_canvas_in_desktop(reference,desktop,
+                                               left=-300,top=100)
+        self.assertEqual(region,{'left':-145,'top':208,
+                                 'width':440,'height':280})
+        self.assertGreater(score,.99)
+        wrong_reference=rng.integers(0,256,size=reference.shape,dtype=np.uint8)
+        with self.assertRaisesRegex(ValueError,'Cannot match Chromium canvas'):
+            locate_canvas_in_desktop(wrong_reference,desktop)
+
+    def test_full_canvas_video_preserves_original_framing(self):
+        import cv2
+        with tempfile.TemporaryDirectory() as tmp:
+            canvas = np.zeros((540, 960, 3), dtype=np.uint8)
+            canvas[:, :15, :] = 255     # left edge must remain visible
+            canvas[:, -15:, :] = 255    # right edge must remain visible
+            ok, jpeg = cv2.imencode('.jpg', canvas)
+            self.assertTrue(ok)
+            single = np.zeros((3,288,512), dtype=np.uint8)
+            secs = np.arange(5) * .05
+            name = make_preview_video(
+                [single]*5, np.zeros(5, dtype=np.int64), secs, Path(tmp),
+                [jpeg.tobytes()]*5)
+            if name is None:
+                self.skipTest('OpenCV video codecs unavailable')
+            cap = cv2.VideoCapture(str(Path(tmp)/name))
+            ret, frame = cap.read()
+            cap.release()
+            self.assertTrue(ret)
+            self.assertEqual(frame.shape[:2], (540,960))
+            self.assertGreater(float(frame[40, 2].mean()), 220)
+            self.assertGreater(float(frame[40,-3].mean()), 220)
 
     def test_save_replay_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:

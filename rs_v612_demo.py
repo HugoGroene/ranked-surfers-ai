@@ -32,7 +32,45 @@ from rs_v5_segmentation_live_benchmark import DEFAULT_CROP, crop_game, fit_rgb_t
 
 ARROWS = {'ArrowLeft': 1, 'ArrowRight': 2, 'ArrowUp': 3, 'ArrowDown': 4}
 ROOT = Path('ai_data/demonstrations_v1')
-WINDOWS_KEYS = {'ArrowLeft': 0x25, 'ArrowUp': 0x26, 'ArrowRight': 0x27, 'ArrowDown': 0x28}
+# Capture arrows AND optional WASD/Space. The labels remain PPO's five actions.
+WINDOWS_KEYS = {
+    'ArrowLeft': 0x25, 'ArrowUp': 0x26, 'ArrowRight': 0x27, 'ArrowDown': 0x28,
+    'KeyA': 0x41, 'KeyW': 0x57, 'KeyD': 0x44, 'KeyS': 0x53, 'Space': 0x20,
+}
+ALIASES = {'KeyA': 'ArrowLeft', 'KeyD': 'ArrowRight',
+           'KeyW': 'ArrowUp', 'KeyS': 'ArrowDown', 'Space': 'ArrowUp'}
+
+
+def canonical_key(code):
+    return ALIASES.get(code, code)
+
+
+def trusted_keydowns(events, *, duplicate_ms=45):
+    """Merge the Win32 and browser event streams, avoiding double labels.
+
+    Uses the earliest arrival for any matching real keydown. It never invents
+    a keypress from camera/player motion.
+    """
+    raw = [e for e in events
+           if e.get('type') == 'keydown'
+           and canonical_key(e.get('code')) in ARROWS
+           and not e.get('repeat', False)]
+    # Win32 is timestamped at the physical press. Playwright bindings can arrive
+    # 100-300ms late if Chromium is busy. A delayed DOM event must NEVER create
+    # a second action or shift the human label into the future. Use the whole
+    # run's Win32 stream when present; otherwise allow browser-only fallback.
+    if any(e.get('source') == 'win32_key_state' for e in raw):
+        raw = [e for e in raw if e.get('source') == 'win32_key_state']
+    raw.sort(key=lambda e: float(e['at']))
+    kept = []
+    last = {}
+    for e in raw:
+        canonical = canonical_key(e['code'])
+        at = float(e['at'])
+        if canonical not in last or at - last[canonical] > duplicate_ms / 1000.:
+            kept.append({**e, 'code': canonical})
+        last[canonical] = at
+    return kept
 
 
 def monitor_windows_arrows(events, stop, *, interval=.004):
@@ -60,6 +98,91 @@ def monitor_windows_arrows(events, stop, *, interval=.004):
                     print(f'[HUMAN INPUT] {code} captured', flush=True)
                 previous[code] = down
         stop.wait(interval)
+
+
+def locate_canvas_in_desktop(reference_bgr, desktop_bgra, *, left=0, top=0,
+                             min_score=.70, downscale=.23):
+    """Locate Chromium's canvas PNG in a physical desktop frame using pixels.
+
+    Unlike the old rs_practice_controller coordinate helper, this does not
+    assume Linux Chrome borders, window position, screen scale, or fullscreen.
+    A static menu / stopped game is recommended for the initial calibration.
+    The return value is an MSS screen rectangle (physical pixels).
+
+    Fail closed if the matched pixels are not similar enough: we prefer refusing
+    to record over confidently labeling the wrong screen region as gameplay.
+    """
+    if (reference_bgr is None or reference_bgr.ndim != 3
+            or desktop_bgra is None or desktop_bgra.ndim != 3):
+        raise ValueError('Reference and desktop must be color images')
+    ref_h, ref_w = reference_bgr.shape[:2]
+    screen_h, screen_w = desktop_bgra.shape[:2]
+    if min(ref_h, ref_w, screen_h, screen_w) < 40:
+        raise ValueError('Unexpectedly small screenshot')
+    if ref_w > screen_w or ref_h > screen_h:
+        raise ValueError('Canvas screenshot is larger than captured desktop; '
+                         'verify Windows display scaling and the correct monitor')
+    screen_gray = cv2.cvtColor(desktop_bgra, cv2.COLOR_BGRA2GRAY)
+    ref_gray = cv2.cvtColor(reference_bgr, cv2.COLOR_BGR2GRAY)
+    size = lambda w,h: (max(1, int(round(w * downscale))),
+                       max(1, int(round(h * downscale))))
+    small_screen = cv2.resize(screen_gray, size(screen_w,screen_h),
+                              interpolation=cv2.INTER_AREA)
+    small_ref = cv2.resize(ref_gray, size(ref_w,ref_h),
+                           interpolation=cv2.INTER_AREA)
+    if small_ref.shape[0] > small_screen.shape[0] or small_ref.shape[1] > small_screen.shape[1]:
+        raise ValueError('Canvas exceeds physical desktop after scaling')
+    coarse = cv2.matchTemplate(small_screen,small_ref,cv2.TM_CCOEFF_NORMED)
+    _,coarse_score,_,pos = cv2.minMaxLoc(coarse)
+    x0,y0 = int(round(pos[0]/downscale)), int(round(pos[1]/downscale))
+    # Match once in a small full-resolution search window near the coarse
+    # location. Calling matchTemplate dozens of times on 1920px frames would
+    # needlessly delay the initial calibration.
+    radius = 8
+    x_left = max(0, x0-radius)
+    y_top = max(0, y0-radius)
+    x_end = min(screen_w, x0+ref_w+radius+1)
+    y_end = min(screen_h, y0+ref_h+radius+1)
+    search = screen_gray[y_top:y_end,x_left:x_end]
+    if search.shape[0] < ref_h or search.shape[1] < ref_w:
+        raise ValueError('Initial canvas match touches invalid desktop coordinates')
+    fine = cv2.matchTemplate(search, ref_gray, cv2.TM_CCOEFF_NORMED)
+    _, score, _, fine_pos = cv2.minMaxLoc(fine)
+    x,y = x_left+fine_pos[0], y_top+fine_pos[1]
+    if score < min_score:
+        raise ValueError(f'Cannot match Chromium canvas to the physical display '
+                         f'(score {score:.3f}; coarse={coarse_score:.3f}); '
+                         'keep game visible, use a static menu and retry')
+    return {'left':int(left+x),'top':int(top+y),
+            'width':int(ref_w),'height':int(ref_h)}, score
+
+
+async def calibrate_canvas_mss(page,canvas,grabber, *, attempts=4):
+    """One-time Playwright screenshot only, then MSS on every gameplay frame."""
+    import rs_practice_controller as controller
+    best_error = None
+    for attempt in range(attempts):
+        try:
+            png = await controller.screenshot_canvas(page,canvas,image_type='png')
+            reference = cv2.imdecode(np.frombuffer(png,dtype=np.uint8),
+                                     cv2.IMREAD_COLOR)
+            if reference is None:
+                raise ValueError('Could not decode browser calibration screenshot')
+            desktop = grabber.monitors[0]
+            shot = np.asarray(grabber.grab(desktop))
+            region,score = locate_canvas_in_desktop(
+                reference,shot,left=desktop['left'],top=desktop['top'])
+            print(f'[CALIBRATION] MSS canvas {region} pixel similarity={score:.3f}',
+                  flush=True)
+            return region
+        except Exception as exc:
+            best_error = exc
+            print(f'[CALIBRATION] Attempt {attempt+1}/{attempts}: {exc}',flush=True)
+            await asyncio.sleep(.20)
+    raise RuntimeError('Cannot safely calibrate fast canvas capture. '
+                       'Do not collect training runs with incorrect pixels. '
+                       'Open the Practice menu, make game fully visible, then '
+                       'restart the recorder; last error: '+str(best_error))
 
 
 def nonzero_approved_actions(actions, valid, seconds, segments):
@@ -96,8 +219,7 @@ def action_labels(times, events, *, max_lag=.13):
     times = np.asarray(times, dtype=float)
     actions = np.zeros(len(times), dtype=np.int64)
     valid = np.zeros(len(times), dtype=bool)
-    ordered = sorted((e for e in events if e['type'] == 'keydown' and e['code'] in ARROWS
-                      and not e.get('repeat', False)), key=lambda e: e['at'])
+    ordered = trusted_keydowns(events)
     p = 0
     for i in range(len(times)-1):
         t0, t1 = times[i], times[i+1]
@@ -176,29 +298,53 @@ def make_contact_sheet(frames, actions, secs, path, count=18):
 
 
 def make_preview_video(frames, actions, seconds, folder, canvas_jpegs=None):
-    """Preview the UNCROPPED game canvas; model frames remain cropped for PPO."""
-    fps = int(np.clip(1.0/max(1e-3, float(np.median(np.diff(seconds)))), 5, 60))
-    for name, codec in (('preview.mp4','mp4v'), ('preview.avi','MJPG')):
-        target = folder/name
-        writer = cv2.VideoWriter(str(target), cv2.VideoWriter_fourcc(*codec), fps, (512, 288))
+    """Human preview uses the entire original canvas, preserving its aspect ratio.
+
+    PPO frames.npz remains the same 3x288x512 game-only image as before.
+    """
+    fps = int(np.clip(1. / max(1e-3, float(np.median(np.diff(seconds)))), 5, 60))
+    has_canvas = bool(canvas_jpegs and canvas_jpegs[0] is not None)
+    source = (cv2.imdecode(np.frombuffer(canvas_jpegs[0], dtype=np.uint8),
+                           cv2.IMREAD_COLOR)
+              if has_canvas else cv2.cvtColor(frames[0].transpose(1, 2, 0),
+                                              cv2.COLOR_RGB2BGR))
+    if source is None or source.ndim != 3:
+        raise ValueError('Invalid video source frame')
+    source_h, source_w = source.shape[:2]
+    scale = min(1., 960. / source_w)
+    width = max(2, 2 * round(source_w * scale / 2))
+    height = max(2, 2 * round(source_h * scale / 2))
+    for name, codec in (('preview.mp4', 'mp4v'), ('preview.avi', 'MJPG')):
+        target = folder / name
+        writer = cv2.VideoWriter(str(target), cv2.VideoWriter_fourcc(*codec),
+                                 fps, (width, height))
         if not writer.isOpened():
             writer.release()
             continue
-        for idx, frame in enumerate(frames):
-            if canvas_jpegs is not None and canvas_jpegs[idx] is not None:
-                # Full-canvas preview recorded independently from PPO crop.
-                bgr = cv2.imdecode(np.frombuffer(canvas_jpegs[idx], dtype=np.uint8),
-                                   cv2.IMREAD_COLOR)
-                if bgr is None or bgr.shape[:2] != (288, 512):
-                    raise ValueError('Invalid full-canvas preview JPEG')
-            else:
-                bgr = cv2.cvtColor(frame.transpose(1,2,0), cv2.COLOR_RGB2BGR)
-            labeled = bgr.copy()
-            cv2.rectangle(labeled, (0, 262), (230, 288), (17,17,17), -1)
-            cv2.putText(labeled, f'{seconds[idx]:.2f}s {ACTION_NAMES[actions[idx]]}',
-                        (12,281), cv2.FONT_HERSHEY_SIMPLEX, .55, (255,255,255), 1, cv2.LINE_AA)
-            writer.write(labeled)
-        writer.release()
+        try:
+            for idx, frame in enumerate(frames):
+                if has_canvas:
+                    if canvas_jpegs[idx] is None:
+                        raise ValueError('Missing full-canvas frame in replay')
+                    bgr = cv2.imdecode(np.frombuffer(canvas_jpegs[idx],
+                                                     dtype=np.uint8), cv2.IMREAD_COLOR)
+                else:
+                    bgr = cv2.cvtColor(frame.transpose(1, 2, 0), cv2.COLOR_RGB2BGR)
+                if bgr is None or bgr.shape[:2] != (source_h, source_w):
+                    raise ValueError('Inconsistent full-canvas dimensions during replay')
+                if bgr.shape[1] != width or bgr.shape[0] != height:
+                    bgr = cv2.resize(bgr, (width, height), interpolation=cv2.INTER_AREA)
+                labeled = bgr.copy()
+                y0 = max(0, height - 32)
+                cv2.rectangle(labeled, (0, y0), (min(width, 265), height),
+                              (17, 17, 17), -1)
+                cv2.putText(labeled,
+                            f'{seconds[idx]:.2f}s {ACTION_NAMES[actions[idx]]}',
+                            (10, height-10), cv2.FONT_HERSHEY_SIMPLEX,
+                            .55, (255, 255, 255), 1, cv2.LINE_AA)
+                writer.write(labeled)
+        finally:
+            writer.release()
         if target.exists() and target.stat().st_size > 1024:
             return name
         target.unlink(missing_ok=True)
@@ -239,8 +385,12 @@ def save_replay(samples, events, output, *, status, segments=None, reason=''):
         'reason': reason, 'last_0_7s_excluded_by_default': True,
         'frame_storage': 'single RGB CHW frame; reconstruct 4-frame stack with oldest-first order',
         'preview_source': 'full_canvas_before_model_crop_when_available',
-        'recorded_keydown_count': sum(e.get('type') == 'keydown' and e.get('code') in ARROWS
-                                      for e in events),
+        'recorded_keydown_count': len(trusted_keydowns(events)),
+        'keyboard_sources': dict(Counter(e.get('source','unknown') for e in events)),
+        'preview_canvas_original_shape': (
+            list(cv2.imdecode(np.frombuffer(samples[0]['canvas_jpeg'],
+                 dtype=np.uint8), cv2.IMREAD_COLOR).shape[:2])
+            if samples[0].get('canvas_jpeg') is not None else None),
         'review_note': 'Approve only genuinely good intervals; long survival alone does not prove optimal actions.',
     }
     (output/'manifest.json').write_text(json.dumps(metadata, indent=2)+'\n', encoding='utf-8')
@@ -321,6 +471,38 @@ async def capture_loop(a):
       async with async_playwright() as pw:
         browser = await pw.chromium.launch(headless=False, args=['--start-maximized'])
         ctx = await browser.new_context(no_viewport=True)
+
+        def browser_keys(_source, payload):
+            # The browser callback also works for child Unity iframes. Playwright
+            # may deliver it a few ms after the event; Win32 is preferred if
+            # both sources captured the same physical keypress.
+            if (isinstance(payload, dict)
+                    and payload.get('code') in WINDOWS_KEYS
+                    and payload.get('event') in ('keydown', 'keyup')):
+                events.append({'at': time.perf_counter(),
+                               'code': payload['code'], 'type': payload['event'],
+                               'repeat': bool(payload.get('repeat', False)),
+                               'source': 'browser_dom'})
+                if payload['event'] == 'keydown' and not payload.get('repeat'):
+                    print(f"[BROWSER INPUT] {payload['code']} captured", flush=True)
+
+        await ctx.expose_binding('__rs_demo_key_event', browser_keys)
+        await ctx.add_init_script("""
+          (() => {
+            const accepted = new Set([
+              'ArrowLeft','ArrowRight','ArrowUp','ArrowDown',
+              'KeyA','KeyD','KeyW','KeyS','Space'
+            ]);
+            for (const type of ['keydown','keyup']) {
+              window.addEventListener(type, e => {
+                if (!e.isTrusted || !accepted.has(e.code)) return;
+                window.__rs_demo_key_event({
+                  event: type, code: e.code, repeat: e.repeat
+                }).catch(() => {});
+              }, true);
+            }
+          })();
+        """)
         page = await ctx.new_page()
         try:
             cdp = await ctx.new_cdp_session(page)
@@ -336,16 +518,34 @@ async def capture_loop(a):
         print('Click local Practice and use keyboard normally. Manually press R to restart after death.', flush=True)
         canvas = await controller.find_canvas(page, timeout=60)
         with mss.mss() as grabber:
-            # Existing region helper accounts for iframe coordinates + Chrome UI chrome.
-            coords = argparse.Namespace(screen_x_offset=a.screen_x_offset, screen_y_offset=a.screen_y_offset)
-            region = await controller.mss_region_for_canvas(page, canvas, grabber, coords)
-            print('Capture rectangle:', region, '| Verify contact sheets before BC.', flush=True)
+            print('[CAPTURE] Calibrating canvas against physical desktop once. '
+                  'There are NO Chromium screenshots during normal gameplay.',
+                  flush=True)
+            region = await calibrate_canvas_mss(page,canvas,grabber)
+            async def canvas_view_signature():
+                info = await page.evaluate("""() => [
+                    window.innerWidth,window.innerHeight,
+                    window.devicePixelRatio,window.screenX,window.screenY
+                ]""")
+                bounds = await canvas.bounding_box()
+                if not bounds:
+                    raise RuntimeError('Game canvas temporarily not visible')
+                # Canvas CSS geometry can change even without a browser
+                # viewport change (e.g. the game enters its own fullscreen).
+                return tuple(info) + tuple(round(bounds[k],1)
+                       for k in ('x','y','width','height'))
+            canvas_view = await canvas_view_signature()
+            last_view_check = time.perf_counter()
             mode, streak, samples, start_event_index = 'idle', 0, [], 0
             recent = None
             menu_first = None
             future, last_detection, request_id = None, None, 0
             episode = 0
             interval = 1./a.fps
+            first_capture_written = False
+            capture_intervals = deque(maxlen=80)
+            last_captured = None
+            last_rate_log = time.perf_counter()
             next_tick = time.perf_counter()
             try:
                 while True:
@@ -392,8 +592,48 @@ async def capture_loop(a):
                         await asyncio.sleep(.08)
                         next_tick = time.perf_counter()+interval
                         continue
+                    # Only check for window move/fullscreen transitions about
+                    # once a second; the heavy screenshot happens only on change.
+                    if time.perf_counter()-last_view_check >= 1.0:
+                        current_view = await canvas_view_signature()
+                        last_view_check = time.perf_counter()
+                        if current_view != canvas_view:
+                            print('[CAPTURE] Browser moved/resized/fullscreen changed. '
+                                  'Discarding partial run and recalibrating!', flush=True)
+                            mode,streak,samples,recent = 'idle',0,[],None
+                            last_detection,future,request_id = None,None,0
+                            region = await calibrate_canvas_mss(page,canvas,grabber)
+                            canvas_view=current_view
+                            first_capture_written=False
+                            last_captured=None
+                            capture_intervals.clear()
+                            next_tick=time.perf_counter()+interval
+                            continue
                     shot = np.asarray(grabber.grab(region))
                     captured_at = time.perf_counter()
+                    if last_captured is not None:
+                        capture_intervals.append(captured_at-last_captured)
+                    last_captured=captured_at
+                    if captured_at-last_rate_log>=5.0:
+                        effective_fps = (1. / float(np.median(capture_intervals))
+                                         if capture_intervals else 0.0)
+                        print(f'[CAPTURE] Measured frame interval '
+                              f'{1000./effective_fps:.0f} ms ('
+                              f'{effective_fps:.1f} FPS)'
+                              if effective_fps else '[CAPTURE] FPS not yet available',
+                              flush=True)
+                        if effective_fps < 8:
+                            print('[WARNING] Capture below 8 FPS; BC action '
+                                  'samples may be invalid. Save only candidate.',
+                                  flush=True)
+                        last_rate_log=captured_at
+                    if not first_capture_written:
+                        preview_file = a.root/'capture_preview_full_canvas.png'
+                        if not cv2.imwrite(str(preview_file), shot):
+                            raise RuntimeError('Could not save initial canvas preview')
+                        first_capture_written = True
+                        print(f'[CAPTURE] Raw canvas {shot.shape[1]}x{shot.shape[0]}; '
+                              f'preview saved: {preview_file}', flush=True)
                     state, probs = states.state(shot, confidence=a.state_confidence)
                     # Uncertain screenshots never get recorded as gameplay.
                     if state == 'GAMEPLAY':
@@ -443,11 +683,12 @@ async def capture_loop(a):
                         frame = np.ascontiguousarray(rgb.transpose(2,0,1))
                         # Human review shows the ENTIRE canvas, while V6.1 PPO still sees
                         # the exact crop+letterbox input it was trained on.
-                        canvas_rgb = cv2.cvtColor(shot, cv2.COLOR_BGRA2RGB)
-                        canvas_rgb = fit_rgb_to_target(canvas_rgb, (512,288),
-                                                       interpolation=cv2.INTER_LINEAR)
-                        ok, encoded = cv2.imencode('.jpg', cv2.cvtColor(canvas_rgb, cv2.COLOR_RGB2BGR),
-                                                   [cv2.IMWRITE_JPEG_QUALITY, 84])
+                        # Keep the entire source canvas at its true original
+                        # width/height for human review, not another 512x288 crop.
+                        full_canvas_bgr = cv2.cvtColor(shot, cv2.COLOR_BGRA2BGR)
+                        ok, encoded = cv2.imencode(
+                            '.jpg', full_canvas_bgr,
+                            [cv2.IMWRITE_JPEG_QUALITY, 89])
                         if not ok:
                             raise RuntimeError('Could not encode human-review canvas frame')
                         samples.append({'at':captured_at, 'frame':frame,
