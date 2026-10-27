@@ -1,240 +1,303 @@
-# Ranked Surfers AI - V6.1.2 PPO
+# Ranked Surfers AI — PPO V6.1.2 + Human Demonstrations V1.3
 
-Screenshot-driven reinforcement learning for a **locally served Practice copy** of Ranked Surfers. The agent plays through the visible Chromium/Unity WebGL game, using Stable-Baselines3 PPO with screen capture, a nine-class YOLO segmentation detector, and a gameplay/menu safety guard. These experiments are intended **only for local Practice** (`http://localhost:8000`), not live or ranked play.
+**Last updated: 27 October 2026.** Development branch: [`demo-recorder-debug-20261027`](https://github.com/HugoGroene/ranked-surfers-ai/tree/demo-recorder-debug-20261027) (latest user-confirmed push: `943909d`).
 
-## Current status (26 October 2026)
+Screenshot-based reinforcement learning for a **locally hosted Practice copy** of the Unity WebGL endless runner Ranked Surfers. This project uses Stable-Baselines3 PPO, native game-canvas screen capture, asynchronous nine-class YOLO segmentation, and a fail-closed gameplay/menu guard. The separate **experimental human-demonstration V1.3** workflow records manual gameplay, permits reviewing and trimming good segments, and can fine-tune a **copy** of the existing PPO model using behavioral cloning (BC). Neither recorder nor trainer is intended for public ranked/live matches.
 
-The current model trains **independently using PPO**, without human demonstrations or scripted obstacle-avoidance actions. The trained policy selects one of five actions: `NONE`, `LEFT`, `RIGHT`, `JUMP`, or `ROLL`.
+> **Repository vs. local results:** The 4.61-second evaluation and latest 7-hour checkpoint reported below are from the local 27 October run, **not yet committed to GitHub**. The branch's previously published benchmark and Git-LFS checkpoint correspond to the **older 3.84-second** model. Cloning this repo does not automatically retrieve the newest local `ai_data/` runs or demonstrations. V1.3's live Windows performance is **not yet verified**; the 12 passing tests are offline tests.
 
-- **Training and evaluation:** `train_rs_v612_ppo.py`
-- **Gameplay safety guard:** `rs_v612_gameplay_guard.py`
-- **Runtime screen-state classifier code:** `rs_v4_screen_states.py`
-- **Screen-state model:** `ai_data/v4_screen_states_rebuild_01/screen_state_candidate_v2.pt`
-- **Nine-class YOLO segmentation model:** `ai_data/v5_hazards/runs/segment_round04/weights/best.pt`
-- **Observation:** four stacked RGB frames at 512 x 288 (12 channels), plus a 557-dimensional numerical auxiliary observation
-- **Operating configuration:** 5 ms keypresses, target FPS 30, `--rate-mode uncapped`, fast capture, linear resize, YOLO inference every three decisions
-- **Latest selected PPO checkpoint backup:** `checkpoints/v612_after_120min_press5_20261026.zip` (Git LFS)
-- **Original local checkpoint:** `ai_data/rl_v2_runs/v612_resume_120min_press5_20261026_133230/latest.zip`
+## Current results — 27 October 2026
 
-### Recorded evaluation results
+### Controlled PPO evaluations
 
-A controlled 100-episode evaluation using the 5 ms configuration produced:
+| Policy / reference | Deterministic episodes | Mean survival | Median survival | At least 5 s | At least 10 s | Notes |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Earlier PPO checkpoint | 100 | 3.11 s | 3.35 s | 0 | — | Published older comparison |
+| No-action reference | 100 | 3.48 s | 3.37 s | 12 | — | Published older comparison; not a learned policy |
+| 120-minute PPO continuation | 100 | 3.84 s | 4.16 s | 15 | — | Published in `reports/v612_learning_proof_20261026_153745/` |
+| **Latest 7-hour PPO continuation** | **100** | **4.61 s** | **4.21 s** | **44** | **2** | **Local result; report not yet committed** |
 
-| Evaluated policy | Episodes | Mean survival | Median survival | Survived >= 5 s |
-| --- | ---: | ---: | ---: | ---: |
-| Earlier PPO checkpoint | 100 | 3.11 s | 3.35 s | 0 |
-| PPO checkpoint after 120-minute continuation | 100 | **3.84 s** | **4.16 s** | **15** |
-| No-action reference | 100 | 3.48 s | 3.37 s | 12 |
+The latest evaluation's longest survival was **10.25 s**. The latest seven-hour training continuation logged **374,703 additional PPO steps**, **5,417 episodes**, a training-episode mean of **4.33 s**, a training best of **15.03 s**, **14.87 steps/s including resets**, and **zero guard aborts**. Training and evaluation episode averages measure different distributions and should not be conflated.
 
-The corresponding JSON data is preserved at `reports/v612_learning_proof_20261026_153745/`. These results suggest PPO improvement but do not guarantee better performance on every procedurally generated episode. **Do not repeat the no-action reference for every checkpoint**; retain it for comparisons under unchanged game and evaluation conditions.
+**Latest local checkpoint (not automatically available in a fresh Git clone):**
 
-## Project structure
+```text
+ai_data/rl_v2_runs/v612_overnight_next_420min_press5_20261027_094116/latest.zip
+```
 
-| Path | Purpose |
+**Action-collapse diagnosis:** In the latest deterministic 100-episode evaluation, the policy selected **zero LEFT and zero RIGHT** actions. Recorded counts were `NONE=1978`, `JUMP=2779`, `ROLL=3169`, `LEFT=0`, `RIGHT=0`. Mean predicted action probabilities were `NONE=21.66%`, `LEFT=0.56%`, `RIGHT=0.15%`, `JUMP=36.59%`, `ROLL=41.04%`. The key experimental hypothesis is that carefully approved human lane-change examples can introduce LEFT/RIGHT behavior while preserving the model's existing timing. **BC has not yet been shown to improve survival.**
+
+Small changes in 100-episode means can reflect procedural/evaluation variance. Compare checkpoint evaluations using identical game, guard, detector and action settings, and repeat close comparisons if needed.
+
+## How the system works
+
+| Component | Current implementation |
 | --- | --- |
-| `train_rs_v612_ppo.py` | Active PPO trainer, evaluator and offline check |
-| `rs_v612_gameplay_guard.py` | Fail-closed visual gate before game inputs |
-| `rs_v61_features.py`, `rs_v6_ppo_features.py`, `rs_v61_rewards.py` | Active observation and reward logic |
-| `rs_v5_segmentation_live_benchmark.py`, `rs_v5_shadow_segmentation.py` | Live capture and segmentation dependencies |
-| `rs_v4_screen_states.py` | Current runtime state-classifier implementation |
-| `rs_practice_controller.py`, `train_rs_v3_ppo.py` and other older-named root modules | **Still required** via the inherited controller/import chain |
-| `server.py` | Local Unity WebGL server with required content-encoding and cross-origin headers |
-| `test_rs_v612_guard.py`, `test_rs_v61.py` | Active regression tests |
-| `checkpoints/` | Selected PPO/classifier/detector weights backed up in Git LFS |
-| `reports/` | Selected JSON experiment evidence committed to Git |
-| `ai_data/rl_v2_runs/` | Local, Git-ignored training and evaluation outputs |
-| `development/archive/docs/`, `development/archive/python/` | Historical documentation and standalone tools |
-| `development/local/` | Ignored local diagnostics and backups |
-| `rankedsurfers-downloaded/` | Local Unity WebGL game assets |
+| RL agent | Stable-Baselines3 `PPO('MultiInputPolicy')`, five discrete actions: `NONE=0`, `LEFT=1`, `RIGHT=2`, `JUMP=3`, `ROLL=4` |
+| Images | Four successive 512×288 RGB game-crop frames, stacked oldest-first as **12×288×512** uint8 |
+| Numerical observation | **557 float32 features**: nine-class segmentation/hazard summaries, image-column features, action history, capture/detection timing and action context |
+| Feature extractor | `RGBHazardExtractor`: RGB CNN → 128 features; auxiliary MLP **557→96→64**, then concatenated (192 features total) |
+| Detector | Nine-class YOLO segmentation, typically `--imgsz 960`, asynchronous **one-worker** inference approximately every 3 decisions; stale results are gated |
+| PPO input | Actions executed in the local Practice browser by the PPO environment; safety checked before actions |
+| Timing | PPO target `--fps 30`, uncapped, typical proven action tap **5 ms** (`--press-delay-ms 5` must be passed explicitly; script default is 10 ms) |
+| Rewards | Survival time + periodic milestones and death penalty; **no** hard-coded hazard/action reward or inferred track-lane safety rules |
+| Safety | `rs_v612_gameplay_guard.py` prevents keyboard actions if gameplay cannot be verified; no system can eliminate the capture-to-keypress race entirely |
+| Human demonstrations | **V1.3** manual-only recorder with calibrated MSS capture, per-run folders, candidate/approved segments, action timestamps, and actor-only BC branch |
 
-**Important:** Several root files beginning with `v2`, `v3`, `v4`, or `color` are still imported by the current runtime. Do not move or remove them without checking transitive imports and rerunning tests. Do not refactor the active pipeline in the middle of a training experiment.
+The YOLO worker is **already asynchronous**; switching to an LSTM, compressing the 557-D auxiliary vector, changing rewards, or changing keypress durations should not be mixed into the initial demonstration experiment. Image-column locations are not ground-truth track lanes. Local practice only.
 
-## Windows setup
+## Repository map
 
-Run commands in **Windows PowerShell**, from the repository root:
+| Location | Purpose |
+| --- | --- |
+| `train_rs_v612_ppo.py` | PPO offline check, input probe, training and deterministic/stochastic evaluations |
+| `rs_v612_gameplay_guard.py` | Fail-closed visual gate against clicking/acting in menus or uncertain states |
+| `rs_v61_features.py`, `rs_v6_ppo_features.py`, `rs_v61_rewards.py` | V6.1 observation schema and reward computation |
+| `rs_v5_segmentation_live_benchmark.py`, `rs_v5_shadow_segmentation.py` | Native game crop, detector and historical benchmark dependencies |
+| `train_rs_v3_ppo.py`, `rs_practice_controller.py`, `rs_v4_screen_states.py` | **Required** inherited capture/controller/extractor/classifier code; not safe to delete merely because names are older |
+| `rs_v612_demo.py` | **V1.3** manually played demonstrations: capture, save, review, segment approval |
+| `rs_v612_demo_bc.py` | Clone approved demonstrations into **new** PPO model checkpoint; original PPO untouched |
+| `test_rs_v612_demo.py`, `test_rs_v612_guard.py`, `test_rs_v61.py` | Offline demonstration, guard and observation tests |
+| `README_DEMONSTRATIONS_V612.md` | Full V1.3 manual-play, save, preview, trim, troubleshooting and BC instructions |
+| `server.py` | Local Unity server with required WebGL content-encoding and cross-origin headers |
+| `checkpoints/` | Selected older backed-up weights via Git LFS; **not** necessarily latest local checkpoint |
+| `reports/` | Selected committed benchmark reports; newest 4.61 s report is **local only** until explicitly added |
+| `ai_data/rl_v2_runs/` | Local PPO checkpoints, logs and evaluation reports (Git-ignored) |
+| `ai_data/demonstrations_v13/` | **Recommended current** local replay root; review/BC data **must not be blindly staged** |
+| `rankedsurfers-downloaded/` | Unity WebGL files served locally; respect redistribution rights |
+| `development/archive/`, `development/local/` | Historical/reference material and ignored local diagnostics |
+
+`ppo_direct_observation_probe.py` and a locally modified `train_rs_v612_ppo.py` were reported present in the **original PC project**, but were **not pushed** with the recorder debug branch. Do not assume these are in a fresh clone. The tracked PPO trainer remains suitable for evaluating compatible V6.1.2 models.
+
+## Windows PowerShell — setup and launch
+
+Use the project directory that contains `server.py`. For example, a fresh clone may be in `Documents\ranked-surfers-ai-new` rather than the original `Documents\ranked-surfers-ai`; choose the appropriate path.
 
 ```powershell
 cd "$HOME\Documents\ranked-surfers-ai"
-```
 
-A working `.venv` and required model files are assumed. To verify essential packages and hardware:
-
-```powershell
-.\.venv\Scripts\python.exe -c "import torch, stable_baselines3, ultralytics, playwright, mss; print('CUDA:', torch.cuda.is_available())"
-```
-
-To restore Git LFS objects in an existing clone, when needed:
-
-```powershell
+# Restore tracked selected model assets (requires Git LFS installed).
 git lfs install
 git lfs pull
+
+# Verify this computer has the required Python environment.
+.\.venv\Scripts\python.exe -c "import torch, stable_baselines3, ultralytics, playwright, mss; print('CUDA:',torch.cuda.is_available())"
 ```
 
-### Start the local game server
+**Fresh-clone limitation:** Git does not include `.venv`, most `ai_data` assets, or the latest 4.61 s checkpoint. Install/restore the compatible Python dependencies and transfer required local files from the original PC project before attempting training or demonstrations. At minimum, the commands below refer to these **local assets**:
 
-Open a **separate PowerShell terminal**, and leave it running:
+```text
+ai_data/v4_screen_states_rebuild_01/screen_state_candidate_v2.pt
+ai_data/v5_hazards/runs/segment_round04/weights/best.pt
+ai_data/rl_v2_runs/v612_overnight_next_420min_press5_20261027_094116/latest.zip
+```
+
+The first two are the current classifier/detector paths used by the recorder; the third is necessary to reproduce the latest PPO model or fine-tune it. These paths may need to be copied from your original installation.
+
+### Terminal 1 — serve the local Practice game
 
 ```powershell
 cd "$HOME\Documents\ranked-surfers-ai"
 .\.venv\Scripts\python.exe server.py
 ```
 
-Open `http://localhost:8000` in the local Practice environment. Use the bundled `server.py` rather than a generic `python -m http.server`; it configures the response headers expected by Unity WebGL.
+Leave the terminal open. Server URL: `http://localhost:8000`. Use `server.py`, **not** a generic web server, because WebGL assets require special headers.
 
-## Before training: stable-build checks
+### Offline tests (no game input)
 
 ```powershell
 cd "$HOME\Documents\ranked-surfers-ai"
 
-.\.venv\Scripts\python.exe -m unittest test_rs_v612_guard test_rs_v61 -q
-if ($LASTEXITCODE -ne 0) { throw "Unit tests failed" }
-
+.\.venv\Scripts\python.exe -m unittest test_rs_v612_guard test_rs_v61 -v
+.\.venv\Scripts\python.exe -m unittest test_rs_v612_demo -v
 .\.venv\Scripts\python.exe train_rs_v612_ppo.py --mode check --resolution 160x96
-if ($LASTEXITCODE -ne 0) { throw "PPO architecture check failed" }
 ```
 
-The October 26 cleanup passed 48 tests and the offline PPO check. Re-run them after code or import-path changes; no live game control is required for these checks.
+The user confirmed **12/12 demonstration tests pass** after installing V1.3 on Windows (27 October). These are *offline unit tests*, not proof of real-time capture speed or improved PPO performance.
 
-## Continue training for four hours (5 ms)
+## Human demonstrations V1.3 — recommended next experiment
 
-Keep the local server running and **do not run two training/evaluation processes at the same time**. This command continues from the saved 120-minute checkpoint without modifying architecture, rewards, perception or guard thresholds.
+**Important:** Stop PPO training/evaluation before running the human recorder. The recorder launches its own Chromium instance and **never injects movement or restart keys**.
+
+### Terminal 2 — record new runs separately inside the same repo
 
 ```powershell
 cd "$HOME\Documents\ranked-surfers-ai"
 
-$candidate = "ai_data\v4_screen_states_rebuild_01\screen_state_candidate_v2.pt"
-$detector   = "ai_data\v5_hazards\runs\segment_round04\weights\best.pt"
-$checkpoint = "ai_data\rl_v2_runs\v612_resume_120min_press5_20261026_133230\latest.zip"
-
-foreach ($file in @($candidate, $detector, $checkpoint)) {
-    if (-not (Test-Path $file)) { throw "Missing required file: $file" }
-}
-
-$runName = "v612_extended_240min_press5_" + (Get-Date -Format "yyyyMMdd_HHmmss")
-Write-Host "Resuming from: $checkpoint"
-Write-Host "Writing run: $runName"
-
-.\.venv\Scripts\python.exe -u train_rs_v612_ppo.py `
-  --mode train `
-  --run-name $runName `
-  --resume $checkpoint `
-  --steps 1048576 `
-  --max-minutes 240 `
-  --resolution 512x288 `
-  --n-steps 128 `
-  --batch-size 32 `
-  --n-epochs 5 `
-  --fps 30 `
-  --rate-mode uncapped `
-  --press-delay-ms 5 `
-  --capture-mode fast `
-  --resize-method linear `
-  --state-model $candidate `
-  --state-confidence 0.90 `
-  --detector $detector `
-  --imgsz 960 `
-  --conf 0.20 `
+.\.venv\Scripts\python.exe -u rs_v612_demo.py record `
+  --root "ai_data\demonstrations_v13" `
+  --fps 20 `
   --detect-every 3 `
-  --save-every-minutes 4 `
-  2>&1 | Tee-Object -FilePath "ai_data\$runName.log"
+  --imgsz 960
 ```
 
-The step ceiling is intentionally higher than the likely experience collected in four hours; the normal stopping condition should be the **240-minute time limit**. This generally leaves `completed_requested_steps: false` in the JSON report, which is expected. The guard may stop earlier if game state cannot be verified; **never disable the guard just to keep a run going**. Saved checkpoints do not imply a successful or completed run unless the report and guard state agree.
+Let Chromium load, select fullscreen **before playing**, keep the canvas unobstructed, and wait for `[CALIBRATION]` to complete. Click **Practice** manually and use arrows or WASD/Space. Restart the game manually with **R**. After a good run or a confirmed death, **Alt+Tab** to the recorder's PowerShell window. Type one command followed by Enter:
 
-During training, keep Windows awake and unlocked, and the browser/game visible and unobstructed for screen capture. Do not change the display layout or minimize the game.
+| Terminal key | Effect |
+| --- | --- |
+| **S** | Save latest buffered run as **candidate** (not used by BC); **recommended for the first tests** |
+| **P** | Save as candidate and open the full-canvas preview |
+| **G** | Save + approve, excluding the last 0.7 s by default (**not** a guarantee mistakes are excluded) |
+| **T** | Save + approve manually selected intervals, e.g. `0.2-4.8,5.2-8.6` |
+| **R** | Discard the buffered unsaved run (**terminal R** differs from manually restarting the game) |
+| **Q** | Quit the recorder |
 
-## Inspect a training run
+Each saved replay goes to `ai_data/demonstrations_v13/runs/demo_YYYYmmdd_HHMMSS_micros/` with preview, `manifest.json`, raw RGB/aux/actions/timestamps, validity mask and raw key events. `frames.npz` stores unique 512×288 model images; the **preview video** preserves full-canvas framing. **Reviewing a saved replay changes only approval intervals in its manifest**—not the raw frames or actions.
 
-Run this in the **same PowerShell session** that set `$runName` above, or set `$runName` to the saved run folder's name:
+**First validate V1.3 on the actual machine:**
 
 ```powershell
-$runDir = "ai_data\rl_v2_runs\$runName"
-$r = Get-Content "$runDir\v61_report.json" -Raw | ConvertFrom-Json
-$r | Select-Object steps, episodes, wall_seconds, mean_survival_seconds, `
-  max_survival_seconds, first_25_mean_seconds, last_25_mean_seconds, `
-  avg_steps_per_sec_including_resets, completed_requested_steps | Format-List
-$r.detector.v612_live_input_guard | Format-List
-Get-Item "$runDir\latest.zip" | Select-Object FullName, Length, LastWriteTime
+# View the unmodified capture region used by the recorder.
+explorer "ai_data\demonstrations_v13\capture_preview_full_canvas.png"
+
+# Find the newest saved replay and inspect its event-label health.
+$run = Get-ChildItem "ai_data\demonstrations_v13\runs" -Directory |
+  Sort-Object LastWriteTime -Descending | Select-Object -First 1
+Get-Content "$($run.FullName)\manifest.json" -Raw | ConvertFrom-Json |
+  Select-Object status,duration_seconds,recorded_keydown_count,valid_action_samples,action_counts_valid | Format-List
+Invoke-Item "$($run.FullName)\preview.mp4"
 ```
 
-Check that `guard_hard_stopped` is `false` and `uncertain_state_abort` is `0` before treating the checkpoint as a normal finished continuation.
+Check the terminal's measured `[CAPTURE] ... FPS`, framing, actual keypress counts and valid action labels. If the preview is cropped wrongly, gameplay lags, or action validity is zero, keep the replay a **candidate** and fix capture before training. V1.2's last uploaded laggy trial recorded **51 frames in 14.07 s (~3.55 FPS; median interval 272 ms)**, producing **zero valid training samples**; V1.3 was developed to address that and has not yet received a confirmed real-world FPS measurement.
 
-## Evaluate a trained checkpoint: 100 deterministic episodes
+### Review and trim **after** saving with G/S/P
 
-Use exactly the same perception and 5 ms input configuration used for the prior 100-episode evaluation. This example finds the newest four-hour checkpoint, **including potentially interrupted runs**; verify its training report before evaluating it.
+```powershell
+# $run is the folder located above.
+.\.venv\Scripts\python.exe rs_v612_demo.py review `
+  "$($run.FullName)" --status approved --segments "0.2-5.5"
+
+# Or keep it excluded from training until corrected:
+.\.venv\Scripts\python.exe rs_v612_demo.py review `
+  "$($run.FullName)" --status candidate
+```
+
+You may keep multiple nonoverlapping intervals, such as `"0.2-3.5,4.2-7.0"`. **Never assume surviving parts were all good**: remove the actual wrong move(s), potentially well before death. Candidate/rejected runs are excluded from BC.
+
+For the detailed workflow and troubleshooting, see **[README_DEMONSTRATIONS_V612.md](README_DEMONSTRATIONS_V612.md)**.
+
+## Train a separate behavioral-cloning copy — only after verified demos
+
+Collect **at least three varied, genuinely good approved runs** and substantially more for a meaningful lane experiment, including real correct LEFT and RIGHT actions. The BC loader splits by **whole runs** for holdout; keeps non-NONE actions and subsamples NONE; freezes the visual/aux extractor and critic for the initial actor-focused test; and creates a **new** checkpoint, preserving the 4.61 s source.
 
 ```powershell
 cd "$HOME\Documents\ranked-surfers-ai"
+$best = "ai_data\rl_v2_runs\v612_overnight_next_420min_press5_20261027_094116\latest.zip"
+if (-not (Test-Path $best)) { throw "Latest local PPO checkpoint is missing: $best" }
 
-$candidate = "ai_data\v4_screen_states_rebuild_01\screen_state_candidate_v2.pt"
-$detector  = "ai_data\v5_hazards\runs\segment_round04\weights\best.pt"
-
-$latestRun = Get-ChildItem "ai_data\rl_v2_runs" -Directory |
-  Where-Object {
-    $_.Name -like "v612_extended_240min_press5_*" -and
-    (Test-Path (Join-Path $_.FullName "latest.zip"))
-  } |
-  Sort-Object LastWriteTime -Descending |
-  Select-Object -First 1
-
-if (-not $latestRun) { throw "No four-hour-run checkpoint found" }
-
-$checkpoint = Join-Path $latestRun.FullName "latest.zip"
-$evalName = "v612_eval_after_240min_press5_" + (Get-Date -Format "yyyyMMdd_HHmmss")
-
-.\.venv\Scripts\python.exe -u train_rs_v612_ppo.py `
-  --mode eval `
-  --run-name $evalName `
-  --resume $checkpoint `
-  --eval-policy deterministic `
-  --eval-episodes 100 `
-  --max-minutes 35 `
-  --resolution 512x288 `
-  --fps 30 `
-  --rate-mode uncapped `
-  --press-delay-ms 5 `
-  --capture-mode fast `
-  --resize-method linear `
-  --state-model $candidate `
-  --state-confidence 0.90 `
-  --detector $detector `
-  --imgsz 960 `
-  --conf 0.20 `
-  --detect-every 3 `
-  2>&1 | Tee-Object -FilePath "ai_data\$evalName.log"
+.\.venv\Scripts\python.exe -u rs_v612_demo_bc.py `
+  --root "ai_data\demonstrations_v13" `
+  --checkpoint $best `
+  --epochs 3 `
+  --batch-size 12 `
+  --lr 0.00002
 ```
 
-Summarize the saved result:
+New BC outputs appear under `ai_data/demonstrations_v13/bc_runs/bc_*/model.zip`. **The BC training script does not evaluate the Unity game.** It reports holdout imitation loss; you must separately evaluate gameplay. Never overwrite the original PPO checkpoint.
+
+## Benchmark or evaluate a checkpoint: 100 deterministic episodes
+
+Use the **same** 5 ms input and YOLO/classifier settings for baseline and BC comparison. Keep the server running; no recorder or other PPO process running at the same time.
 
 ```powershell
-$e = Get-Content "ai_data\rl_v2_runs\$evalName\v61_eval_report.json" -Raw |
-  ConvertFrom-Json
-$durations = @($e.durations_seconds)
+cd "$HOME\Documents\ranked-surfers-ai"
+$state = "ai_data\v4_screen_states_rebuild_01\screen_state_candidate_v2.pt"
+$detector = "ai_data\v5_hazards\runs\segment_round04\weights\best.pt"
 
+# Set this to the latest PPO source, or to a new BC model.zip to compare.
+$checkpoint = "ai_data\rl_v2_runs\v612_overnight_next_420min_press5_20261027_094116\latest.zip"
+foreach ($p in @($state,$detector,$checkpoint)) { if (-not (Test-Path $p)) { throw "Missing: $p" } }
+
+$evalName = "v612_eval_100_" + (Get-Date -Format "yyyyMMdd_HHmmss")
+.\.venv\Scripts\python.exe -u train_rs_v612_ppo.py `
+  --mode eval --run-name $evalName --resume $checkpoint `
+  --eval-policy deterministic --eval-episodes 100 --max-minutes 45 `
+  --resolution 512x288 --fps 30 --rate-mode uncapped `
+  --press-delay-ms 5 --capture-mode fast --resize-method linear `
+  --state-model $state --state-confidence 0.90 `
+  --detector $detector --imgsz 960 --conf 0.20 --detect-every 3
+```
+
+The evaluator writes a report to `ai_data/rl_v2_runs/<evalName>/v61_eval_report.json`. Read and verify **100 completed episodes** before comparing; a time limit, interrupted run or safety abort may yield fewer.
+
+```powershell
+$r = Get-Content "ai_data\rl_v2_runs\$evalName\v61_eval_report.json" -Raw | ConvertFrom-Json
+$d = @($r.durations_seconds)
 [PSCustomObject]@{
-    Episodes     = $e.eval_episodes
-    MeanSeconds  = $e.mean_survival_seconds
-    MedianSeconds = $e.median_survival_seconds
-    BestSeconds  = $e.best_survival_seconds
-    Survived5s   = @($durations | Where-Object { $_ -ge 5 }).Count
-    Survived10s  = @($durations | Where-Object { $_ -ge 10 }).Count
-    GuardAborts  = $e.detector.v612_live_input_guard.uncertain_state_abort
+  Episodes = $r.eval_episodes
+  MeanSeconds = $r.mean_survival_seconds
+  MedianSeconds = $r.median_survival_seconds
+  BestSeconds = $r.best_survival_seconds
+  Survived5s = @($d | Where-Object { $_ -ge 5 }).Count
+  Survived10s = @($d | Where-Object { $_ -ge 10 }).Count
+  ActionCounts = ($r.action_counts | ConvertTo-Json -Compress)
+  GuardAborts = $r.detector.v612_live_input_guard.uncertain_state_abort
 } | Format-List
 ```
 
-Compare the new checkpoint with the already saved **3.84-second / 100-episode** trained-policy reference in `reports/v612_learning_proof_20261026_153745/after.json`. A fresh no-action benchmark is not required for every training milestone.
+The **current known reference** is **4.61 s mean**, **4.21 s median**, **44/100 at least 5 s**, **2/100 at least 10 s**, and **no LEFT/RIGHT selected**. Successful BC should make lateral decisions available **without ruining survival**; thereafter consider short PPO continuation. No 100-episode evaluation of a BC model has been reported yet.
 
-## Results, backups and version control
+## Continue PPO only after a successful BC evaluation
 
-- Training runs: `ai_data/rl_v2_runs/<run-name>/latest.zip`, `v61_report.json`, and `progress.jsonl`.
-- Evaluation runs: `ai_data/rl_v2_runs/<eval-name>/v61_eval_report.json`.
-- The `ai_data/rl_v2_runs/` tree is **Git-ignored**. A normal `git push` does not automatically back it up.
-- Copy **selected milestone checkpoints** into `checkpoints/` and **selected JSON reports** into `reports/`, then commit and push those explicit copies.
-- `.gitattributes` tracks `.pt` and `.zip` files with **Git LFS**; keep meaningful model checkpoints rather than every four-minute autosave.
-- `development/archive/` contains historical scripts and docs. `development/local/` is for ignored local diagnostics; never `git add -f` its contents unintentionally.
+A separate output name preserves the BC source. Example **60-minute experimental** continuation; do not run concurrently with recording or evaluation:
 
-## Safety and reproducibility
+```powershell
+$bc = "ai_data\demonstrations_v13\bc_runs\REPLACE_WITH_ACTUAL_BC_RUN\model.zip"
+if (-not (Test-Path $bc)) { throw "BC checkpoint not found: $bc" }
+$runName = "v612_post_demo_ppo_" + (Get-Date -Format "yyyyMMdd_HHmmss")
 
-The gameplay guard is designed to block action when it cannot verify gameplay on the most recent visual evidence; it cannot guarantee that the game state will not change between observation and keypress. Limit automation to the **local Practice** environment. Model performance, throughput, and survival vary across procedural levels; sample averages are not guarantees. The native trainer defaults to a **10 ms** press delay, so pass `--press-delay-ms 5` explicitly to retain the measured operating configuration. Avoid changing core controller imports, rewards, detector, guard or PPO architecture immediately before a long run.
+.\.venv\Scripts\python.exe -u train_rs_v612_ppo.py `
+  --mode train --run-name $runName --resume $bc `
+  --steps 1048576 --max-minutes 60 `
+  --resolution 512x288 --fps 30 --rate-mode uncapped `
+  --n-steps 128 --batch-size 32 --n-epochs 5 `
+  --press-delay-ms 5 --capture-mode fast --resize-method linear `
+  --state-model $state --state-confidence 0.90 `
+  --detector $detector --imgsz 960 --conf 0.20 --detect-every 3 `
+  --save-every-minutes 4
+```
 
-The downloaded game assets remain in `rankedsurfers-downloaded/` because the local server needs them. Confirm you have permission to redistribute those assets if the repository is made public.
+If a PPO checkpoint is resumed, its stored rollout/batch hyperparameters can override CLI suggestions; inspect the emitted `[RESUME]` message. Guard aborts or uncertain state must be investigated, not bypassed. The new checkpoint lands in `ai_data/rl_v2_runs/<runName>/latest.zip`.
+
+## Other diagnostic/benchmark tools
+
+- `train_rs_v612_ppo.py --mode check` — offline network/observation/serialization verification (run before changing model code).
+- `train_rs_v612_ppo.py --mode probe` — **live local-Practice input pulse audit**; may send safe local game inputs. Check the flag help before running: `python train_rs_v612_ppo.py --help`.
+- `rs_v5_segmentation_live_benchmark.py` — historic segmentation throughput/quality and preview benchmark. A fixed-JUMP test intentionally **does not evaluate a PPO policy**; do not report those trials as learned policy performance.
+- `rs_v2_timing_probe_ab.py` — historical capture/input timing comparison; inspect its help for arguments.
+- `ppo_direct_observation_probe.py` — separate **local-only** diagnostic script reported on the original machine, **not** part of this GitHub branch.
+- `reports/v612_learning_proof_20261026_153745/` — older published 100-episode experimental evidence; do not present it as the latest seven-hour evaluation.
+
+For a controlled future optimization: benchmark YOLO `--imgsz` 960 vs 768 vs 640 with matching saved frame quality and detector freshness, or test PPO `target_kl`/learning rate **one independent change at a time**. None of those changes is included in V1.3.
+
+## Git, safe backups and second clone
+
+**Known Git issue:** Existing `.gitignore` protects many older `ai_data` paths, but new `ai_data/demonstrations_v13/` folders may be **untracked and not ignored**. Never run `git add .`, `git add -A` or force-add entire `ai_data/`. Raw captured screen data can be large and may contain private pixels. Stage source, docs, and selected small evidence files explicitly:
+
+```powershell
+# Run inside the clone in which you want to commit documentation.
+git status
+git add README.md README_DEMONSTRATIONS_V612.md
+git diff --cached --stat
+git commit -m "Document latest PPO 4.61s result and V1.3 demonstrations"
+git push origin demo-recorder-debug-20261027
+```
+
+If using the **new** `ranked-surfers-ai-new` clone, update only that folder:
+
+```powershell
+cd "$HOME\Documents\ranked-surfers-ai-new"
+git switch demo-recorder-debug-20261027
+git pull --ff-only
+```
+
+Preserve the newest `ai_data/rl_v2_runs/.../latest.zip` separately (ideally with a hash/backup). If you decide to publish a chosen new milestone, copy **only** its checkpoint to `checkpoints/` (Git LFS) and corresponding **actual**, unmodified JSON report to `reports/`. Never fabricate a benchmark JSON or assert a live test passed when it has not.
+
+## Safety, limitations and next steps
+
+1. Verify the **V1.3 live Windows FPS**, stable fullscreen/windowed capture, input lag, preview crop, and keypress-to-observation alignment with **candidate** recordings. V1.3's unit tests do not establish any of these empirically.
+2. Curate genuinely good lateral examples; keep raw replays, exclude death and pre-death mistakes via explicit segments; train only approved runs.
+3. Actor-only BC on a **copy** of the 4.61-second PPO checkpoint; evaluate both with matched **100 deterministic local-Practice episodes**. Keep the better model; don't overwrite either checkpoint.
+4. Only after that result, consider further PPO or more complex imitation (DAgger-style corrections, decaying demonstration loss). Keep reward changes, LSTM, YOLO resize, and action timing separate from this experiment.
+
+The code samples assume you have the required local model assets, working `.venv`, Unity game files and a compatible Windows display. A Python test passing or a ZIP being pushed **does not** prove real-time capture quality or better survival.

@@ -1,100 +1,215 @@
-# Human demonstrations for Ranked Surfers V6.1.2 (local Practice only)
+# Human demonstration recorder + behavioral cloning — V1.3
 
-**Experimental integration (V1.1 keyboard + preview fix).** Uses the same game-only crop/letterbox preprocessing, four RGB frames, V5 nine-class YOLO asynchronous detector, V6.1.2 557-D auxiliary schema, and five discrete actions. It does not alter old training code, checkpoint files, reward shaping, or the UI safety guard. No ranked/live service connections are permitted.
+**Updated: 27 October 2026 · Windows · local Practice only · experimental.**
 
-## Install
+Source branch: [`demo-recorder-debug-20261027`](https://github.com/HugoGroene/ranked-surfers-ai/tree/demo-recorder-debug-20261027), user-confirmed latest commit `943909d`. The tracked `rs_v612_demo.py` is **V1.3** (calibrated fast MSS capture), not the V1.1 version described in the old README. The separate `rs_v612_demo_bc.py` was introduced with the original demonstration integration. This recorder does **not** play the game, send movement controls, or automatically restart it.
 
-Copy `rs_v612_demo.py`, `rs_v612_demo_bc.py`, and `test_rs_v612_demo.py` into the **repository root**, next to `train_rs_v612_ppo.py`. Existing venv packages (OpenCV, numpy, mss, Playwright, Ultralytics, SB3, PyTorch) are reused; no new pip packages.
+## Why collect demonstrations?
+
+The latest 7-hour PPO continuation (local checkpoint, **not** yet on GitHub) scored **mean 4.61 s, median 4.21 s over 100 deterministic episodes**, with **44/100 ≥5 s** and **2/100 ≥10 s**. Yet deterministic evaluation selected **zero LEFT and RIGHT actions**. Average LEFT+RIGHT policy probability was only **0.71%** (`0.56%` and `0.15%`). Human demonstrations are intended to show it successful lane movements, **not** replace PPO or assume all human actions are ideal. Whether BC improves game survival has **not been evaluated**.
+
+The correct learning sequence is: **verified human observation/action pairs → approved good intervals → conservative actor-only BC on a copy of the best PPO → matched 100-episode deterministic gameplay evaluation → optional separate PPO continuation**.
+
+## Status and known issues
+
+| Item | Current evidence |
+| --- | --- |
+| V1.3 installation on Windows | User installed successfully on 27 Oct 2026 |
+| Demo unit tests | **12/12 PASS** locally (offline tests only) |
+| V1.1/V1.2 action capture | Real trials found missing or invalid labels; **do not train on these broken runs** |
+| V1.2 capture | Real trial `demo_20261027_185600_980494`: **51 frames / 14.07 s ≈ 3.55 FPS**, median interval **272 ms**, **0 valid action samples**, despite real keydowns being recorded |
+| V1.3 approach | One-time browser screenshot / full-desktop MSS template matching to find physical canvas; then fast `mss.grab` every capture (no per-frame Chromium screenshot) |
+| V1.3 browser/display behavior | Detects viewport/fullscreen changes about once/second; recalibrates and **discards an incomplete run** when geometry changes |
+| V1.3 real performance and input labels | **NOT YET CONFIRMED** with a recorded real Windows trial. A new short candidate test is essential |
+| Behavior-cloned agent | No measured 100-episode result yet; preserve source PPO checkpoint |
+
+## 1. Setup and checks
+
+Run inside the **original** repo or whichever clone has the game, `.venv` and local model assets:
 
 ```powershell
 cd "$HOME\Documents\ranked-surfers-ai"
+
 .\.venv\Scripts\python.exe -m unittest test_rs_v612_demo -v
-# Another terminal: .\.venv\Scripts\python.exe server.py
-.\.venv\Scripts\python.exe -u rs_v612_demo.py record --fps 20 --detect-every 3 --imgsz 960
+
+$state = "ai_data\v4_screen_states_rebuild_01\screen_state_candidate_v2.pt"
+$detector = "ai_data\v5_hazards\runs\segment_round04\weights\best.pt"
+foreach ($path in @($state,$detector)) {
+  if (-not (Test-Path $path)) { throw "Required local model missing: $path" }
+}
 ```
 
-Close any *PPO* evaluation/training Chromium first. The recorder launches **its own** Chromium on `http://localhost:8000`; wait for the visible game canvas, click Practice manually, and use arrow keys normally. **The recorder never injects any arrow keys or restart keys.** Restart manually with R after dying, as usual. Keep the captured Chromium game visible and unobstructed during gameplay, as with PPO MSS training. You can Alt+Tab after a good run: focus loss pauses capture and buffers its last gameplay frames. If MENU was detected first, the completed run is also buffered. Wait for a `[RUN] ... buffered` or `Completed` message before saving.
+Stop other browser automation / PPO train/eval before recording. The GitHub clone alone does **not** include a working `.venv`, most `ai_data` assets, or the 4.61-second local checkpoint. Check those separately if working in `ranked-surfers-ai-new`.
 
-After a completed run, Alt+Tab to the PowerShell recorder and type one of:
+## 2. Start the local Practice game
 
-- `G` Enter: immediately save **approved**, excluding the last 0.7 seconds by default (an initial safety margin, not a guarantee of optimality).
-- `S` Enter: save **candidate** for later review; **not** included in BC.
-- `T` Enter: type exact approved intervals, e.g. `0.2-5.4,5.8-8.3`, to save **approved** with mistakes/excluded periods removed without modifying original observations.
-- `P` Enter: save **candidate** and open the timestamped `preview.mp4` / `preview.avi` showing the **entire game canvas** (or contact sheet if video codecs unavailable), for review before approval.
-- `R` Enter: discard latest completed unsaved run from RAM.
-- `Q` Enter: quit.
+**PowerShell #1:**
 
-You can manually restart a new run even after saving an earlier run. Only **the most recent completed run** is retained temporarily in RAM; save/approve it before finishing another run. If you accidentally discard a good run, it cannot be recovered unless previously saved. The recorder does not automatically start/restart Practice. Avoid interacting with the browser or using automated PPO simultaneously.
+```powershell
+cd "$HOME\Documents\ranked-surfers-ai"
+.\.venv\Scripts\python.exe server.py
+```
 
-All outputs are in different uniquely named directories, under:
+Leave it open. Practice URL: `http://localhost:8000`. Only local Practice is supported. The server's custom Unity WebGL headers are required.
+
+## 3. Start recording V1.3 into a new local-only folder
+
+**PowerShell #2:**
+
+```powershell
+cd "$HOME\Documents\ranked-surfers-ai"
+.\.venv\Scripts\python.exe -u rs_v612_demo.py record `
+  --root "ai_data\demonstrations_v13" `
+  --fps 20 `
+  --detect-every 3 `
+  --imgsz 960
+```
+
+The recorder launches a separate Chromium browser. It only captures screen pixels and logs **your physical keys**: arrow keys, WASD and Space. Press **R in the game** to restart manually after death. It never injects gameplay inputs.
+
+For a reliable trial:
+
+1. Keep the browser uncovered and foreground while playing. Enter fullscreen **before** starting a run, then allow any `[CALIBRATION]` message to finish. If you resize/fullscreen mid-run, V1.3 detects that change and discards the incomplete run while recalibrating. Do not reposition the window while playing.
+2. Wait for `[RUN ...] Gameplay confirmed` before expecting training samples. Try deliberate **LEFT, RIGHT, JUMP and ROLL** movements; look for `[HUMAN INPUT]` messages from Win32 and/or `[BROWSER INPUT]` diagnostic messages.
+3. Check the periodic `[CAPTURE] Measured frame interval ... FPS` line. The requested `--fps 20` is a **target**, not a guarantee. Sustained low FPS produces invalid action labels.
+4. After a good run, die and wait for `Completed`, **or Alt+Tab after a good segment** to freeze the current run in memory. Alt+Tab to the terminal and type a command followed by Enter.
+
+| Terminal command | Meaning |
+| --- | --- |
+| `S` | Save most recent buffered run as **candidate** (recommended first; excluded from BC) |
+| `P` | Save candidate and open preview video/contact sheet |
+| `G` | Save + approve, default excluding final **0.7 seconds** (not enough if the error occurred earlier) |
+| `T` | Enter explicit good intervals, e.g. `0.25-4.8,5.3-8.6`, and save + approve |
+| `R` | Discard the latest unsaved buffered run; **not** the same as the game's restart key |
+| `Q` | Quit recorder |
+
+The **latest buffered completed run** is kept in RAM for save/reject; save it before another run replaces it. Each saved replay receives a distinct timestamped folder. `G` refuses to approve all-NONE/no-action examples, but **the existence of key events is not proof their timing is correct**.
+
+## 4. Location of recordings and what's inside
+
+Your old demos remain in `ai_data/demonstrations_v1/` or `ai_data/demonstrations_v12/`; current V1.3 recordings go under **`ai_data/demonstrations_v13/` in the same repository**:
 
 ```text
-ai_data/demonstrations_v1/runs/demo_YYYYmmdd_HHMMSS_micros/
-    manifest.json           # only approved, selected time ranges can train BC
-    frames.npz              # immutable raw, unique 3x288x512 RGB frames
-    aux.npy                 # matching 557-D model auxiliary features
-    actions.npy             # physical human action BEFORE subsequent observation
-    timestamps.npy          # gameplay-relative capture times
-    valid.npy               # ambiguous/missing interval labels excluded
-    events.jsonl            # raw trusted keyboard events with timestamps
-    preview.mp4 or .avi     # timestamped full-canvas replay (if codec available)
-    contact_sheet.jpg       # overview of selected frames
+ranked-surfers-ai/
+  ai_data/
+    demonstrations_v13/
+      capture_preview_full_canvas.png   # current calibration reference
+      runs/
+        demo_YYYYmmdd_HHMMSS_micros/
+          manifest.json                 # candidate/approved/rejected + selected intervals
+          frames.npz                    # single RGB model frames, 3×288×512 each
+          aux.npy                       # V6.1.2 557-D auxiliary features
+          actions.npy                   # NONE/LEFT/RIGHT/JUMP/ROLL sample labels
+          valid.npy                     # label alignment/interval validity mask
+          timestamps.npy                # gameplay-relative seconds
+          events.jsonl                  # original Win32 + browser keyboard records
+          preview.mp4 (or preview.avi)  # uncropped full-canvas human review video
+          contact_sheet.jpg             # thumbnail overview of model input frames
+      bc_runs/
+        bc_YYYYmmdd_HHMMSS/
+          model.zip                     # new fine-tuned PPO model, NOT source replacement
 ```
 
-`manifest.json` can be updated without cutting or deleting any frames. For a previously saved candidate:
+The human `preview.mp4` preserves full-canvas content and aspect ratio. `frames.npz` deliberately contains the **same cropped/letterboxed 512×288 game image** as the PPO training pipeline. These are different on purpose. Four-frame image history is reconstructed by the dataset loader to avoid storing every RGB frame four times.
+
+The recorder captures asynchronous YOLO detections with staleness/episode gating, then reconstructs the action/timing history for the 557-D auxiliary observation. This is designed for model compatibility, but keydown-to-observation discretization remains approximate and **must** be checked with real data. An approved manifest does not guarantee correctness.
+
+### Open and inspect a replay
 
 ```powershell
+cd "$HOME\Documents\ranked-surfers-ai"
+explorer "ai_data\demonstrations_v13\capture_preview_full_canvas.png"
+
+$run = Get-ChildItem "ai_data\demonstrations_v13\runs" -Directory |
+  Sort-Object LastWriteTime -Descending | Select-Object -First 1
+if (-not $run) { throw 'No V1.3 demonstration runs saved yet' }
+explorer $run.FullName
+
+$m = Get-Content "$($run.FullName)\manifest.json" -Raw | ConvertFrom-Json
+$m | Select-Object status,duration_seconds,frames,recorded_keydown_count,valid_action_samples,action_counts_valid,keyboard_sources | Format-List
+
+$video = Join-Path $run.FullName $m.preview_video
+if ($m.preview_video -and (Test-Path $video)) { Invoke-Item $video }
+```
+
+Do not approve until you verify ALL of the following: the preview shows the correct unobstructed canvas, it plays at plausible speed, actual physical key presses appear in events and in **valid** action labels, LEFT and RIGHT aren't accidentally zero when you performed lane changes, and the intended approved segments contain good decisions. If frame intervals are frequently `>130 ms`, labels may be invalid. Look at `valid_action_samples` and `action_counts_valid` **not** merely `recorded_keydown_count`.
+
+### Edit the replay later — including one already saved with G
+
+`review` updates **only `manifest.json`**; raw RGB, actions, aux, video and timestamps remain unchanged. You can exclude wrong moves and death portions long after saving.
+
+```powershell
+# Keep 0.2 to 5.5 seconds only:
 .\.venv\Scripts\python.exe rs_v612_demo.py review `
-  "ai_data\demonstrations_v1\runs\demo_YYYYmmdd_HHMMSS_micros" `
-  --status approved --segments "0.2-4.2,4.8-8.3"
+  "$($run.FullName)" --status approved --segments "0.2-5.5"
+
+# Or keep two separate good intervals and exclude a mistake between them:
+.\.venv\Scripts\python.exe rs_v612_demo.py review `
+  "$($run.FullName)" --status approved --segments "0.2-3.5,4.2-7.0"
+
+# Or stop the replay from being used in BC at all:
+.\.venv\Scripts\python.exe rs_v612_demo.py review `
+  "$($run.FullName)" --status candidate
 ```
 
-A run with questionable decisions should be marked candidate/rejected. Manually review the timestamped replay video or contact sheet and selected time ranges; **do not blindly approve the last 0.7-second cutoff**, because a mistake can start well before death. More detailed inspection is possible using individual frame arrays from `frames.npz` (and timestamps/actions); the video can be scrubbed by time in your normal Windows player, while the contact sheet summarizes the whole run. If you need frame-by-frame curation, load `.npz` with NumPy and review it manually before approval.
+A saved `candidate` can later be changed to `approved`, once verified. Bad or uncertain runs should stay `candidate` or `rejected`. Merely deleting the last 0.7 s may still leave the decision that caused death; manually inspect the time of the wrong input and adjust the cutoff or intervals accordingly.
 
-## First actor-only behavioral cloning experiment
+## 5. Behavioral cloning: separate PPO model, same architecture
 
-Collect at least three approved **varied** runs; more and richer LEFT/RIGHT situations are better. We specifically require at least some LEFT and RIGHT actions in *training* runs. BC splits **entire runs** for holdout rather than adjacent frames; it preserves all non-NONE actions and subsamples NONE so the action imbalance doesn't swamp lanes. All five action types remain learnable. It freezes the CNN/aux feature extractor and critic, updates only the PPO policy MLP/action head, selects the best validation epoch, and resets PPO Adam optimizer. The existing checkpoint is never modified.
+The current PPO input is a `Dict(image, aux)` with `12×288×512 uint8` stacked RGB and `557` numeric features. The action labels map to `0=NONE`, `1=LEFT`, `2=RIGHT`, `3=JUMP`, `4=ROLL`.
+
+Before BC:
+
+- Collect multiple **approved, varied** episodes, not only one long recording. At least **3 approved runs** are required for the current holdout workflow; aim for a meaningful number of correctly timed LEFT and RIGHT examples across different obstacle situations.
+- Ensure each run's preview and timestamps are sensible. Review correct segments manually; a long duration does not prove optimal behavior.
+- Preserve the full original **4.61-second** PPO checkpoint; **do not** train into its original path.
+
+Then:
 
 ```powershell
+cd "$HOME\Documents\ranked-surfers-ai"
 $best = "ai_data\rl_v2_runs\v612_overnight_next_420min_press5_20261027_094116\latest.zip"
-.\.venv\Scripts\python.exe -u rs_v612_demo_bc.py --checkpoint $best --epochs 3 --batch-size 12 --lr 0.00002
+if (-not (Test-Path $best)) { throw "Missing best local checkpoint: $best" }
+
+.\.venv\Scripts\python.exe -u rs_v612_demo_bc.py `
+  --root "ai_data\demonstrations_v13" `
+  --checkpoint $best `
+  --epochs 3 `
+  --batch-size 12 `
+  --lr 0.00002
 ```
 
-A distinct checkpoint is created at `ai_data\demonstrations_v1\bc_runs\bc_YYYYmmdd_HHMMSS\model.zip`. This is **not proven better** until you run your existing controlled deterministic **100-episode** evaluation using that path with `train_rs_v612_ppo.py --mode eval --resume <model.zip> ...` and compare with baseline **mean 4.61 s, 44/100 survive 5s, 0 deterministic LEFT/RIGHT**. Stop if it damages survival or action timing. A short PPO continuation can subsequently resume from *this separate BC checkpoint*, without touching original.
+`rs_v612_demo_bc.py` accepts only **approved** runs and segments, splits holdout by **entire run**, preserves human action examples while subsampling some NONE actions for training, fine-tunes the **policy network/action head** with existing visual/aux representation frozen initially, keeps critic weights fixed, and saves a **separate** V6.1.2-compatible checkpoint. Existing original PPO weights are never replaced. Best holdout imitation loss is **not equivalent** to better gameplay survival.
 
-## Safety and data fidelity
+Run `train_rs_v612_ppo.py --mode eval --resume <new-bc-model.zip> --eval-policy deterministic --eval-episodes 100` with exactly the same settings as baseline. A ready-to-paste full 100-episode command and report summary are in **[README.md](README.md#benchmark-or-evaluate-a-checkpoint-100-deterministic-episodes)**. Compare survival mean, median, ≥5s and ≥10s, LEFT/RIGHT action counts and policies, as well as guard aborts. **No BC gameplay improvement has been demonstrated yet.**
 
-- Pre-action causal labeling: observation `i` is paired with physical keydowns *between* observation `i` and `i+1`, never an image after the action. Auto-repeat keydowns and keyups are excluded from action labels. Simultaneous/conflicting keydowns and capture gaps are marked invalid.
-- Gameplay-only capture is decided by the **existing** screen state classifier; no menu/death screens used for positive-action BC.
-- The terminal is not captured as gameplay. Focus loss mid-run discards the incomplete run. `R` manually restarts game and is **never a PPO action**.
-- Observation schema matches V6.1.2, but **human event→decision discretization, asynchronous detector scheduling, and browser→Python timestamp offset** are approximate. Inspect early data; do not assume they are bit-identical to PPO-internal observations. In particular, browser callbacks are only timestamped to the expected observation window; unmatched/late events can be missed.
-- Browser–desktop coordinate mapping may need `--screen-x-offset` / `--screen-y-offset` on Windows/DPI-scaled monitors. Inspect `contact_sheet.jpg` before recording substantial data. If it shows Chrome UI/terminal/incorrect crop, discard that run and fix the capture region. The recorder uses the same canvas-region helper as the old manual collector.
-- The collector currently identifies a completed run using three consecutive confident `MENU` predictions. If misclassification causes early/late endings, keep as candidate, inspect, and adjust state classifier/capture alignment. It never sends keys to recover.
-- More advanced future upgrades: full frame-by-frame preview, event-lag diagnostics, and PPO+BC auxiliary loss. Don't alter reward, fps, LSTM, or PPO hyperparameters during the first BC experiment.
+Only if evaluation is acceptable, optionally continue PPO from the **new** BC model in another training directory. The BC helper initializes fresh PPO Adam statistics after fine-tuning so previous PPO moments are not blindly reused. Do not simultaneously change YOLO resolution, PPO reward, LSTM, keypress length and demonstration learning; make controlled tests one variable at a time.
 
-## V1.1 hotfix: important keyboard-data integrity issue
+## 6. Troubleshooting / reliability
 
-The original V1 recorder used a browser JavaScript callback to log human arrows. One
-real-world 15.1-second recording had **zero** keyboard events and all 297 action
-labels were `NONE` despite visible gameplay movements. Do NOT train on it.
-V1.1 switches to Windows `GetAsyncKeyState` polling every 4 ms in a separate
-thread, using `time.perf_counter` timestamps shared with frame captures. Each
-physical arrow keydown prints `[HUMAN INPUT] ArrowLeft/Right/Up/Down captured`.
-Run one short recording and VERIFY that LEFT and RIGHT occur in its manifest.
-This remains **unverified in live Windows gameplay** until you test it locally.
-V1.1 refuses to approve any run or interval without a valid non-NONE action;
-BC also fails closed on already-approved all-NONE runs. It additionally reads
-actual YOLO episode tags instead of accidentally assuming `episode=1` forever.
+**Video still cropped / shows browser borders:** The V1.3 start-of-session calibration is designed to locate the Unity canvas on the *physical desktop* using image matching and fail if uncertain. Inspect `capture_preview_full_canvas.png`. Recalibrate with the game visible/uncovered and still at a stable screen; do not trust a misframed preview. The PPO's game-only crop is intentionally tighter than the preview.
 
-Old `preview.mp4` files used cropped model frames with a 24-pixel footer and
-video aspect ratio 512x312. New videos use **uncropped game-canvas frames**,
-letterboxed to the normal 512x288 (16:9) aspect ratio, and draw a small
-label inside the image. The full-canvas frames are used for *review video* only;
-the PPO dataset still uses its exact original game-only crop. Existing cropped
-recordings cannot recover pixels outside the saved crop. A broken run's missing
-arrow timestamps also cannot be reconstructed reliably from video alone.
+**Input feels laggy or windowed gameplay glitches:** V1.2 used `page.screenshot(clip=...)` *for every frame*; its real trial measured only **3.55 FPS** and zero usable action samples. V1.3 requests one calibration screenshot then records with MSS, avoiding that compositor work. Do not claim V1.3 is fixed until you confirm actual FPS, latency and validity on Windows. If still slow, quantify YOLO GPU/CPU load, detector freshness and the screen classifier before changing observation semantics. Use fullscreen before play; window changes invalidate the current partial run.
 
-To install the V1.1 ZIP into an existing V1 install, stop the recorder and run
-`INSTALL_DEMO_FIX.ps1` from the extracted ZIP. It backs up previous demo files
-under `ai_data/demo_patch_backup_YYYYMMDD_HHMMSS` before replacing them; it
-never changes PPO training code, YOLO weights or checkpoints. Then rerun tests.
+**Keypress counts look right but valid samples are zero:** Input events are not enough: the observation preceding each action must have a sufficiently short, unambiguous decision interval. V1.3 prefers Win32 physical key timestamps to delayed browser callbacks and records both for diagnosis. If sampling is slow, do not relax the `130ms` label-validity bound just to make bad data appear valid.
+
+**Canvas moves during recording / multi-monitor scaling:** V1.3 checks window/canvas geometry and recalibrates on detected changes. A move or occlusion not detectable through its view signature is still a risk, and desktop/template screenshots may disagree during active animation. Favor a stationary, uncovered display and verify each session's capture preview. Changing fullscreen may discard the unsaved partial run.
+
+**No detection or classifier asset in a fresh Git clone:** Most `ai_data` model assets are local/ignored. Check the local paths and copy the necessary assets from your original project rather than committing enormous training directories.
+
+**Don't train on old broken runs:** At least one V1.1 run with 297 frames had **zero physical actions**. A V1.2 run had input events but **zero valid action samples**. Keep these candidate/rejected or archive them; action inference from playback alone is unreliable.
+
+**Safety:** This system is only for `http://localhost:8000` local Practice. The recorder never submits movement controls; the PPO controller uses a fail-closed gameplay guard. Don't run PPO training/evaluation alongside manual recording. Fullscreen, calibration and hardware speed influence the quality of every recorded example.
+
+## 7. Version control
+
+The recorder/BC source and tests are on the debug branch. The newest 4.61-second checkpoint, `ai_data/demonstrations_v13/` recordings and many trained models are **local only**. Your `.gitignore` may not exclude the V1.3 demonstration data; do **not** run `git add .` or accidentally commit raw replays/backups. Stage documentation and code by explicit filename:
+
+```powershell
+git add README.md README_DEMONSTRATIONS_V612.md
+git diff --cached --stat
+git commit -m "Update docs for PPO 4.61s and V1.3 demonstrations"
+git push origin demo-recorder-debug-20261027
+```
+
+This documentation describes implemented code and observed results; **a 12-test offline PASS is not a substitute for a real Windows live-capture test**, and a 4.61-second reference is not proof that BC will improve it.
