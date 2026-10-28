@@ -75,6 +75,7 @@ def build_env_class():
             self._ppo_boundary_menu_duration_at = None
             self._ppo_boundary_menu_started_at = None
             self._ppo_menu_handoff_terminal_observed = False
+            self._ppo_pause_visual_reference = None
             super().__init__(cfg, output, demos, detector, a=a)
             w, h = self.target_wh
             self.observation_space = spaces.Dict({
@@ -143,6 +144,7 @@ def build_env_class():
             self._ppo_boundary_menu_duration_at = None
             self._ppo_boundary_menu_started_at = None
             self._ppo_menu_handoff_terminal_observed = False
+            self._ppo_pause_visual_reference = None
             self.survival_rewards.reset()
             self.action_context.reset()
             return super().reset(seed=seed, options=options)
@@ -164,6 +166,13 @@ def build_env_class():
                     raise GuardUncertainError('Cannot refresh after guard hard stop')
                 # Any earlier candidate belongs to a different rollout.
                 self._ppo_post_resume_menu_candidate = None
+                from tools.ppo_pause_visual_v179 import matches_prior_paused_panel
+                reference = getattr(self, '_ppo_pause_visual_reference', None)
+                if reference is None:
+                    return None, 'Missing verified PAUSED visual reference; no PPO keys sent'
+                overlay = self.page.locator(
+                    '.game-pause-panel[aria-label="Game paused"]')
+                paused_frame_skips = 0
                 window = ResyncWindow()
                 self.native_history.clear()  # never mix pre-/post-optimizer frames
                 self.frame_intervals.clear()
@@ -178,7 +187,34 @@ def build_env_class():
                         'document.hasFocus() && document.visibilityState === "visible"'))
                     if not focused:
                         return None, 'browser focus/visibility lost while resynchronizing; no keys sent'
+                    # React's DOM and the rendered screenshot can disagree for
+                    # a frame after Resume. Neither may be PAUSED before any
+                    # image is allowed into PPO's new observation stack.
+                    pause_dom_before = bool(await overlay.is_visible())
                     legacy, menu_score, _ = await self._capture()
+                    pause_dom_after = bool(await overlay.is_visible())
+                    pause_visual, pause_difference = matches_prior_paused_panel(
+                        self._v2_last_bgra, reference)
+                    if pause_dom_before or pause_dom_after or pause_visual:
+                        paused_frame_skips += 1
+                        origin = ('DOM' if pause_dom_before or pause_dom_after
+                                  else 'RENDERED_FRAME')
+                        print('[PPO RESYNC PAUSED] runtime_state=PAUSED '
+                              f'capture={attempt+1}/{MAX_RESYNC_CAPTURES} '
+                              f'source={origin} visual_delta={pause_difference:.1f}; '
+                              'NO movement or gameplay vote.', flush=True)
+                        # Even an ML GAMEPLAY label MUST NOT override the panel.
+                        # Drop any partial stack collected before this frame.
+                        window = ResyncWindow()
+                        self.native_history.clear()
+                        self.frame_intervals.clear()
+                        self.previous_observation_at = None
+                        observation = None
+                        accepted_traces.clear()
+                        if paused_frame_skips >= 4:
+                            return None, ('PAUSED overlay persisted after resume '
+                                          f'for {paused_frame_skips} frames; no keys sent')
+                        continue
                     state, probs = self._read_screen_state()
                     # A terminal screen can appear AFTER Unity resumes, while
                     # we are passively capturing the four fresh PPO frames.
@@ -243,6 +279,9 @@ def build_env_class():
                     if decision == 'DONE':
                         # Only the four COMPLETE consecutive valid frames get
                         # audit TRACE events. Rejected partial stacks do not.
+                        # The first PPO action can only use frames positively
+                        # verified against BOTH Pause signals and the ML guard.
+                        self._ppo_pause_visual_reference = None
                         for line in accepted_traces:
                             print(line, flush=True)
                         return observation, None
@@ -602,7 +641,13 @@ def build_env_class():
 
             # Never silently proceed if the pause fails. Trainer catches the
             # exception, saves partial model, and closes the Practice browser.
+            self._ppo_pause_visual_reference = None
             paused_mono, paused_perf, paused_wall, delta = self._call(pause(), timeout=15)
+            # A DOM-hidden but visually stale Pause panel must not be mistaken
+            # for GAMEPLAY after optimizer. Only use an anchor captured while
+            # the panel AND three frozen-track pairs were verified.
+            from tools.ppo_pause_visual_v179 import pause_panel_signature
+            self._ppo_pause_visual_reference = pause_panel_signature(self._v2_last_bgra)
             self._ppo_pause_pending = (paused_mono, paused_perf, paused_wall,
                                        paused_mono - float(self.episode_start))
             return delta

@@ -6,6 +6,32 @@ Screenshot-based reinforcement learning for a **locally hosted Practice copy** o
 
 > **Repository vs. local results:** The 4.61-second evaluation and latest 7-hour checkpoint reported below are from the local 27 October run, **not yet committed to GitHub**. The branch's previously published benchmark and Git-LFS checkpoint correspond to the **older 3.84-second** model. Cloning this repo does not automatically retrieve the newest local `ai_data/` runs or demonstrations. V1.3's live Windows performance is **not yet verified**; the 12 passing tests are offline tests.
 
+## 28 October update: v1.7.9 runtime and overnight evaluation
+
+Current development branch: `claude-development`. The 27 October branch and
+latest-checkpoint descriptions below are historical. See
+[the v1.7.9 comparison](reports/v179_overnight_comparison_20261028/README.md)
+for the current measured results and local checkpoint paths.
+
+The pause-aware trainer completed an eight-hour continuation. It excludes
+DOM-visible or visually stale Pause panels from post-optimizer observations,
+requires four consecutive confident gameplay captures, and retains guarded
+terminal rewards. PPO architecture, reward coefficients, classifier labels and
+confidence thresholds are unchanged. Checkpoints and recordings remain local.
+
+Matched 100-episode deterministic evaluations scored 3.99 s before and 4.30 s
+after the continuation; the bootstrap 95% interval for the mean difference
+was -0.16 to +0.75 s. Both selected zero LEFT/RIGHT actions and had zero guard
+aborts. Improvement remains inconclusive; investigate lateral-action collapse
+before another long continuation.
+
+Offline runtime regressions (no installer payloads needed):
+
+```powershell
+& $py -B -m unittest discover -s tests -p "test_ppo_pause_runtime_v179.py" -v
+& $py -B -m unittest discover -s tests -p "test_ppo_current_runtime.py" -v
+```
+
 ## Current results — 27 October 2026
 
 ### Controlled PPO evaluations

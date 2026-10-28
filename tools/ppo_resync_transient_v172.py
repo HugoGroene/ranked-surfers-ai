@@ -43,14 +43,18 @@ class ResyncWindow:
             return 'DONE' if self.accepted == REQUIRED_GAMEPLAY_FRAMES else 'ACCEPT'
         # No relaxation of classifier confidence: uncertain captures are dropped,
         # not passed to _pack or counted toward the four safe GAMEPLAY frames.
-        # Only a near-GAMEPLAY uncertain state with no independent MENU evidence
-        # and no substantial ML MENU probability gets this bounded grace.
-        if (state == 'UNCERTAIN' and .70 <= p_game < conf and p_menu < .10
+        # A brief UNCERTAIN frame is not evidence of gameplay or death.
+        # In particular, a tunnel/camera transition can push p_game below .70.
+        # Passive retries may wait for independent proof, but DO NOT permit a
+        # movement key: four consecutive high-confidence GAMEPLAY captures are
+        # still required. MENU evidence, other states and exhausted retries
+        # still abort. Never count an UNCERTAIN frame toward the image stack.
+        if (state == 'UNCERTAIN' and p_game < conf and p_menu < .10
                 and score < threshold * .30 and self.skipped < MAX_TRANSIENT_SKIPS):
             self.skipped += 1
             self.discarded_before_last_retry = self.accepted
             self.accepted = 0
-            self.last_reason = 'near-gameplay UNCERTAIN; no menu evidence'
+            self.last_reason = 'transient UNCERTAIN; no corroborated menu evidence'
             return 'RETRY'
         self.last_reason = ('unsafe post-resume state=' + str(state) +
                             f' menu_score={score:.3f} ml_gameplay={p_game:.3f} '
