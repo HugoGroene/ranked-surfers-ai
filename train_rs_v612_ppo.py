@@ -71,6 +71,10 @@ def build_env_class():
             self.guard_visual_recoveries = 0
             self._guard_forced_terminal = False
             self._guard_hard_stopped = False
+            self._ppo_boundary_menu_pending = False
+            self._ppo_boundary_menu_duration_at = None
+            self._ppo_boundary_menu_started_at = None
+            self._ppo_menu_handoff_terminal_observed = False
             super().__init__(cfg, output, demos, detector, a=a)
             w, h = self.target_wh
             self.observation_space = spaces.Dict({
@@ -135,9 +139,514 @@ def build_env_class():
             if self._guard_hard_stopped:
                 raise GuardUncertainError('[V612 GUARD] Training latched off after uncertain UI; restart process after reviewing evidence.')
             self._guard_forced_terminal = False
+            self._ppo_boundary_menu_pending = False
+            self._ppo_boundary_menu_duration_at = None
+            self._ppo_boundary_menu_started_at = None
+            self._ppo_menu_handoff_terminal_observed = False
             self.survival_rewards.reset()
             self.action_context.reset()
             return super().reset(seed=seed, options=options)
+
+        def refresh_after_ppo_optimizer(self):
+            """Rebuild four consecutive confident GAMEPLAY images, without keys.
+
+            A near-GAMEPLAY UNCERTAIN frame just after overlay disappearance is
+            neither gameplay proof nor MENU proof. Discard it and any partial
+            image stack; allow a bounded number of independent fresh retries.
+            No ML threshold changes, speculative restarts or reward changes.
+            """
+            import asyncio
+            from tools.ppo_resync_transient_v172 import (
+                ResyncWindow, MAX_RESYNC_CAPTURES)
+
+            async def capture_fresh_stack():
+                if self._guard_hard_stopped:
+                    raise GuardUncertainError('Cannot refresh after guard hard stop')
+                # Any earlier candidate belongs to a different rollout.
+                self._ppo_post_resume_menu_candidate = None
+                window = ResyncWindow()
+                self.native_history.clear()  # never mix pre-/post-optimizer frames
+                self.frame_intervals.clear()
+                self.previous_observation_at = None
+                observation = None
+                accepted_traces = []
+                for attempt in range(MAX_RESYNC_CAPTURES):
+                    if attempt:
+                        await asyncio.sleep(.033)
+                    # Only the foreground local Practice may feed the PPO image.
+                    focused = bool(await self.page.evaluate(
+                        'document.hasFocus() && document.visibilityState === "visible"'))
+                    if not focused:
+                        return None, 'browser focus/visibility lost while resynchronizing; no keys sent'
+                    legacy, menu_score, _ = await self._capture()
+                    state, probs = self._read_screen_state()
+                    # A terminal screen can appear AFTER Unity resumes, while
+                    # we are passively capturing the four fresh PPO frames.
+                    # Record its FIRST corroborated observation timestamp,
+                    # but never authorize a menu from ML confidence alone.
+                    if (state == 'MENU' and
+                            probs.get('MENU', 0.) >= self.state_confidence and
+                            menu_score >= float(self.args.threshold) * .80 and
+                            self._ppo_post_resume_menu_candidate is None):
+                        self._ppo_post_resume_menu_candidate = (
+                            time.monotonic(), time.perf_counter(), time.time())
+                    decision = window.observe(
+                        state=state, probs=probs, menu_score=menu_score,
+                        confidence=self.state_confidence,
+                        menu_threshold=self.args.threshold)
+                    resumed_at = getattr(self, '_ppo_resume_trace_start_perf', None)
+                    since_resume_ms = ((time.perf_counter() - resumed_at) * 1000.0
+                                       if resumed_at is not None else None)
+                    if decision == 'RETRY':
+                        print(f'[PPO RESYNC TRANSIENT] skipped={window.skipped} '
+                              f'capture={attempt+1}/{MAX_RESYNC_CAPTURES} '
+                              f'discarded_valid={window.discarded_before_last_retry} '
+                              f'state={state} menu_score={menu_score:.3f} '
+                              f'ml_gameplay={probs.get("GAMEPLAY", 0.):.3f} '
+                              f'since_resume_ms={since_resume_ms}', flush=True)
+                        # _pack has already added any earlier valid frames; they
+                        # cannot be used across an uncertain intervening image.
+                        self.native_history.clear()
+                        self.frame_intervals.clear()
+                        self.previous_observation_at = None
+                        observation = None
+                        accepted_traces.clear()  # rejected partial stacks must not appear in the audit
+                        continue
+                    if decision == 'ABORT':
+                        # Exact unsafe frame, for manual inspection only.
+                        if self._v2_last_bgra is not None:
+                            try:
+                                import cv2
+                                image_path = (self.output_dir /
+                                    f'ppo_resume_failure_ep{self.episode_number:04d}_frame{attempt+1}.jpg')
+                                wrote = cv2.imwrite(str(image_path),
+                                    cv2.cvtColor(self._v2_last_bgra, cv2.COLOR_BGRA2BGR))
+                                if wrote:
+                                    print(f'[PPO RESYNC TRACE] failure_screenshot={image_path}', flush=True)
+                            except Exception as trace_exc:
+                                print(f'[PPO RESYNC TRACE] diagnostic screenshot unavailable: '
+                                      f'{trace_exc}', flush=True)
+                        return None, (f'{window.last_reason}; '
+                                      f'capture={attempt+1}/{MAX_RESYNC_CAPTURES} '
+                                      f'since_resume_ms={since_resume_ms}')
+                    # Only confirmed GAMEPLAY frames are packed or counted in
+                    # the existing four-frame audit. Never infer from motion.
+                    if since_resume_ms is not None:
+                        accepted_traces.append(
+                            f'[PPO RESYNC TRACE] frame={window.accepted}/4 '
+                            f'since_resume_ms={since_resume_ms:.1f} '
+                            f'state={state} menu_score={menu_score:.3f} '
+                            f'ml_gameplay={probs.get("GAMEPLAY", 0.):.3f} '
+                            f'ml_menu={probs.get("MENU", 0.):.3f}')
+                    observation, _fresh, _age = self._pack(
+                        legacy, start_detection=(window.accepted == 1))
+                    if decision == 'DONE':
+                        # Only the four COMPLETE consecutive valid frames get
+                        # audit TRACE events. Rejected partial stacks do not.
+                        for line in accepted_traces:
+                            print(line, flush=True)
+                        return observation, None
+                return None, (f'No four consecutive GAMEPLAY frames within '
+                              f'{MAX_RESYNC_CAPTURES} captures; '
+                              f'transient_skips={window.skipped}; no keys sent')
+
+            obs, reason = self._call(capture_fresh_stack(), timeout=15)
+            return obs, reason, self.last_capture_end
+
+        def confirm_post_optimizer_menu(self):
+            """Passively verify a death after PPO updates using four recent MENU frames.
+
+            Allow up to eight fresh captures to outlast a brief early animation dip.
+            NEVER lower any guard threshold or restart based on ML alone.
+            No keys are sent here; a separate inherited safe reset handles R.
+            """
+            import asyncio
+            from rs_v612_gameplay_guard import screen_gate
+            from tools.ppo_menu_guard_alignment_v14 import (
+                accept_menu_after_transient, MAX_CONFIRM_CAPTURES)
+
+            async def confirm():
+                if self._guard_hard_stopped:
+                    return False, 'gameplay guard already hard-stopped'
+                readings = []
+                for i in range(MAX_CONFIRM_CAPTURES):
+                    if i:
+                        await asyncio.sleep(.075)
+                    # Focus can change while waiting. Do not authorize a reset
+                    # using only the initial focus state.
+                    try:
+                        focused = bool(await self.page.evaluate(
+                            'document.hasFocus() && document.visibilityState === "visible"'))
+                    except Exception as exc:
+                        return False, f'cannot verify browser focus: {exc}'
+                    if not focused:
+                        return False, 'browser not focused/visible'
+                    if self._guard_hard_stopped:
+                        return False, 'gameplay guard hard-stopped during confirmation'
+                    _legacy, menu_score, _unused = await self._capture()
+                    state, probs = self._read_screen_state()
+                    reading = screen_gate(
+                        state, probs, menu_score,
+                        confidence=self.state_confidence,
+                        menu_threshold=float(self.args.threshold),
+                        motion_threshold=self.startup_motion_threshold)
+                    readings.append(reading)
+                    # Requires 4 most recent independent captures to corroborate
+                    # MENU. A weak or gameplay capture breaks the streak.
+                    if accept_menu_after_transient(readings, focused=focused):
+                        confirmed = True
+                        break
+                else:
+                    confirmed = False
+                evidence = {
+                    'checks': [
+                        {'state': r.state,
+                         'menu_probability': round(r.menu_probability, 4),
+                         'menu_score': round(r.menu_score, 5),
+                         'corroborated': bool(r.ml_template_corroborated)}
+                        for r in readings],
+                    'required': '4 consecutive confident ML MENU + >=80% template corroboration',
+                    'max_checks': MAX_CONFIRM_CAPTURES,
+                }
+                return confirmed, evidence
+
+            return self._call(confirm(), timeout=15)
+
+        def pause_for_ppo_optimizer(self):
+            """Freeze the *local* Practice game before PPO.train(), without keys.
+
+            UI must report GAMEPLAY; verify the site pause overlay and that the
+            captured track remains static. Never send Escape (fullscreen risk).
+            The old cached PPO observation stays untouched until rollout-start
+            refresh, after the game resumes.
+            """
+            import asyncio
+            import time as _time
+            import numpy as _np
+
+            async def pause():
+                if self._guard_hard_stopped or getattr(self, '_ppo_pause_pending', None):
+                    raise GuardUncertainError('Guard stopped or pause already pending')
+                pending_menu_suspicion = self.suspected_since is not None
+                page = self.page
+                if not bool(await page.evaluate(
+                        'document.hasFocus() && document.visibilityState === "visible"')):
+                    raise GuardUncertainError('Browser not focused/visible before pause')
+                overlay = page.locator('.game-pause-panel[aria-label="Game paused"]')
+                pause_button = page.locator('button[aria-label="Pause game"]')
+                if await overlay.is_visible():
+                    raise GuardUncertainError('Game unexpectedly already paused')
+                _legacy, menu_score, _ = await self._capture()
+                state, probs = self._read_screen_state()
+                # A1: an uncertain frame or a pending menu suspicion at an
+                # optimizer boundary must NOT cause a blind Pause click. The
+                # bounded recheck below requires two fresh PLAY frames + a
+                # unique visible Pause button, or four corroborated MENU frames.
+                needs_boundary_recheck = (
+                    pending_menu_suspicion or state != 'GAMEPLAY' or
+                    menu_score >= self.args.threshold * .85)
+                if needs_boundary_recheck:
+                    print('[PPO BOUNDARY RECHECK] Initial frame/suspicion '
+                          f'state={state} menu_score={menu_score:.3f} '
+                          f'pending_suspicion={pending_menu_suspicion}; '
+                          'no keys sent.', flush=True)
+                # The Pause control can vanish *before* click (v1.7.1), or
+                # detach *while Playwright waits for a stable click target*
+                # (v1.7.4). In both cases, use fresh classifier/template
+                # captures before sending another click. A click timeout alone
+                # is NOT evidence that the click failed: check overlay first.
+                async def recheck_pause_control(reason, *, after_click=False):
+                    nonlocal menu_score, probs
+                    from tools.ppo_pause_control_recheck_v171 import (
+                        PauseControlRecheck, MAX_RECHECK_CAPTURES)
+                    window = PauseControlRecheck(
+                        confidence=self.state_confidence,
+                        threshold=self.args.threshold,
+                        motion_threshold=self.startup_motion_threshold)
+                    observation_monos = []
+                    for recheck_index in range(MAX_RECHECK_CAPTURES):
+                        if recheck_index:
+                            await asyncio.sleep(.075)
+                        focused = bool(await page.evaluate(
+                            'document.hasFocus() && document.visibilityState === "visible"'))
+                        if not focused:
+                            raise GuardUncertainError(
+                                f'Browser focus lost during {reason}; NO inputs sent')
+                        if await overlay.is_visible():
+                            if after_click:
+                                print('[PPO PAUSE CLICK] Pause overlay appeared '
+                                      f'during {reason}; verify frozen track, '
+                                      'do not click again.', flush=True)
+                                return 'OVERLAY'
+                            raise GuardUncertainError(
+                                'Unexpected Pause overlay during missing-control recheck')
+                        count = await pause_button.count()
+                        if count > 1:
+                            raise GuardUncertainError(
+                                'Ambiguous multiple site Pause game buttons; NO click')
+                        visible = count == 1 and await pause_button.is_visible()
+                        _legacy, score, _unused = await self._capture()
+                        new_state, new_probs = self._read_screen_state()
+                        captured_mono = _time.monotonic()
+                        observation_monos.append(captured_mono)
+                        decision = window.observe(
+                            state=new_state, probabilities=new_probs,
+                            menu_score=score, observed_mono=captured_mono,
+                            focused=focused, button_count=count,
+                            button_visible=visible)
+                        if decision == 'MENU':
+                            # Anchor to the first of the FINAL consecutive
+                            # four confirmed menu observations, not a possible
+                            # earlier unrelated MENU frame before a PLAY gap.
+                            first_menu = observation_monos[-4]
+                            if first_menu is None:
+                                raise GuardUncertainError(
+                                    'Corroborated MENU missing observation-time anchor')
+                            self._ppo_boundary_menu_duration_at = max(
+                                float(self.survival_rewards.last_duration),
+                                first_menu - float(self.episode_start))
+                            print('[PPO PAUSE CONTROL] ' + reason + '; MENU '
+                                  f'corroborated after {len(window.readings)} frames; '
+                                  'no movement, no restart.', flush=True)
+                            # The unchanged rollout callback independently
+                            # re-confirms MENU, then records the terminal
+                            # penalty via the normal no-key input guard.
+                            raise GuardUncertainError(
+                                f'Not verified GAMEPLAY at rollout end: MENU, '
+                                f'menu={score:.3f}')
+                        if decision == 'READY':
+                            # The pre-pause trace must describe the latest
+                            # verified capture, not the original UNCERTAIN one.
+                            menu_score, probs = score, new_probs
+                            print('[PPO PAUSE CONTROL] ' + reason + '; Pause '
+                                  'button visible with two GAMEPLAY frames '
+                                  f'after {len(window.readings)} checks.', flush=True)
+                            return 'READY'
+                        if decision == 'ABORT':
+                            break
+                    import cv2
+                    diagnostic = (self.output_dir /
+                        f'ppo_pause_control_ep{self.episode_number:04d}.jpg')
+                    if self._v2_last_bgra is not None:
+                        cv2.imwrite(str(diagnostic), cv2.cvtColor(
+                            self._v2_last_bgra, cv2.COLOR_BGRA2BGR))
+                    raise GuardUncertainError(
+                        f'Pause control unresolved after {reason}; '
+                        f'{window.diagnostic()}; diagnostic={diagnostic}; '
+                        'NO inputs sent')
+
+                if needs_boundary_recheck:
+                    # Distinguish a transient camera pan from MENU without
+                    # lowering either classifier or independent template rules.
+                    # If a stale menu suspicion clears, the same two positive
+                    # PLAY frames justify clearing it as in the per-action guard.
+                    await recheck_pause_control('Rollout-boundary screen recheck')
+                    if pending_menu_suspicion:
+                        self.suspected_since = None
+                        self.menu_scores.clear()
+                        self.clear_streak = 0
+                if await pause_button.count() != 1 or not await pause_button.is_visible():
+                    await recheck_pause_control('Missing Pause button')
+                print('[PPO PAUSE TRACE] pre_pause_classifier=GAMEPLAY '
+                      f'menu_score={menu_score:.3f} '
+                      f'ml_gameplay={probs.get("GAMEPLAY", 0.):.3f} '
+                      f'boundary_rechecked={needs_boundary_recheck}', flush=True)
+
+                from playwright.async_api import TimeoutError as PlaywrightTimeoutError
+                try:
+                    await pause_button.click(timeout=1800)
+                except PlaywrightTimeoutError as exc:
+                    # DOM detachment/unstable target is not proof of MENU and
+                    # not proof the click was ineffective. Never blindly retry.
+                    print('[PPO PAUSE CLICK] Initial click timed out; '
+                          'checking overlay and fresh screen evidence.', flush=True)
+                    result = await recheck_pause_control(
+                        'Pause click timeout', after_click=True)
+                    if result == 'READY':
+                        # At most ONE retry, after two newly observed PLAY
+                        # frames and a unique visible Pause button.
+                        if await overlay.is_visible():
+                            print('[PPO PAUSE CLICK] Overlay appeared before '
+                                  'retry; no second click.', flush=True)
+                        else:
+                            try:
+                                await pause_button.click(timeout=1200)
+                            except PlaywrightTimeoutError as second_exc:
+                                result = await recheck_pause_control(
+                                    'Second Pause click timeout', after_click=True)
+                                if result == 'READY':
+                                    raise GuardUncertainError(
+                                        'Pause control timed out twice despite '
+                                        'verified gameplay; NO third click') from second_exc
+                                # OVERLAY means it may have clicked; strict
+                                # frozen-scene confirmation below is mandatory.
+                await overlay.wait_for(state='visible', timeout=2500)
+                # The React pause overlay can become visible before Unity has
+                # consumed the pause message. Unlike v1.5, do not infer a
+                # frozen game from the overlay or a single capture pair.
+                # Bound the settling interval and NEVER relax the .25 threshold.
+                from tools.ppo_pause_freeze_window import FreezeWindow
+                window = FreezeWindow(required_pairs=3, max_delta=.25)
+                verified = None
+                for attempt in range(16):
+                    if not await overlay.is_visible():
+                        raise GuardUncertainError('Pause overlay vanished while settling Unity')
+                    await asyncio.sleep(.09)
+                    _legacy, score, _unused = await self._capture()
+                    # The site's pause overlay changes the screenshot that the
+                    # screen classifier sees.  In the live probe a verified
+                    # frozen GAMEPLAY track classified as UNCERTAIN, so an ML
+                    # GAMEPLAY vote here is not meaningful.  GAMEPLAY must
+                    # still be confirmed BEFORE clicking Pause (above).  While
+                    # paused, require the visible overlay, a frozen *track*,
+                    # and no positive independent menu-template evidence.
+                    # After resume, the existing four-frame resync rechecks
+                    # unoccluded GAMEPLAY before the first PPO action.
+                    if score >= self.args.threshold * .85:
+                        raise GuardUncertainError(
+                            f'MENU template detected during pause: {score:.3f}')
+                    if self._v2_last_bgra is None:
+                        raise GuardUncertainError('Missing paused Unity capture')
+                    track = self._motion_view(self._v2_last_bgra, self.crop)
+                    verified = window.observe(
+                        track, (_time.monotonic(), _time.perf_counter(), _time.time()))
+                    if verified is not None:
+                        break
+                if verified is None:
+                    raise GuardUncertainError(
+                        'Unity did not demonstrate three consecutive frozen track '
+                        f'intervals within 16 checks; changes={window.changes}')
+                if not await overlay.is_visible():
+                    raise GuardUncertainError('Pause overlay vanished after freeze verification')
+                start_mono, start_perf, start_wall, mean_change = verified
+                print(f'[PPO PAUSE] Freeze verified after {attempt + 1} captures; '
+                      f'track_deltas={window.changes}', flush=True)
+                return start_mono, start_perf, start_wall, mean_change
+
+            # Never silently proceed if the pause fails. Trainer catches the
+            # exception, saves partial model, and closes the Practice browser.
+            paused_mono, paused_perf, paused_wall, delta = self._call(pause(), timeout=15)
+            self._ppo_pause_pending = (paused_mono, paused_perf, paused_wall,
+                                       paused_mono - float(self.episode_start))
+            return delta
+
+        def resume_after_ppo_optimizer(self, monitor):
+            """Resume, correct clocks, then let existing v1.4 resync the image."""
+            import time as _time
+            from tools.ppo_optimizer_pause_clock import compensate_pause_clocks
+
+            token = getattr(self, '_ppo_pause_pending', None)
+            if not (isinstance(token, tuple) and len(token) == 4):
+                raise GuardUncertainError('No validated pause token at rollout start')
+
+            # Validate the exact SB3 Monitor BEFORE unpausing.
+            if getattr(monitor, 'env', None) is not self:
+                raise GuardUncertainError('Expected exact Monitor(raw) wrapper')
+
+            async def resume():
+                page = self.page
+                if not bool(await page.evaluate(
+                        'document.hasFocus() && document.visibilityState === "visible"')):
+                    raise GuardUncertainError('Browser not focused/visible before resume')
+                overlay = page.locator('.game-pause-panel[aria-label="Game paused"]')
+                button = overlay.get_by_role('button', name='Resume', exact=True)
+                if not await overlay.is_visible() or not await button.is_visible():
+                    raise GuardUncertainError('Verified pause overlay/Resume button missing')
+                from playwright.async_api import TimeoutError as PlaywrightTimeoutError
+                try:
+                    await button.click(timeout=1800)
+                except PlaywrightTimeoutError:
+                    # The first click might have *worked*. Always inspect the
+                    # overlay before considering another click; hidden overlay
+                    # still requires the strict four-frame GAMEPLAY resync.
+                    print('[PPO RESUME CLICK] Timed out; checking overlay '
+                          'before any retry.', flush=True)
+                    if await overlay.is_visible():
+                        if not bool(await page.evaluate(
+                                'document.hasFocus() && document.visibilityState === "visible"')):
+                            raise GuardUncertainError(
+                                'Focus lost after timed-out Resume click; NO retry')
+                        if await button.count() != 1 or not await button.is_visible():
+                            raise GuardUncertainError(
+                                'Resume control not unique and visible after timeout; NO retry')
+                        # Before a second click, verify that Unity is STILL
+                        # frozen behind the overlay. An overlay by itself may
+                        # be stale; do not assume the game is paused from DOM.
+                        import asyncio
+                        from tools.ppo_pause_freeze_window import FreezeWindow
+                        frozen = FreezeWindow(required_pairs=3, max_delta=.25)
+                        for index in range(8):
+                            await asyncio.sleep(.075)
+                            if not await overlay.is_visible():
+                                break
+                            if not bool(await page.evaluate(
+                                    'document.hasFocus() && document.visibilityState === "visible"')):
+                                raise GuardUncertainError('Focus lost in Resume retry verification')
+                            _legacy, score, _ = await self._capture()
+                            if score >= self.args.threshold * .85 or self._v2_last_bgra is None:
+                                raise GuardUncertainError(
+                                    'Unsafe screen behind Resume overlay; NO retry')
+                            track = self._motion_view(self._v2_last_bgra, self.crop)
+                            found = frozen.observe(
+                                track, (_time.monotonic(), _time.perf_counter(), _time.time()))
+                            if found is not None:
+                                break
+                        if await overlay.is_visible():
+                            if found is None:
+                                raise GuardUncertainError(
+                                    'Resume retry refused: frozen Unity not independently verified')
+                            if await button.count() != 1 or not await button.is_visible():
+                                raise GuardUncertainError(
+                                    'Resume button changed after freeze verification; NO retry')
+                            print('[PPO RESUME CLICK] Frozen track reverified; '
+                                  'one guarded Resume retry.', flush=True)
+                            try:
+                                await button.click(timeout=1200)
+                            except PlaywrightTimeoutError:
+                                print('[PPO RESUME CLICK] Second click timed out; '
+                                      'checking overlay; NO third click.', flush=True)
+                                if await overlay.is_visible():
+                                    raise GuardUncertainError(
+                                        'Resume click timed out twice with overlay visible; NO third click')
+                try:
+                    await overlay.wait_for(state='hidden', timeout=2500)
+                except PlaywrightTimeoutError:
+                    if await overlay.is_visible():
+                        raise GuardUncertainError('Resume overlay did not disappear; NO PPO action')
+                if await overlay.is_visible():
+                    raise GuardUncertainError('Resume overlay still visible; NO PPO action')
+                if not bool(await page.evaluate(
+                        'document.hasFocus() && document.visibilityState === "visible"')):
+                    raise GuardUncertainError('Browser focus lost after Resume; NO PPO action')
+                return _time.monotonic(), _time.perf_counter(), _time.time()
+
+            finished_mono, finished_perf, finished_wall = self._call(resume(), timeout=12)
+            # The timestamp is recorded immediately after the confirmed
+            # overlay disappearance. This measures how long the game was
+            # running before each of the existing four resync captures.
+            self._ppo_resume_trace_start_perf = finished_perf
+            dm = finished_mono - token[0]
+            dp = finished_perf - token[1]
+            # Adjust wall-time origins, but never fabricate a step/reward or
+            # relax the screen-state classifier. If anything goes wrong,
+            # fail closed BEFORE the next PPO action.
+            report = compensate_pause_clocks(
+                self, dm, dp, monitor=monitor,
+                elapsed_wall=finished_wall - token[2])
+            corrected_duration = _time.monotonic() - float(self.episode_start)
+            duration_drift = corrected_duration - token[3]
+            if not (-.10 <= duration_drift <= .20):
+                raise GuardUncertainError(
+                    f'Pause-aware episode timer drifted {duration_drift:.3f}s')
+            report['active_episode_clock_drift_s'] = round(duration_drift, 3)
+            self._ppo_pause_pending = None
+            return report
+
+        @staticmethod
+        def _meter_mask(bgra):
+            """Guard-only distance HUD mask; supports visible Chrome or fullscreen."""
+            from tools.ppo_guard_hud_v175 import meter_mask
+            return meter_mask(bgra)
 
         def _guard_diagnostic(self, readings, *, reason, name=None):
             """Write screen + full gating evidence for any fail-closed stop."""
@@ -203,11 +712,16 @@ def build_env_class():
                                       motion_threshold=self.startup_motion_threshold)
                 return frame, reading
 
+            # A verified rollout-boundary MENU survives the optimizer unchanged.
+            # The NEXT normal env.step must deliver its real terminal reward;
+            # never execute the policy-sampled movement on a MENU screen.
+            boundary_menu_handoff = bool(getattr(self, '_ppo_boundary_menu_pending', False))
             frame, first = await sample()
             readings = [first]
             if first.ml_menu and not first.menu_evidence:
                 self.guard_ml_menu_disagreements += 1
-            needs_recovery = first.verdict != 'PLAY' or self.suspected_since is not None
+            needs_recovery = (first.verdict != 'PLAY' or
+                              self.suspected_since is not None or boundary_menu_handoff)
             if needs_recovery:
                 self.guard_rechecks += 1
                 decision = 'CONTINUE'
@@ -221,6 +735,9 @@ def build_env_class():
                 if decision == 'TERMINAL':
                     self.guard_confirmed_menu += 1
                     self._guard_forced_terminal = True
+                    if boundary_menu_handoff:
+                        self._ppo_boundary_menu_pending = False
+                        self._ppo_menu_handoff_terminal_observed = True
                     # Save the first few positive menu transitions as evidence.
                     if self.guard_confirmed_menu <= 6:
                         self._guard_diagnostic(readings, reason='menu confirmed without movement')
@@ -239,6 +756,17 @@ def build_env_class():
                         f'States={[r.state for r in readings]}, '
                         f'menu_scores={[round(r.menu_score, 2) for r in readings]}. '
                         f'Diagnostics: {image}')
+                # A pending boundary death is NEVER allowed to resume gameplay
+                # and execute the policy's sampled action. Require the ordinary
+                # guard's TERMINAL verdict, otherwise fail closed before keys.
+                if boundary_menu_handoff:
+                    self.guard_aborts += 1
+                    self._guard_hard_stopped = True
+                    image = self._guard_diagnostic(
+                        readings, reason='boundary MENU handoff became nonterminal')
+                    raise GuardUncertainError(
+                        '[PPO MENU HANDOFF] MENU was not terminal on next step; '
+                        f'NO key sent. Diagnostic: {image}')
                 # Two affirmative ML gameplay frames, OR two consecutive
                 # moving-track + advancing-distance-HUD pairs, permit action.
                 if (readings[-1].visual_gameplay and readings[-2].visual_gameplay and
@@ -277,6 +805,15 @@ def build_env_class():
             # Only real elapsed gameplay (observed by the local game loop) is
             # rewarded. No coins, class confidence, lane assumptions, or
             # specific action get a reward. Avoid repeated-action exploits.
+            if getattr(self, '_ppo_menu_handoff_terminal_observed', False):
+                # Game was already dead when this rollout boundary was checked.
+                # Do not credit optimizer / idle menu / guard confirmation time.
+                anchor = self._ppo_boundary_menu_duration_at
+                if anchor is None or not np.isfinite(anchor) or anchor < 0:
+                    raise GuardUncertainError(
+                        '[PPO MENU HANDOFF] Missing trustworthy pre-optimizer death time')
+                info['duration'] = round(
+                    max(self.survival_rewards.last_duration, float(anchor)), 2)
             reward, pieces = self.survival_rewards.step(
                 info.get('duration', 0.), died)
             self.reward_parts.update(pieces)
@@ -285,6 +822,15 @@ def build_env_class():
             info['reward_death'] = round(pieces['death'], 4)
             info['reward_v61'] = round(reward, 4)
             info['reward_old_ignored'] = round(float(base_reward), 4)
+            if getattr(self, '_ppo_menu_handoff_terminal_observed', False):
+                if not died or truncated or pieces['death'] >= 0:
+                    raise GuardUncertainError(
+                        '[PPO MENU HANDOFF] Deferred death did not receive terminal penalty')
+                self._ppo_menu_handoff_terminal_observed = False
+                self._ppo_boundary_menu_duration_at = None
+                info['ppo_menu_handoff_terminal'] = True
+                print('[PPO MENU HANDOFF] Terminal recorded by guarded env.step; '
+                      f'death_reward={pieces["death"]:.4f}; NO movement key sent.', flush=True)
             return obs, float(reward), died, truncated, info
 
         def hazard_report(self):
@@ -530,8 +1076,12 @@ def input_probe(a):
     print(f'[INPUT PROBE] Wrote {len(trials)} action pairs to {picture_dir}',flush=True)
 
 
-def build_callback(a, output):
+def build_callback(a, output, raw=None):
     from stable_baselines3.common.callbacks import BaseCallback
+    from tools.ppo_rollout_gap_audit import RolloutGapTracker
+    from tools.ppo_rollout_resync import replace_cached_observation
+    from tools.ppo_optimizer_menu_recovery import candidate_is_menu, validated_new_vec_episode
+    from tools.ppo_rollout_menu_handoff_v17 import boundary_menu_candidate
 
     class V61Callback(BaseCallback):
         def __init__(self):
@@ -549,15 +1099,282 @@ def build_callback(a, output):
             self.policy_snapshots = []
             self.log_path = output/'progress.jsonl'
             self.log_handle = None
+            self.reward_step_audit_handle = None
+            self.rollout_gap_tracker = RolloutGapTracker()
+            self.rollout_gap_log_path = output / 'ppo_rollout_gaps.jsonl'
+            self._checkpoint_due_at_boundary = False
 
         def _on_training_start(self):
             self.log_handle = self.log_path.open('a',encoding='utf-8')
+            if a.audit_reward_timing:
+                self.reward_step_audit_handle = (output/'ppo_reward_step_audit.jsonl').open('w', encoding='utf-8')
+                print('[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).', flush=True)
+
+        def _on_rollout_end(self):
+            # Before PPO.train() starts. No environment interaction.
+            try:
+                self.rollout_gap_tracker.finish_rollout(time.perf_counter())
+            except Exception as exc:
+                print(f"[PPO GAP] rollout-end diagnostic failed: {exc}", flush=True)
+            if a.pause_ppo_optimizer:
+                try:
+                    if raw is None:
+                        raise RuntimeError('No raw environment for PPO pause')
+                    delta = raw.pause_for_ppo_optimizer()
+                    print(f'[PPO PAUSE] Verified frozen gameplay before optimizer; '
+                          f'paused-track delta={delta:.3f}', flush=True)
+                except Exception as exc:
+                    # MENU can appear after the 128th environment step but
+                    # BEFORE the pause click. The previous step has already
+                    # entered PPO's rollout buffer, so a direct reset here
+                    # would LOSE the real death penalty. Keep the MENU idle
+                    # during the optimizer and hand it to the NEXT normal
+                    # env.step, whose existing guard records a real terminal.
+                    if (a.resync_rollouts and boundary_menu_candidate(exc) and
+                            getattr(raw, '_ppo_pause_pending', None) is None):
+                        try:
+                            confirmed, evidence = raw.confirm_post_optimizer_menu()
+                        except Exception as verify_exc:
+                            raise GuardUncertainError(
+                                f'[PPO MENU HANDOFF] MENU confirmation failed: {verify_exc}') from verify_exc
+                        if not confirmed:
+                            raise GuardUncertainError(
+                                f'[PPO PAUSE] Safe stop: rollout-boundary MENU not '
+                                f'independently confirmed: {evidence}') from exc
+                        if getattr(raw, '_ppo_boundary_menu_duration_at', None) is None:
+                            raise GuardUncertainError(
+                                '[PPO MENU HANDOFF] Missing pre-optimizer MENU duration anchor')
+                        raw._ppo_boundary_menu_pending = True
+                        raw._ppo_boundary_menu_started_at = (
+                            time.monotonic(), time.perf_counter(), time.time())
+                        print('[PPO MENU HANDOFF] Boundary MENU confirmed by '
+                              'independent ML+template frames; no pause, reset or '
+                              'movement. Terminal reward deferred to next rollout step.',
+                              flush=True)
+                    else:
+                        raise GuardUncertainError(
+                            f'[PPO PAUSE] Safe stop at rollout-end: {exc}') from exc
+            # Periodic saves are deferred until the verified frozen rollout
+            # boundary (or independently confirmed terminal MENU). Never stall
+            # active Unity in the middle of a PPO decision to write a ZIP.
+            if self._checkpoint_due_at_boundary:
+                from tools.ppo_atomic_checkpoint_v176 import save_atomic_checkpoint
+                save_atomic_checkpoint(self.model, output/'latest.zip')
+                self.last_save = time.perf_counter()
+                self._checkpoint_due_at_boundary = False
+                print(f'[V612 SAVE] Atomic latest.zip at safe rollout boundary '
+                      f'after {self.num_timesteps} PPO steps', flush=True)
+
+        def _on_rollout_start(self):
+            record = None
+            # This runs after the preceding PPO gradient update. SB3 still
+            # holds its previous _last_obs. Measure the gap, but DO NOT
+            # alter observations, weights, rewards, or actions.
+            try:
+                record = self.rollout_gap_tracker.begin_rollout(
+                    time.perf_counter(), timesteps=int(self.num_timesteps))
+                if record is not None:
+                    print("[PPO GAP] " + json.dumps(record), flush=True)
+                    with self.rollout_gap_log_path.open('a', encoding='utf-8') as handle:
+                        handle.write(json.dumps(record) + "\n")
+            except Exception as exc:
+                print(f"[PPO GAP] rollout-start diagnostic failed: {exc}", flush=True)
+            # MENU needs no freeze while the optimizer works: the game is
+            # already terminal and idle. Re-confirm before handing the next
+            # step to the input guard. No R, no direct VecEnv.reset, and no
+            # stale-image movement are permitted by the handoff gate.
+            if (a.pause_ppo_optimizer and record is not None and raw is not None
+                    and getattr(raw, '_ppo_boundary_menu_pending', False)):
+                if getattr(raw, '_ppo_pause_pending', None) is not None:
+                    raise GuardUncertainError(
+                        '[PPO MENU HANDOFF] Unexpected pause token during terminal handoff')
+                confirmed, evidence = raw.confirm_post_optimizer_menu()
+                if not confirmed:
+                    raise GuardUncertainError(
+                        '[PPO MENU HANDOFF] MENU not independently confirmed '
+                        f'after optimizer: {evidence}; NO inputs sent.')
+                token = getattr(raw, '_ppo_boundary_menu_started_at', None)
+                if token is None or len(token) != 3:
+                    raise GuardUncertainError(
+                        '[PPO MENU HANDOFF] Missing idle-menu timer anchor')
+                vec = self.model.env
+                if (self.model.n_envs != 1 or not hasattr(vec, 'envs') or
+                        len(vec.envs) != 1 or getattr(vec.envs[0], 'env', None) is not raw):
+                    raise GuardUncertainError(
+                        '[PPO MENU HANDOFF] Expected exact single-env Monitor')
+                from tools.ppo_optimizer_pause_clock import compensate_pause_clocks
+                now_mono, now_perf, now_wall = (
+                    time.monotonic(), time.perf_counter(), time.time())
+                try:
+                    idle = compensate_pause_clocks(
+                        raw, now_mono-token[0], now_perf-token[1],
+                        monitor=vec.envs[0], elapsed_wall=now_wall-token[2])
+                except Exception as exc:
+                    raise GuardUncertainError(
+                        f'[PPO MENU HANDOFF] Idle-menu clock correction failed: {exc}') from exc
+                raw._ppo_boundary_menu_started_at = None
+                print('[PPO MENU HANDOFF] MENU reverified after optimizer; '
+                      f'menu_idle_seconds_excluded={idle["paused_wall_seconds"]:.3f}; '
+                      'next guarded PPO step must be TERMINAL and will record '
+                      'the actual death penalty; no movement key allowed.', flush=True)
+                return
+            # Resume BEFORE the existing fresh-stack capture and PPO prediction.
+            if a.pause_ppo_optimizer and record is not None:
+                try:
+                    if raw is None:
+                        raise RuntimeError('No raw environment for PPO resume')
+                    vec = self.model.env
+                    if self.model.n_envs != 1 or not hasattr(vec, 'envs') or len(vec.envs) != 1:
+                        raise RuntimeError('Pause clock correction requires one DummyVecEnv')
+                    monitor = vec.envs[0]
+                    if getattr(monitor, 'env', None) is not raw:
+                        raise RuntimeError('Pause requires Monitor(raw) without other wrappers')
+                    clock_report = raw.resume_after_ppo_optimizer(monitor)
+                    print('[PPO PAUSE] Resumed after optimizer with pause-aware clocks: '
+                          + json.dumps(clock_report), flush=True)
+                except Exception as exc:
+                    raise GuardUncertainError(f'[PPO PAUSE] Safe stop at rollout-start: {exc}') from exc
+            # Run after the optimizer, before SB3 predicts its first action.
+            # Only active with the explicit experimental flag.
+            if a.resync_rollouts and record is not None:
+                try:
+                    if raw is None:
+                        raise RuntimeError("No raw environment for resync")
+                    observation, skip_reason, capture_at = raw.refresh_after_ppo_optimizer()
+                    if observation is None:
+                        # v1.7.3: MENU may appear DURING resync after the game
+                        # resumes. Confirm with four fresh ML+template captures,
+                        # then let the existing guarded env.step record the
+                        # actual terminal and death penalty with NO movement.
+                        # The cached PPO observation is stale, but the guard
+                        # MUST intercept the sampled action before any key.
+                        candidate = getattr(raw, '_ppo_post_resume_menu_candidate', None)
+                        if candidate is not None:
+                            if (not a.pause_ppo_optimizer or
+                                    getattr(raw, '_ppo_pause_pending', None) is not None or
+                                    getattr(raw, '_ppo_boundary_menu_pending', False)):
+                                raise GuardUncertainError(
+                                    '[PPO POST RESUME MENU] Invalid pause/menu state; no keys')
+                            confirmed, evidence = raw.confirm_post_optimizer_menu()
+                            if not confirmed:
+                                raise GuardUncertainError(
+                                    '[PPO POST RESUME MENU] MENU not independently '
+                                    f'confirmed: {evidence}; no inputs sent')
+                            vec = self.model.env
+                            if (self.model.n_envs != 1 or not hasattr(vec, 'envs') or
+                                    len(vec.envs) != 1 or
+                                    getattr(vec.envs[0], 'env', None) is not raw):
+                                raise GuardUncertainError(
+                                    '[PPO POST RESUME MENU] Expected single Monitor(raw)')
+                            if len(candidate) != 3:
+                                raise GuardUncertainError(
+                                    '[PPO POST RESUME MENU] Missing first-menu time anchor')
+                            from tools.ppo_optimizer_pause_clock import compensate_pause_clocks
+                            now_mono, now_perf, now_wall = (
+                                time.monotonic(), time.perf_counter(), time.time())
+                            duration = max(
+                                float(raw.survival_rewards.last_duration),
+                                float(candidate[0]) - float(raw.episode_start))
+                            if not np.isfinite(duration) or duration < 0:
+                                raise GuardUncertainError(
+                                    '[PPO POST RESUME MENU] Invalid terminal duration')
+                            clock = compensate_pause_clocks(
+                                raw, now_mono-candidate[0], now_perf-candidate[1],
+                                monitor=vec.envs[0], elapsed_wall=now_wall-candidate[2])
+                            raw._ppo_boundary_menu_duration_at = duration
+                            raw._ppo_boundary_menu_pending = True
+                            raw._ppo_post_resume_menu_candidate = None
+                            print('[PPO POST RESUME MENU] Confirmed MENU after '
+                                  f'{len(evidence["checks"])} fresh ML+template captures; '
+                                  f'menu_idle_seconds_excluded={clock["paused_wall_seconds"]:.3f}; '
+                                  'deferred guarded terminal with NO movement.', flush=True)
+                            return
+                        # If the game died *during the optimizer*, the preceding
+                        # rollout was already trained on. Safely reset a NEW episode
+                        # without inventing an action or a synthetic terminal reward.
+                        # An abandoned in-progress episode is logged explicitly.
+                        if not (a.recover_rollout_menu and candidate_is_menu(skip_reason)):
+                            raise GuardUncertainError(
+                                f"Cannot verify gameplay after PPO update: {skip_reason}. "
+                                "Stopping instead of acting on the stale cached image.")
+                        verified, evidence = raw.confirm_post_optimizer_menu()
+                        if not verified:
+                            raise GuardUncertainError(
+                                f"Post-update MENU not independently confirmed: {evidence}. "
+                                "Stopping without restarting active gameplay.")
+                        # Use the *monitored VecEnv*, not raw.reset(), so monitor
+                        # and SB3 wrappers remain synchronized. Only confirmed MENU
+                        # can reach the inherited safe R-restart routine.
+                        new_vec_obs = self.model.env.reset()
+                        reset_obs, episode_starts = validated_new_vec_episode(
+                            self.model._last_obs, new_vec_obs, self.model.n_envs)
+                        fresh_at = getattr(raw, 'last_capture_end', None)
+                        reset_age_ms = ((time.perf_counter() - fresh_at) * 1000
+                                        if fresh_at is not None else float('inf'))
+                        if not (0 <= reset_age_ms < 100.0):
+                            raise GuardUncertainError(
+                                f"Reset gameplay capture is stale ({reset_age_ms:.1f}ms).")
+                        self.model._last_obs = reset_obs
+                        self.model._last_episode_starts = episode_starts
+                        print('[PPO RESYNC] Verified MENU during optimizer; '
+                              f'restarted local Practice with fresh observation '
+                              f'({reset_age_ms:.1f}ms old), new_episode=True; '
+                              'ABANDONED partial episode without death reward.', flush=True)
+                        return
+                    age_ms = (time.perf_counter() - capture_at) * 1000
+                    if not (0 <= age_ms < 100.0):
+                        raise GuardUncertainError(
+                            f"Refresh itself is stale ({age_ms:.1f}ms). "
+                            "Stopping instead of acting on an old observation.")
+                    replace_cached_observation(self.model, observation)
+                    print(f"[PPO RESYNC] refreshed 4-frame stack; cached age now {age_ms:.1f}ms", flush=True)
+                except Exception as exc:
+                    raise GuardUncertainError(f"[PPO RESYNC] Safe stop: {exc}") from exc
 
         def _on_step(self):
             now = time.perf_counter()
+            try:
+                # raw is the same unwrapped env supplied to Monitor,
+                # preserving original source-frame timing even if SB3
+                # adds VecEnv observation wrappers.
+                capture_at = getattr(raw, 'last_capture_end', None) if raw is not None else None
+                done = bool(np.any(self.locals.get('dones', [])))
+                self.rollout_gap_tracker.record_step(now, capture_at=capture_at, done=done)
+            except Exception as exc:
+                if not getattr(self, '_rollout_gap_step_error_shown', False):
+                    self._rollout_gap_step_error_shown = True
+                    print(f"[PPO GAP] step diagnostic failed: {exc}", flush=True)
             for act in np.asarray(self.locals.get('actions', []), dtype=np.int32).ravel():
                 self.action_total[int(act)] += 1
                 self.action_recent[int(act)] += 1
+            if a.audit_reward_timing:
+                # Read env->Monitor->DummyVecEnv INFO, after the actual
+                # policy action. Absolutely no actions/rewards/dones changed.
+                audited_infos = self.locals.get('infos', [])
+                audited_dones = np.asarray(self.locals.get('dones', []), dtype=bool).ravel()
+                audited_rewards = np.asarray(self.locals.get('rewards', []), dtype=float).ravel()
+                if len(audited_infos) != 1 or len(audited_dones) != 1 or len(audited_rewards) != 1:
+                    raise RuntimeError('[PPO REWARD STEP AUDIT] Expected single env INFO/DONE/reward')
+                audit_info = audited_infos[0]
+                required = ('duration', 'reward_survival', 'reward_milestones',
+                            'reward_death', 'reward_v61')
+                if any(k not in audit_info for k in required):
+                    raise RuntimeError('[PPO REWARD STEP AUDIT] Missing raw reward fields')
+                audit_row = {
+                    'step': int(self.num_timesteps),
+                    'episode_duration_s': float(audit_info['duration']),
+                    'done': bool(audited_dones[0]),
+                    'truncated': bool(audit_info.get('TimeLimit.truncated', False)),
+                    'environment_reward': float(audited_rewards[0]),
+                    'reward_survival': float(audit_info['reward_survival']),
+                    'reward_milestones': float(audit_info['reward_milestones']),
+                    'reward_death': float(audit_info['reward_death']),
+                    'reward_v61': float(audit_info['reward_v61']),
+                    'ppo_menu_handoff_terminal': bool(
+                        audit_info.get('ppo_menu_handoff_terminal', False)),
+                }
+                self.reward_step_audit_handle.write(json.dumps(audit_row)+'\n')
+                self.reward_step_audit_handle.flush()
             for info in self.locals.get('infos', []):
                 for key, dest in (('reward_survival','survival'),('reward_milestones','milestones'),
                                   ('reward_death','death')):
@@ -589,12 +1406,18 @@ def build_callback(a, output):
                 self.action_recent.clear()
                 self.last_log=now
             if now - self.last_save >= a.save_every_minutes*60:
-                self.model.save(output/'latest')
-                print(f'[V612 SAVE] latest.zip after {self.num_timesteps} PPO steps',flush=True)
-                self.last_save=now
+                if a.pause_ppo_optimizer:
+                    self._checkpoint_due_at_boundary = True
+                else:
+                    from tools.ppo_atomic_checkpoint_v176 import save_atomic_checkpoint
+                    save_atomic_checkpoint(self.model, output/'latest.zip')
+                    print(f'[V612 SAVE] Atomic latest.zip after {self.num_timesteps} PPO steps',flush=True)
+                    self.last_save=now
             return (now-self.began) < a.max_minutes*60
 
         def _on_training_end(self):
+            if self.reward_step_audit_handle is not None:
+                self.reward_step_audit_handle.close()
             if self.log_handle is not None:
                 self.log_handle.close()
 
@@ -684,7 +1507,7 @@ def train(a):
             print(f'[RESUME] PPO weights loaded from {a.resume}',flush=True)
         else:
             model=make_model(monitored,a)
-        callback=build_callback(a,dest)
+        callback=build_callback(a,dest,raw=raw)
         print(f'[V612 TRAIN] PPO executing its OWN actions; no fixed jump; no demos. '
               f'RGB={a.resolution}, AUX={AUX_DIM}, YOLO={a.detector}, '
               f'steps={a.steps}, max_minutes={a.max_minutes}, device={model.device}',flush=True)
@@ -701,8 +1524,9 @@ def train(a):
             callback.log_handle.flush()
             callback.log_handle.close()
         if model is not None:
-            model.save(dest/'latest')
-            print(f'[V612] Saved model: {dest/"latest.zip"}',flush=True)
+            from tools.ppo_atomic_checkpoint_v176 import save_atomic_checkpoint
+            save_atomic_checkpoint(model, dest/'latest.zip')
+            print(f'[V612] Saved model atomically: {dest/"latest.zip"}',flush=True)
         if raw is not None:
             report=build_report(a,raw,steps=raw.training_steps,
                                 started=started,callback=callback)
@@ -802,6 +1626,12 @@ def parse_args():
     p.add_argument('--resolution',type=bench.shape,default=(512,288))
     p.add_argument('--fps',type=int,default=30)
     p.add_argument('--rate-mode',choices=['uncapped','capped'],default='uncapped')
+    p.add_argument('--resync-rollouts', action='store_true',
+                   help='EXPERIMENTAL: passively rebuild 4-frame observation after PPO updates')
+    p.add_argument('--pause-ppo-optimizer', action='store_true',
+                   help='EXPERIMENTAL: freeze local Practice during PPO gradient updates, correct wall clocks; requires --resync-rollouts')
+    p.add_argument('--recover-rollout-menu', action='store_true',
+                   help='EXPERIMENTAL: after verified death during PPO update, reset local Practice with episode flag; skipped death reward is logged')
     p.add_argument('--crop',nargs=4,type=float,default=bench.DEFAULT_CROP)
     p.add_argument('--steps',type=int,default=4000)
     p.add_argument('--max-minutes',type=float,default=25.)
@@ -837,6 +1667,8 @@ def parse_args():
     p.add_argument('--reward-milestone-seconds',type=float,default=.5)
     p.add_argument('--log-every-seconds',type=float,default=30.)
     p.add_argument('--save-every-minutes',type=float,default=4.)
+    p.add_argument('--audit-reward-timing', action='store_true',
+                   help='OPT-IN: write read-only per-step reward/timing evidence for offline audit')
     p.add_argument('--resume',type=Path,default=None,
                    help='Only V6.1 checkpoints work; V6 has a different aux dimension.')
     p.add_argument('--eval-episodes',type=int,default=20)
@@ -849,6 +1681,10 @@ def parse_args():
     p.add_argument('--probe-delays-ms',type=str,default='5,10',
                    help='Comma-separated Playwright tap durations for manual action audit')
     a=p.parse_args()
+    if a.audit_reward_timing and not (a.mode == 'train' and a.pause_ppo_optimizer and a.resync_rollouts):
+        p.error('--audit-reward-timing requires --mode train --pause-ppo-optimizer --resync-rollouts')
+    if a.pause_ppo_optimizer and (a.mode != 'train' or not a.resync_rollouts):
+        p.error('--pause-ppo-optimizer requires --mode train --resync-rollouts')
     a.crop=bench.validate_crop(a.crop)
     a.benchmark_action='ppo'  # NEVER override PPO actions in a learning run.
     try:
