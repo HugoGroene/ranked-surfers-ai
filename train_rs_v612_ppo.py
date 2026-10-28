@@ -453,22 +453,21 @@ def build_env_class():
                       f'boundary_rechecked={needs_boundary_recheck}', flush=True)
 
                 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
+                pause_click_attempts = 1
                 try:
                     await pause_button.click(timeout=1800)
                 except PlaywrightTimeoutError as exc:
-                    # DOM detachment/unstable target is not proof of MENU and
-                    # not proof the click was ineffective. Never blindly retry.
+                    # DOM detachment or a timeout is not proof of a failed click.
                     print('[PPO PAUSE CLICK] Initial click timed out; '
                           'checking overlay and fresh screen evidence.', flush=True)
                     result = await recheck_pause_control(
                         'Pause click timeout', after_click=True)
                     if result == 'READY':
-                        # At most ONE retry, after two newly observed PLAY
-                        # frames and a unique visible Pause button.
                         if await overlay.is_visible():
                             print('[PPO PAUSE CLICK] Overlay appeared before '
                                   'retry; no second click.', flush=True)
                         else:
+                            pause_click_attempts += 1
                             try:
                                 await pause_button.click(timeout=1200)
                             except PlaywrightTimeoutError as second_exc:
@@ -478,30 +477,97 @@ def build_env_class():
                                     raise GuardUncertainError(
                                         'Pause control timed out twice despite '
                                         'verified gameplay; NO third click') from second_exc
-                                # OVERLAY means it may have clicked; strict
-                                # frozen-scene confirmation below is mandatory.
-                await overlay.wait_for(state='visible', timeout=2500)
-                # The React pause overlay can become visible before Unity has
-                # consumed the pause message. Unlike v1.5, do not infer a
-                # frozen game from the overlay or a single capture pair.
-                # Bound the settling interval and NEVER relax the .25 threshold.
+                                # OVERLAY means click may have worked; still
+                                # require independently verified frozen track.
+
+                async def recover_disappeared_overlay(reason):
+                    """At most one bounded recovery; no keys, no blind click.
+
+                    MENU uses the existing deferred-terminal path; PLAY must
+                    be established by two fresh images and unique Pause UI.
+                    A successful second click is never assumed to freeze Unity.
+                    """
+                    nonlocal pause_click_attempts
+                    print('[PPO PAUSE SETTLE] Overlay missing: ' + reason +
+                          '; checking fresh UI/screen evidence; NO keys.', flush=True)
+                    decision = await recheck_pause_control(
+                        'Pause overlay vanished: ' + reason, after_click=True)
+                    if decision == 'READY':
+                        if pause_click_attempts >= 2:
+                            raise GuardUncertainError(
+                                'Pause overlay vanished after two Pause click attempts; '
+                                'NO third click')
+                        # It may have reappeared since the last PLAY frame.
+                        if not await overlay.is_visible():
+                            if (await pause_button.count() != 1 or
+                                    not await pause_button.is_visible()):
+                                raise GuardUncertainError(
+                                    'Pause control changed before overlay recovery; NO click')
+                            pause_click_attempts += 1
+                            print('[PPO PAUSE SETTLE] Two fresh GAMEPLAY frames '
+                                  'and unique Pause button; one verified click retry.',
+                                  flush=True)
+                            try:
+                                await pause_button.click(timeout=1200)
+                            except PlaywrightTimeoutError as exc:
+                                decision = await recheck_pause_control(
+                                    'Overlay recovery click timeout', after_click=True)
+                                if decision != 'OVERLAY':
+                                    raise GuardUncertainError(
+                                        'Pause recovery click timed out; overlay not '
+                                        'verified; NO third click') from exc
+                    # Either the overlay returned by itself or a single
+                    # verified re-click was made. Never count any prior frozen
+                    # frames; caller resets the FreezeWindow.
+                    try:
+                        await overlay.wait_for(state='visible', timeout=1200)
+                    except PlaywrightTimeoutError as exc:
+                        raise GuardUncertainError(
+                            'Pause overlay not visible after bounded recheck; '
+                            'NO additional click') from exc
+
+                try:
+                    await overlay.wait_for(state='visible', timeout=2500)
+                except PlaywrightTimeoutError:
+                    # A completed click can race against a React transition.
+                    await recover_disappeared_overlay('initial overlay wait')
+
+                # Site overlay visibility is NOT proof Unity has stopped.
+                # Require three frozen track pairs, even after any recovery.
+                # If the overlay vanishes during settling, a bounded recheck
+                # may confirm MENU or PLAY; ambiguous observations still stop.
                 from tools.ppo_pause_freeze_window import FreezeWindow
                 window = FreezeWindow(required_pairs=3, max_delta=.25)
                 verified = None
-                for attempt in range(16):
+                overlay_recoveries = 0
+                attempt = 0
+                while attempt < 24:
                     if not await overlay.is_visible():
-                        raise GuardUncertainError('Pause overlay vanished while settling Unity')
+                        if overlay_recoveries:
+                            raise GuardUncertainError(
+                                'Pause overlay vanished again during freeze settling; '
+                                'NO more retries')
+                        overlay_recoveries += 1
+                        await recover_disappeared_overlay('freeze settling')
+                        window = FreezeWindow(required_pairs=3, max_delta=.25)
+                        verified = None
+                        continue
                     await asyncio.sleep(.09)
+                    attempt += 1
+                    if not await overlay.is_visible():
+                        if overlay_recoveries:
+                            raise GuardUncertainError(
+                                'Pause overlay vanished again during freeze settling; '
+                                'NO more retries')
+                        overlay_recoveries += 1
+                        await recover_disappeared_overlay('settling sleep')
+                        window = FreezeWindow(required_pairs=3, max_delta=.25)
+                        verified = None
+                        continue
                     _legacy, score, _unused = await self._capture()
-                    # The site's pause overlay changes the screenshot that the
-                    # screen classifier sees.  In the live probe a verified
-                    # frozen GAMEPLAY track classified as UNCERTAIN, so an ML
-                    # GAMEPLAY vote here is not meaningful.  GAMEPLAY must
-                    # still be confirmed BEFORE clicking Pause (above).  While
-                    # paused, require the visible overlay, a frozen *track*,
-                    # and no positive independent menu-template evidence.
-                    # After resume, the existing four-frame resync rechecks
-                    # unoccluded GAMEPLAY before the first PPO action.
+                    # GAMEPLAY ML votes can be unreliable behind the pause
+                    # overlay. Never relax the independent MENU exclusion or
+                    # static-track threshold.
                     if score >= self.args.threshold * .85:
                         raise GuardUncertainError(
                             f'MENU template detected during pause: {score:.3f}')
@@ -511,15 +577,26 @@ def build_env_class():
                     verified = window.observe(
                         track, (_time.monotonic(), _time.perf_counter(), _time.time()))
                     if verified is not None:
+                        # A frozen scene without a visible Pause overlay does
+                        # not authorize starting the PPO optimizer.
+                        if not await overlay.is_visible():
+                            if overlay_recoveries:
+                                raise GuardUncertainError(
+                                    'Pause overlay vanished again after freeze '
+                                    'verification; NO more retries')
+                            overlay_recoveries += 1
+                            await recover_disappeared_overlay('post-freeze check')
+                            window = FreezeWindow(required_pairs=3, max_delta=.25)
+                            verified = None
+                            continue
                         break
                 if verified is None:
                     raise GuardUncertainError(
-                        'Unity did not demonstrate three consecutive frozen track '
-                        f'intervals within 16 checks; changes={window.changes}')
-                if not await overlay.is_visible():
-                    raise GuardUncertainError('Pause overlay vanished after freeze verification')
+                        'Unity did not demonstrate three consecutive frozen '
+                        f'track intervals within {attempt} checks; '
+                        f'changes={window.changes}')
                 start_mono, start_perf, start_wall, mean_change = verified
-                print(f'[PPO PAUSE] Freeze verified after {attempt + 1} captures; '
+                print(f'[PPO PAUSE] Freeze verified after {attempt} captures; '
                       f'track_deltas={window.changes}', flush=True)
                 return start_mono, start_perf, start_wall, mean_change
 
