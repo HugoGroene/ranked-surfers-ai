@@ -1,0 +1,13 @@
+[
+  "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai\\.venv\\Scripts\\python.exe",
+  "-B",
+  "-u",
+  "-m",
+  "tools.ppo_reward_timing_audit",
+  "--log",
+  "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\ppo_bc_continuation_ab_20261028\\pilot_train.log",
+  "--min-resumes",
+  "31",
+  "--min-steps",
+  "4096"
+]

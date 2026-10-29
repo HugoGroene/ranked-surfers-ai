@@ -1,0 +1,35 @@
+{
+  "scope": "Read-only source inspection during unchanged matched evaluation; no runtime timing instrumentation added",
+  "decision_period_reference_ms": {
+    "median": 51.65,
+    "p95": 65.34,
+    "p99": 69.78
+  },
+  "detector_age_reference_ms": {
+    "median": 106.0,
+    "p95": 182.1
+  },
+  "detector_fresh_fraction_reference": 0.975,
+  "fresh_cutoff_ms": 300,
+  "reference_run": "v612_eval_bc_large_100_20261028_180438",
+  "findings": [
+    "Newest RGB frame and asynchronous YOLO feature age are different quantities.",
+    "Policy chooses action from prior returned observation before guarded env.step captures and classifies a newer screenshot.",
+    "Guard screenshot is not repacked into the already chosen policy action.",
+    "Legacy frame_age_at_command_ms uses last_capture_end after guard capture, so it does not measure original policy-observation age.",
+    "last_capture_end is stamped after menu scoring/compatibility resize, not at desktop present time.",
+    "5 ms requested key hold does not measure browser dispatch or Unity input-to-visible-response latency.",
+    "Four-frame stack provides temporal context, but does not guarantee motion anticipation is learned.",
+    "Actor-only BC freezes the visual/aux extractor; PPO continuation can update the policy feature extractor.",
+    "Training-only four-frame post-resume refresh passively waits while game is running; supplied overnight traces show roughly 213-277 ms to fourth accepted frame.",
+    "100-episode evaluation caps episodes at 15 seconds, and therefore does not validate sustained later high-speed play."
+  ],
+  "recommended_measurement": [
+    "Preserve timestamps/IDs for the exact frame stack used by policy.",
+    "Measure policy inference, guard duration and keydown dispatch; report median/p95/p99 for policy-frame-to-key.",
+    "Correlate commanded actions with browser receipt and visible Unity movement before treating delivery as confirmed.",
+    "Compare detector source age separately from RGB age and measure post-optimizer first-action delay.",
+    "Only then A/B one performance setting at a time on the same checkpoint, without weakening guards."
+  ],
+  "inference": "Existing system plausibly supports substantially better play, but adequacy at high speed and a more-steps-only explanation are not established."
+}

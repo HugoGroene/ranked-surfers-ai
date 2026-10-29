@@ -1,0 +1,12 @@
+{
+  "changed_tensors": [
+    "mlp_extractor.policy_net.0.weight",
+    "mlp_extractor.policy_net.0.bias",
+    "action_net.weight",
+    "action_net.bias"
+  ],
+  "unchanged_tensors": 40,
+  "source_preserved": true,
+  "pilot_preserved": true,
+  "zip_crc_valid": true
+}

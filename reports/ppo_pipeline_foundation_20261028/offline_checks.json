@@ -1,0 +1,17 @@
+{
+  "tests_run": 126,
+  "failures": 0,
+  "errors": 0,
+  "successful": true,
+  "patterns": [
+    "test_ppo_browser_session.py",
+    "test_ppo_browser_focus.py",
+    "test_ppo_long_episode_limit.py",
+    "test_ppo_prepared_guard.py",
+    "test_ppo_checkpoint_settings.py",
+    "test_ppo_eval_prediction.py",
+    "test_ppo_reaction_latency.py",
+    "test_ppo_pause_runtime_v179.py",
+    "test_ppo_current_runtime.py"
+  ]
+}

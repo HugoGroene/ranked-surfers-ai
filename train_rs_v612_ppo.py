@@ -44,6 +44,14 @@ def build_env_class():
 
     class PPOV61Env(OldEnv):
         """Preserve proven V4/V5 control, extend PPO observations without rules."""
+        async def _open_browser(self):
+            await super()._open_browser()
+            from tools.ppo_browser_focus import ensure_startup_focus
+            try:
+                await ensure_startup_focus(self.page)
+            except Exception as exc:
+                raise GuardUncertainError(f'[PPO FOCUS] Startup stopped: {exc}') from exc
+
         def __init__(self, cfg, output, demos, detector, *, a):
             if a.benchmark_action != 'ppo':
                 raise ValueError('V6 learning must execute the PPO-sampled action')
@@ -76,6 +84,11 @@ def build_env_class():
             self._ppo_boundary_menu_started_at = None
             self._ppo_menu_handoff_terminal_observed = False
             self._ppo_pause_visual_reference = None
+            self._prepared_gameplay_reading = None
+            self.prepared_guard_hits = 0
+            self.prepared_guard_fallbacks = 0
+            self.prepared_guard_late_fallbacks = 0
+            self.reuse_observation_guard = bool(getattr(a, 'reuse_observation_guard', False))
             super().__init__(cfg, output, demos, detector, a=a)
             w, h = self.target_wh
             self.observation_space = spaces.Dict({
@@ -133,12 +146,34 @@ def build_env_class():
             if aux[V6_AUX_DIM:V6_AUX_DIM+SCREEN_COLUMN_DIM].any():
                 self.column_nonzero_observations += 1
             self.last_aux = aux
+            self._prepared_gameplay_reading = None
+            if getattr(self, 'reuse_observation_guard', False):
+                captured = getattr(self, '_capture_menu_metadata', None)
+                if captured is not None and captured[:2] == (id(self._v2_last_bgra), self.last_capture_end):
+                    state, probabilities = self._read_screen_state()
+                    menu_score = captured[2]
+                    reading = screen_gate(state, probabilities, menu_score,
+                        confidence=self.state_confidence, menu_threshold=self.args.threshold)
+                    if reading.verdict == 'PLAY' and self.last_capture_end is not None:
+                        from tools.ppo_prepared_guard import PreparedGameplayReading
+                        self._prepared_gameplay_reading = PreparedGameplayReading(
+                            id(self._v2_last_bgra), self.last_capture_end,
+                            state, dict(probabilities), menu_score)
             self.pack_ms.append((time.perf_counter()-start)*1000)
             return {'image': packed, 'aux': aux}, fresh, age_ms
+
+        async def _capture(self):
+            result = await super()._capture()
+            self._capture_menu_metadata = (id(self._v2_last_bgra), self.last_capture_end, float(result[1]))
+            return result
 
         def reset(self, *, seed=None, options=None):
             if self._guard_hard_stopped:
                 raise GuardUncertainError('[V612 GUARD] Training latched off after uncertain UI; restart process after reviewing evidence.')
+            if getattr(self, '_ppo_time_limit_pending', False):
+                from tools.ppo_episode_reset import reload_after_time_limit
+                self._call(reload_after_time_limit(self), timeout=120)
+                self._ppo_time_limit_pending = False
             self._guard_forced_terminal = False
             self._ppo_boundary_menu_pending = False
             self._ppo_boundary_menu_duration_at = None
@@ -801,12 +836,30 @@ def build_env_class():
             # screens can also move. The distance HUD must visibly advance.
             previous_track = None
             baseline_hud = None
+            prepared = getattr(self, '_prepared_gameplay_reading', None)
+            used_prepared = None
+            self._prepared_gameplay_reading = None  # one decision only
+            if (not getattr(self, 'reuse_observation_guard', False) or
+                    self.suspected_since is not None or
+                    getattr(self, '_ppo_boundary_menu_pending', False) or
+                    prepared is None or not prepared.valid_for(
+                        self._v2_last_bgra, self.last_capture_end, time.perf_counter())):
+                prepared = None
+                if getattr(self, 'reuse_observation_guard', False):
+                    self.prepared_guard_fallbacks += 1
 
             async def sample():
-                nonlocal previous_track, baseline_hud
+                nonlocal previous_track, baseline_hud, prepared, used_prepared
                 import cv2
-                frame = await self._capture()
-                state, probs = self._read_screen_state()
+                if prepared is not None:
+                    frame = (self._v2_last_chw, prepared.menu_score, None)
+                    state, probs = prepared.state, prepared.probabilities
+                    used_prepared = prepared
+                    prepared = None
+                    self.prepared_guard_hits += 1
+                else:
+                    frame = await self._capture()
+                    state, probs = self._read_screen_state()
                 track_motion = track_texture = 0.
                 hud_pixels = hud_changed_pixels = 0
                 shot = self._v2_last_bgra
@@ -909,6 +962,12 @@ def build_env_class():
                 print(f'[V612 GUARD] Resumed after {len(readings)} captures: '
                       'two positive gameplay confirmations.', flush=True)
 
+            if used_prepared is not None and not used_prepared.valid_for(
+                    self._v2_last_bgra, self.last_capture_end, time.perf_counter()):
+                # Invalidate before dispatch as well as before classification.
+                # A scheduler stall must fall back to the original fresh guard.
+                self.prepared_guard_late_fallbacks += 1
+                return await self._step_browser(action)
             self.guard_allowed += 1
             self.action_context.note_action(int(action), time.perf_counter())
             # Preserve the inherited tap, pacing and post-key screenshot.
@@ -922,6 +981,8 @@ def build_env_class():
                 # detector that could have missed the same menu transition.
                 died, truncated = True, False
                 info['v612_guard_confirmed_menu'] = True
+            self._ppo_time_limit_pending = bool(truncated and not died)
+            info['termination_reason'] = 'death' if died else ('time_limit' if truncated else None)
             info['v612_guard_allowed'] = self.guard_allowed
             info['v612_guard_rechecks'] = self.guard_rechecks
             # Only real elapsed gameplay (observed by the local game loop) is
@@ -974,6 +1035,11 @@ def build_env_class():
                 'visual_gameplay_recoveries': self.guard_visual_recoveries,
                 'guard_hard_stopped': self._guard_hard_stopped,
                 'preflight_checks_every_decision': True,
+                'prepared_observation_guard_enabled': bool(getattr(self, 'reuse_observation_guard', False)),
+                'prepared_observation_guard_hits': getattr(self, 'prepared_guard_hits', 0),
+                'prepared_observation_guard_fallbacks': getattr(self, 'prepared_guard_fallbacks', 0),
+                'prepared_observation_guard_late_fallbacks': getattr(self, 'prepared_guard_late_fallbacks', 0),
+                'prepared_observation_max_age_ms': 20.,
                 'warning': 'One screenshot cannot prevent a game ending between capture and keypress.'
             }
             return report
@@ -1546,7 +1612,7 @@ def build_callback(a, output, raw=None):
     return V61Callback()
 
 
-def create_live_env(a, output):
+def create_live_env(a, output, *, browser_session=None):
     from stable_baselines3.common.monitor import Monitor
     import train_rs_v2_verify as v2
     from train_rs_v3_ppo import v2_args
@@ -1565,9 +1631,17 @@ def create_live_env(a, output):
                              max_minutes=a.max_minutes,fullscreen=True)
     cfg=v2_args(arg)
     cfg.episode_max_seconds=a.episode_max_seconds
+    if browser_session is not None:
+        cfg.persistent_browser_session = browser_session
     Env=build_env_class()
     demos=v2.DemoStore(v2.DEMO_ROOT,max_samples=100,load_existing=False)
     raw=Env(cfg,output,demos,detector,a=a)
+    if a.mode == 'train':
+        # Full reward audits stream to disk; keep only recent debug timing
+        # dictionaries in RAM during multi-hour training.
+        raw.step_timings = deque(maxlen=10000)
+    if browser_session is not None:
+        write_json(output/'persistent_browser.json', browser_session.summary())
     try:
         monitored=Monitor(raw,filename=str(output/'episodes.monitor.csv'))
     except BaseException:
@@ -1597,6 +1671,8 @@ def build_report(a, raw, *, steps, started, callback=None, mode='train'):
         'startup_guard_failures':raw.startup_failures,
         'detector':raw.hazard_report(),
         'observation_aux_dim':AUX_DIM,'observation_image_shape':list(raw.observation_space['image'].shape),
+        'episode_time_limit_seconds':float(a.episode_max_seconds),
+        'debug_step_timing_history_limit':getattr(raw.step_timings, 'maxlen', None),
         'reward_parts':dict(raw.reward_parts),
         'first_25_mean_seconds':round(float(np.mean(durations[:25])),3) if len(durations)>=25 else None,
         'last_25_mean_seconds':round(float(np.mean(durations[-25:])),3) if len(durations)>=25 else None,
@@ -1605,7 +1681,7 @@ def build_report(a, raw, *, steps, started, callback=None, mode='train'):
     return report
 
 
-def train(a):
+def train(a, *, browser_session=None):
     import torch
     from stable_baselines3 import PPO
     from train_rs_v2_verify import RUN_ROOT
@@ -1619,10 +1695,13 @@ def train(a):
     monitored=raw=model=callback=None
     completed=False
     try:
-        monitored,raw=create_live_env(a,dest)
+        monitored,raw=(create_live_env(a,dest) if browser_session is None else
+                       create_live_env(a,dest,browser_session=browser_session))
         if a.resume:
-            model=PPO.load(str(a.resume),env=monitored,
-                           device='cuda' if torch.cuda.is_available() else 'cpu')
+            from tools.ppo_checkpoint_settings import load_training_checkpoint
+            model, effective_settings = load_training_checkpoint(
+                a, monitored, device='cuda' if torch.cuda.is_available() else 'cpu')
+            write_json(dest/'v61_effective_ppo_settings.json', effective_settings)
             if (model.n_steps != a.n_steps or model.batch_size != a.batch_size):
                 print('[RESUME] Using checkpoint PPO rollout/batch hyperparameters; '
                       'CLI --n-steps/--batch-size do not override a loaded checkpoint.',flush=True)
@@ -1668,7 +1747,7 @@ def train(a):
     print(f'[V612] Training outputs: {dest}',flush=True)
 
 
-def evaluate(a):
+def evaluate(a, *, browser_session=None):
     import torch
     from stable_baselines3 import PPO
     from train_rs_v2_verify import RUN_ROOT
@@ -1680,11 +1759,13 @@ def evaluate(a):
     started=time.perf_counter()
     monitored=raw=None
     durations=[];scores=[];actions=Counter(); steps=0
+    termination_reasons=Counter()
     prob_sums=np.zeros(5,dtype=np.float64)
     prob_samples=0
     prob_maxima=[]
     try:
-        monitored,raw=create_live_env(a,dest)
+        monitored,raw=(create_live_env(a,dest) if browser_session is None else
+                       create_live_env(a,dest,browser_session=browser_session))
         eval_policy=('stochastic' if a.stochastic_eval else a.eval_policy)
         model=(PPO.load(str(a.resume),env=monitored,
                         device='cuda' if torch.cuda.is_available() else 'cpu')
@@ -1692,22 +1773,23 @@ def evaluate(a):
         rng=np.random.default_rng(a.seed)
         obs,info=monitored.reset()
         while len(durations)<a.eval_episodes and time.perf_counter()-started<a.max_minutes*60:
-            if model is not None and steps % 8 == 0:
-                probs=read_policy_probs(model,obs)
-                if probs is not None:
-                    prob_sums += np.asarray(probs['probabilities'],dtype=float)
-                    prob_samples+=1
-                    prob_maxima.append(probs['max_probability'])
             if eval_policy == 'random':
                 action=int(rng.integers(0,5))
             elif eval_policy == 'none':
                 action=0
             else:
-                action,_=model.predict(obs,deterministic=(eval_policy=='deterministic'))
+                from tools.ppo_eval_prediction import predict_with_optional_probabilities
+                action, probs = predict_with_optional_probabilities(model, obs,
+                    deterministic=(eval_policy=='deterministic'), sample_probabilities=(steps % 8 == 0))
                 action=int(action)
+                if probs is not None:
+                    prob_sums += np.asarray(probs['probabilities'],dtype=float)
+                    prob_samples+=1
+                    prob_maxima.append(probs['max_probability'])
             obs,r,done,trunc,info=monitored.step(action)
             actions[action]+=1;steps+=1
             if done or trunc:
+                termination_reasons['death' if done else 'time_limit'] += 1
                 durations.append(float(info.get('duration',0.)))
                 scores.append(float(info.get('episode',{}).get('r',0.)))
                 print(f'[V61 EVAL] episode {len(durations)}/{a.eval_episodes}: '
@@ -1724,6 +1806,7 @@ def evaluate(a):
         if raw is not None:
             report=build_report(a,raw,steps=steps,started=started,mode='eval')
             report.update({'eval_episodes':len(durations),'durations_seconds':durations,
+                           'eval_termination_counts':dict(termination_reasons),
                            'mean_survival_seconds':round(float(np.mean(durations)),2) if durations else None,
                            'median_survival_seconds':round(float(np.median(durations)),2) if durations else None,
                            'best_survival_seconds':max(durations) if durations else None,
@@ -1741,13 +1824,15 @@ def evaluate(a):
             raw.close()
 
 
-def parse_args():
+def parse_args(argv=None):
     p=argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--mode',required=True,choices=['check','probe','train','eval'])
     p.add_argument('--run-name',default='v61_ppo_'+datetime.now().strftime('%Y%m%d_%H%M%S'))
     p.add_argument('--resolution',type=bench.shape,default=(512,288))
     p.add_argument('--fps',type=int,default=30)
     p.add_argument('--rate-mode',choices=['uncapped','capped'],default='uncapped')
+    p.add_argument('--reuse-observation-guard', action='store_true',
+                   help='EXPERIMENTAL: reuse the confident gameplay check on the exact policy image for at most 20 ms; otherwise use normal preflight capture')
     p.add_argument('--resync-rollouts', action='store_true',
                    help='EXPERIMENTAL: passively rebuild 4-frame observation after PPO updates')
     p.add_argument('--pause-ppo-optimizer', action='store_true',
@@ -1755,7 +1840,7 @@ def parse_args():
     p.add_argument('--recover-rollout-menu', action='store_true',
                    help='EXPERIMENTAL: after verified death during PPO update, reset local Practice with episode flag; skipped death reward is logged')
     p.add_argument('--crop',nargs=4,type=float,default=bench.DEFAULT_CROP)
-    p.add_argument('--steps',type=int,default=4000)
+    p.add_argument('--steps',type=int,default=4096)
     p.add_argument('--max-minutes',type=float,default=25.)
     p.add_argument('--n-steps',type=int,default=128)
     p.add_argument('--batch-size',type=int,default=32)
@@ -1763,6 +1848,10 @@ def parse_args():
     p.add_argument('--learning-rate',type=float,default=3.0e-4)
     p.add_argument('--gamma',type=float,default=.995)
     p.add_argument('--ent-coef',type=float,default=.002)
+    p.add_argument('--target-kl',type=float,default=None)
+    p.add_argument('--override-ppo-settings',nargs='+',default=[],
+                   choices=['n_steps','batch_size','n_epochs','learning_rate','gamma','ent_coef','target_kl','seed'],
+                   help='Explicitly override only these saved settings when resuming training; all others retain checkpoint values')
     p.add_argument('--seed',type=int,default=123)
     p.add_argument('--detector',type=Path,default=Path('ai_data/v5_hazards/runs/segment_round04/weights/best.pt'))
     p.add_argument('--imgsz',type=int,default=960)
@@ -1782,7 +1871,8 @@ def parse_args():
     p.add_argument('--startup-motion-threshold',type=float,default=2.2)
     p.add_argument('--save-overlays',type=int,default=6)
     p.add_argument('--preview-delay',type=float,default=.2)
-    p.add_argument('--episode-max-seconds',type=float,default=15.)
+    p.add_argument('--episode-max-seconds',type=float,default=300.,
+                   help='External episode time limit; reported separately from death. Use 15 explicitly for historical benchmarks.')
     p.add_argument('--reward-survival-rate',type=float,default=.8)
     p.add_argument('--reward-death-penalty',type=float,default=1.0)
     p.add_argument('--reward-milestone-bonus',type=float,default=.15)
@@ -1802,7 +1892,15 @@ def parse_args():
     p.add_argument('--probe-trials',type=int,default=2,help='Repetitions per action and tap duration')
     p.add_argument('--probe-delays-ms',type=str,default='5,10',
                    help='Comma-separated Playwright tap durations for manual action audit')
-    a=p.parse_args()
+    a=p.parse_args(argv)
+    if a.override_ppo_settings and (a.mode != 'train' or a.resume is None):
+        p.error('--override-ppo-settings requires resumed training')
+    if a.target_kl is not None and not 0 < a.target_kl < 1:
+        p.error('--target-kl must be positive and below 1')
+    if a.reuse_observation_guard and a.mode == 'train' and not (a.pause_ppo_optimizer and a.resync_rollouts):
+        p.error('--reuse-observation-guard training requires --pause-ppo-optimizer and --resync-rollouts')
+    if a.reuse_observation_guard and a.capture_mode != 'fast':
+        p.error('--reuse-observation-guard requires the fast capture path')
     if a.audit_reward_timing and not (a.mode == 'train' and a.pause_ppo_optimizer and a.resync_rollouts):
         p.error('--audit-reward-timing requires --mode train --pause-ppo-optimizer --resync-rollouts')
     if a.pause_ppo_optimizer and (a.mode != 'train' or not a.resync_rollouts):

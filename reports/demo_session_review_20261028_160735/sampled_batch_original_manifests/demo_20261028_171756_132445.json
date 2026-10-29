@@ -1,0 +1,308 @@
+{
+  "schema": 1,
+  "status": "candidate",
+  "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+  "preview_video": "preview.mp4",
+  "image_shape": [
+    3,
+    288,
+    512
+  ],
+  "aux_dim": 557,
+  "action_names": [
+    "NONE",
+    "LEFT",
+    "RIGHT",
+    "JUMP",
+    "ROLL"
+  ],
+  "frames": 743,
+  "duration_seconds": 37.142,
+  "valid_segments_seconds": [
+    [
+      0.0,
+      36.442
+    ]
+  ],
+  "valid_action_samples": 742,
+  "action_counts_valid": {
+    "NONE": 717,
+    "RIGHT": 7,
+    "JUMP": 9,
+    "LEFT": 6,
+    "ROLL": 3
+  },
+  "reason": "completed",
+  "last_0_7s_excluded_by_default": true,
+  "frame_storage": "single RGB CHW frame; reconstruct 4-frame stack with oldest-first order",
+  "preview_source": "full_canvas_before_model_crop_when_available",
+  "recorded_keydown_count": 25,
+  "keyboard_sources": {
+    "browser_dom": 50,
+    "win32_key_state": 50
+  },
+  "preview_canvas_original_shape": [
+    945,
+    1920
+  ],
+  "review_note": "Approve only genuinely good intervals; long survival alone does not prove optimal actions.",
+  "recorder_version": "1.3.1-diagnostics",
+  "timestamp_origin_perf_counter": 191825.0164996,
+  "diagnostics": {
+    "schema": 1,
+    "frame_intervals": {
+      "frames": 743,
+      "max_lag_ms": 130.0,
+      "intervals_ms": {
+        "count": 742,
+        "median": 48.67,
+        "p95": 63.15,
+        "mean": 50.06,
+        "min": 20.58,
+        "max": 119.25
+      },
+      "intervals_over_max_lag": 0,
+      "fraction_intervals_within_max_lag": 1.0,
+      "effective_fps_from_median": 20.55,
+      "intervals_over_1s": 0
+    },
+    "validity": {
+      "samples": 743,
+      "valid_samples": 742,
+      "valid_fraction": 0.9987,
+      "valid_by_action": {
+        "NONE": 717,
+        "LEFT": 6,
+        "RIGHT": 7,
+        "JUMP": 9,
+        "ROLL": 3
+      },
+      "valid_nonnone_samples": 25,
+      "invalid_labeled_nonnone": 0,
+      "valid_with_stack_gap": 0,
+      "segments_seconds": [
+        [
+          0.0,
+          36.442
+        ]
+      ],
+      "valid_in_segments_by_action": {
+        "NONE": 706,
+        "LEFT": 6,
+        "RIGHT": 7,
+        "JUMP": 8,
+        "ROLL": 2
+      }
+    },
+    "keydowns": {
+      "max_lag_ms": 130.0,
+      "trusted_source": "win32_key_state",
+      "keydowns_total": 25,
+      "merged_by_dedup": 0,
+      "keydowns_eligible": 25,
+      "keydowns_assigned": 25,
+      "keydown_yield": 1.0,
+      "outcomes": {
+        "assigned": 25
+      },
+      "eligible_by_action": {
+        "RIGHT": 7,
+        "JUMP": 9,
+        "LEFT": 6,
+        "ROLL": 3
+      },
+      "assigned_by_action": {
+        "RIGHT": 7,
+        "JUMP": 9,
+        "LEFT": 6,
+        "ROLL": 3
+      },
+      "assigned_offset_after_frame_ms": {
+        "count": 25,
+        "median": 14.46,
+        "p95": 34.76,
+        "mean": 16.83,
+        "min": 0.03,
+        "max": 46.75
+      }
+    },
+    "keyboard_delivery": {
+      "win32_keydowns": 25,
+      "browser_keydowns": 25,
+      "matched_pairs": 25,
+      "win32_without_browser": 0,
+      "browser_without_win32": 0,
+      "browser_before_win32": 11,
+      "browser_minus_win32_ms": {
+        "count": 25,
+        "median": 0.68,
+        "p95": 10.57,
+        "mean": -0.86,
+        "min": -14.37,
+        "max": 11.72
+      }
+    }
+  },
+  "capture_timing_ms": {
+    "focus_check": {
+      "count": 743,
+      "median": 1.79,
+      "p95": 2.91,
+      "mean": 1.97,
+      "min": 1.26,
+      "max": 6.72
+    },
+    "view_check_and_misc": {
+      "count": 743,
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.26,
+      "min": 0.0,
+      "max": 9.83
+    },
+    "grab": {
+      "count": 743,
+      "median": 10.62,
+      "p95": 13.55,
+      "mean": 10.46,
+      "min": 6.75,
+      "max": 16.47
+    },
+    "classify": {
+      "count": 743,
+      "median": 5.02,
+      "p95": 7.55,
+      "mean": 5.31,
+      "min": 4.8,
+      "max": 10.63
+    },
+    "detector_poll_and_preprocess": {
+      "count": 743,
+      "median": 1.1,
+      "p95": 1.7,
+      "mean": 1.17,
+      "min": 0.94,
+      "max": 2.12
+    },
+    "jpeg_encode": {
+      "count": 743,
+      "median": 3.91,
+      "p95": 6.41,
+      "mean": 4.19,
+      "min": 3.39,
+      "max": 7.59
+    },
+    "post_frame": {
+      "count": 743,
+      "median": 0.02,
+      "p95": 0.72,
+      "mean": 0.21,
+      "min": 0.01,
+      "max": 1.07
+    },
+    "sleep_actual": {
+      "count": 743,
+      "median": 24.44,
+      "p95": 42.02,
+      "mean": 26.44,
+      "min": 0.06,
+      "max": 88.48
+    },
+    "loop_total": {
+      "count": 743,
+      "median": 47.06,
+      "p95": 63.04,
+      "mean": 50.0,
+      "min": 20.8,
+      "max": 115.76
+    },
+    "sleep_requested": {
+      "count": 743,
+      "median": 18.76,
+      "p95": 28.69,
+      "mean": 18.92,
+      "min": 2.0,
+      "max": 48.85
+    },
+    "sleep_overshoot": {
+      "count": 743,
+      "median": 7.76,
+      "p95": 14.88,
+      "mean": 7.52,
+      "min": -17.68,
+      "max": 75.18
+    }
+  },
+  "capture": {
+    "recorder_version": "1.3.1-diagnostics",
+    "git": {
+      "commit": "2abafd83f4ba31e36b3afa5a9ffbfbda46eb3752",
+      "tracked_changes": true
+    },
+    "cli_args": {
+      "command": "record",
+      "url": "http://localhost:8000",
+      "root": "ai_data\\demonstrations_v13",
+      "detector": "ai_data\\v5_hazards\\runs\\segment_round04\\weights\\best.pt",
+      "state_model": "checkpoints\\v612_snapshot_20261021\\screen_state_candidate_v2.pt",
+      "fps": "20",
+      "detect_every": "3",
+      "imgsz": "960",
+      "conf": "0.2",
+      "state_confidence": "0.9",
+      "max_run_seconds": "45",
+      "screen_x_offset": "0",
+      "screen_y_offset": "0"
+    },
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.6",
+    "opencv": "5.0.0",
+    "region": {
+      "left": 0,
+      "top": 87,
+      "width": 1920,
+      "height": 945
+    },
+    "calibration_score": 0.9990409016609192,
+    "monitors": [
+      {
+        "left": 0,
+        "top": 0,
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "left": 0,
+        "top": 0,
+        "width": 1920,
+        "height": 1080,
+        "is_primary": true,
+        "name": "Generic PnP Monitor",
+        "unique_id": "\\\\?\\DISPLAY#MSI3BA4#5&12ade559&0&UID4357#{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}"
+      }
+    ],
+    "canvas_monitor_index": null,
+    "view_signature": {
+      "inner_width": 1920,
+      "inner_height": 945,
+      "device_pixel_ratio": 1,
+      "screen_x": 0,
+      "screen_y": 0,
+      "canvas_x": 0,
+      "canvas_y": 0,
+      "canvas_width": 1920,
+      "canvas_height": 945
+    },
+    "keyboard_poll_ms": {
+      "count": 4000,
+      "median": 15.54,
+      "p95": 16.52,
+      "mean": 15.64,
+      "min": 6.53,
+      "max": 87.58
+    },
+    "keyboard_requested_interval_ms": 4.0,
+    "keyboard_monitor_alive": true,
+    "keyboard_monitor_error": null
+  }
+}

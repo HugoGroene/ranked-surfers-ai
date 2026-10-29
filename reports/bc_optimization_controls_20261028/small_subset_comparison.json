@@ -1,0 +1,29 @@
+[
+  {
+    "learning_rate": 0.0001,
+    "accuracy": [
+      0.7125,
+      0.7375,
+      0.75
+    ],
+    "all_inputs_unchanged": true
+  },
+  {
+    "learning_rate": 0.0003,
+    "accuracy": [
+      0.825,
+      0.875,
+      0.8875
+    ],
+    "all_inputs_unchanged": true
+  },
+  {
+    "learning_rate": 0.001,
+    "accuracy": [
+      0.825,
+      0.825,
+      0.85
+    ],
+    "all_inputs_unchanged": true
+  }
+]

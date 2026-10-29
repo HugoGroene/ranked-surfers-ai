@@ -1,0 +1,12 @@
+{
+  "actor_only_verified": true,
+  "changed_tensors": [
+    "mlp_extractor.policy_net.0.weight",
+    "mlp_extractor.policy_net.0.bias",
+    "action_net.weight",
+    "action_net.bias"
+  ],
+  "unchanged_tensors": 40,
+  "source_sha256": "1188e943f42b70e4e5ef94d4e7c23662d1ee7191d5e87f4e4aa0921fa638b55c",
+  "bc_sha256": "ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc"
+}

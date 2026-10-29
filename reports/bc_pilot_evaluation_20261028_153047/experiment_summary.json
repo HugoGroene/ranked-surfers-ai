@@ -1,0 +1,19 @@
+{
+  "source_checkpoint": "ai_data\\rl_v2_runs\\v612_paused_state_v179_8h_20261028_045909\\latest.zip",
+  "source_sha256": "1188e943f42b70e4e5ef94d4e7c23662d1ee7191d5e87f4e4aa0921fa638b55c",
+  "output_checkpoint": "ai_data\\demonstrations_v13\\bc_runs\\bc_20261028_152607\\model.zip",
+  "output_sha256": "ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc",
+  "training_configuration": {
+    "epochs": 3,
+    "batch_size": 12,
+    "learning_rate": 2e-05,
+    "holdout_fraction": 0.2,
+    "none_fraction": 0.35,
+    "seed": 77
+  },
+  "selected_dataset": "reports/demo_training_selection_20261028_150326/selection.json",
+  "actor_only_verified": true,
+  "live_gameplay_evaluated": true,
+  "interpretation": "Observed mean survival 4.8276 s versus source 4.2970 s in one 100-episode evaluation each; zero deterministic lateral actions. Repeat comparison needed; this does not establish learned lane behavior.",
+  "live_evaluation_run": "v612_eval_bc_pilot_100_20261028_153047"
+}

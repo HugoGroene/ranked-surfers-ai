@@ -153,9 +153,13 @@ class LocalPracticeEnv(gym.Env):
         self._capture_anchor_box = None
         self._capture_anchor_region = None
         self._last_alignment_check = 0.0
-        self.worker_loop = asyncio.new_event_loop()
-        self.worker_thread = threading.Thread(target=self._run_async_loop, daemon=True)
-        self.worker_thread.start()
+        self._persistent_browser_session = getattr(args, 'persistent_browser_session', None)
+        if self._persistent_browser_session is None:
+            self.worker_loop = asyncio.new_event_loop()
+            self.worker_thread = threading.Thread(target=self._run_async_loop, daemon=True)
+            self.worker_thread.start()
+        else:
+            self._persistent_browser_session.acquire(self)
 
         if not ctrl.TEMPLATE_INFO.is_file():
             self.close()
@@ -187,32 +191,40 @@ class LocalPracticeEnv(gym.Env):
         return task.result(timeout=timeout)
 
     async def _open_browser(self):
-        self.playwright = await ctrl.async_playwright().start()
-        launch_args = ["--start-maximized"]
-        try:
-            self.browser = await self.playwright.chromium.launch(headless=False, args=launch_args)
-        except Exception:
-            executable = shutil.which("chromium") or shutil.which("chromium-browser")
-            if not executable:
-                raise
-            self.browser = await self.playwright.chromium.launch(
-                headless=False, executable_path=executable, args=launch_args)
-        self.context = await self.browser.new_context(no_viewport=True)
-        self.page = await self.context.new_page()
-        try:
-            cdp = await self.context.new_cdp_session(self.page)
-            window = await cdp.send("Browser.getWindowForTarget")
-            await cdp.send("Browser.setWindowBounds", {
-                "windowId": window["windowId"],
-                "bounds": {"windowState": "maximized"},
-            })
-        except Exception as exc:
-            print("Window maximize warning:", str(exc)[:160])
+        session = getattr(self, '_persistent_browser_session', None)
+        reused = session is not None and session.restore(self)
+        if reused:
+            print('[BROWSER SESSION] Reusing owned Chromium window; reloading local Practice.', flush=True)
+        else:
+            self.playwright = await ctrl.async_playwright().start()
+            launch_args = ["--start-maximized"]
+            try:
+                self.browser = await self.playwright.chromium.launch(headless=False, args=launch_args)
+            except Exception:
+                executable = shutil.which("chromium") or shutil.which("chromium-browser")
+                if not executable:
+                    raise
+                self.browser = await self.playwright.chromium.launch(
+                    headless=False, executable_path=executable, args=launch_args)
+            self.context = await self.browser.new_context(no_viewport=True)
+            self.page = await self.context.new_page()
+            try:
+                cdp = await self.context.new_cdp_session(self.page)
+                window = await cdp.send("Browser.getWindowForTarget")
+                await cdp.send("Browser.setWindowBounds", {
+                    "windowId": window["windowId"],
+                    "bounds": {"windowState": "maximized"},
+                })
+            except Exception as exc:
+                print("Window maximize warning:", str(exc)[:160])
         await self.page.goto(self.args.url, wait_until="domcontentloaded", timeout=45000)
         await self.page.bring_to_front()
-        self.grabber = mss.MSS()  # Only accessed from this worker thread.
+        if self.grabber is None:
+            self.grabber = mss.MSS()  # Only accessed from this worker thread.
         self.canvas = await ctrl.find_canvas(self.page, timeout=60)
         await self._anchor_capture_region()
+        if session is not None:
+            session.remember(self)
         print("Browser ready. IMPORTANT: keep Chromium visible and unobstructed.", flush=True)
 
     async def _anchor_capture_region(self):
@@ -449,7 +461,7 @@ class LocalPracticeEnv(gym.Env):
                 debug_path = self.output_dir / f'watchdog_episode_{self.episode_number:04d}.jpg'
                 debug_path.write_bytes(self.last_raw)
                 print(f'[RL] Detector missed a possible death? Review {debug_path}', flush=True)
-            reason = 'death' if dead else 'TIME-LIMIT WATCHDOG (possible missed death)' 
+            reason = 'death' if dead else 'time_limit'
             print(f'[RL] Episode {self.episode_number} done | {duration:.1f}s '
                   f'| {reason} | last menu score {score:.2f}', flush=True)
         return np.stack(self.frames), float(reward), bool(dead), bool(truncated), info
@@ -480,6 +492,9 @@ class LocalPracticeEnv(gym.Env):
         if self.closed:
             return
         self.closed = True
+        if getattr(self, '_persistent_browser_session', None) is not None:
+            self._persistent_browser_session.release(self)
+            return
         if self.worker_loop.is_running():
             try:
                 self._call(self._close_browser(), timeout=20)

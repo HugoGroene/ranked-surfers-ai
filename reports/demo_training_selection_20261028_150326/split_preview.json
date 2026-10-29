@@ -1,0 +1,32 @@
+{
+  "note": "Read-only split simulation using candidate metadata, not approval or training.",
+  "seed": 77,
+  "training_runs": [
+    "demo_20261028_150144_472981",
+    "demo_20261028_145438_471297",
+    "demo_20261028_150100_323415",
+    "demo_20261028_145918_817660",
+    "demo_20261028_145501_178756",
+    "demo_20261028_145830_927998",
+    "demo_20261028_145805_464929"
+  ],
+  "holdout_runs": [
+    "demo_20261028_145706_224680",
+    "demo_20261028_145548_721806"
+  ],
+  "training_sample_count": 183,
+  "training_counts": {
+    "1": 35,
+    "0": 64,
+    "3": 37,
+    "2": 33,
+    "4": 14
+  },
+  "holdout_counts": {
+    "0": 924,
+    "3": 9,
+    "1": 6,
+    "4": 4,
+    "2": 5
+  }
+}

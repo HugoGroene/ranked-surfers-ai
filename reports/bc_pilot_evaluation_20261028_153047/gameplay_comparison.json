@@ -1,0 +1,110 @@
+{
+  "models": [
+    {
+      "run": "v612_eval_v179_8h_100_20261028_140115",
+      "episodes": 100,
+      "mean": 4.297,
+      "median": 4.19,
+      "best": 10.08,
+      "ge5": 32,
+      "ge10": 2,
+      "actions": {
+        "4": 1576,
+        "3": 3987,
+        "0": 1836
+      },
+      "probabilities": {
+        "NONE": 0.2333,
+        "LEFT": 0.0004,
+        "RIGHT": 0.0041,
+        "JUMP": 0.5376,
+        "ROLL": 0.2246
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 7321,
+        "preflight_rechecks_on_transient": 78,
+        "preflight_confirmed_menu": 78,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 69,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "gameplay_intervals": {
+        "count": 7243,
+        "median_ms": 51.91,
+        "p95_ms": 65.45,
+        "p99_ms": 69.66,
+        "mean_ms": 52.84
+      },
+      "detector_fresh_fraction": 0.973
+    },
+    {
+      "run": "v612_eval_bc_pilot_100_20261028_153047",
+      "episodes": 100,
+      "mean": 4.8276,
+      "median": 4.275,
+      "best": 11.55,
+      "ge5": 47,
+      "ge10": 4,
+      "actions": {
+        "4": 1502,
+        "3": 4426,
+        "0": 2263
+      },
+      "probabilities": {
+        "NONE": 0.2627,
+        "LEFT": 0.0006,
+        "RIGHT": 0.0054,
+        "JUMP": 0.5281,
+        "ROLL": 0.2032
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 8110,
+        "preflight_rechecks_on_transient": 81,
+        "preflight_confirmed_menu": 81,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 77,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "gameplay_intervals": {
+        "count": 8030,
+        "median_ms": 53.36,
+        "p95_ms": 65.48,
+        "p99_ms": 69.84,
+        "mean_ms": 53.39
+      },
+      "detector_fresh_fraction": 0.976
+    }
+  ],
+  "mean_difference_bc_minus_source": 0.5306000000000006,
+  "bootstrap_95_difference": [
+    0.028295000000000674,
+    1.0471074999999987
+  ],
+  "bootstrap_95_means": [
+    [
+      3.9979849999999995,
+      4.6140124999999985
+    ],
+    [
+      4.440697500000001,
+      5.237102500000001
+    ]
+  ],
+  "config_differences": {
+    "run_name": [
+      "v612_eval_v179_8h_100_20261028_140115",
+      "v612_eval_bc_pilot_100_20261028_153047"
+    ],
+    "resume": [
+      "ai_data\\rl_v2_runs\\v612_paused_state_v179_8h_20261028_045909\\latest.zip",
+      "ai_data\\demonstrations_v13\\bc_runs\\bc_20261028_152607\\model.zip"
+    ]
+  },
+  "bootstrap_method": "Independent episode resampling, 20000 draws, default_rng(123); excludes training-seed and session variation."
+}

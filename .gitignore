@@ -31,3 +31,8 @@ rankedsurfers-downloaded/cdn-cgi/
 /ai_data/v612_*.zip
 /v612_*.zip
 /v612_guard_backup_*/
+
+# Local replay/model assets and historical installer backups
+/ai_data/demonstrations_*/
+*.bak
+/reports/**/video/

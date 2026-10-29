@@ -1,0 +1,31 @@
+{
+  "options": [
+    {
+      "option": "Remote single-worker GPU desktop",
+      "benefit": "Frees local PC; not established as a large sampling speedup",
+      "current_blocker": "Needs supported interactive desktop capture/focus and validated WebGL rendering"
+    },
+    {
+      "option": "Parallel independent workers",
+      "benefit": "Higher aggregate rollout collection; batching policy inference",
+      "current_blocker": "Current one-screen MSS/foreground design is not multi-instance safe; requires isolated displays or another observation backend"
+    },
+    {
+      "option": "Step-controlled accelerated simulation",
+      "benefit": "Potentially removes real-time collection bottleneck",
+      "current_blocker": "Requires suitable engine integration; only WebGL build assets found, not an ML-Agents Unity source project"
+    },
+    {
+      "option": "Larger PPO rollouts",
+      "benefit": "Fewer optimizer/resync boundaries; potentially improved update statistics",
+      "current_blocker": "Not a substitute for parallel data collection; more CPU RAM and longer individual pauses"
+    }
+  ],
+  "sources": [
+    "https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html",
+    "https://unity-technologies.github.io/ml-agents/Training-ML-Agents/",
+    "https://playwright.dev/python/docs/browsers"
+  ],
+  "cloud_actions_taken": false,
+  "packages_installed": false
+}

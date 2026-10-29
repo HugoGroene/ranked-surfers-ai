@@ -1,0 +1,37 @@
+{
+  "stability": {
+    "status": "PASS_STABILITY_CANDIDATE",
+    "steps": 32768,
+    "completed": true,
+    "freeze_checks": 63,
+    "verified_optimizer_pauses": 63,
+    "optimizer_resumes": 62,
+    "menu_boundaries": 1,
+    "menu_handoffs_after_optimizer": 1,
+    "post_resume_menu_handoffs": 3,
+    "menu_terminal_rewards_recorded": 4,
+    "optimizer_continuations": 63,
+    "fresh_stacks": 59,
+    "fresh_frame_age_max_ms": 16.5,
+    "pause_duration_total_s": 82.825,
+    "max_reported_abs_active_clock_drift_s": 0.0,
+    "per_frame_gameplay_checks": 236,
+    "completed_episodes": 329,
+    "mean_survival_seconds": 4.4,
+    "warnings": [
+      "Reported pause-clock drift is internal consistency, not an independent Unity timer reading.",
+      "No evidence here that the reward cap or per-step PPO discount is unbiased."
+    ],
+    "failures": []
+  },
+  "reward_replay": {
+    "status": "PASS_REWARD_REPLAY",
+    "validated_steps": 32768,
+    "completed_episodes": 329,
+    "menu_handoff_terminal_events": 4,
+    "steps_exceeding_survival_reward_cap": 381,
+    "maximum_observed_episode_duration_step_s": 1.88,
+    "note": "A capped interval does not get survival credit above 0.15s; review large gaps. Reward replay verifies trainer arithmetic, not Unity internal time or gamma discounts.",
+    "failures": []
+  }
+}

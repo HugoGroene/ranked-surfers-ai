@@ -1,0 +1,443 @@
+[
+  {
+    "checkpoint": "ai_data\\demonstrations_v13\\bc_runs\\bc_control_macro_lr3e4_20261028\\latest.zip",
+    "learning_rate": 0.0003,
+    "best_epoch": 99,
+    "epochs_run": 100,
+    "training": {
+      "cross_entropy": 1.2843557559780219,
+      "accuracy": 0.46462955211385515,
+      "support": {
+        "NONE": 836,
+        "LEFT": 402,
+        "RIGHT": 392,
+        "JUMP": 555,
+        "ROLL": 204
+      },
+      "recall": {
+        "NONE": 0.8576555023923444,
+        "LEFT": 0.07462686567164178,
+        "RIGHT": 0.030612244897959183,
+        "JUMP": 0.5963963963963964,
+        "ROLL": 0.09803921568627451
+      },
+      "per_action_cross_entropy": {
+        "NONE": 0.9604427757445705,
+        "LEFT": 1.693511488425791,
+        "RIGHT": 1.5718762144750478,
+        "JUMP": 1.0747746922948338,
+        "ROLL": 1.8231798620784985
+      },
+      "predicted_counts": {
+        "NONE": 1669,
+        "LEFT": 62,
+        "RIGHT": 24,
+        "JUMP": 606,
+        "ROLL": 28
+      },
+      "confusion_matrix": [
+        [
+          717,
+          11,
+          6,
+          97,
+          5
+        ],
+        [
+          297,
+          30,
+          6,
+          68,
+          1
+        ],
+        [
+          320,
+          15,
+          12,
+          44,
+          1
+        ],
+        [
+          219,
+          4,
+          0,
+          331,
+          1
+        ],
+        [
+          116,
+          2,
+          0,
+          66,
+          20
+        ]
+      ]
+    },
+    "validation": {
+      "cross_entropy": 1.069083544919018,
+      "accuracy": 0.7637312755333636,
+      "support": {
+        "NONE": 8467,
+        "LEFT": 89,
+        "RIGHT": 86,
+        "JUMP": 129,
+        "ROLL": 41
+      },
+      "recall": {
+        "NONE": 0.7874099444903744,
+        "LEFT": 0.02247191011235955,
+        "RIGHT": 0.011627906976744186,
+        "JUMP": 0.4418604651162791,
+        "ROLL": 0.07317073170731707
+      },
+      "per_action_cross_entropy": {
+        "NONE": 1.0470648455031297,
+        "LEFT": 1.7508351883191742,
+        "RIGHT": 1.7238590994546579,
+        "JUMP": 1.333122120347134,
+        "ROLL": 1.9321264173926376
+      },
+      "predicted_counts": {
+        "NONE": 6901,
+        "LEFT": 127,
+        "RIGHT": 109,
+        "JUMP": 1604,
+        "ROLL": 71
+      },
+      "confusion_matrix": [
+        [
+          6667,
+          123,
+          106,
+          1503,
+          68
+        ],
+        [
+          76,
+          2,
+          2,
+          9,
+          0
+        ],
+        [
+          67,
+          0,
+          1,
+          18,
+          0
+        ],
+        [
+          71,
+          1,
+          0,
+          57,
+          0
+        ],
+        [
+          20,
+          1,
+          0,
+          17,
+          3
+        ]
+      ]
+    },
+    "macro_ce": 1.557401534203347,
+    "independent_actor_only_verified": true,
+    "sha256": "714910cccbc69f8d9bdacb79160432577c2f0808ec23b6194c14b06b7108f73d"
+  },
+  {
+    "checkpoint": "ai_data\\demonstrations_v13\\bc_runs\\bc_control_macro_lr1e4_20261028\\latest.zip",
+    "learning_rate": 0.0001,
+    "best_epoch": 62,
+    "epochs_run": 82,
+    "training": {
+      "cross_entropy": 1.4198019970606042,
+      "accuracy": 0.40435328589367936,
+      "support": {
+        "NONE": 836,
+        "LEFT": 402,
+        "RIGHT": 392,
+        "JUMP": 555,
+        "ROLL": 204
+      },
+      "recall": {
+        "NONE": 0.9055023923444976,
+        "LEFT": 0.009950248756218905,
+        "RIGHT": 0.00510204081632653,
+        "JUMP": 0.36396396396396397,
+        "ROLL": 0.004901960784313725
+      },
+      "per_action_cross_entropy": {
+        "NONE": 1.045492929705022,
+        "LEFT": 1.6668601534259853,
+        "RIGHT": 1.6963805957716338,
+        "JUMP": 1.2847728007548564,
+        "ROLL": 2.302779422086828
+      },
+      "predicted_counts": {
+        "NONE": 1983,
+        "LEFT": 13,
+        "RIGHT": 2,
+        "JUMP": 390,
+        "ROLL": 1
+      },
+      "confusion_matrix": [
+        [
+          757,
+          6,
+          0,
+          73,
+          0
+        ],
+        [
+          345,
+          4,
+          0,
+          53,
+          0
+        ],
+        [
+          357,
+          3,
+          2,
+          30,
+          0
+        ],
+        [
+          353,
+          0,
+          0,
+          202,
+          0
+        ],
+        [
+          171,
+          0,
+          0,
+          32,
+          1
+        ]
+      ]
+    },
+    "validation": {
+      "cross_entropy": 1.1054796983153508,
+      "accuracy": 0.8405583295506128,
+      "support": {
+        "NONE": 8467,
+        "LEFT": 89,
+        "RIGHT": 86,
+        "JUMP": 129,
+        "ROLL": 41
+      },
+      "recall": {
+        "NONE": 0.8703200661391284,
+        "LEFT": 0.0,
+        "RIGHT": 0.0,
+        "JUMP": 0.29457364341085274,
+        "ROLL": 0.0
+      },
+      "per_action_cross_entropy": {
+        "NONE": 1.0827461405770196,
+        "LEFT": 1.6394247097915478,
+        "RIGHT": 1.821671530257824,
+        "JUMP": 1.4112971993379815,
+        "ROLL": 2.176722921976229
+      },
+      "predicted_counts": {
+        "NONE": 7643,
+        "LEFT": 53,
+        "RIGHT": 4,
+        "JUMP": 1083,
+        "ROLL": 29
+      },
+      "confusion_matrix": [
+        [
+          7369,
+          51,
+          4,
+          1014,
+          29
+        ],
+        [
+          79,
+          0,
+          0,
+          10,
+          0
+        ],
+        [
+          73,
+          1,
+          0,
+          12,
+          0
+        ],
+        [
+          91,
+          0,
+          0,
+          38,
+          0
+        ],
+        [
+          31,
+          1,
+          0,
+          9,
+          0
+        ]
+      ]
+    },
+    "macro_ce": 1.6263725003881202,
+    "independent_actor_only_verified": true,
+    "sha256": "21c3d58072f1241263979850d58e0eabffd2b6652bb04375369a6eec9bac74d8"
+  },
+  {
+    "checkpoint": "ai_data\\demonstrations_v13\\bc_runs\\bc_control_macro_lr2e5_20261028\\latest.zip",
+    "learning_rate": 2e-05,
+    "best_epoch": 100,
+    "epochs_run": 100,
+    "training": {
+      "cross_entropy": 1.522031887049653,
+      "accuracy": 0.3595646714106321,
+      "support": {
+        "NONE": 836,
+        "LEFT": 402,
+        "RIGHT": 392,
+        "JUMP": 555,
+        "ROLL": 204
+      },
+      "recall": {
+        "NONE": 0.7727272727272727,
+        "LEFT": 0.007462686567164179,
+        "RIGHT": 0.14285714285714285,
+        "JUMP": 0.27387387387387385,
+        "ROLL": 0.00980392156862745
+      },
+      "per_action_cross_entropy": {
+        "NONE": 1.0899074499686938,
+        "LEFT": 1.8163293677182932,
+        "RIGHT": 1.7429120589275748,
+        "JUMP": 1.3813887312605575,
+        "ROLL": 2.6711513294893154
+      },
+      "predicted_counts": {
+        "NONE": 1760,
+        "LEFT": 25,
+        "RIGHT": 241,
+        "JUMP": 312,
+        "ROLL": 51
+      },
+      "confusion_matrix": [
+        [
+          646,
+          16,
+          97,
+          55,
+          22
+        ],
+        [
+          290,
+          3,
+          54,
+          42,
+          13
+        ],
+        [
+          301,
+          3,
+          56,
+          30,
+          2
+        ],
+        [
+          364,
+          3,
+          24,
+          152,
+          12
+        ],
+        [
+          159,
+          0,
+          10,
+          33,
+          2
+        ]
+      ]
+    },
+    "validation": {
+      "cross_entropy": 1.152890571506793,
+      "accuracy": 0.7116432137993645,
+      "support": {
+        "NONE": 8467,
+        "LEFT": 89,
+        "RIGHT": 86,
+        "JUMP": 129,
+        "ROLL": 41
+      },
+      "recall": {
+        "NONE": 0.7361521199952757,
+        "LEFT": 0.033707865168539325,
+        "RIGHT": 0.10465116279069768,
+        "JUMP": 0.20155038759689922,
+        "ROLL": 0.0
+      },
+      "per_action_cross_entropy": {
+        "NONE": 1.127440324961062,
+        "LEFT": 1.748839185478982,
+        "RIGHT": 1.8544979539028434,
+        "JUMP": 1.5207125050152919,
+        "ROLL": 2.4860746337146296
+      },
+      "predicted_counts": {
+        "NONE": 6471,
+        "LEFT": 100,
+        "RIGHT": 1055,
+        "JUMP": 857,
+        "ROLL": 329
+      },
+      "confusion_matrix": [
+        [
+          6233,
+          97,
+          1012,
+          805,
+          320
+        ],
+        [
+          58,
+          3,
+          18,
+          6,
+          4
+        ],
+        [
+          63,
+          0,
+          9,
+          11,
+          3
+        ],
+        [
+          89,
+          0,
+          12,
+          26,
+          2
+        ],
+        [
+          28,
+          0,
+          4,
+          9,
+          0
+        ]
+      ]
+    },
+    "macro_ce": 1.7475129206145616,
+    "independent_actor_only_verified": true,
+    "sha256": "81ff7aa18c03d08d06eeb602acfc4d8bbc5e5aab681fc21b696fe158b0fb4251"
+  }
+]

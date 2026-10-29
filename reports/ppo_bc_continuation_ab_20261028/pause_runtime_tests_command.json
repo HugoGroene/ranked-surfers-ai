@@ -1,0 +1,13 @@
+[
+  "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai\\.venv\\Scripts\\python.exe",
+  "-B",
+  "-u",
+  "-m",
+  "unittest",
+  "discover",
+  "-s",
+  "tests",
+  "-p",
+  "test_ppo_pause_runtime_v179.py",
+  "-q"
+]

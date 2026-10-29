@@ -1,10 +1,116 @@
 # Ranked Surfers AI — PPO V6.1.2 + Human Demonstrations V1.3
 
-**Last updated: 27 October 2026.** Development branch: [`demo-recorder-debug-20261027`](https://github.com/HugoGroene/ranked-surfers-ai/tree/demo-recorder-debug-20261027) (latest user-confirmed push: `943909d`).
+**Last updated: 29 October 2026.** Development branch: [`claude-development`](https://github.com/HugoGroene/ranked-surfers-ai/tree/claude-development).
 
 Screenshot-based reinforcement learning for a **locally hosted Practice copy** of the Unity WebGL endless runner Ranked Surfers. This project uses Stable-Baselines3 PPO, native game-canvas screen capture, asynchronous nine-class YOLO segmentation, and a fail-closed gameplay/menu guard. The separate **experimental human-demonstration V1.3** workflow records manual gameplay, permits reviewing and trimming good segments, and can fine-tune a **copy** of the existing PPO model using behavioral cloning (BC). Neither recorder nor trainer is intended for public ranked/live matches.
 
-> **Repository vs. local results:** The 4.61-second evaluation and latest 7-hour checkpoint reported below are from the local 27 October run, **not yet committed to GitHub**. The branch's previously published benchmark and Git-LFS checkpoint correspond to the **older 3.84-second** model. Cloning this repo does not automatically retrieve the newest local `ai_data/` runs or demonstrations. V1.3's live Windows performance is **not yet verified**; the 12 passing tests are offline tests.
+> **Repository vs. local assets:** Source, tests and selected experiment reports are versioned; working checkpoints, raw demonstrations, review videos and feature caches remain local. A fresh clone does not include the latest models or a Python environment. The older Git-LFS milestone is not the current working policy. The 27 October workflow below is historical; use the current status and pipeline guide first.
+
+## Current status: recovered 28 October development
+
+The priority is an environment and PPO learning pipeline that supports effective
+autonomous learning from survival/death rewards. BC remains an optional starting
+point, not an action quota or a requirement to imitate human movement forever.
+Better runtime throughput is measured separately from better gameplay.
+
+| Foundation | Implemented and verified | Remaining qualification |
+| --- | --- | --- |
+| Longer episodes | Default cap 300 seconds; death/timeout distinction, reset and bootstrap handling; a training episode reached 17.09 seconds | Multi-minute model survival is not demonstrated; pass 15 explicitly for historical comparisons |
+| Persistent Chromium | One owned window and worker across the final seven-stage batch; six reuses and clean closure | Keep the desktop visible/unobstructed; Windows may still refuse initial focus |
+| Fresher action inputs | Optional exact-observation safety reading, single-use identity/timestamp checks, 20 ms deadline and fresh-check fallback | Opt-in; median image age improved, rare fallback tails remain; Unity response time is not measured |
+| Controlled PPO settings | Explicit saved-setting overrides, effective-setting reports, rollout 128/512 and target-KL comparisons | No winning learning configuration established; exploration and learning-rate comparisons remain open |
+
+See [pipeline usage](README_PPO_PIPELINE.md),
+[implementation/tests/latency validation](reports/ppo_pipeline_foundation_20261028/README.md)
+and [remote/parallel scaling assessment](reports/ppo_pipeline_foundation_20261028/SCALING.md).
+The policy architecture, four-frame RGB/557-D observation, five-action mapping,
+reward coefficients and normal confidence thresholds remain unchanged. No
+recurrent model, integrated demonstration loss, detector removal or parallel
+simulation backend was added.
+
+### Completed learning experiments
+
+All entries below are deterministic 100-episode evaluations. Separate procedural
+sessions and one training seed limit conclusions; use the matched baseline for
+each experiment rather than treating all historical scores as interchangeable.
+
+| Experiment | Mean survival | LEFT / RIGHT selections | Interpretation |
+| --- | ---: | ---: | --- |
+| Pre-v1.7.9 overnight source | 3.9933 s | 0 / 0 | Matched before reference |
+| Eight-hour v1.7.9 PPO | 4.2970 s | 0 / 0 | Improvement over source inconclusive |
+| Small actor-only BC pilot | 4.8276 s | 0 / 0 | Best observed historical 100-episode mean; preserve |
+| Larger BC | 4.4800 s | 0 / 0 | No demonstrated improvement over pilot |
+| Macro-selected BC | 3.6653 s | 91 / 9 | Lateral choices emerged, survival worsened |
+| Pilot + 4,096 PPO steps | 4.6238 s | 0 / 0 | Short continuation did not establish improvement |
+| Macro BC + 4,096 PPO steps | 4.5058 s | 1 / 0 | Recovered survival, no clear advantage over pilot |
+
+The second recording session saved 291 runs at approximately 20.5 FPS. Under
+the explicitly authorized sampled-review policy, 142 were selected with trims
+and combined with nine approved pilot runs: 151 approved runs in total. Raw
+recordings remain intact. Approval and timestamp consistency do not establish
+optimal actions; no diagnostic recording was silently treated as expert data.
+BC froze the extractor/critic and changed four actor tensors. Frozen-feature
+caching and per-action selection diagnostics are included in the new tooling.
+
+Reports: [overnight](reports/v179_overnight_comparison_20261028/README.md),
+[pilot BC](reports/bc_pilot_evaluation_20261028_153047/README.md),
+[larger BC](reports/bc_sampled_batch_20261028/README.md),
+[BC optimization controls](reports/bc_optimization_controls_20261028/README.md),
+[macro gameplay](reports/bc_macro_gameplay_20261028/README.md),
+[BC-to-PPO continuations](reports/ppo_bc_continuation_ab_20261028/README.md).
+
+### Final multi-hour experiment: complete before the Windows restart
+
+The controlled batch completed at **23:30 on 28 October**, before the reported
+00:35 restart. All 98,304 training steps (three independent 32,768-step arms)
+and 400 evaluation episodes completed. Each arm started from the same preserved
+pilot, not from the preceding arm. All used the optional faster guard and a
+300-second cap. Learning rate 0.0003, batch 32, epochs 5, gamma 0.995 and entropy
+0.002 were held fixed.
+
+| Model | Rollout | Target KL | Evaluation mean | Training steps/s |
+| --- | ---: | ---: | ---: | ---: |
+| Fresh pilot baseline | — | — | 4.6494 s | — |
+| A | 128 | None | 3.9852 s | 16.06 |
+| B | 512 | None | 4.3799 s | 18.64 |
+| C | 512 | 0.03 | 4.1714 s | 19.81 |
+
+All three arms passed stability and reward replay audits; no guard abort/hard
+stop occurred. None established a survival improvement. A regressed in this
+sample; other differences remain uncertain. C recorded 63 KL early stops;
+target KL is not a hard bound on update size. A retains a documented warning
+that its final MENU boundary had no subsequent step to record the last terminal
+penalty. Reward replay checks arithmetic, not Unity internal time or unbiased
+reward caps/discounting.
+
+[Full results, uncertainty intervals and provenance](reports/ppo_controlled_learning_20261028/README.md).
+The final batch state is COMPLETE; its older live_session.json is a stale
+RUNNING launch note, not evidence of an interrupted experiment. Recovery checks
+verified ZIP CRCs and metadata of the three saved outputs and matched all 83
+recorded source hashes. No expensive experiment needs repeating for recovery.
+
+Preserved local reference:
+`ai_data/demonstrations_v13/bc_runs/bc_20261028_152607/model.zip`
+(SHA-256 `ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc`).
+Outputs: `ai_data/rl_v2_runs/ppoctrl_20261028_02_train/latest.zip`,
+`ppoctrl_20261028_04_train/latest.zip`, and `ppoctrl_20261028_06_train/latest.zip`.
+Do not promote the newest checkpoint merely because it is newest.
+
+### Next learning work
+
+First audit transition/reward alignment, time-limit bootstrapping, pause/resume
+boundaries, capped intervals and the relationship between decision cadence and
+per-step discounting. Preserve reward semantics until a separate experiment is
+authorized. Then compare PPO learning rate 0.0001 versus 0.0003 from the same
+preserved source at rollout 512, holding other settings fixed, with meaningful
+equal budgets and matched evaluations. This comparison has **not** run yet.
+Promote settings based on survival/control and stable learning, then schedule
+longer monitored training. Additional BC and recurrent memory remain separate
+optional experiments; neither is required to complete this foundation audit.
+
+No cloud resources were provisioned. The persistent batch runner is sequential
+automation, not parallel environment collection. Raw models/data stay local;
+the published reports describe the exact assets needed to reproduce a run.
 
 ## 28 October update: v1.7.9 runtime and overnight evaluation
 
@@ -32,7 +138,26 @@ Offline runtime regressions (no installer payloads needed):
 & $py -B -m unittest discover -s tests -p "test_ppo_current_runtime.py" -v
 ```
 
-## Current results — 27 October 2026
+The local startup focus helper now attempts to activate only its owned Chromium
+window and requires both Windows foreground ownership and browser focus before
+the first episode. If Windows denies activation, it allows eight seconds for
+manual focus and then stops without gameplay input. Automatic activation was
+denied in early live attempts; later owned-window activation and persistent
+batches succeeded. This is not a guarantee of unattended startup on every run.
+See [next-step research and focus limitations](reports/v179_overnight_comparison_20261028/NEXT_STEPS_RESEARCH.md).
+Focus regressions: `& $py -B -m unittest discover -s tests -p "test_ppo_browser_focus.py" -v`.
+
+## 28 October: autonomous PPO pipeline foundation
+
+The current focus is reliable and efficient autonomous PPO learning; BC remains
+optional. The new [pipeline guide](README_PPO_PIPELINE.md) covers 300-second
+episode limits, a persistent single-window batch runner, explicit saved-setting
+overrides and an opt-in lower-latency observation guard. Historical commands
+passing a 15-second limit remain reproducible. The faster path is experimental;
+short latency checks do not establish better gameplay or learning efficiency.
+See [validation and scaling](reports/ppo_pipeline_foundation_20261028/README.md).
+
+## Historical results — 27 October 2026
 
 ### Controlled PPO evaluations
 

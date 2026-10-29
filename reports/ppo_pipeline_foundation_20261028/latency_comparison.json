@@ -1,0 +1,74 @@
+{
+  "baseline": {
+    "run": "v612_pipeline_baseline10_v2_20261028",
+    "episodes": 10,
+    "observations": {
+      "count": 859,
+      "median_ms": 51.92,
+      "p95_ms": 65.15,
+      "p99_ms": 66.9,
+      "mean_ms": 53.57
+    },
+    "command_latency": {
+      "count": 659,
+      "median_ms": 28.219799976795912,
+      "p95_ms": 33.88393001514487,
+      "p99_ms": 39.91726602020194,
+      "max_ms": 180.69680000189692
+    },
+    "commands": 659,
+    "guard": {
+      "preflight_gameplay_allowed": 870,
+      "preflight_rechecks_on_transient": 6,
+      "preflight_confirmed_menu": 5,
+      "uncertain_state_abort": 0,
+      "ml_menu_without_template": 3,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": false,
+      "preflight_checks_every_decision": true,
+      "prepared_observation_guard_enabled": false,
+      "prepared_observation_guard_hits": 0,
+      "prepared_observation_guard_fallbacks": 0,
+      "prepared_observation_guard_late_fallbacks": 0,
+      "prepared_observation_max_age_ms": 20.0,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    },
+    "checkpoint_unchanged": true
+  },
+  "prepared": {
+    "run": "v612_pipeline_prepared10_v2_20261028",
+    "episodes": 10,
+    "observations": {
+      "count": 973,
+      "median_ms": 40.19,
+      "p95_ms": 54.12,
+      "p99_ms": 57.71,
+      "mean_ms": 39.43
+    },
+    "command_latency": {
+      "count": 739,
+      "median_ms": 13.771300000371411,
+      "p95_ms": 20.93177000351716,
+      "p99_ms": 42.521570012904704,
+      "max_ms": 57.043899985728785
+    },
+    "commands": 739,
+    "guard": {
+      "preflight_gameplay_allowed": 985,
+      "preflight_rechecks_on_transient": 5,
+      "preflight_confirmed_menu": 5,
+      "uncertain_state_abort": 0,
+      "ml_menu_without_template": 7,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": false,
+      "preflight_checks_every_decision": true,
+      "prepared_observation_guard_enabled": true,
+      "prepared_observation_guard_hits": 959,
+      "prepared_observation_guard_fallbacks": 39,
+      "prepared_observation_guard_late_fallbacks": 8,
+      "prepared_observation_max_age_ms": 20.0,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    },
+    "checkpoint_unchanged": true
+  }
+}

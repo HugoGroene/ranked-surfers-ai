@@ -1,0 +1,316 @@
+{
+  "minimum_run_seconds": 20,
+  "selected_runs": [
+    {
+      "run": "demo_20261028_145438_471297",
+      "original_duration_seconds": 29.878,
+      "segments_seconds": [
+        [
+          2.15,
+          27.799720300012268
+        ]
+      ],
+      "selected_seconds": 25.65,
+      "valid_samples": 512,
+      "action_counts": {
+        "NONE": 493,
+        "LEFT": 6,
+        "RIGHT": 7,
+        "JUMP": 6,
+        "ROLL": 0
+      },
+      "original_manifest_sha256": "deed1b8ad0cc35dd70bd738eb3f982b7a1bed2416675ab733e14c09371458f43",
+      "raw_file_sha256": {
+        "actions.npy": "c9d21abddaeb7cbc7e7c33a3172eaeda31cd5f578555ffb4981d0af2fc2ee107",
+        "aux.npy": "853de9405ddb86ab4fb681be3cec7a3330c4d2e5b5ce5429b9343e86a9ef66a8",
+        "capture_timing.npz": "d7eba9d06af3029278f8567ae025129122dd186ad3a029af51302f139366a4a5",
+        "contact_sheet.jpg": "63a701ee77f362377d7e376f613d2f5097294e5b5512fbb6f7c15b13ec22a142",
+        "events.jsonl": "2386b27b61fe0b6e2b714553853d7a0bb7ce8534c75782f709365880050a6911",
+        "frames.npz": "6c5be11e3defd434a0bcafc30a01447ce8b361c89945c9765b60e743d3ef5bf6",
+        "label_diagnostics.json": "66699b4b41d52adfbb6c125d3d4fc8e668e6b431af96af4975a4020b188816a1",
+        "preview.mp4": "9ae9339329ebfe8131ddf7392655b9043aa0d0d16d7a112218aabc2045ddf705",
+        "timestamps.npy": "3e6efd47cfab0463c10d1a642482272228e5a0b680fdf2599e34ecc9c6f50b68",
+        "valid.npy": "e30a4b23851a04990b3ed1278de31bf55e039bd8826df6289682bb1c3504c8e0"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_145501_178756",
+      "original_duration_seconds": 22.044,
+      "segments_seconds": [
+        [
+          2.15,
+          19.943362899997737
+        ]
+      ],
+      "selected_seconds": 17.793,
+      "valid_samples": 356,
+      "action_counts": {
+        "NONE": 344,
+        "LEFT": 3,
+        "RIGHT": 4,
+        "JUMP": 2,
+        "ROLL": 3
+      },
+      "original_manifest_sha256": "cee2dd4684eab86c6bcd9e890506bff9c771cfe54475080fa40a470e3341e3ff",
+      "raw_file_sha256": {
+        "actions.npy": "7c4bd9140f2c3d966c97e156f29eb582db3ba3ea9078dd4aee28d2579dd67e1e",
+        "aux.npy": "a5452079279f7f13af1763686995e6e237e248eb3fa9fb6ab8b65fdb7ca4099c",
+        "capture_timing.npz": "753bb408e74c7d251706af3f2417c09c6f6dc6708cae349da749857db235711c",
+        "contact_sheet.jpg": "bbd1e088000b7f0885ec3f82d89c4cf5ff40d78dd320654d691c7f4aa0c67c9b",
+        "events.jsonl": "b610e1814b4e44f358bf65ae5589c9a027f90e0444e46edd46ed4212efa76525",
+        "frames.npz": "a195532558c98dd207051c0a388615f17046db69317f52f656e8a899533d6caa",
+        "label_diagnostics.json": "3b80a37377d0515d92e55cd9113fe3f209329c77a0911d2694a4e64ae2fc9169",
+        "preview.mp4": "a66ec673e63537d6994d1a1a202b476742af23134ecf82ba2e0a8c73e9da0f3d",
+        "timestamps.npy": "09a9ea2e8fa9419c47374b4c81dd4b792c5a65f14f27efee4664091a48b88560",
+        "valid.npy": "b7cef4fb8f415450e42bf28c81bcdb598ffa4bb3e8efad6cd9d2a9f17741fb34"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_145548_721806",
+      "original_duration_seconds": 32.506,
+      "segments_seconds": [
+        [
+          2.15,
+          25.797505299997283
+        ]
+      ],
+      "selected_seconds": 23.648,
+      "valid_samples": 473,
+      "action_counts": {
+        "NONE": 463,
+        "LEFT": 3,
+        "RIGHT": 3,
+        "JUMP": 3,
+        "ROLL": 1
+      },
+      "original_manifest_sha256": "83e0e85b4da6121d41dfabf0e19d200f8cfa271ef66a12b0f3ad2f5207b56af9",
+      "raw_file_sha256": {
+        "actions.npy": "e84de3383c78366373dc24b049cec3f26e002a60e10015bfb166ec8821b6c123",
+        "aux.npy": "f63137104a4e45146ac59ce5ae2fc4df6b5e6b8611765970f89a684a657091b9",
+        "capture_timing.npz": "20682d95265b0c536b92688f578b982b4c229980f2372ea42c71b2d38f94c4dc",
+        "contact_sheet.jpg": "7592cbdaa290dc0b2449603c3536c0e5e907367081da164f9f7ca594d136b829",
+        "events.jsonl": "da11d080ff2a76236188994b7c8a430cea608af8ee029795d6ac62cbaea333be",
+        "frames.npz": "c10c4f402aa785c14df8ea79e68b4ffe94dcc13351e46e596812f856da291c23",
+        "label_diagnostics.json": "aa191f9a2235d92c557d76d5b17d952f933fca7a0fe302e203e7913f0b77a6f1",
+        "preview.mp4": "8777e6593d70c84149cc9991e7be2fa3fe864c263ff4f48676d3775f9915e41a",
+        "timestamps.npy": "2bd2c8f1ae5bb6be0dcadd2fd6c0c812451378c5c4b66d20e2dec0c4876881af",
+        "valid.npy": "cee6ba90be32f198ff9e1e21c1de28e50ea04996c9b0c9fa5df5af17e855face"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_145706_224680",
+      "original_duration_seconds": 27.096,
+      "segments_seconds": [
+        [
+          2.15,
+          25.85168649998377
+        ]
+      ],
+      "selected_seconds": 23.702,
+      "valid_samples": 473,
+      "action_counts": {
+        "NONE": 459,
+        "LEFT": 3,
+        "RIGHT": 2,
+        "JUMP": 6,
+        "ROLL": 3
+      },
+      "original_manifest_sha256": "932c9f0d9c85e30dcd91a68132c46b7aa35b8663c25b23350a55d797db3a98c7",
+      "raw_file_sha256": {
+        "actions.npy": "092cc97e0028fa37e1764d2f49e8f3a7612464709af300a60fa334825471e606",
+        "aux.npy": "2ec536b08f708d565cba8d5cfdf205332a3a3e50f46892b60d208812024c1d65",
+        "capture_timing.npz": "8ad83592a1616f21065058f382cdb0c45bc70d8aae49578ce4255854155ae0a4",
+        "contact_sheet.jpg": "d3425ccaeecf3da998df1fe2d79b03ad86724fc416f084df6689b2de7149ce61",
+        "events.jsonl": "0403e043bcf7a1d365f16b7b56091b5af7ab39ec259e12b86e5b0a123ba8bbe2",
+        "frames.npz": "71bf94f843d1e3755b3a03910d0c902a3dcba1e01fd6fac91cb8813f9a0afa57",
+        "label_diagnostics.json": "4cb33d0e333122ac7c8a41c2fb312b8c402c92241c80355f009b8b5e5c33f09d",
+        "preview.mp4": "c6e294a4f2fd1357c864736ee4678b33744cb7692bc2c542b30e6f8b68b6cc7a",
+        "timestamps.npy": "8ffabc4539fa46a8b5a77f47c40e445906dfb57561ae5204333b32c5b6f055a2",
+        "valid.npy": "b8301368aec5bd886cd71b1a0ab88da8715b2f1eec8cb6fda54f5875a5e99c91"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_145805_464929",
+      "original_duration_seconds": 22.496,
+      "segments_seconds": [
+        [
+          2.15,
+          19.895622700016247
+        ]
+      ],
+      "selected_seconds": 17.746,
+      "valid_samples": 355,
+      "action_counts": {
+        "NONE": 345,
+        "LEFT": 3,
+        "RIGHT": 2,
+        "JUMP": 4,
+        "ROLL": 1
+      },
+      "original_manifest_sha256": "7fb4c11b1904073f2d1ad9580c8689340d2c770f1cc5a139bb5e7fd9d49b6847",
+      "raw_file_sha256": {
+        "actions.npy": "5a2121a1327a1a44b749dbe6cb62ab102354fa44f71fe5fd0b33a3da4ca62db7",
+        "aux.npy": "e1371f7114d37fa6d0547bc884ac08791ca1c2e7214cf7b4a2de4b7d5fd88f5e",
+        "capture_timing.npz": "37231a5531d94fc01205eb6d084bc9d5d41d8119fb3f99943d97f4768fc510db",
+        "contact_sheet.jpg": "93d6dec5bb3dc81ebca6415d078d6e30a6f4e3d8df41b1775dc310308a1e1b31",
+        "events.jsonl": "12a937c1272fcb92ea9c070d0bfa68ae1a0ecfbe840f6153b58e3f69a142f010",
+        "frames.npz": "1189fa81757e36f9a164321d4a471eb7856ea66a71824ab3af715a74d81e3667",
+        "label_diagnostics.json": "6cbbce06725d2732c759238f4829e59d4c56db0b35b1731b6fbff076c93b2e38",
+        "preview.mp4": "0edbc604a982ead1afaa5159126ad57f8420a6fe1f84410ff25d0519cefaea30",
+        "timestamps.npy": "b1b03e69880809c8211652166a520093a04aff6112d9e88c205c6ee98e8ffda9",
+        "valid.npy": "4e13ae9bd51ffa6ce1787e0bb70d152ccb2a2616bb0dad37f4c012362b61370d"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_145830_927998",
+      "original_duration_seconds": 24.955,
+      "segments_seconds": [
+        [
+          2.15,
+          22.841802900016773
+        ]
+      ],
+      "selected_seconds": 20.692,
+      "valid_samples": 414,
+      "action_counts": {
+        "NONE": 392,
+        "LEFT": 6,
+        "RIGHT": 6,
+        "JUMP": 8,
+        "ROLL": 2
+      },
+      "original_manifest_sha256": "7b8987b67d047b1bbcb2905dc0854127bae0fca79c5dd935378016bd4642f461",
+      "raw_file_sha256": {
+        "actions.npy": "c1ba1986c39de311d303fbeac670734127de6029395d751857f4618c6ae57dd6",
+        "aux.npy": "9076fffc0f6a47e50672cc827ecc633d3995af5239362ca8504f092a72d0b260",
+        "capture_timing.npz": "fd9d37c2a19a5a8fd97df41eb4ca7d8912d31ba38bd5db3058115e8e8530a86f",
+        "contact_sheet.jpg": "e7ffc0f0a228339b969e00fc262d3712a94700c88c84e6299b87e2a83a8d3385",
+        "events.jsonl": "9c4701b0c88d2e8e9e0404e403c156e623d7d28a37b88645ca75e36c7b692e46",
+        "frames.npz": "30f635f2efb8808e1b6bf76619188146221813767a9ebdbdba8bc2223f380acb",
+        "label_diagnostics.json": "b4ba8266ec6587f7b0620097495a80bbf17ec95b6f3b19f54d1da41d332a81e0",
+        "preview.mp4": "0690e589a2778d9ffc1e14fa800fa53cace044b322eb27854162c8ecb565f05a",
+        "timestamps.npy": "4e4ac594a73519416a7a136fd3e3d355fa078c008413ef81ec83e38f9af429a7",
+        "valid.npy": "71173c9a719d482873693cae5afd8b32a94b064252927ac24f439feffa720cbb"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_145918_817660",
+      "original_duration_seconds": 29.35,
+      "segments_seconds": [
+        [
+          2.15,
+          27.242869299981976
+        ]
+      ],
+      "selected_seconds": 25.093,
+      "valid_samples": 502,
+      "action_counts": {
+        "NONE": 485,
+        "LEFT": 5,
+        "RIGHT": 4,
+        "JUMP": 6,
+        "ROLL": 2
+      },
+      "original_manifest_sha256": "752bd1ec5c73a773953b70d5b151acc4b3b3303d9a85d7e182f6e0a18dc48c9f",
+      "raw_file_sha256": {
+        "actions.npy": "5568892357f8a05dba63d5839c5b142527e59bf31ad1887a1b430a4ac0245be3",
+        "aux.npy": "dc3ca11a635008e90097c2a7e03ae62b45476e841ce4e0708f6ffc41b74656b8",
+        "capture_timing.npz": "3287801d2a9499e20491327e703a8fe685420b95b549006c323fc01b3dbaa9da",
+        "contact_sheet.jpg": "9ea8a55ebc9465090a3ffac556b7b9236113acb05aba98412b2a9bfd86df35f3",
+        "events.jsonl": "7a37856aa34934f6024174969abbe31d90db09a80af0302ea71bffb8186327f7",
+        "frames.npz": "1c41591961ec72ad9299d92f784846efa7bdb16c632c2533c32839cfe44a2e6b",
+        "label_diagnostics.json": "aeb85f3436b28a345c33fab2b40a6d6a8c5364685ddb463ff802e322d88794d0",
+        "preview.mp4": "0d20595d2241dc3f21e8a5b64f7a1ceeff86b2115b3ec1368470e57bfd48535d",
+        "timestamps.npy": "edc985b54ed00419928bc5ff0bdfc55bc796b0ad3403ab87ff69df36ab8df664",
+        "valid.npy": "3bb4d13d5d9ad99adc896632b2869ac735512f489ceef3d4677f85c04b6567f9"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_150100_323415",
+      "original_duration_seconds": 37.127,
+      "segments_seconds": [
+        [
+          2.15,
+          35.66062399998191
+        ]
+      ],
+      "selected_seconds": 33.511,
+      "valid_samples": 670,
+      "action_counts": {
+        "NONE": 653,
+        "LEFT": 6,
+        "RIGHT": 5,
+        "JUMP": 4,
+        "ROLL": 2
+      },
+      "original_manifest_sha256": "f1a0cc5dc7a908db9eeb47cfef0e650763b2f518981ca7711769b2da71fbb032",
+      "raw_file_sha256": {
+        "actions.npy": "31b76dbaa7706e7470e5863e10cfcd13e5f21ff61815f8f1f4adcf1946ec1ded",
+        "aux.npy": "31d885959b0deb781d86e74d4809f809305e9456edc18ed590b7ddcc47aee439",
+        "capture_timing.npz": "5b4bd35f5437cefc7f0da6141b82bb24c0347f4bfdb8ae98c6898c429b7e56f0",
+        "contact_sheet.jpg": "4985d60e5a9f19b8cd3b501d487be8a1eb04209c212e73b4a3ca0a66377e2115",
+        "events.jsonl": "ac06b59bbfd293f1e7c6367f1ab1ec77c4ee6ddbef1db95e389ef761fde704e5",
+        "frames.npz": "9d599a57e944be1f166685b1a17716497e792caa701a9f88fda2239ba416931e",
+        "label_diagnostics.json": "1a1752f3e38d3c486493a621c96e49536826124e9b748ed96e72c32d1b2a0c56",
+        "preview.mp4": "16610684913d46b313b104338491c7daa2f3b81329f168c7cf650dfa59c6e5bf",
+        "timestamps.npy": "4b78ac285a2ee8164fa693e56b20ab467b190de3c7abaeedcc576afd67d0ea86",
+        "valid.npy": "f6409f8cc5b3c3e59a85b0112a11af211823c5805fdc6f08106d6ca9f1d5371b"
+      },
+      "status": "candidate"
+    },
+    {
+      "run": "demo_20261028_150144_472981",
+      "original_duration_seconds": 37.246,
+      "segments_seconds": [
+        [
+          2.15,
+          29.946476899989648
+        ]
+      ],
+      "selected_seconds": 27.796,
+      "valid_samples": 556,
+      "action_counts": {
+        "NONE": 534,
+        "LEFT": 6,
+        "RIGHT": 5,
+        "JUMP": 7,
+        "ROLL": 4
+      },
+      "original_manifest_sha256": "6a7e51cc6b34e62c65d22485d00c2b2476d6ba174da60f0d1b35c6a188194fb1",
+      "raw_file_sha256": {
+        "actions.npy": "2c0f6bebaf191a3288ed28ae7319982b22563b665f021925fe72fc5a965359eb",
+        "aux.npy": "6a8d9008e4d3a419459accba3b3f2a9104a619747d2bdc0616ddfca9c2ce13d5",
+        "capture_timing.npz": "88517002d86b1213874ada7ff62785bad65e7157cdcbce9933ca5c396b86ea4a",
+        "contact_sheet.jpg": "dceb8c2a99bce7f96f44ffa4f7b2b1e6f5aeaff9eb85520355d2cfa72eea1961",
+        "events.jsonl": "7c782a19e1b8855fcfa064c7c4f88e59f256fbca38f998ea0348c9976e874b13",
+        "frames.npz": "963ee0aebb3b2671606a809065530b8383cb4966a5eb5a3685bca59327ba5b80",
+        "label_diagnostics.json": "0eb8a65759a9e590721e4d8475ddff9d8be7383f62393a87b29860f5f30faa81",
+        "preview.mp4": "4fff597afcf25abaf0bc051dc49171e235048f5e2afd95ec7894e370583a48a7",
+        "timestamps.npy": "86ed5f7ecf8627a87c67f6f0fb792f737767cefcc1819b5b48ba35c2ea69881e",
+        "valid.npy": "58667d48a33a6c33fed3289973e4de77684592d7e6662b8b118a5797f94df36e"
+      },
+      "status": "candidate"
+    }
+  ],
+  "excluded_long_runs": {
+    "demo_20261028_145631_029216": "Opening/start animation reappears after gameplay; possible mixed attempts.",
+    "demo_20261028_150006_469386": "Opening/start animation reappears after gameplay; possible mixed attempts."
+  },
+  "total_selected_seconds": 215.631,
+  "total_valid_samples": 4311,
+  "total_action_counts": {
+    "NONE": 4168,
+    "LEFT": 41,
+    "RIGHT": 38,
+    "JUMP": 46,
+    "ROLL": 18
+  },
+  "approval": "User explicitly approved all nine selected trimmed recordings for actor-only BC."
+}

@@ -1,0 +1,145 @@
+{
+  "models": [
+    {
+      "run": "v612_eval_v179_8h_100_20261028_140115",
+      "episodes": 100,
+      "mean": 4.297,
+      "median": 4.19,
+      "best": 10.08,
+      "ge5": 32,
+      "ge10": 2,
+      "actions": {
+        "4": 1576,
+        "3": 3987,
+        "0": 1836
+      },
+      "probabilities": {
+        "NONE": 0.2333,
+        "LEFT": 0.0004,
+        "RIGHT": 0.0041,
+        "JUMP": 0.5376,
+        "ROLL": 0.2246
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 7321,
+        "preflight_rechecks_on_transient": 78,
+        "preflight_confirmed_menu": 78,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 69,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 7243,
+        "median_ms": 51.91,
+        "p95_ms": 65.45,
+        "p99_ms": 69.66,
+        "mean_ms": 52.84
+      },
+      "detector_fresh_fraction": 0.973
+    },
+    {
+      "run": "v612_eval_bc_pilot_100_20261028_153047",
+      "episodes": 100,
+      "mean": 4.8276,
+      "median": 4.275,
+      "best": 11.55,
+      "ge5": 47,
+      "ge10": 4,
+      "actions": {
+        "4": 1502,
+        "3": 4426,
+        "0": 2263
+      },
+      "probabilities": {
+        "NONE": 0.2627,
+        "LEFT": 0.0006,
+        "RIGHT": 0.0054,
+        "JUMP": 0.5281,
+        "ROLL": 0.2032
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 8110,
+        "preflight_rechecks_on_transient": 81,
+        "preflight_confirmed_menu": 81,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 77,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 8030,
+        "median_ms": 53.36,
+        "p95_ms": 65.48,
+        "p99_ms": 69.84,
+        "mean_ms": 53.39
+      },
+      "detector_fresh_fraction": 0.976
+    },
+    {
+      "run": "v612_eval_bc_large_100_20261028_180438",
+      "episodes": 100,
+      "mean": 4.48,
+      "median": 4.2,
+      "best": 10.05,
+      "ge5": 40,
+      "ge10": 1,
+      "actions": {
+        "4": 2081,
+        "3": 3316,
+        "0": 2316
+      },
+      "probabilities": {
+        "NONE": 0.2499,
+        "LEFT": 0.0027,
+        "RIGHT": 0.0251,
+        "JUMP": 0.4445,
+        "ROLL": 0.2778
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 7627,
+        "preflight_rechecks_on_transient": 86,
+        "preflight_confirmed_menu": 86,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 76,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 7553,
+        "median_ms": 51.65,
+        "p95_ms": 65.34,
+        "p99_ms": 69.78,
+        "mean_ms": 52.9
+      },
+      "detector_fresh_fraction": 0.975
+    }
+  ],
+  "large_minus_pilot_mean": -0.3475999999999999,
+  "large_minus_pilot_95": [
+    -0.8808999999999996,
+    0.17260749999999858
+  ],
+  "large_minus_ppo_mean": 0.18300000000000072,
+  "large_minus_ppo_95": [
+    -0.2768025000000006,
+    0.6352000000000007
+  ],
+  "config_differences_pilot_vs_large": {
+    "run_name": [
+      "v612_eval_bc_pilot_100_20261028_153047",
+      "v612_eval_bc_large_100_20261028_180438"
+    ],
+    "resume": [
+      "ai_data\\demonstrations_v13\\bc_runs\\bc_20261028_152607\\model.zip",
+      "ai_data\\demonstrations_v13\\bc_runs\\bc_sampled_batch_20261028_1740_v2\\latest.zip"
+    ]
+  },
+  "bootstrap": "20000 independent episode resamples, default_rng(123); excludes session and training-seed variability"
+}

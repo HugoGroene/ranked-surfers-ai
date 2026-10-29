@@ -1,0 +1,38 @@
+{
+  "stability": {
+    "status": "PASS_STABILITY_CANDIDATE",
+    "steps": 32768,
+    "completed": true,
+    "freeze_checks": 249,
+    "verified_optimizer_pauses": 249,
+    "optimizer_resumes": 249,
+    "menu_boundaries": 7,
+    "menu_handoffs_after_optimizer": 6,
+    "post_resume_menu_handoffs": 22,
+    "menu_terminal_rewards_recorded": 28,
+    "optimizer_continuations": 255,
+    "fresh_stacks": 227,
+    "fresh_frame_age_max_ms": 20.6,
+    "pause_duration_total_s": 298.573,
+    "max_reported_abs_active_clock_drift_s": 0.016,
+    "per_frame_gameplay_checks": 908,
+    "completed_episodes": 346,
+    "mean_survival_seconds": 4.56,
+    "warnings": [
+      "Final rollout ended on MENU without another PPO step; final terminal reward is not in the buffer.",
+      "Reported pause-clock drift is internal consistency, not an independent Unity timer reading.",
+      "No evidence here that the reward cap or per-step PPO discount is unbiased."
+    ],
+    "failures": []
+  },
+  "reward_replay": {
+    "status": "PASS_REWARD_REPLAY",
+    "validated_steps": 32768,
+    "completed_episodes": 346,
+    "menu_handoff_terminal_events": 28,
+    "steps_exceeding_survival_reward_cap": 555,
+    "maximum_observed_episode_duration_step_s": 1.89,
+    "note": "A capped interval does not get survival credit above 0.15s; review large gaps. Reward replay verifies trainer arithmetic, not Unity internal time or gamma discounts.",
+    "failures": []
+  }
+}

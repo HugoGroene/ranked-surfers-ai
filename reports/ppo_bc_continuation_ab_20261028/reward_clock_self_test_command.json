@@ -1,0 +1,8 @@
+[
+  "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai\\.venv\\Scripts\\python.exe",
+  "-B",
+  "-u",
+  "-m",
+  "tools.ppo_reward_timing_audit",
+  "--self-test"
+]

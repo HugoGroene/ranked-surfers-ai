@@ -1,0 +1,245 @@
+{
+  "scope": "Desktop-grab completion to Playwright dispatch/return; not Unity input application",
+  "checkpoint_sha256": "ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc",
+  "checkpoint_unchanged": true,
+  "clock": "perf_counter; capture times measure MSS grab, not desktop presentation",
+  "instrumentation": "In-memory wrappers; no extra browser calls or model forwards; no weights saved",
+  "summary": {
+    "all_steps": {
+      "steps": 2804,
+      "metrics": {
+        "policy_inference_ms": {
+          "count": 2804,
+          "median_ms": 3.852299996651709,
+          "p95_ms": 6.029269988357555,
+          "p99_ms": 6.31879000662593,
+          "max_ms": 7.940899988170713
+        },
+        "policy_rgb_age_at_predict_ms": {
+          "count": 2804,
+          "median_ms": 3.9063500007614493,
+          "p95_ms": 9.04724998108577,
+          "p99_ms": 10.386739018140357,
+          "max_ms": 73.54230000055395
+        },
+        "policy_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 28.232400014530867,
+          "p95_ms": 35.16096000093967,
+          "p99_ms": 36.931675993837395,
+          "max_ms": 107.87420000997372
+        },
+        "prediction_end_to_command_ms": {
+          "count": 2037,
+          "median_ms": 20.611199986888096,
+          "p95_ms": 22.99176000524312,
+          "p99_ms": 24.87416799180209,
+          "max_ms": 27.530299994396046
+        },
+        "guard_to_inner_ms": {
+          "count": 2782,
+          "median_ms": 20.588850005879067,
+          "p95_ms": 22.96919998916564,
+          "p99_ms": 24.685184003028553,
+          "max_ms": 27.51500002341345
+        },
+        "keypress_roundtrip_ms": {
+          "count": 2037,
+          "median_ms": 17.54229998914525,
+          "p95_ms": 21.862499992130324,
+          "p99_ms": 22.263612006790936,
+          "max_ms": 24.721299996599555
+        },
+        "policy_rgb_age_at_press_return_ms": {
+          "count": 2037,
+          "median_ms": 47.99500000081025,
+          "p95_ms": 51.09947997843846,
+          "p99_ms": 53.322620018152506,
+          "max_ms": 128.01210000179708
+        },
+        "guard_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 6.98579999152571,
+          "p95_ms": 10.909720009658486,
+          "p99_ms": 12.435559995938087,
+          "max_ms": 15.484100003959611
+        },
+        "detector_source_age_at_predict_ms": {
+          "count": 2774,
+          "median_ms": 113.17055000108667,
+          "p95_ms": 190.65139000449562,
+          "p99_ms": 191.74546800146345,
+          "max_ms": 270.9904999937862
+        }
+      }
+    },
+    "movement_commands": {
+      "steps": 2037,
+      "metrics": {
+        "policy_inference_ms": {
+          "count": 2037,
+          "median_ms": 3.8812000129837543,
+          "p95_ms": 6.059880013344809,
+          "p99_ms": 6.363772011827676,
+          "max_ms": 7.940899988170713
+        },
+        "policy_rgb_age_at_predict_ms": {
+          "count": 2037,
+          "median_ms": 3.9092999941203743,
+          "p95_ms": 9.249739989172662,
+          "p99_ms": 10.519863993395118,
+          "max_ms": 73.54230000055395
+        },
+        "policy_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 28.232400014530867,
+          "p95_ms": 35.16096000093967,
+          "p99_ms": 36.931675993837395,
+          "max_ms": 107.87420000997372
+        },
+        "prediction_end_to_command_ms": {
+          "count": 2037,
+          "median_ms": 20.611199986888096,
+          "p95_ms": 22.99176000524312,
+          "p99_ms": 24.87416799180209,
+          "max_ms": 27.530299994396046
+        },
+        "guard_to_inner_ms": {
+          "count": 2037,
+          "median_ms": 20.59409997309558,
+          "p95_ms": 22.97333998722024,
+          "p99_ms": 24.84875599970109,
+          "max_ms": 27.51500002341345
+        },
+        "keypress_roundtrip_ms": {
+          "count": 2037,
+          "median_ms": 17.54229998914525,
+          "p95_ms": 21.862499992130324,
+          "p99_ms": 22.263612006790936,
+          "max_ms": 24.721299996599555
+        },
+        "policy_rgb_age_at_press_return_ms": {
+          "count": 2037,
+          "median_ms": 47.99500000081025,
+          "p95_ms": 51.09947997843846,
+          "p99_ms": 53.322620018152506,
+          "max_ms": 128.01210000179708
+        },
+        "guard_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 6.98579999152571,
+          "p95_ms": 10.909720009658486,
+          "p99_ms": 12.435559995938087,
+          "max_ms": 15.484100003959611
+        },
+        "detector_source_age_at_predict_ms": {
+          "count": 2007,
+          "median_ms": 114.0531999990344,
+          "p95_ms": 190.83147999772336,
+          "p99_ms": 195.2108040114399,
+          "max_ms": 270.9904999937862
+        }
+      }
+    },
+    "single_guard_capture_commands": {
+      "steps": 2037,
+      "metrics": {
+        "policy_inference_ms": {
+          "count": 2037,
+          "median_ms": 3.8812000129837543,
+          "p95_ms": 6.059880013344809,
+          "p99_ms": 6.363772011827676,
+          "max_ms": 7.940899988170713
+        },
+        "policy_rgb_age_at_predict_ms": {
+          "count": 2037,
+          "median_ms": 3.9092999941203743,
+          "p95_ms": 9.249739989172662,
+          "p99_ms": 10.519863993395118,
+          "max_ms": 73.54230000055395
+        },
+        "policy_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 28.232400014530867,
+          "p95_ms": 35.16096000093967,
+          "p99_ms": 36.931675993837395,
+          "max_ms": 107.87420000997372
+        },
+        "prediction_end_to_command_ms": {
+          "count": 2037,
+          "median_ms": 20.611199986888096,
+          "p95_ms": 22.99176000524312,
+          "p99_ms": 24.87416799180209,
+          "max_ms": 27.530299994396046
+        },
+        "guard_to_inner_ms": {
+          "count": 2037,
+          "median_ms": 20.59409997309558,
+          "p95_ms": 22.97333998722024,
+          "p99_ms": 24.84875599970109,
+          "max_ms": 27.51500002341345
+        },
+        "keypress_roundtrip_ms": {
+          "count": 2037,
+          "median_ms": 17.54229998914525,
+          "p95_ms": 21.862499992130324,
+          "p99_ms": 22.263612006790936,
+          "max_ms": 24.721299996599555
+        },
+        "policy_rgb_age_at_press_return_ms": {
+          "count": 2037,
+          "median_ms": 47.99500000081025,
+          "p95_ms": 51.09947997843846,
+          "p99_ms": 53.322620018152506,
+          "max_ms": 128.01210000179708
+        },
+        "guard_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 6.98579999152571,
+          "p95_ms": 10.909720009658486,
+          "p99_ms": 12.435559995938087,
+          "max_ms": 15.484100003959611
+        },
+        "detector_source_age_at_predict_ms": {
+          "count": 2007,
+          "median_ms": 114.0531999990344,
+          "p95_ms": 190.83147999772336,
+          "p99_ms": 195.2108040114399,
+          "max_ms": 270.9904999937862
+        }
+      }
+    },
+    "multi_guard_capture_commands": {
+      "steps": 0,
+      "metrics": {
+        "policy_inference_ms": {
+          "count": 0
+        },
+        "policy_rgb_age_at_predict_ms": {
+          "count": 0
+        },
+        "policy_rgb_age_at_command_ms": {
+          "count": 0
+        },
+        "prediction_end_to_command_ms": {
+          "count": 0
+        },
+        "guard_to_inner_ms": {
+          "count": 0
+        },
+        "keypress_roundtrip_ms": {
+          "count": 0
+        },
+        "policy_rgb_age_at_press_return_ms": {
+          "count": 0
+        },
+        "guard_rgb_age_at_command_ms": {
+          "count": 0
+        },
+        "detector_source_age_at_predict_ms": {
+          "count": 0
+        }
+      }
+    }
+  }
+}

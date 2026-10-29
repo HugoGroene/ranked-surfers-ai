@@ -1,0 +1,13 @@
+{
+  "runs": 291,
+  "browser_compatible_video_loads": true,
+  "approval_requires_checkbox": true,
+  "json_export_verified": true,
+  "editing_invalidates_keep": true,
+  "draft_survives_reload": true,
+  "duration_filters_verified": true,
+  "contact_sheet_loads": true,
+  "exact_window_validation_matches_python_for_all_241_suggestions": true,
+  "javascript_errors": [],
+  "note": "Synthetic decisions in an isolated headless test browser only; no user approvals or manifests were changed."
+}

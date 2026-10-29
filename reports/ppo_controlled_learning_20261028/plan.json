@@ -1,0 +1,40 @@
+{
+  "source_checkpoint": "ai_data/demonstrations_v13/bc_runs/bc_20261028_152607/model.zip",
+  "source_sha256": "ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc",
+  "source_timesteps": 1662427,
+  "arms": [
+    {
+      "name": "rollout128",
+      "steps": 32768,
+      "n_steps": 128,
+      "target_kl": null,
+      "source": "ai_data/demonstrations_v13/bc_runs/bc_20261028_152607/model.zip"
+    },
+    {
+      "name": "rollout512",
+      "steps": 32768,
+      "n_steps": 512,
+      "target_kl": null,
+      "source": "ai_data/demonstrations_v13/bc_runs/bc_20261028_152607/model.zip"
+    },
+    {
+      "name": "rollout512_kl",
+      "steps": 32768,
+      "n_steps": 512,
+      "target_kl": 0.03,
+      "source": "ai_data/demonstrations_v13/bc_runs/bc_20261028_152607/model.zip"
+    }
+  ],
+  "total_training_steps": 98304,
+  "fresh_baseline_episodes": 100,
+  "evaluation_episodes_per_arm": 100,
+  "run_prefix": "ppoctrl_20261028",
+  "runtime": "Exact-observation guard enabled in every arm; same detector, schema, 300s cap and rewards",
+  "scope": "Compare rollout128 vs512, then KL .03 vs none at512. LR .0003, epochs5, batch32, entropy .002, gamma .995 fixed. No BC updates or recurrent change.",
+  "limitations": [
+    "One training seed",
+    "Sequential unpaired procedural maps",
+    "Same step budgets need not imply same wall time or active-gameplay exposure",
+    "Fresh runtime baseline added; historical 4.83s report is context, not the matched control"
+  ]
+}

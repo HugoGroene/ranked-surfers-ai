@@ -1,0 +1,2216 @@
+[
+  {
+    "run": "ai_data\\demonstrations_v13\\runs\\demo_20261027_211547_738959",
+    "recorder_version": "1.3.1-diagnostics",
+    "status": "candidate",
+    "duration_seconds": 5.958,
+    "frames": 119,
+    "frame_intervals": {
+      "frames": 119,
+      "max_lag_ms": 130.0,
+      "intervals_ms": {
+        "count": 118,
+        "median": 48.49,
+        "p95": 71.2,
+        "mean": 50.49,
+        "min": 27.18,
+        "max": 98.66
+      },
+      "intervals_over_max_lag": 0,
+      "fraction_intervals_within_max_lag": 1.0,
+      "effective_fps_from_median": 20.62,
+      "intervals_over_1s": 0
+    },
+    "validity": {
+      "samples": 119,
+      "valid_samples": 118,
+      "valid_fraction": 0.9916,
+      "valid_by_action": {
+        "NONE": 115,
+        "LEFT": 0,
+        "RIGHT": 1,
+        "JUMP": 1,
+        "ROLL": 1
+      },
+      "valid_nonnone_samples": 3,
+      "invalid_labeled_nonnone": 0,
+      "valid_with_stack_gap": 0,
+      "segments_seconds": [
+        [
+          0.0,
+          5.258
+        ]
+      ],
+      "valid_in_segments_by_action": {
+        "NONE": 104,
+        "LEFT": 0,
+        "RIGHT": 1,
+        "JUMP": 0,
+        "ROLL": 0
+      }
+    },
+    "keyboard_delivery": {
+      "win32_keydowns": 3,
+      "browser_keydowns": 3,
+      "matched_pairs": 3,
+      "win32_without_browser": 0,
+      "browser_without_win32": 0,
+      "browser_before_win32": 1,
+      "browser_minus_win32_ms": {
+        "count": 3,
+        "median": 1.47,
+        "p95": 7.9,
+        "mean": 1.67,
+        "min": -5.07,
+        "max": 8.62
+      }
+    },
+    "keyboard_sources": {
+      "win32_key_state": 6,
+      "browser_dom": 6
+    },
+    "origin": {
+      "method": "manifest",
+      "value": 119725.8402214
+    },
+    "keydowns": {
+      "max_lag_ms": 130.0,
+      "trusted_source": "win32_key_state",
+      "keydowns_total": 3,
+      "merged_by_dedup": 0,
+      "keydowns_eligible": 3,
+      "keydowns_assigned": 3,
+      "keydown_yield": 1.0,
+      "outcomes": {
+        "assigned": 3
+      },
+      "eligible_by_action": {
+        "RIGHT": 1,
+        "JUMP": 1,
+        "ROLL": 1
+      },
+      "assigned_by_action": {
+        "RIGHT": 1,
+        "JUMP": 1,
+        "ROLL": 1
+      },
+      "assigned_offset_after_frame_ms": {
+        "count": 3,
+        "median": 31.58,
+        "p95": 36.42,
+        "mean": 24.0,
+        "min": 3.46,
+        "max": 36.96
+      }
+    },
+    "labels_reproducible": true,
+    "lateral_review": {
+      "assigned": [
+        {
+          "seconds": 2.6373,
+          "frame": 51,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 36.96
+        }
+      ],
+      "not_assigned": []
+    },
+    "capture": {
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "calibration_score": 0.9988001585006714,
+      "canvas_monitor_index": null,
+      "view_signature": {
+        "inner_width": 1920,
+        "inner_height": 945,
+        "device_pixel_ratio": 1,
+        "screen_x": 0,
+        "screen_y": 0,
+        "canvas_x": 0,
+        "canvas_y": 0,
+        "canvas_width": 1920,
+        "canvas_height": 945
+      },
+      "keyboard_poll_ms": {
+        "count": 967,
+        "median": 15.53,
+        "p95": 16.64,
+        "mean": 14.88,
+        "min": 4.06,
+        "max": 51.42
+      },
+      "keyboard_requested_interval_ms": 4.0,
+      "keyboard_monitor_alive": true,
+      "keyboard_monitor_error": null,
+      "git": {
+        "commit": "63e2ddef51c402544211e4746e9c9edd6cf6eacc",
+        "tracked_changes": true
+      }
+    },
+    "capture_timing_ms": {
+      "focus_check": {
+        "count": 119,
+        "median": 2.24,
+        "p95": 3.96,
+        "mean": 2.57,
+        "min": 1.54,
+        "max": 16.52
+      },
+      "view_check_and_misc": {
+        "count": 119,
+        "median": 0.0,
+        "p95": 0.49,
+        "mean": 0.3,
+        "min": 0.0,
+        "max": 7.03
+      },
+      "grab": {
+        "count": 119,
+        "median": 10.93,
+        "p95": 14.16,
+        "mean": 10.9,
+        "min": 7.04,
+        "max": 18.94
+      },
+      "classify": {
+        "count": 119,
+        "median": 5.34,
+        "p95": 9.0,
+        "mean": 6.57,
+        "min": 4.87,
+        "max": 56.17
+      },
+      "detector_poll_and_preprocess": {
+        "count": 119,
+        "median": 1.14,
+        "p95": 2.07,
+        "mean": 1.3,
+        "min": 0.92,
+        "max": 3.48
+      },
+      "jpeg_encode": {
+        "count": 119,
+        "median": 4.22,
+        "p95": 6.51,
+        "mean": 4.92,
+        "min": 3.59,
+        "max": 44.05
+      },
+      "post_frame": {
+        "count": 119,
+        "median": 0.02,
+        "p95": 0.63,
+        "mean": 0.14,
+        "min": 0.01,
+        "max": 1.01
+      },
+      "sleep_actual": {
+        "count": 119,
+        "median": 22.91,
+        "p95": 40.13,
+        "mean": 23.35,
+        "min": 2.36,
+        "max": 48.34
+      },
+      "loop_total": {
+        "count": 119,
+        "median": 46.97,
+        "p95": 63.32,
+        "mean": 50.07,
+        "min": 29.99,
+        "max": 108.64
+      },
+      "sleep_requested": {
+        "count": 119,
+        "median": 15.18,
+        "p95": 24.98,
+        "mean": 14.97,
+        "min": 2.0,
+        "max": 34.85
+      },
+      "sleep_overshoot": {
+        "count": 119,
+        "median": 8.23,
+        "p95": 15.84,
+        "mean": 8.38,
+        "min": -3.72,
+        "max": 32.36
+      }
+    },
+    "preview": {
+      "available": true,
+      "file": "preview.mp4",
+      "frames": 119,
+      "fps": 20.0,
+      "width": 960,
+      "height": 472,
+      "playback_seconds": 5.95,
+      "real_seconds": 6.009,
+      "speed_ratio": 0.9902,
+      "aspect_error": 0.0011
+    },
+    "criteria": [
+      {
+        "criterion": "median frame interval (ms)",
+        "status": "PASS",
+        "value": 48.49,
+        "threshold": "<= 55"
+      },
+      {
+        "criterion": "p95 frame interval (ms)",
+        "status": "PASS",
+        "value": 71.2,
+        "threshold": "<= 100"
+      },
+      {
+        "criterion": "intervals within 130 ms",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 95%"
+      },
+      {
+        "criterion": "valid sample fraction",
+        "status": "PASS",
+        "value": 0.9916,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "keydown yield (eligible gameplay keydowns)",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "saved labels reproducible from raw events",
+        "status": "PASS",
+        "value": true,
+        "threshold": "exact match"
+      },
+      {
+        "criterion": "keyboard monitor alive, no error",
+        "status": "PASS",
+        "value": true,
+        "threshold": "true"
+      },
+      {
+        "criterion": "capture geometry (recorder captures canvas only)",
+        "status": "INFO",
+        "value": {
+          "region": {
+            "left": 0,
+            "top": 87,
+            "width": 1920,
+            "height": 945
+          },
+          "canvas_fills_monitor": false
+        },
+        "threshold": "compare with PPO capture before BC"
+      },
+      {
+        "criterion": "preview playback speed ratio",
+        "status": "PASS",
+        "value": 0.9902,
+        "threshold": "1 +/- 3%"
+      },
+      {
+        "criterion": "label alignment: lateral keys in lateral_review start moving at/after labeled frame",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "preview shows the full, unobstructed canvas at plausible speed",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "approved segments exclude mistakes and the death animation",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      }
+    ]
+  },
+  {
+    "run": "ai_data\\demonstrations_v13\\runs\\demo_20261027_211627_127845",
+    "recorder_version": "1.3.1-diagnostics",
+    "status": "candidate",
+    "duration_seconds": 38.303,
+    "frames": 765,
+    "frame_intervals": {
+      "frames": 765,
+      "max_lag_ms": 130.0,
+      "intervals_ms": {
+        "count": 764,
+        "median": 48.61,
+        "p95": 63.28,
+        "mean": 50.13,
+        "min": 20.27,
+        "max": 110.64
+      },
+      "intervals_over_max_lag": 0,
+      "fraction_intervals_within_max_lag": 1.0,
+      "effective_fps_from_median": 20.57,
+      "intervals_over_1s": 0
+    },
+    "validity": {
+      "samples": 765,
+      "valid_samples": 764,
+      "valid_fraction": 0.9987,
+      "valid_by_action": {
+        "NONE": 735,
+        "LEFT": 9,
+        "RIGHT": 10,
+        "JUMP": 7,
+        "ROLL": 3
+      },
+      "valid_nonnone_samples": 29,
+      "invalid_labeled_nonnone": 0,
+      "valid_with_stack_gap": 0,
+      "segments_seconds": [
+        [
+          0.0,
+          37.603
+        ]
+      ],
+      "valid_in_segments_by_action": {
+        "NONE": 724,
+        "LEFT": 9,
+        "RIGHT": 10,
+        "JUMP": 6,
+        "ROLL": 2
+      }
+    },
+    "keyboard_delivery": {
+      "win32_keydowns": 29,
+      "browser_keydowns": 29,
+      "matched_pairs": 29,
+      "win32_without_browser": 0,
+      "browser_without_win32": 0,
+      "browser_before_win32": 19,
+      "browser_minus_win32_ms": {
+        "count": 29,
+        "median": -2.98,
+        "p95": 12.35,
+        "mean": -1.39,
+        "min": -13.62,
+        "max": 16.02
+      }
+    },
+    "keyboard_sources": {
+      "browser_dom": 58,
+      "win32_key_state": 58
+    },
+    "origin": {
+      "method": "manifest",
+      "value": 119732.841498
+    },
+    "keydowns": {
+      "max_lag_ms": 130.0,
+      "trusted_source": "win32_key_state",
+      "keydowns_total": 29,
+      "merged_by_dedup": 0,
+      "keydowns_eligible": 29,
+      "keydowns_assigned": 29,
+      "keydown_yield": 1.0,
+      "outcomes": {
+        "assigned": 29
+      },
+      "eligible_by_action": {
+        "LEFT": 9,
+        "RIGHT": 10,
+        "JUMP": 7,
+        "ROLL": 3
+      },
+      "assigned_by_action": {
+        "LEFT": 9,
+        "RIGHT": 10,
+        "JUMP": 7,
+        "ROLL": 3
+      },
+      "assigned_offset_after_frame_ms": {
+        "count": 29,
+        "median": 20.44,
+        "p95": 37.34,
+        "mean": 20.77,
+        "min": 0.07,
+        "max": 46.13
+      }
+    },
+    "labels_reproducible": true,
+    "lateral_review": {
+      "assigned": [
+        {
+          "seconds": 2.7252,
+          "frame": 53,
+          "action": "LEFT",
+          "offset_after_frame_ms": 21.86
+        },
+        {
+          "seconds": 4.0938,
+          "frame": 81,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 0.27
+        },
+        {
+          "seconds": 4.2782,
+          "frame": 84,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 17.17
+        },
+        {
+          "seconds": 6.0446,
+          "frame": 119,
+          "action": "LEFT",
+          "offset_after_frame_ms": 32.21
+        },
+        {
+          "seconds": 6.8202,
+          "frame": 135,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 15.62
+        },
+        {
+          "seconds": 7.177,
+          "frame": 142,
+          "action": "LEFT",
+          "offset_after_frame_ms": 16.97
+        },
+        {
+          "seconds": 7.3939,
+          "frame": 146,
+          "action": "LEFT",
+          "offset_after_frame_ms": 32.07
+        },
+        {
+          "seconds": 8.4514,
+          "frame": 168,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 5.9
+        },
+        {
+          "seconds": 15.2359,
+          "frame": 303,
+          "action": "LEFT",
+          "offset_after_frame_ms": 33.8
+        },
+        {
+          "seconds": 19.2353,
+          "frame": 383,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 35.88
+        },
+        {
+          "seconds": 21.3232,
+          "frame": 425,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 17.37
+        },
+        {
+          "seconds": 24.0721,
+          "frame": 479,
+          "action": "LEFT",
+          "offset_after_frame_ms": 20.44
+        },
+        {
+          "seconds": 24.2744,
+          "frame": 483,
+          "action": "LEFT",
+          "offset_after_frame_ms": 20.75
+        },
+        {
+          "seconds": 29.3798,
+          "frame": 585,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 16.65
+        },
+        {
+          "seconds": 30.1601,
+          "frame": 600,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 46.13
+        },
+        {
+          "seconds": 32.8304,
+          "frame": 654,
+          "action": "LEFT",
+          "offset_after_frame_ms": 32.88
+        },
+        {
+          "seconds": 34.2088,
+          "frame": 682,
+          "action": "LEFT",
+          "offset_after_frame_ms": 0.51
+        },
+        {
+          "seconds": 35.3063,
+          "frame": 704,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 0.07
+        },
+        {
+          "seconds": 35.4927,
+          "frame": 707,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 33.0
+        }
+      ],
+      "not_assigned": []
+    },
+    "capture": {
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "calibration_score": 0.9988001585006714,
+      "canvas_monitor_index": null,
+      "view_signature": {
+        "inner_width": 1920,
+        "inner_height": 945,
+        "device_pixel_ratio": 1,
+        "screen_x": 0,
+        "screen_y": 0,
+        "canvas_x": 0,
+        "canvas_y": 0,
+        "canvas_width": 1920,
+        "canvas_height": 945
+      },
+      "keyboard_poll_ms": {
+        "count": 3489,
+        "median": 15.53,
+        "p95": 16.57,
+        "mean": 15.41,
+        "min": 4.06,
+        "max": 71.74
+      },
+      "keyboard_requested_interval_ms": 4.0,
+      "keyboard_monitor_alive": true,
+      "keyboard_monitor_error": null,
+      "git": {
+        "commit": "63e2ddef51c402544211e4746e9c9edd6cf6eacc",
+        "tracked_changes": true
+      }
+    },
+    "capture_timing_ms": {
+      "focus_check": {
+        "count": 765,
+        "median": 2.1,
+        "p95": 3.31,
+        "mean": 2.24,
+        "min": 1.4,
+        "max": 7.22
+      },
+      "view_check_and_misc": {
+        "count": 765,
+        "median": 0.0,
+        "p95": 0.0,
+        "mean": 0.26,
+        "min": 0.0,
+        "max": 6.47
+      },
+      "grab": {
+        "count": 765,
+        "median": 10.92,
+        "p95": 14.03,
+        "mean": 10.76,
+        "min": 6.9,
+        "max": 15.63
+      },
+      "classify": {
+        "count": 765,
+        "median": 5.34,
+        "p95": 6.4,
+        "mean": 5.46,
+        "min": 4.85,
+        "max": 12.45
+      },
+      "detector_poll_and_preprocess": {
+        "count": 765,
+        "median": 1.27,
+        "p95": 1.59,
+        "mean": 1.26,
+        "min": 0.91,
+        "max": 2.31
+      },
+      "jpeg_encode": {
+        "count": 765,
+        "median": 4.21,
+        "p95": 4.96,
+        "mean": 4.27,
+        "min": 3.54,
+        "max": 7.38
+      },
+      "post_frame": {
+        "count": 765,
+        "median": 0.02,
+        "p95": 0.96,
+        "mean": 0.27,
+        "min": 0.01,
+        "max": 1.49
+      },
+      "sleep_actual": {
+        "count": 765,
+        "median": 23.52,
+        "p95": 40.85,
+        "mean": 25.48,
+        "min": 0.07,
+        "max": 77.34
+      },
+      "loop_total": {
+        "count": 765,
+        "median": 47.06,
+        "p95": 63.19,
+        "mean": 50.0,
+        "min": 20.39,
+        "max": 101.39
+      },
+      "sleep_requested": {
+        "count": 765,
+        "median": 18.33,
+        "p95": 27.65,
+        "mean": 18.25,
+        "min": 2.0,
+        "max": 45.86
+      },
+      "sleep_overshoot": {
+        "count": 765,
+        "median": 7.35,
+        "p95": 14.83,
+        "mean": 7.23,
+        "min": -19.6,
+        "max": 53.53
+      }
+    },
+    "preview": {
+      "available": true,
+      "file": "preview.mp4",
+      "frames": 765,
+      "fps": 20.0,
+      "width": 960,
+      "height": 472,
+      "playback_seconds": 38.25,
+      "real_seconds": 38.353,
+      "speed_ratio": 0.9973,
+      "aspect_error": 0.0011
+    },
+    "criteria": [
+      {
+        "criterion": "median frame interval (ms)",
+        "status": "PASS",
+        "value": 48.61,
+        "threshold": "<= 55"
+      },
+      {
+        "criterion": "p95 frame interval (ms)",
+        "status": "PASS",
+        "value": 63.28,
+        "threshold": "<= 100"
+      },
+      {
+        "criterion": "intervals within 130 ms",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 95%"
+      },
+      {
+        "criterion": "valid sample fraction",
+        "status": "PASS",
+        "value": 0.9987,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "keydown yield (eligible gameplay keydowns)",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "saved labels reproducible from raw events",
+        "status": "PASS",
+        "value": true,
+        "threshold": "exact match"
+      },
+      {
+        "criterion": "keyboard monitor alive, no error",
+        "status": "PASS",
+        "value": true,
+        "threshold": "true"
+      },
+      {
+        "criterion": "capture geometry (recorder captures canvas only)",
+        "status": "INFO",
+        "value": {
+          "region": {
+            "left": 0,
+            "top": 87,
+            "width": 1920,
+            "height": 945
+          },
+          "canvas_fills_monitor": false
+        },
+        "threshold": "compare with PPO capture before BC"
+      },
+      {
+        "criterion": "preview playback speed ratio",
+        "status": "PASS",
+        "value": 0.9973,
+        "threshold": "1 +/- 3%"
+      },
+      {
+        "criterion": "label alignment: lateral keys in lateral_review start moving at/after labeled frame",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "preview shows the full, unobstructed canvas at plausible speed",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "approved segments exclude mistakes and the death animation",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      }
+    ]
+  },
+  {
+    "run": "ai_data\\demonstrations_v13\\runs\\demo_20261027_211822_036384",
+    "recorder_version": "1.3.1-diagnostics",
+    "status": "candidate",
+    "duration_seconds": 38.478,
+    "frames": 758,
+    "frame_intervals": {
+      "frames": 758,
+      "max_lag_ms": 130.0,
+      "intervals_ms": {
+        "count": 757,
+        "median": 48.68,
+        "p95": 63.42,
+        "mean": 50.83,
+        "min": 20.07,
+        "max": 493.46
+      },
+      "intervals_over_max_lag": 2,
+      "fraction_intervals_within_max_lag": 0.9974,
+      "effective_fps_from_median": 20.54,
+      "intervals_over_1s": 0
+    },
+    "validity": {
+      "samples": 758,
+      "valid_samples": 755,
+      "valid_fraction": 0.996,
+      "valid_by_action": {
+        "NONE": 730,
+        "LEFT": 6,
+        "RIGHT": 5,
+        "JUMP": 11,
+        "ROLL": 3
+      },
+      "valid_nonnone_samples": 25,
+      "invalid_labeled_nonnone": 0,
+      "valid_with_stack_gap": 3,
+      "segments_seconds": [
+        [
+          0.0,
+          37.778
+        ]
+      ],
+      "valid_in_segments_by_action": {
+        "NONE": 719,
+        "LEFT": 6,
+        "RIGHT": 5,
+        "JUMP": 9,
+        "ROLL": 2
+      }
+    },
+    "keyboard_delivery": {
+      "win32_keydowns": 25,
+      "browser_keydowns": 25,
+      "matched_pairs": 25,
+      "win32_without_browser": 0,
+      "browser_without_win32": 0,
+      "browser_before_win32": 19,
+      "browser_minus_win32_ms": {
+        "count": 25,
+        "median": -5.04,
+        "p95": 7.32,
+        "mean": -3.03,
+        "min": -13.56,
+        "max": 9.72
+      }
+    },
+    "keyboard_sources": {
+      "browser_dom": 50,
+      "win32_key_state": 50
+    },
+    "origin": {
+      "method": "manifest",
+      "value": 119847.5564583
+    },
+    "keydowns": {
+      "max_lag_ms": 130.0,
+      "trusted_source": "win32_key_state",
+      "keydowns_total": 25,
+      "merged_by_dedup": 0,
+      "keydowns_eligible": 25,
+      "keydowns_assigned": 25,
+      "keydown_yield": 1.0,
+      "outcomes": {
+        "assigned": 25
+      },
+      "eligible_by_action": {
+        "JUMP": 11,
+        "RIGHT": 5,
+        "LEFT": 6,
+        "ROLL": 3
+      },
+      "assigned_by_action": {
+        "JUMP": 11,
+        "RIGHT": 5,
+        "LEFT": 6,
+        "ROLL": 3
+      },
+      "assigned_offset_after_frame_ms": {
+        "count": 25,
+        "median": 18.74,
+        "p95": 36.48,
+        "mean": 19.33,
+        "min": 1.79,
+        "max": 37.58
+      }
+    },
+    "labels_reproducible": true,
+    "lateral_review": {
+      "assigned": [
+        {
+          "seconds": 3.7185,
+          "frame": 73,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 20.05
+        },
+        {
+          "seconds": 7.9217,
+          "frame": 157,
+          "action": "LEFT",
+          "offset_after_frame_ms": 17.13
+        },
+        {
+          "seconds": 10.137,
+          "frame": 201,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 35.81
+        },
+        {
+          "seconds": 12.4141,
+          "frame": 247,
+          "action": "LEFT",
+          "offset_after_frame_ms": 18.74
+        },
+        {
+          "seconds": 14.0645,
+          "frame": 280,
+          "action": "LEFT",
+          "offset_after_frame_ms": 14.87
+        },
+        {
+          "seconds": 14.9513,
+          "frame": 298,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 4.55
+        },
+        {
+          "seconds": 15.1694,
+          "frame": 302,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 21.07
+        },
+        {
+          "seconds": 17.1611,
+          "frame": 342,
+          "action": "LEFT",
+          "offset_after_frame_ms": 18.55
+        },
+        {
+          "seconds": 17.3487,
+          "frame": 346,
+          "action": "LEFT",
+          "offset_after_frame_ms": 4.16
+        },
+        {
+          "seconds": 32.2726,
+          "frame": 644,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 16.28
+        },
+        {
+          "seconds": 34.3717,
+          "frame": 674,
+          "action": "LEFT",
+          "offset_after_frame_ms": 16.48
+        }
+      ],
+      "not_assigned": []
+    },
+    "capture": {
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "calibration_score": 0.9986808896064758,
+      "canvas_monitor_index": null,
+      "view_signature": {
+        "inner_width": 1920,
+        "inner_height": 945,
+        "device_pixel_ratio": 1,
+        "screen_x": 0,
+        "screen_y": 0,
+        "canvas_x": 0,
+        "canvas_y": 0,
+        "canvas_width": 1920,
+        "canvas_height": 945
+      },
+      "keyboard_poll_ms": {
+        "count": 3010,
+        "median": 15.54,
+        "p95": 16.42,
+        "mean": 15.55,
+        "min": 4.08,
+        "max": 68.13
+      },
+      "keyboard_requested_interval_ms": 4.0,
+      "keyboard_monitor_alive": true,
+      "keyboard_monitor_error": null,
+      "git": {
+        "commit": "63e2ddef51c402544211e4746e9c9edd6cf6eacc",
+        "tracked_changes": true
+      }
+    },
+    "capture_timing_ms": {
+      "focus_check": {
+        "count": 758,
+        "median": 1.84,
+        "p95": 3.08,
+        "mean": 2.0,
+        "min": 1.19,
+        "max": 5.62
+      },
+      "view_check_and_misc": {
+        "count": 758,
+        "median": 0.0,
+        "p95": 0.0,
+        "mean": 0.28,
+        "min": 0.0,
+        "max": 10.98
+      },
+      "grab": {
+        "count": 758,
+        "median": 11.02,
+        "p95": 14.05,
+        "mean": 10.89,
+        "min": 6.89,
+        "max": 46.14
+      },
+      "classify": {
+        "count": 758,
+        "median": 5.17,
+        "p95": 6.66,
+        "mean": 5.47,
+        "min": 4.88,
+        "max": 54.26
+      },
+      "detector_poll_and_preprocess": {
+        "count": 758,
+        "median": 1.02,
+        "p95": 1.37,
+        "mean": 1.08,
+        "min": 0.9,
+        "max": 7.98
+      },
+      "jpeg_encode": {
+        "count": 758,
+        "median": 4.01,
+        "p95": 4.72,
+        "mean": 4.09,
+        "min": 3.45,
+        "max": 7.98
+      },
+      "post_frame": {
+        "count": 758,
+        "median": 0.01,
+        "p95": 0.54,
+        "mean": 0.18,
+        "min": 0.01,
+        "max": 1.21
+      },
+      "sleep_actual": {
+        "count": 758,
+        "median": 24.34,
+        "p95": 40.26,
+        "mean": 26.03,
+        "min": 0.04,
+        "max": 77.66
+      },
+      "loop_total": {
+        "count": 758,
+        "median": 47.07,
+        "p95": 63.03,
+        "mean": 50.02,
+        "min": 23.4,
+        "max": 125.08
+      },
+      "sleep_requested": {
+        "count": 758,
+        "median": 19.36,
+        "p95": 27.49,
+        "mean": 18.42,
+        "min": 2.0,
+        "max": 44.87
+      },
+      "sleep_overshoot": {
+        "count": 758,
+        "median": 7.84,
+        "p95": 14.99,
+        "mean": 7.61,
+        "min": -16.43,
+        "max": 60.85
+      }
+    },
+    "preview": {
+      "available": true,
+      "file": "preview.mp4",
+      "frames": 758,
+      "fps": 20.0,
+      "width": 960,
+      "height": 472,
+      "playback_seconds": 37.9,
+      "real_seconds": 38.529,
+      "speed_ratio": 0.9837,
+      "aspect_error": 0.0011
+    },
+    "criteria": [
+      {
+        "criterion": "median frame interval (ms)",
+        "status": "PASS",
+        "value": 48.68,
+        "threshold": "<= 55"
+      },
+      {
+        "criterion": "p95 frame interval (ms)",
+        "status": "PASS",
+        "value": 63.42,
+        "threshold": "<= 100"
+      },
+      {
+        "criterion": "intervals within 130 ms",
+        "status": "PASS",
+        "value": 0.9974,
+        "threshold": ">= 95%"
+      },
+      {
+        "criterion": "valid sample fraction",
+        "status": "PASS",
+        "value": 0.996,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "keydown yield (eligible gameplay keydowns)",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "saved labels reproducible from raw events",
+        "status": "PASS",
+        "value": true,
+        "threshold": "exact match"
+      },
+      {
+        "criterion": "keyboard monitor alive, no error",
+        "status": "PASS",
+        "value": true,
+        "threshold": "true"
+      },
+      {
+        "criterion": "capture geometry (recorder captures canvas only)",
+        "status": "INFO",
+        "value": {
+          "region": {
+            "left": 0,
+            "top": 87,
+            "width": 1920,
+            "height": 945
+          },
+          "canvas_fills_monitor": false
+        },
+        "threshold": "compare with PPO capture before BC"
+      },
+      {
+        "criterion": "preview playback speed ratio",
+        "status": "PASS",
+        "value": 0.9837,
+        "threshold": "1 +/- 3%"
+      },
+      {
+        "criterion": "label alignment: lateral keys in lateral_review start moving at/after labeled frame",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "preview shows the full, unobstructed canvas at plausible speed",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "approved segments exclude mistakes and the death animation",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      }
+    ]
+  },
+  {
+    "run": "ai_data\\demonstrations_v13\\runs\\demo_20261027_211841_149579",
+    "recorder_version": "1.3.1-diagnostics",
+    "status": "candidate",
+    "duration_seconds": 6.833,
+    "frames": 137,
+    "frame_intervals": {
+      "frames": 137,
+      "max_lag_ms": 130.0,
+      "intervals_ms": {
+        "count": 136,
+        "median": 48.73,
+        "p95": 64.08,
+        "mean": 50.24,
+        "min": 26.0,
+        "max": 96.88
+      },
+      "intervals_over_max_lag": 0,
+      "fraction_intervals_within_max_lag": 1.0,
+      "effective_fps_from_median": 20.52,
+      "intervals_over_1s": 0
+    },
+    "validity": {
+      "samples": 137,
+      "valid_samples": 136,
+      "valid_fraction": 0.9927,
+      "valid_by_action": {
+        "NONE": 127,
+        "LEFT": 1,
+        "RIGHT": 1,
+        "JUMP": 5,
+        "ROLL": 2
+      },
+      "valid_nonnone_samples": 9,
+      "invalid_labeled_nonnone": 0,
+      "valid_with_stack_gap": 0,
+      "segments_seconds": [
+        [
+          0.0,
+          6.133
+        ]
+      ],
+      "valid_in_segments_by_action": {
+        "NONE": 115,
+        "LEFT": 1,
+        "RIGHT": 1,
+        "JUMP": 4,
+        "ROLL": 1
+      }
+    },
+    "keyboard_delivery": {
+      "win32_keydowns": 9,
+      "browser_keydowns": 9,
+      "matched_pairs": 9,
+      "win32_without_browser": 0,
+      "browser_without_win32": 0,
+      "browser_before_win32": 5,
+      "browser_minus_win32_ms": {
+        "count": 9,
+        "median": -0.02,
+        "p95": 9.48,
+        "mean": -0.94,
+        "min": -12.56,
+        "max": 10.28
+      }
+    },
+    "keyboard_sources": {
+      "browser_dom": 18,
+      "win32_key_state": 18
+    },
+    "origin": {
+      "method": "manifest",
+      "value": 119887.6614989
+    },
+    "keydowns": {
+      "max_lag_ms": 130.0,
+      "trusted_source": "win32_key_state",
+      "keydowns_total": 9,
+      "merged_by_dedup": 0,
+      "keydowns_eligible": 9,
+      "keydowns_assigned": 9,
+      "keydown_yield": 1.0,
+      "outcomes": {
+        "assigned": 9
+      },
+      "eligible_by_action": {
+        "JUMP": 5,
+        "LEFT": 1,
+        "RIGHT": 1,
+        "ROLL": 2
+      },
+      "assigned_by_action": {
+        "JUMP": 5,
+        "LEFT": 1,
+        "RIGHT": 1,
+        "ROLL": 2
+      },
+      "assigned_offset_after_frame_ms": {
+        "count": 9,
+        "median": 13.58,
+        "p95": 45.86,
+        "mean": 19.19,
+        "min": 0.04,
+        "max": 54.61
+      }
+    },
+    "labels_reproducible": true,
+    "lateral_review": {
+      "assigned": [
+        {
+          "seconds": 3.7704,
+          "frame": 74,
+          "action": "LEFT",
+          "offset_after_frame_ms": 30.22
+        },
+        {
+          "seconds": 4.7559,
+          "frame": 94,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 14.52
+        }
+      ],
+      "not_assigned": []
+    },
+    "capture": {
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "calibration_score": 0.9986808896064758,
+      "canvas_monitor_index": null,
+      "view_signature": {
+        "inner_width": 1920,
+        "inner_height": 945,
+        "device_pixel_ratio": 1,
+        "screen_x": 0,
+        "screen_y": 0,
+        "canvas_x": 0,
+        "canvas_y": 0,
+        "canvas_width": 1920,
+        "canvas_height": 945
+      },
+      "keyboard_poll_ms": {
+        "count": 3549,
+        "median": 15.54,
+        "p95": 16.61,
+        "mean": 15.56,
+        "min": 4.08,
+        "max": 68.13
+      },
+      "keyboard_requested_interval_ms": 4.0,
+      "keyboard_monitor_alive": true,
+      "keyboard_monitor_error": null,
+      "git": {
+        "commit": "63e2ddef51c402544211e4746e9c9edd6cf6eacc",
+        "tracked_changes": true
+      }
+    },
+    "capture_timing_ms": {
+      "focus_check": {
+        "count": 137,
+        "median": 2.47,
+        "p95": 3.92,
+        "mean": 2.66,
+        "min": 1.55,
+        "max": 5.83
+      },
+      "view_check_and_misc": {
+        "count": 137,
+        "median": 0.0,
+        "p95": 0.0,
+        "mean": 0.24,
+        "min": 0.0,
+        "max": 6.42
+      },
+      "grab": {
+        "count": 137,
+        "median": 12.13,
+        "p95": 14.89,
+        "mean": 11.65,
+        "min": 7.33,
+        "max": 15.51
+      },
+      "classify": {
+        "count": 137,
+        "median": 5.47,
+        "p95": 7.78,
+        "mean": 5.95,
+        "min": 5.14,
+        "max": 10.22
+      },
+      "detector_poll_and_preprocess": {
+        "count": 137,
+        "median": 1.46,
+        "p95": 2.12,
+        "mean": 1.58,
+        "min": 1.15,
+        "max": 4.23
+      },
+      "jpeg_encode": {
+        "count": 137,
+        "median": 4.33,
+        "p95": 7.42,
+        "mean": 4.92,
+        "min": 3.97,
+        "max": 7.91
+      },
+      "post_frame": {
+        "count": 137,
+        "median": 0.02,
+        "p95": 1.07,
+        "mean": 0.33,
+        "min": 0.01,
+        "max": 1.27
+      },
+      "sleep_actual": {
+        "count": 137,
+        "median": 21.91,
+        "p95": 36.46,
+        "mean": 22.59,
+        "min": 0.07,
+        "max": 50.67
+      },
+      "loop_total": {
+        "count": 137,
+        "median": 47.51,
+        "p95": 63.84,
+        "mean": 49.93,
+        "min": 23.55,
+        "max": 73.72
+      },
+      "sleep_requested": {
+        "count": 137,
+        "median": 17.55,
+        "p95": 27.96,
+        "mean": 16.45,
+        "min": 2.0,
+        "max": 43.19
+      },
+      "sleep_overshoot": {
+        "count": 137,
+        "median": 6.91,
+        "p95": 14.52,
+        "mean": 6.14,
+        "min": -16.25,
+        "max": 15.48
+      }
+    },
+    "preview": {
+      "available": true,
+      "file": "preview.mp4",
+      "frames": 137,
+      "fps": 20.0,
+      "width": 960,
+      "height": 472,
+      "playback_seconds": 6.85,
+      "real_seconds": 6.884,
+      "speed_ratio": 0.9951,
+      "aspect_error": 0.0011
+    },
+    "criteria": [
+      {
+        "criterion": "median frame interval (ms)",
+        "status": "PASS",
+        "value": 48.73,
+        "threshold": "<= 55"
+      },
+      {
+        "criterion": "p95 frame interval (ms)",
+        "status": "PASS",
+        "value": 64.08,
+        "threshold": "<= 100"
+      },
+      {
+        "criterion": "intervals within 130 ms",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 95%"
+      },
+      {
+        "criterion": "valid sample fraction",
+        "status": "PASS",
+        "value": 0.9927,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "keydown yield (eligible gameplay keydowns)",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "saved labels reproducible from raw events",
+        "status": "PASS",
+        "value": true,
+        "threshold": "exact match"
+      },
+      {
+        "criterion": "keyboard monitor alive, no error",
+        "status": "PASS",
+        "value": true,
+        "threshold": "true"
+      },
+      {
+        "criterion": "capture geometry (recorder captures canvas only)",
+        "status": "INFO",
+        "value": {
+          "region": {
+            "left": 0,
+            "top": 87,
+            "width": 1920,
+            "height": 945
+          },
+          "canvas_fills_monitor": false
+        },
+        "threshold": "compare with PPO capture before BC"
+      },
+      {
+        "criterion": "preview playback speed ratio",
+        "status": "PASS",
+        "value": 0.9951,
+        "threshold": "1 +/- 3%"
+      },
+      {
+        "criterion": "label alignment: lateral keys in lateral_review start moving at/after labeled frame",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "preview shows the full, unobstructed canvas at plausible speed",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "approved segments exclude mistakes and the death animation",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      }
+    ]
+  },
+  {
+    "run": "ai_data\\demonstrations_v13\\runs\\demo_20261027_211844_541805",
+    "recorder_version": "1.3.1-diagnostics",
+    "status": "candidate",
+    "duration_seconds": 2.204,
+    "frames": 43,
+    "frame_intervals": {
+      "frames": 43,
+      "max_lag_ms": 130.0,
+      "intervals_ms": {
+        "count": 42,
+        "median": 48.95,
+        "p95": 68.64,
+        "mean": 52.47,
+        "min": 27.8,
+        "max": 145.67
+      },
+      "intervals_over_max_lag": 1,
+      "fraction_intervals_within_max_lag": 0.9762,
+      "effective_fps_from_median": 20.43,
+      "intervals_over_1s": 0
+    },
+    "validity": {
+      "samples": 43,
+      "valid_samples": 41,
+      "valid_fraction": 0.9535,
+      "valid_by_action": {
+        "NONE": 39,
+        "LEFT": 0,
+        "RIGHT": 0,
+        "JUMP": 1,
+        "ROLL": 1
+      },
+      "valid_nonnone_samples": 2,
+      "invalid_labeled_nonnone": 0,
+      "valid_with_stack_gap": 3,
+      "segments_seconds": [
+        [
+          0.0,
+          1.504
+        ]
+      ],
+      "valid_in_segments_by_action": {
+        "NONE": 28,
+        "LEFT": 0,
+        "RIGHT": 0,
+        "JUMP": 0,
+        "ROLL": 0
+      }
+    },
+    "keyboard_delivery": {
+      "win32_keydowns": 3,
+      "browser_keydowns": 3,
+      "matched_pairs": 3,
+      "win32_without_browser": 0,
+      "browser_without_win32": 0,
+      "browser_before_win32": 1,
+      "browser_minus_win32_ms": {
+        "count": 3,
+        "median": 1.72,
+        "p95": 8.54,
+        "mean": 2.38,
+        "min": -3.87,
+        "max": 9.29
+      }
+    },
+    "keyboard_sources": {
+      "browser_dom": 6,
+      "win32_key_state": 6
+    },
+    "origin": {
+      "method": "manifest",
+      "value": 119896.955584
+    },
+    "keydowns": {
+      "max_lag_ms": 130.0,
+      "trusted_source": "win32_key_state",
+      "keydowns_total": 3,
+      "merged_by_dedup": 0,
+      "keydowns_eligible": 2,
+      "keydowns_assigned": 2,
+      "keydown_yield": 1.0,
+      "outcomes": {
+        "assigned": 2,
+        "after_last_frame": 1
+      },
+      "eligible_by_action": {
+        "JUMP": 1,
+        "ROLL": 1
+      },
+      "assigned_by_action": {
+        "JUMP": 1,
+        "ROLL": 1
+      },
+      "assigned_offset_after_frame_ms": {
+        "count": 2,
+        "median": 35.25,
+        "p95": 35.45,
+        "mean": 35.25,
+        "min": 35.02,
+        "max": 35.47
+      }
+    },
+    "labels_reproducible": true,
+    "lateral_review": {
+      "assigned": [],
+      "not_assigned": []
+    },
+    "capture": {
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "calibration_score": 0.9986808896064758,
+      "canvas_monitor_index": null,
+      "view_signature": {
+        "inner_width": 1920,
+        "inner_height": 945,
+        "device_pixel_ratio": 1,
+        "screen_x": 0,
+        "screen_y": 0,
+        "canvas_x": 0,
+        "canvas_y": 0,
+        "canvas_width": 1920,
+        "canvas_height": 945
+      },
+      "keyboard_poll_ms": {
+        "count": 3885,
+        "median": 15.54,
+        "p95": 16.62,
+        "mean": 15.57,
+        "min": 4.08,
+        "max": 68.13
+      },
+      "keyboard_requested_interval_ms": 4.0,
+      "keyboard_monitor_alive": true,
+      "keyboard_monitor_error": null,
+      "git": {
+        "commit": "63e2ddef51c402544211e4746e9c9edd6cf6eacc",
+        "tracked_changes": true
+      }
+    },
+    "capture_timing_ms": {
+      "focus_check": {
+        "count": 43,
+        "median": 2.52,
+        "p95": 3.87,
+        "mean": 2.74,
+        "min": 1.9,
+        "max": 6.47
+      },
+      "view_check_and_misc": {
+        "count": 43,
+        "median": 0.0,
+        "p95": 4.65,
+        "mean": 0.43,
+        "min": 0.0,
+        "max": 6.82
+      },
+      "grab": {
+        "count": 43,
+        "median": 11.64,
+        "p95": 15.09,
+        "mean": 11.59,
+        "min": 8.38,
+        "max": 15.27
+      },
+      "classify": {
+        "count": 43,
+        "median": 5.83,
+        "p95": 8.37,
+        "mean": 6.44,
+        "min": 5.3,
+        "max": 8.89
+      },
+      "detector_poll_and_preprocess": {
+        "count": 43,
+        "median": 1.79,
+        "p95": 2.09,
+        "mean": 1.69,
+        "min": 1.21,
+        "max": 2.24
+      },
+      "jpeg_encode": {
+        "count": 43,
+        "median": 6.58,
+        "p95": 7.29,
+        "mean": 5.83,
+        "min": 4.1,
+        "max": 7.83
+      },
+      "post_frame": {
+        "count": 43,
+        "median": 0.02,
+        "p95": 1.1,
+        "mean": 0.35,
+        "min": 0.01,
+        "max": 1.21
+      },
+      "sleep_actual": {
+        "count": 43,
+        "median": 18.62,
+        "p95": 35.98,
+        "mean": 20.75,
+        "min": 1.64,
+        "max": 39.23
+      },
+      "loop_total": {
+        "count": 43,
+        "median": 47.03,
+        "p95": 63.58,
+        "mean": 49.82,
+        "min": 26.84,
+        "max": 68.01
+      },
+      "sleep_requested": {
+        "count": 43,
+        "median": 12.62,
+        "p95": 23.61,
+        "mean": 13.77,
+        "min": 2.0,
+        "max": 31.43
+      },
+      "sleep_overshoot": {
+        "count": 43,
+        "median": 6.83,
+        "p95": 14.62,
+        "mean": 6.98,
+        "min": -10.34,
+        "max": 15.79
+      }
+    },
+    "preview": {
+      "available": true,
+      "file": "preview.mp4",
+      "frames": 43,
+      "fps": 20.0,
+      "width": 960,
+      "height": 472,
+      "playback_seconds": 2.15,
+      "real_seconds": 2.256,
+      "speed_ratio": 0.9529,
+      "aspect_error": 0.0011
+    },
+    "criteria": [
+      {
+        "criterion": "median frame interval (ms)",
+        "status": "PASS",
+        "value": 48.95,
+        "threshold": "<= 55"
+      },
+      {
+        "criterion": "p95 frame interval (ms)",
+        "status": "PASS",
+        "value": 68.64,
+        "threshold": "<= 100"
+      },
+      {
+        "criterion": "intervals within 130 ms",
+        "status": "PASS",
+        "value": 0.9762,
+        "threshold": ">= 95%"
+      },
+      {
+        "criterion": "valid sample fraction",
+        "status": "PASS",
+        "value": 0.9535,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "keydown yield (eligible gameplay keydowns)",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "saved labels reproducible from raw events",
+        "status": "PASS",
+        "value": true,
+        "threshold": "exact match"
+      },
+      {
+        "criterion": "keyboard monitor alive, no error",
+        "status": "PASS",
+        "value": true,
+        "threshold": "true"
+      },
+      {
+        "criterion": "capture geometry (recorder captures canvas only)",
+        "status": "INFO",
+        "value": {
+          "region": {
+            "left": 0,
+            "top": 87,
+            "width": 1920,
+            "height": 945
+          },
+          "canvas_fills_monitor": false
+        },
+        "threshold": "compare with PPO capture before BC"
+      },
+      {
+        "criterion": "preview playback speed ratio",
+        "status": "FAIL",
+        "value": 0.9529,
+        "threshold": "1 +/- 3%"
+      },
+      {
+        "criterion": "label alignment: lateral keys in lateral_review start moving at/after labeled frame",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "preview shows the full, unobstructed canvas at plausible speed",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "approved segments exclude mistakes and the death animation",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      }
+    ]
+  },
+  {
+    "run": "ai_data\\demonstrations_v13\\runs\\demo_20261027_211845_625831",
+    "recorder_version": "1.3.1-diagnostics",
+    "status": "candidate",
+    "duration_seconds": 6.888,
+    "frames": 138,
+    "frame_intervals": {
+      "frames": 138,
+      "max_lag_ms": 130.0,
+      "intervals_ms": {
+        "count": 137,
+        "median": 48.65,
+        "p95": 64.6,
+        "mean": 50.28,
+        "min": 26.57,
+        "max": 105.29
+      },
+      "intervals_over_max_lag": 0,
+      "fraction_intervals_within_max_lag": 1.0,
+      "effective_fps_from_median": 20.56,
+      "intervals_over_1s": 0
+    },
+    "validity": {
+      "samples": 138,
+      "valid_samples": 137,
+      "valid_fraction": 0.9928,
+      "valid_by_action": {
+        "NONE": 127,
+        "LEFT": 2,
+        "RIGHT": 2,
+        "JUMP": 4,
+        "ROLL": 2
+      },
+      "valid_nonnone_samples": 10,
+      "invalid_labeled_nonnone": 0,
+      "valid_with_stack_gap": 0,
+      "segments_seconds": [
+        [
+          0.0,
+          6.188
+        ]
+      ],
+      "valid_in_segments_by_action": {
+        "NONE": 115,
+        "LEFT": 2,
+        "RIGHT": 2,
+        "JUMP": 3,
+        "ROLL": 1
+      }
+    },
+    "keyboard_delivery": {
+      "win32_keydowns": 10,
+      "browser_keydowns": 10,
+      "matched_pairs": 10,
+      "win32_without_browser": 0,
+      "browser_without_win32": 0,
+      "browser_before_win32": 5,
+      "browser_minus_win32_ms": {
+        "count": 10,
+        "median": -0.5,
+        "p95": 15.79,
+        "mean": 0.97,
+        "min": -10.55,
+        "max": 20.19
+      }
+    },
+    "keyboard_sources": {
+      "win32_key_state": 20,
+      "browser_dom": 20
+    },
+    "origin": {
+      "method": "manifest",
+      "value": 119902.4060677
+    },
+    "keydowns": {
+      "max_lag_ms": 130.0,
+      "trusted_source": "win32_key_state",
+      "keydowns_total": 10,
+      "merged_by_dedup": 0,
+      "keydowns_eligible": 10,
+      "keydowns_assigned": 10,
+      "keydown_yield": 1.0,
+      "outcomes": {
+        "assigned": 10
+      },
+      "eligible_by_action": {
+        "JUMP": 4,
+        "LEFT": 2,
+        "RIGHT": 2,
+        "ROLL": 2
+      },
+      "assigned_by_action": {
+        "JUMP": 4,
+        "LEFT": 2,
+        "RIGHT": 2,
+        "ROLL": 2
+      },
+      "assigned_offset_after_frame_ms": {
+        "count": 10,
+        "median": 11.69,
+        "p95": 30.46,
+        "mean": 12.42,
+        "min": 0.04,
+        "max": 30.49
+      }
+    },
+    "labels_reproducible": true,
+    "lateral_review": {
+      "assigned": [
+        {
+          "seconds": 2.6866,
+          "frame": 52,
+          "action": "LEFT",
+          "offset_after_frame_ms": 30.42
+        },
+        {
+          "seconds": 3.9045,
+          "frame": 77,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 5.59
+        },
+        {
+          "seconds": 4.169,
+          "frame": 82,
+          "action": "RIGHT",
+          "offset_after_frame_ms": 19.52
+        },
+        {
+          "seconds": 4.8878,
+          "frame": 97,
+          "action": "LEFT",
+          "offset_after_frame_ms": 1.49
+        }
+      ],
+      "not_assigned": []
+    },
+    "capture": {
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "calibration_score": 0.9986808896064758,
+      "canvas_monitor_index": null,
+      "view_signature": {
+        "inner_width": 1920,
+        "inner_height": 945,
+        "device_pixel_ratio": 1,
+        "screen_x": 0,
+        "screen_y": 0,
+        "canvas_x": 0,
+        "canvas_y": 0,
+        "canvas_width": 1920,
+        "canvas_height": 945
+      },
+      "keyboard_poll_ms": {
+        "count": 4000,
+        "median": 15.54,
+        "p95": 16.72,
+        "mean": 15.69,
+        "min": 4.15,
+        "max": 68.13
+      },
+      "keyboard_requested_interval_ms": 4.0,
+      "keyboard_monitor_alive": true,
+      "keyboard_monitor_error": null,
+      "git": {
+        "commit": "63e2ddef51c402544211e4746e9c9edd6cf6eacc",
+        "tracked_changes": true
+      }
+    },
+    "capture_timing_ms": {
+      "focus_check": {
+        "count": 138,
+        "median": 2.3,
+        "p95": 3.83,
+        "mean": 2.59,
+        "min": 1.5,
+        "max": 9.84
+      },
+      "view_check_and_misc": {
+        "count": 138,
+        "median": 0.0,
+        "p95": 0.0,
+        "mean": 0.39,
+        "min": 0.0,
+        "max": 22.69
+      },
+      "grab": {
+        "count": 138,
+        "median": 11.61,
+        "p95": 14.13,
+        "mean": 11.19,
+        "min": 7.3,
+        "max": 15.81
+      },
+      "classify": {
+        "count": 138,
+        "median": 5.51,
+        "p95": 8.66,
+        "mean": 6.4,
+        "min": 4.94,
+        "max": 34.36
+      },
+      "detector_poll_and_preprocess": {
+        "count": 138,
+        "median": 1.39,
+        "p95": 2.09,
+        "mean": 1.51,
+        "min": 0.91,
+        "max": 12.38
+      },
+      "jpeg_encode": {
+        "count": 138,
+        "median": 4.32,
+        "p95": 7.23,
+        "mean": 5.18,
+        "min": 3.57,
+        "max": 11.43
+      },
+      "post_frame": {
+        "count": 138,
+        "median": 0.02,
+        "p95": 0.99,
+        "mean": 0.26,
+        "min": 0.01,
+        "max": 1.12
+      },
+      "sleep_actual": {
+        "count": 138,
+        "median": 21.59,
+        "p95": 39.33,
+        "mean": 22.5,
+        "min": 0.08,
+        "max": 58.72
+      },
+      "loop_total": {
+        "count": 138,
+        "median": 47.11,
+        "p95": 64.76,
+        "mean": 50.03,
+        "min": 27.36,
+        "max": 86.49
+      },
+      "sleep_requested": {
+        "count": 138,
+        "median": 16.28,
+        "p95": 28.63,
+        "mean": 15.54,
+        "min": 2.0,
+        "max": 44.22
+      },
+      "sleep_overshoot": {
+        "count": 138,
+        "median": 6.99,
+        "p95": 14.83,
+        "mean": 6.96,
+        "min": -21.99,
+        "max": 44.25
+      }
+    },
+    "preview": {
+      "available": true,
+      "file": "preview.mp4",
+      "frames": 138,
+      "fps": 20.0,
+      "width": 960,
+      "height": 472,
+      "playback_seconds": 6.9,
+      "real_seconds": 6.938,
+      "speed_ratio": 0.9945,
+      "aspect_error": 0.0011
+    },
+    "criteria": [
+      {
+        "criterion": "median frame interval (ms)",
+        "status": "PASS",
+        "value": 48.65,
+        "threshold": "<= 55"
+      },
+      {
+        "criterion": "p95 frame interval (ms)",
+        "status": "PASS",
+        "value": 64.6,
+        "threshold": "<= 100"
+      },
+      {
+        "criterion": "intervals within 130 ms",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 95%"
+      },
+      {
+        "criterion": "valid sample fraction",
+        "status": "PASS",
+        "value": 0.9928,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "keydown yield (eligible gameplay keydowns)",
+        "status": "PASS",
+        "value": 1.0,
+        "threshold": ">= 90%"
+      },
+      {
+        "criterion": "saved labels reproducible from raw events",
+        "status": "PASS",
+        "value": true,
+        "threshold": "exact match"
+      },
+      {
+        "criterion": "keyboard monitor alive, no error",
+        "status": "PASS",
+        "value": true,
+        "threshold": "true"
+      },
+      {
+        "criterion": "capture geometry (recorder captures canvas only)",
+        "status": "INFO",
+        "value": {
+          "region": {
+            "left": 0,
+            "top": 87,
+            "width": 1920,
+            "height": 945
+          },
+          "canvas_fills_monitor": false
+        },
+        "threshold": "compare with PPO capture before BC"
+      },
+      {
+        "criterion": "preview playback speed ratio",
+        "status": "PASS",
+        "value": 0.9945,
+        "threshold": "1 +/- 3%"
+      },
+      {
+        "criterion": "label alignment: lateral keys in lateral_review start moving at/after labeled frame",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "preview shows the full, unobstructed canvas at plausible speed",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      },
+      {
+        "criterion": "approved segments exclude mistakes and the death animation",
+        "status": "MANUAL",
+        "value": null,
+        "threshold": "human review"
+      }
+    ]
+  }
+]

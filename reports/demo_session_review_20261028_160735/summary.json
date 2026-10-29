@@ -1,0 +1,19 @@
+{
+  "runs": 291,
+  "recorded_minutes": 72.07236312666889,
+  "short_under_10s": 133,
+  "medium_10_to_20s": 75,
+  "long_20s_plus": 83,
+  "label_mismatches": 0,
+  "runs_with_gaps": 208,
+  "suggested_useful_prefixes": 241,
+  "suggested_actions": {
+    "NONE": 51589,
+    "LEFT": 570,
+    "RIGHT": 549,
+    "JUMP": 792,
+    "ROLL": 276
+  },
+  "suggested_prefix_minutes": 44.80497471666798,
+  "all_manifests_unchanged": true
+}

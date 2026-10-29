@@ -1,0 +1,10 @@
+{
+  "run_name": [
+    "v612_ab_pilot_train_20261028",
+    "v612_ab_macro_bc_train_retry1_20261028"
+  ],
+  "resume": [
+    "ai_data\\demonstrations_v13\\bc_runs\\bc_20261028_152607\\model.zip",
+    "ai_data\\demonstrations_v13\\bc_runs\\bc_control_macro_lr3e4_20261028\\latest.zip"
+  ]
+}

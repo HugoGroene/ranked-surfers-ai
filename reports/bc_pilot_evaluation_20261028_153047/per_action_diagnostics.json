@@ -1,0 +1,270 @@
+{
+  "training": {
+    "examples": 183,
+    "support": {
+      "NONE": 64,
+      "LEFT": 35,
+      "RIGHT": 33,
+      "JUMP": 37,
+      "ROLL": 14
+    },
+    "source": {
+      "cross_entropy": 3.48927662020824,
+      "accuracy": 0.25136612021857924,
+      "recall": {
+        "NONE": 0.40625,
+        "LEFT": 0.0,
+        "RIGHT": 0.0,
+        "JUMP": 0.5405405405405406,
+        "ROLL": 0.0
+      },
+      "mean_probability_of_correct_action": {
+        "NONE": 0.39854293409734964,
+        "LEFT": 0.0007756375695212877,
+        "RIGHT": 0.013057747608840917,
+        "JUMP": 0.43669346740116943,
+        "ROLL": 0.014581208965475006
+      },
+      "predicted_action_counts": {
+        "NONE": 80,
+        "LEFT": 0,
+        "RIGHT": 0,
+        "JUMP": 103,
+        "ROLL": 0
+      },
+      "confusion_matrix_rows_true_columns_predicted": [
+        [
+          26,
+          0,
+          0,
+          38,
+          0
+        ],
+        [
+          13,
+          0,
+          0,
+          22,
+          0
+        ],
+        [
+          19,
+          0,
+          0,
+          14,
+          0
+        ],
+        [
+          17,
+          0,
+          0,
+          20,
+          0
+        ],
+        [
+          5,
+          0,
+          0,
+          9,
+          0
+        ]
+      ]
+    },
+    "bc": {
+      "cross_entropy": 3.4311678370491405,
+      "accuracy": 0.2459016393442623,
+      "recall": {
+        "NONE": 0.40625,
+        "LEFT": 0.0,
+        "RIGHT": 0.0,
+        "JUMP": 0.5135135135135135,
+        "ROLL": 0.0
+      },
+      "mean_probability_of_correct_action": {
+        "NONE": 0.4042204413563013,
+        "LEFT": 0.00087016497730344,
+        "RIGHT": 0.014626695308834314,
+        "JUMP": 0.4306209828402545,
+        "ROLL": 0.01581492995111538
+      },
+      "predicted_action_counts": {
+        "NONE": 84,
+        "LEFT": 0,
+        "RIGHT": 0,
+        "JUMP": 99,
+        "ROLL": 0
+      },
+      "confusion_matrix_rows_true_columns_predicted": [
+        [
+          26,
+          0,
+          0,
+          38,
+          0
+        ],
+        [
+          14,
+          0,
+          0,
+          21,
+          0
+        ],
+        [
+          21,
+          0,
+          0,
+          12,
+          0
+        ],
+        [
+          18,
+          0,
+          0,
+          19,
+          0
+        ],
+        [
+          5,
+          0,
+          0,
+          9,
+          0
+        ]
+      ]
+    }
+  },
+  "holdout": {
+    "examples": 946,
+    "support": {
+      "NONE": 922,
+      "LEFT": 6,
+      "RIGHT": 5,
+      "JUMP": 9,
+      "ROLL": 4
+    },
+    "source": {
+      "cross_entropy": 1.1190511575460937,
+      "accuracy": 0.4883720930232558,
+      "recall": {
+        "NONE": 0.49783080260303686,
+        "LEFT": 0.0,
+        "RIGHT": 0.0,
+        "JUMP": 0.3333333333333333,
+        "ROLL": 0.0
+      },
+      "mean_probability_of_correct_action": {
+        "NONE": 0.47848398062257086,
+        "LEFT": 0.0012584597473808874,
+        "RIGHT": 0.004452818760182708,
+        "JUMP": 0.3498898156815105,
+        "ROLL": 0.009223238375852816
+      },
+      "predicted_action_counts": {
+        "NONE": 472,
+        "LEFT": 0,
+        "RIGHT": 0,
+        "JUMP": 474,
+        "ROLL": 0
+      },
+      "confusion_matrix_rows_true_columns_predicted": [
+        [
+          459,
+          0,
+          0,
+          463,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          6,
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          3,
+          0
+        ]
+      ]
+    },
+    "bc": {
+      "cross_entropy": 1.0985023478876965,
+      "accuracy": 0.5,
+      "recall": {
+        "NONE": 0.5108459869848156,
+        "LEFT": 0.0,
+        "RIGHT": 0.0,
+        "JUMP": 0.2222222222222222,
+        "ROLL": 0.0
+      },
+      "mean_probability_of_correct_action": {
+        "NONE": 0.48481761413644553,
+        "LEFT": 0.0013849782602240641,
+        "RIGHT": 0.004972794174682349,
+        "JUMP": 0.3418353622158368,
+        "ROLL": 0.00992262783984188
+      },
+      "predicted_action_counts": {
+        "NONE": 485,
+        "LEFT": 0,
+        "RIGHT": 0,
+        "JUMP": 461,
+        "ROLL": 0
+      },
+      "confusion_matrix_rows_true_columns_predicted": [
+        [
+          471,
+          0,
+          0,
+          451,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          7,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          3,
+          0
+        ]
+      ]
+    }
+  }
+}

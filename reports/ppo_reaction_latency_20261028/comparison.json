@@ -1,0 +1,486 @@
+{
+  "runs": [
+    {
+      "run": "v612_latency_pilot_30_20261028",
+      "detect_every": 3,
+      "episodes": 30,
+      "decisions": 2804,
+      "commands": 2037,
+      "mean_survival": 5.32,
+      "intervals": {
+        "count": 2754,
+        "median_ms": 51.85,
+        "p95_ms": 65.38,
+        "p99_ms": 69.91,
+        "mean_ms": 53.04
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 2782,
+        "preflight_rechecks_on_transient": 22,
+        "preflight_confirmed_menu": 22,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 20,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "detector_report": {
+        "requests": 944,
+        "completed": 944,
+        "discarded_previous_episode": 0,
+        "busy_skips": 0,
+        "fresh_fraction": 0.979,
+        "inference_ms": {
+          "count": 944,
+          "median": 21.4,
+          "p95": 27.1
+        },
+        "age_at_decision_ms": {
+          "count": 1000,
+          "median": 112.6,
+          "p95": 189.1
+        },
+        "detected_objects": {
+          "train_roof": 2264,
+          "coin": 6363,
+          "train_front": 1735,
+          "barrier_either": 100,
+          "train_side": 1174,
+          "ramp": 673,
+          "barrier_roll": 198,
+          "barrier_jump": 126,
+          "tunnel_entrance": 20
+        },
+        "v5_segmentation": {
+          "shadow_only": false,
+          "classes": [
+            "coin",
+            "train_front",
+            "train_side",
+            "train_roof",
+            "ramp",
+            "barrier_jump",
+            "barrier_roll",
+            "barrier_either",
+            "tunnel_entrance"
+          ],
+          "model_predict_wall_ms": {
+            "count": 944,
+            "median_ms": 13.56,
+            "p95_ms": 16.6,
+            "p99_ms": 17.52,
+            "mean_ms": 13.75
+          },
+          "input_rgb_to_bgr_ms": {
+            "count": 944,
+            "median_ms": 0.82,
+            "p95_ms": 1.26,
+            "p99_ms": 1.44,
+            "mean_ms": 0.87
+          },
+          "mask_and_box_extract_ms": {
+            "count": 944,
+            "median_ms": 6.81,
+            "p95_ms": 11.74,
+            "p99_ms": 14.26,
+            "mean_ms": 6.87
+          },
+          "polygons_per_completed_inference": {
+            "count": 944,
+            "mean": 13.4
+          },
+          "detections_by_vertical_image_region": {
+            "upper_frame": {
+              "coin": 4573,
+              "train_roof": 1012,
+              "train_front": 1418,
+              "ramp": 595,
+              "train_side": 193,
+              "barrier_roll": 180,
+              "barrier_jump": 107,
+              "barrier_either": 71,
+              "tunnel_entrance": 20
+            },
+            "middle_frame": {
+              "coin": 1456,
+              "train_front": 230,
+              "barrier_either": 26,
+              "train_side": 89,
+              "train_roof": 414,
+              "ramp": 44,
+              "barrier_roll": 12,
+              "barrier_jump": 18
+            },
+            "lower_frame": {
+              "train_roof": 838,
+              "coin": 334,
+              "train_front": 87,
+              "train_side": 892,
+              "ramp": 34,
+              "barrier_roll": 6,
+              "barrier_either": 3,
+              "barrier_jump": 1
+            }
+          },
+          "region_warning": "Image regions are NOT real-world distance or collision risk.",
+          "fed_into_ppo": true,
+          "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+          "screen_column_nonzero_observations": 2774,
+          "assumed_lane_unverified": false,
+          "hazard_obs_total": 2834,
+          "hazard_obs_stale_or_missing": 60,
+          "hazard_obs_nonzero": 2774
+        },
+        "v612_live_input_guard": {
+          "preflight_gameplay_allowed": 2782,
+          "preflight_rechecks_on_transient": 22,
+          "preflight_confirmed_menu": 22,
+          "uncertain_state_abort": 0,
+          "ml_menu_without_template": 20,
+          "visual_gameplay_recoveries": 0,
+          "guard_hard_stopped": false,
+          "preflight_checks_every_decision": true,
+          "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+        }
+      },
+      "latency": {
+        "policy_inference_ms": {
+          "count": 2037,
+          "median_ms": 3.8812000129837543,
+          "p95_ms": 6.059880013344809,
+          "p99_ms": 6.363772011827676,
+          "max_ms": 7.940899988170713
+        },
+        "policy_rgb_age_at_predict_ms": {
+          "count": 2037,
+          "median_ms": 3.9092999941203743,
+          "p95_ms": 9.249739989172662,
+          "p99_ms": 10.519863993395118,
+          "max_ms": 73.54230000055395
+        },
+        "policy_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 28.232400014530867,
+          "p95_ms": 35.16096000093967,
+          "p99_ms": 36.931675993837395,
+          "max_ms": 107.87420000997372
+        },
+        "prediction_end_to_command_ms": {
+          "count": 2037,
+          "median_ms": 20.611199986888096,
+          "p95_ms": 22.99176000524312,
+          "p99_ms": 24.87416799180209,
+          "max_ms": 27.530299994396046
+        },
+        "guard_to_inner_ms": {
+          "count": 2037,
+          "median_ms": 20.59409997309558,
+          "p95_ms": 22.97333998722024,
+          "p99_ms": 24.84875599970109,
+          "max_ms": 27.51500002341345
+        },
+        "keypress_roundtrip_ms": {
+          "count": 2037,
+          "median_ms": 17.54229998914525,
+          "p95_ms": 21.862499992130324,
+          "p99_ms": 22.263612006790936,
+          "max_ms": 24.721299996599555
+        },
+        "policy_rgb_age_at_press_return_ms": {
+          "count": 2037,
+          "median_ms": 47.99500000081025,
+          "p95_ms": 51.09947997843846,
+          "p99_ms": 53.322620018152506,
+          "max_ms": 128.01210000179708
+        },
+        "guard_rgb_age_at_command_ms": {
+          "count": 2037,
+          "median_ms": 6.98579999152571,
+          "p95_ms": 10.909720009658486,
+          "p99_ms": 12.435559995938087,
+          "max_ms": 15.484100003959611
+        },
+        "detector_source_age_at_predict_ms": {
+          "count": 2007,
+          "median_ms": 114.0531999990344,
+          "p95_ms": 190.83147999772336,
+          "p99_ms": 195.2108040114399,
+          "max_ms": 270.9904999937862
+        }
+      },
+      "capture_link_integrity_verified": true,
+      "hash_unchanged": true,
+      "detector_source_age_at_dispatch": {
+        "median_ms": 138.31179999397136,
+        "p95_ms": 217.69830000121146,
+        "p99_ms": 221.58930200443137,
+        "max_ms": 291.3821999973152
+      },
+      "policy_age_at_dispatch_after_first_32_steps": {
+        "median_ms": 28.231600008439273,
+        "p95_ms": 35.11544002103619,
+        "p99_ms": 36.759087999816984,
+        "max_ms": 44.02089997893199
+      },
+      "source_grab_duration": {
+        "median_ms": 12.896100000943989,
+        "p95_ms": 14.758099999744445,
+        "p99_ms": 15.270128006814046,
+        "max_ms": 16.02629999979399
+      },
+      "guard_capture_processed_duration": {
+        "median_ms": 14.483600010862574,
+        "p95_ms": 16.152739984681823,
+        "p99_ms": 17.878039986826465,
+        "max_ms": 20.691600017016754
+      }
+    },
+    {
+      "run": "v612_latency_pilot_detect1_30_20261028",
+      "detect_every": 1,
+      "episodes": 30,
+      "decisions": 2111,
+      "commands": 1538,
+      "mean_survival": 4.32,
+      "intervals": {
+        "count": 2065,
+        "median_ms": 61.14,
+        "p95_ms": 67.33,
+        "p99_ms": 69.54,
+        "mean_ms": 55.9
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 2088,
+        "preflight_rechecks_on_transient": 23,
+        "preflight_confirmed_menu": 23,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 19,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "detector_report": {
+        "requests": 2112,
+        "completed": 2112,
+        "discarded_previous_episode": 1,
+        "busy_skips": 0,
+        "fresh_fraction": 0.972,
+        "inference_ms": {
+          "count": 1000,
+          "median": 21.2,
+          "p95": 26.8
+        },
+        "age_at_decision_ms": {
+          "count": 1000,
+          "median": 64.0,
+          "p95": 65.2
+        },
+        "detected_objects": {
+          "train_roof": 5406,
+          "coin": 14450,
+          "train_front": 4639,
+          "barrier_either": 149,
+          "train_side": 3082,
+          "tunnel_entrance": 115,
+          "barrier_roll": 491,
+          "barrier_jump": 391,
+          "ramp": 797
+        },
+        "v5_segmentation": {
+          "shadow_only": false,
+          "classes": [
+            "coin",
+            "train_front",
+            "train_side",
+            "train_roof",
+            "ramp",
+            "barrier_jump",
+            "barrier_roll",
+            "barrier_either",
+            "tunnel_entrance"
+          ],
+          "model_predict_wall_ms": {
+            "count": 2111,
+            "median_ms": 13.4,
+            "p95_ms": 16.43,
+            "p99_ms": 17.36,
+            "mean_ms": 13.55
+          },
+          "input_rgb_to_bgr_ms": {
+            "count": 2111,
+            "median_ms": 0.82,
+            "p95_ms": 1.21,
+            "p99_ms": 1.45,
+            "mean_ms": 0.87
+          },
+          "mask_and_box_extract_ms": {
+            "count": 2111,
+            "median_ms": 6.94,
+            "p95_ms": 11.49,
+            "p99_ms": 13.65,
+            "mean_ms": 6.97
+          },
+          "polygons_per_completed_inference": {
+            "count": 2111,
+            "mean": 13.98
+          },
+          "detections_by_vertical_image_region": {
+            "upper_frame": {
+              "coin": 9995,
+              "train_roof": 2536,
+              "train_side": 728,
+              "train_front": 3817,
+              "tunnel_entrance": 115,
+              "barrier_roll": 466,
+              "barrier_jump": 364,
+              "barrier_either": 104,
+              "ramp": 767
+            },
+            "middle_frame": {
+              "coin": 3654,
+              "train_front": 558,
+              "barrier_either": 44,
+              "train_side": 221,
+              "train_roof": 991,
+              "barrier_jump": 27,
+              "barrier_roll": 21,
+              "ramp": 13
+            },
+            "lower_frame": {
+              "train_roof": 1879,
+              "coin": 801,
+              "train_front": 264,
+              "train_side": 2133,
+              "barrier_either": 1,
+              "barrier_roll": 4,
+              "ramp": 17
+            }
+          },
+          "region_warning": "Image regions are NOT real-world distance or collision risk.",
+          "fed_into_ppo": true,
+          "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+          "screen_column_nonzero_observations": 2077,
+          "assumed_lane_unverified": false,
+          "hazard_obs_total": 2141,
+          "hazard_obs_stale_or_missing": 59,
+          "hazard_obs_nonzero": 2077
+        },
+        "v612_live_input_guard": {
+          "preflight_gameplay_allowed": 2088,
+          "preflight_rechecks_on_transient": 23,
+          "preflight_confirmed_menu": 23,
+          "uncertain_state_abort": 0,
+          "ml_menu_without_template": 19,
+          "visual_gameplay_recoveries": 0,
+          "guard_hard_stopped": false,
+          "preflight_checks_every_decision": true,
+          "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+        }
+      },
+      "latency": {
+        "policy_inference_ms": {
+          "count": 1538,
+          "median_ms": 5.408800003351644,
+          "p95_ms": 6.245804973877966,
+          "p99_ms": 6.566124008095357,
+          "max_ms": 8.873000013409182
+        },
+        "policy_rgb_age_at_predict_ms": {
+          "count": 1538,
+          "median_ms": 4.4929500145372,
+          "p95_ms": 10.134825020213608,
+          "p99_ms": 11.05495702038752,
+          "max_ms": 71.72110001556575
+        },
+        "policy_rgb_age_at_command_ms": {
+          "count": 1538,
+          "median_ms": 31.497300005867146,
+          "p95_ms": 36.34728499891934,
+          "p99_ms": 41.01124898443229,
+          "max_ms": 101.3319999910891
+        },
+        "prediction_end_to_command_ms": {
+          "count": 1538,
+          "median_ms": 21.040999999968335,
+          "p95_ms": 23.88645998726133,
+          "p99_ms": 25.800992006261364,
+          "max_ms": 28.979800001252443
+        },
+        "guard_to_inner_ms": {
+          "count": 1538,
+          "median_ms": 21.024149988079444,
+          "p95_ms": 23.869560008461118,
+          "p99_ms": 25.780303015781097,
+          "max_ms": 28.854600008344278
+        },
+        "keypress_roundtrip_ms": {
+          "count": 1538,
+          "median_ms": 17.88959999976214,
+          "p95_ms": 21.464699995703995,
+          "p99_ms": 22.10908900538925,
+          "max_ms": 61.897899984614924
+        },
+        "policy_rgb_age_at_press_return_ms": {
+          "count": 1538,
+          "median_ms": 49.707050013239495,
+          "p95_ms": 53.161249998083804,
+          "p99_ms": 56.4592569952947,
+          "max_ms": 113.3587000076659
+        },
+        "guard_rgb_age_at_command_ms": {
+          "count": 1538,
+          "median_ms": 8.648650007671677,
+          "p95_ms": 11.870979995001107,
+          "p99_ms": 13.455609018565152,
+          "max_ms": 16.882500000065193
+        },
+        "detector_source_age_at_predict_ms": {
+          "count": 1508,
+          "median_ms": 65.77945000026375,
+          "p95_ms": 71.61647999018896,
+          "p99_ms": 73.97896899696207,
+          "max_ms": 128.66509999730624
+        }
+      },
+      "capture_link_integrity_verified": true,
+      "hash_unchanged": true,
+      "detector_source_age_at_dispatch": {
+        "median_ms": 92.34384998853784,
+        "p95_ms": 97.90005498653045,
+        "p99_ms": 103.34864900272807,
+        "max_ms": 155.53129999898374
+      },
+      "policy_age_at_dispatch_after_first_32_steps": {
+        "median_ms": 31.49870000197552,
+        "p95_ms": 36.339979991316795,
+        "p99_ms": 40.50046999414921,
+        "max_ms": 57.00790000264533
+      },
+      "source_grab_duration": {
+        "median_ms": 12.313250001170672,
+        "p95_ms": 14.62230500183068,
+        "p99_ms": 15.289612007327378,
+        "max_ms": 15.984400000888854
+      },
+      "guard_capture_processed_duration": {
+        "median_ms": 14.052450002054684,
+        "p95_ms": 17.005710009834726,
+        "p99_ms": 18.444915005238716,
+        "max_ms": 22.55160000640899
+      }
+    }
+  ],
+  "config_differences": {
+    "run_name": [
+      "v612_latency_pilot_30_20261028",
+      "v612_latency_pilot_detect1_30_20261028"
+    ],
+    "detect_every": [
+      3,
+      1
+    ]
+  },
+  "checkpoint_sha256": "ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc"
+}

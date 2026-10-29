@@ -1,0 +1,211 @@
+{
+  "models": {
+    "pilot_before": {
+      "run": "v612_eval_bc_pilot_100_20261028_153047",
+      "episodes": 100,
+      "mean": 4.8276,
+      "median": 4.275,
+      "best": 11.55,
+      "ge5": 47,
+      "ge10": 4,
+      "action_counts": {
+        "4": 1502,
+        "3": 4426,
+        "0": 2263
+      },
+      "probabilities": {
+        "NONE": 0.2627,
+        "LEFT": 0.0006,
+        "RIGHT": 0.0054,
+        "JUMP": 0.5281,
+        "ROLL": 0.2032
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 8110,
+        "preflight_rechecks_on_transient": 81,
+        "preflight_confirmed_menu": 81,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 77,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 8030,
+        "median_ms": 53.36,
+        "p95_ms": 65.48,
+        "p99_ms": 69.84,
+        "mean_ms": 53.39
+      }
+    },
+    "macro_before": {
+      "run": "v612_eval_bc_macro3e4_100_20261028",
+      "episodes": 100,
+      "mean": 3.6653000000000002,
+      "median": 3.4850000000000003,
+      "best": 9.31,
+      "ge5": 10,
+      "ge10": 0,
+      "action_counts": {
+        "4": 1504,
+        "3": 2873,
+        "0": 1682,
+        "1": 91,
+        "2": 9
+      },
+      "probabilities": {
+        "NONE": 0.1569,
+        "LEFT": 0.0656,
+        "RIGHT": 0.0661,
+        "JUMP": 0.4582,
+        "ROLL": 0.2532
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 6084,
+        "preflight_rechecks_on_transient": 75,
+        "preflight_confirmed_menu": 75,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 70,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 6012,
+        "median_ms": 51.77,
+        "p95_ms": 65.35,
+        "p99_ms": 69.66,
+        "mean_ms": 52.88
+      }
+    },
+    "pilot_after": {
+      "run": "v612_ab_pilot_eval_20261028",
+      "episodes": 100,
+      "mean": 4.6238,
+      "median": 4.525,
+      "best": 7.53,
+      "ge5": 46,
+      "ge10": 0,
+      "action_counts": {
+        "4": 1503,
+        "3": 4586,
+        "0": 1616
+      },
+      "probabilities": {
+        "NONE": 0.215,
+        "LEFT": 0.0019,
+        "RIGHT": 0.0033,
+        "JUMP": 0.589,
+        "ROLL": 0.1908
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 7631,
+        "preflight_rechecks_on_transient": 74,
+        "preflight_confirmed_menu": 74,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 84,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 7545,
+        "median_ms": 53.91,
+        "p95_ms": 65.4,
+        "p99_ms": 69.73,
+        "mean_ms": 53.89
+      }
+    },
+    "macro_after": {
+      "run": "v612_ab_macro_bc_eval_20261028",
+      "episodes": 100,
+      "mean": 4.505800000000001,
+      "median": 4.18,
+      "best": 11.5,
+      "ge5": 38,
+      "ge10": 3,
+      "action_counts": {
+        "4": 1276,
+        "3": 4605,
+        "0": 1395,
+        "1": 1
+      },
+      "probabilities": {
+        "NONE": 0.1756,
+        "LEFT": 0.032,
+        "RIGHT": 0.0474,
+        "JUMP": 0.5279,
+        "ROLL": 0.2171
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 7205,
+        "preflight_rechecks_on_transient": 72,
+        "preflight_confirmed_menu": 72,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 92,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 7123,
+        "median_ms": 55.36,
+        "p95_ms": 65.43,
+        "p99_ms": 69.81,
+        "mean_ms": 54.45
+      }
+    }
+  },
+  "comparisons": {
+    "pilot_after_minus_pilot_before": {
+      "difference": -0.2038000000000002,
+      "bootstrap_95": [
+        -0.7351000000000001,
+        0.3082024999999991
+      ]
+    },
+    "macro_after_minus_macro_before": {
+      "difference": 0.8405000000000005,
+      "bootstrap_95": [
+        0.40449750000000007,
+        1.2840050000000003
+      ]
+    },
+    "macro_after_minus_pilot_after": {
+      "difference": -0.11799999999999944,
+      "bootstrap_95": [
+        -0.6135025000000011,
+        0.39259999999999984
+      ]
+    },
+    "macro_after_minus_pilot_before": {
+      "difference": -0.32179999999999964,
+      "bootstrap_95": [
+        -0.8650125000000011,
+        0.23020249999999973
+      ]
+    }
+  },
+  "evaluation_config_differences": {
+    "resume": [
+      "ai_data\\rl_v2_runs\\v612_ab_pilot_train_20261028\\latest.zip",
+      "ai_data\\rl_v2_runs\\v612_ab_macro_bc_train_retry1_20261028\\latest.zip"
+    ],
+    "run_name": [
+      "v612_ab_pilot_eval_20261028",
+      "v612_ab_macro_bc_eval_20261028"
+    ]
+  },
+  "bootstrap": "20000 independent episode resamples, seed123; does not include training-seed/map-session variation",
+  "equal_final_timesteps": 1666523,
+  "equal_final_n_updates": 65085,
+  "source_n_updates": {
+    "pilot": 64925,
+    "macro_bc": 64925
+  },
+  "runtime_sources_unchanged": true
+}

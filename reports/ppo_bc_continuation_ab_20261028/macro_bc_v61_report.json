@@ -1,0 +1,321 @@
+{
+  "mode": "train",
+  "feature_schema": {
+    "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+    "v6_base_version": "v6_seg9_3bands_2slots8_v1",
+    "classes": [
+      "coin",
+      "train_front",
+      "train_side",
+      "train_roof",
+      "ramp",
+      "barrier_jump",
+      "barrier_roll",
+      "barrier_either",
+      "tunnel_entrance"
+    ],
+    "image_frames": 4,
+    "image_channels": 12,
+    "v6_aux_dim": 467,
+    "screen_column_dim": 81,
+    "action_timing_dim": 5,
+    "commanded_lane_dim": 4,
+    "aux_dim": 557,
+    "warning": "Screen columns are NOT track lanes; commanded lane is unverified and disabled by default."
+  },
+  "ppo_actions_sent_only_when_gameplay_verified": true,
+  "input_note": "Actions sent through Playwright, Unity response not automatically verified.",
+  "no_demonstration_training": true,
+  "reward_terms": {
+    "survival_per_real_second": 0.8,
+    "milestone_bonus": 0.15,
+    "milestone_seconds": 0.5,
+    "confirmed_death_penalty": 1.0,
+    "reward_for_yolo_predictions": 0,
+    "reward_for_specific_actions": 0
+  },
+  "steps": 4096,
+  "wall_seconds": 358.48,
+  "avg_steps_per_sec_including_resets": 11.43,
+  "episodes": 85,
+  "mean_survival_seconds": 3.29,
+  "max_survival_seconds": 5.53,
+  "action_counts": {
+    "4": 1032,
+    "3": 2306,
+    "0": 509,
+    "2": 119,
+    "1": 130
+  },
+  "gameplay_only_intervals_ms": {
+    "count": 3979,
+    "median_ms": 54.28,
+    "p95_ms": 65.17,
+    "p99_ms": 66.51,
+    "mean_ms": 54.59
+  },
+  "startup_guard_failures": 0,
+  "detector": {
+    "requests": 1431,
+    "completed": 1431,
+    "discarded_previous_episode": 2,
+    "busy_skips": 0,
+    "fresh_fraction": 0.949,
+    "inference_ms": {
+      "count": 1000,
+      "median": 21.0,
+      "p95": 27.4
+    },
+    "age_at_decision_ms": {
+      "count": 1000,
+      "median": 112.8,
+      "p95": 189.3
+    },
+    "detected_objects": {
+      "train_roof": 3546,
+      "train_front": 2882,
+      "coin": 9904,
+      "barrier_either": 57,
+      "train_side": 1814,
+      "barrier_roll": 219,
+      "ramp": 550,
+      "barrier_jump": 102,
+      "tunnel_entrance": 4
+    },
+    "v5_segmentation": {
+      "shadow_only": false,
+      "classes": [
+        "coin",
+        "train_front",
+        "train_side",
+        "train_roof",
+        "ramp",
+        "barrier_jump",
+        "barrier_roll",
+        "barrier_either",
+        "tunnel_entrance"
+      ],
+      "model_predict_wall_ms": {
+        "count": 1429,
+        "median_ms": 13.27,
+        "p95_ms": 15.97,
+        "p99_ms": 16.96,
+        "mean_ms": 13.36
+      },
+      "input_rgb_to_bgr_ms": {
+        "count": 1429,
+        "median_ms": 0.84,
+        "p95_ms": 1.15,
+        "p99_ms": 1.32,
+        "mean_ms": 0.87
+      },
+      "mask_and_box_extract_ms": {
+        "count": 1429,
+        "median_ms": 7.01,
+        "p95_ms": 12.13,
+        "p99_ms": 14.36,
+        "mean_ms": 7.02
+      },
+      "polygons_per_completed_inference": {
+        "count": 1429,
+        "mean": 13.35
+      },
+      "detections_by_vertical_image_region": {
+        "upper_frame": {
+          "coin": 7045,
+          "train_roof": 1223,
+          "train_front": 2333,
+          "barrier_roll": 218,
+          "train_side": 109,
+          "ramp": 547,
+          "barrier_jump": 102,
+          "barrier_either": 55,
+          "tunnel_entrance": 4
+        },
+        "middle_frame": {
+          "train_front": 310,
+          "coin": 2449,
+          "barrier_either": 2,
+          "train_roof": 732,
+          "train_side": 83,
+          "ramp": 3,
+          "barrier_roll": 1
+        },
+        "lower_frame": {
+          "train_roof": 1591,
+          "coin": 410,
+          "train_front": 239,
+          "train_side": 1622
+        }
+      },
+      "region_warning": "Image regions are NOT real-world distance or collision risk.",
+      "fed_into_ppo": true,
+      "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+      "screen_column_nonzero_observations": 4062,
+      "assumed_lane_unverified": false,
+      "hazard_obs_total": 4296,
+      "hazard_obs_stale_or_missing": 219,
+      "hazard_obs_nonzero": 4062
+    },
+    "v612_live_input_guard": {
+      "preflight_gameplay_allowed": 4032,
+      "preflight_rechecks_on_transient": 64,
+      "preflight_confirmed_menu": 64,
+      "uncertain_state_abort": 0,
+      "ml_menu_without_template": 99,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": false,
+      "preflight_checks_every_decision": true,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    }
+  },
+  "observation_aux_dim": 557,
+  "observation_image_shape": [
+    12,
+    288,
+    512
+  ],
+  "reward_parts": {
+    "survival": 187.46400000000457,
+    "milestones": 63.29999999999958,
+    "death": -85.0
+  },
+  "first_25_mean_seconds": 3.172,
+  "last_25_mean_seconds": 3.15,
+  "policy_snapshots": [
+    {
+      "probabilities": [
+        0.00262,
+        0.00176,
+        0.00663,
+        0.10418,
+        0.88481
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.88481,
+      "entropy": 0.4039
+    },
+    {
+      "probabilities": [
+        0.00537,
+        0.00817,
+        0.00071,
+        0.85281,
+        0.13294
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.85281,
+      "entropy": 0.47652
+    },
+    {
+      "probabilities": [
+        0.27818,
+        0.05188,
+        0.04304,
+        0.4117,
+        0.2152
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.4117,
+      "entropy": 1.34077
+    },
+    {
+      "probabilities": [
+        0.00036,
+        0.00092,
+        0.00191,
+        0.99305,
+        0.00375
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.99305,
+      "entropy": 0.04915
+    },
+    {
+      "probabilities": [
+        0.00225,
+        0.00902,
+        0.00333,
+        0.60576,
+        0.37964
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.60576,
+      "entropy": 0.7465
+    },
+    {
+      "probabilities": [
+        0.00174,
+        0.00095,
+        0.00361,
+        0.12179,
+        0.8719
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.8719,
+      "entropy": 0.41392
+    },
+    {
+      "probabilities": [
+        0.27719,
+        0.05012,
+        0.10317,
+        0.49866,
+        0.07085
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.49866,
+      "entropy": 1.27456
+    },
+    {
+      "probabilities": [
+        0.00019,
+        0.00027,
+        0.00052,
+        0.71097,
+        0.28804
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.71097,
+      "entropy": 0.60889
+    },
+    {
+      "probabilities": [
+        0.00035,
+        0.00034,
+        0.00095,
+        0.02882,
+        0.96954
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.96954,
+      "entropy": 0.14432
+    },
+    {
+      "probabilities": [
+        0.05236,
+        0.00244,
+        0.01175,
+        0.80396,
+        0.12949
+      ],
+      "max_action": "JUMP",
+      "max_probability": 0.80396,
+      "entropy": 0.66146
+    },
+    {
+      "probabilities": [
+        1e-05,
+        0.0,
+        0.0,
+        0.42608,
+        0.57391
+      ],
+      "max_action": "ROLL",
+      "max_probability": 0.57391,
+      "entropy": 0.68231
+    }
+  ],
+  "completed_requested_steps": true,
+  "interrupted_or_time_limited": false
+}

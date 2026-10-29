@@ -1,0 +1,147 @@
+{
+  "models": [
+    {
+      "run": "v612_eval_bc_pilot_100_20261028_153047",
+      "episodes": 100,
+      "mean": 4.8276,
+      "median": 4.275,
+      "best": 11.55,
+      "ge5": 47,
+      "ge10": 4,
+      "actions": {
+        "4": 1502,
+        "3": 4426,
+        "0": 2263
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 8110,
+        "preflight_rechecks_on_transient": 81,
+        "preflight_confirmed_menu": 81,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 77,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 8030,
+        "median_ms": 53.36,
+        "p95_ms": 65.48,
+        "p99_ms": 69.84,
+        "mean_ms": 53.39
+      },
+      "detector_age": {
+        "count": 1000,
+        "median": 112.7,
+        "p95": 189.2
+      },
+      "fresh_fraction": 0.976
+    },
+    {
+      "run": "v612_eval_bc_large_100_20261028_180438",
+      "episodes": 100,
+      "mean": 4.48,
+      "median": 4.2,
+      "best": 10.05,
+      "ge5": 40,
+      "ge10": 1,
+      "actions": {
+        "4": 2081,
+        "3": 3316,
+        "0": 2316
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 7627,
+        "preflight_rechecks_on_transient": 86,
+        "preflight_confirmed_menu": 86,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 76,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 7553,
+        "median_ms": 51.65,
+        "p95_ms": 65.34,
+        "p99_ms": 69.78,
+        "mean_ms": 52.9
+      },
+      "detector_age": {
+        "count": 1000,
+        "median": 106.0,
+        "p95": 182.1
+      },
+      "fresh_fraction": 0.975
+    },
+    {
+      "run": "v612_eval_bc_macro3e4_100_20261028",
+      "episodes": 100,
+      "mean": 3.6653000000000002,
+      "median": 3.4850000000000003,
+      "best": 9.31,
+      "ge5": 10,
+      "ge10": 0,
+      "actions": {
+        "4": 1504,
+        "3": 2873,
+        "0": 1682,
+        "1": 91,
+        "2": 9
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 6084,
+        "preflight_rechecks_on_transient": 75,
+        "preflight_confirmed_menu": 75,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 70,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "intervals": {
+        "count": 6012,
+        "median_ms": 51.77,
+        "p95_ms": 65.35,
+        "p99_ms": 69.66,
+        "mean_ms": 52.88
+      },
+      "detector_age": {
+        "count": 1000,
+        "median": 112.7,
+        "p95": 188.9
+      },
+      "fresh_fraction": 0.969
+    }
+  ],
+  "candidate_minus_reference": {
+    "v612_eval_bc_pilot_100_20261028_153047": {
+      "mean_difference": -1.1623,
+      "bootstrap_95": [
+        -1.627805000000001,
+        -0.7134949999999998
+      ]
+    },
+    "v612_eval_bc_large_100_20261028_180438": {
+      "mean_difference": -0.8147000000000002,
+      "bootstrap_95": [
+        -1.2299150000000008,
+        -0.41559000000000174
+      ]
+    }
+  },
+  "config_differences_pilot_vs_candidate": {
+    "run_name": [
+      "v612_eval_bc_pilot_100_20261028_153047",
+      "v612_eval_bc_macro3e4_100_20261028"
+    ],
+    "resume": [
+      "ai_data\\demonstrations_v13\\bc_runs\\bc_20261028_152607\\model.zip",
+      "ai_data\\demonstrations_v13\\bc_runs\\bc_control_macro_lr3e4_20261028\\latest.zip"
+    ]
+  },
+  "bootstrap": "20000 independent episode resamples; seed123; excludes map-session and training-seed variability"
+}

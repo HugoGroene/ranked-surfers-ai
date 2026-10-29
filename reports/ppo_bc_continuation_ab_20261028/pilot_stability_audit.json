@@ -1,0 +1,25 @@
+{
+  "status": "PASS_STABILITY_CANDIDATE",
+  "steps": 4096,
+  "completed": true,
+  "freeze_checks": 31,
+  "verified_optimizer_pauses": 31,
+  "optimizer_resumes": 30,
+  "menu_boundaries": 1,
+  "menu_handoffs_after_optimizer": 1,
+  "post_resume_menu_handoffs": 2,
+  "menu_terminal_rewards_recorded": 3,
+  "optimizer_continuations": 31,
+  "fresh_stacks": 28,
+  "fresh_frame_age_max_ms": 15.2,
+  "pause_duration_total_s": 35.643,
+  "max_reported_abs_active_clock_drift_s": 0.0,
+  "per_frame_gameplay_checks": 112,
+  "completed_episodes": 53,
+  "mean_survival_seconds": 4.73,
+  "warnings": [
+    "Reported pause-clock drift is internal consistency, not an independent Unity timer reading.",
+    "No evidence here that the reward cap or per-step PPO discount is unbiased."
+  ],
+  "failures": []
+}

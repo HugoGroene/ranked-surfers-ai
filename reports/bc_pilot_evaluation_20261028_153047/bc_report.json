@@ -1,0 +1,53 @@
+{
+  "source_checkpoint": "ai_data\\rl_v2_runs\\v612_paused_state_v179_8h_20261028_045909\\latest.zip",
+  "train_folders": [
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_150144_472981",
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_145438_471297",
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_150100_323415",
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_145918_817660",
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_145501_178756",
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_145830_927998",
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_145805_464929"
+  ],
+  "validation_folders": [
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_145706_224680",
+    "ai_data\\demonstrations_v13\\runs\\demo_20261028_145548_721806"
+  ],
+  "samples": 183,
+  "training_class_counts": {
+    "LEFT": 35,
+    "NONE": 64,
+    "JUMP": 37,
+    "RIGHT": 33,
+    "ROLL": 14
+  },
+  "epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 3.48182,
+      "cross_entropy": 1.11242,
+      "accuracy": 0.4894
+    },
+    {
+      "epoch": 2,
+      "train_loss": 3.46173,
+      "cross_entropy": 1.10565,
+      "accuracy": 0.4915
+    },
+    {
+      "epoch": 3,
+      "train_loss": 3.44197,
+      "cross_entropy": 1.0985,
+      "accuracy": 0.5
+    }
+  ],
+  "validation_before": {
+    "cross_entropy": 1.11905,
+    "accuracy": 0.4884
+  },
+  "validation_after": {
+    "cross_entropy": 1.0985,
+    "accuracy": 0.5
+  },
+  "saved_model": "ai_data\\demonstrations_v13\\bc_runs\\bc_20261028_152607\\model.zip"
+}
