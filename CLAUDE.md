@@ -25,6 +25,10 @@ Their branch/commit metadata is stale; trust code and raw reports over prose.
 ## Way of working
 - Propose a plan and wait for approval before editing. One variable per experiment; small steps.
 - Do not launch the game, browsers, recorder, probe, training or evaluation; the user runs live tests.
+- User workflow update: when explicitly authorized, short live tests may be run
+  by the assistant. For tests longer than a few minutes, give the user commands
+  to run in a separate terminal, including the local server command. Do not
+  spend assistant credits polling long runs; inspect saved artifacts afterward.
 - Label claims: [repo] verified here, [local] verified in original repo, [doc] docs only, [hyp] hypothesis.
 - PPO baseline: original repo `ai_data/rl_v2_runs/v612_overnight_next_420min_press5_20261027_094116/latest.zip`
   (SHA-256 6e49da55…e773f0): 4.61 s mean [95% CI 4.26–4.99], 0 LEFT/RIGHT. A 240-min checkpoint

@@ -89,6 +89,20 @@ def build_env_class():
             self.prepared_guard_fallbacks = 0
             self.prepared_guard_late_fallbacks = 0
             self.reuse_observation_guard = bool(getattr(a, 'reuse_observation_guard', False))
+            self.settled_learning = bool(getattr(a, 'settled_learning', False))
+            self._learning_origin = None
+            self._learning_verified_duration = 0.
+            self._learning_excluded_pause = 0.
+            self._learning_pause_started = None
+            self._learning_passive_kind = None
+            self._learning_current_observation = None
+            self._learning_dispatched_key = None
+            self._learning_capture_serial = 0
+            if getattr(self, 'settled_learning', False):
+                from tools.ppo_settled_learning import VerifiedProgressRewards
+                self.survival_rewards = VerifiedProgressRewards(
+                    self.reward_survival_rate,self.reward_milestone_bonus,
+                    self.reward_milestone_seconds,self.reward_death_penalty)
             super().__init__(cfg, output, demos, detector, a=a)
             w, h = self.target_wh
             self.observation_space = spaces.Dict({
@@ -147,7 +161,7 @@ def build_env_class():
                 self.column_nonzero_observations += 1
             self.last_aux = aux
             self._prepared_gameplay_reading = None
-            if getattr(self, 'reuse_observation_guard', False):
+            if getattr(self, 'reuse_observation_guard', False) or getattr(self, 'settled_learning', False):
                 captured = getattr(self, '_capture_menu_metadata', None)
                 if captured is not None and captured[:2] == (id(self._v2_last_bgra), self.last_capture_end):
                     state, probabilities = self._read_screen_state()
@@ -155,15 +169,26 @@ def build_env_class():
                     reading = screen_gate(state, probabilities, menu_score,
                         confidence=self.state_confidence, menu_threshold=self.args.threshold)
                     if reading.verdict == 'PLAY' and self.last_capture_end is not None:
+                        if getattr(self, 'settled_learning', False) and self._learning_origin is not None:
+                            at = float(self.last_capture_end)
+                            ongoing_pause = (max(0.,at-self._learning_pause_started)
+                                if self._learning_pause_started is not None else 0.)
+                            self._learning_verified_duration = max(self._learning_verified_duration,
+                                at-self._learning_origin-self._learning_excluded_pause-ongoing_pause)
                         from tools.ppo_prepared_guard import PreparedGameplayReading
                         self._prepared_gameplay_reading = PreparedGameplayReading(
                             id(self._v2_last_bgra), self.last_capture_end,
                             state, dict(probabilities), menu_score)
             self.pack_ms.append((time.perf_counter()-start)*1000)
-            return {'image': packed, 'aux': aux}, fresh, age_ms
+            result = {'image': packed, 'aux': aux}
+            self._learning_current_observation = result
+            self._learning_observation_capture = dict(
+                serial=getattr(self,'_learning_capture_serial',None),captured_at=self.last_capture_end)
+            return result, fresh, age_ms
 
         async def _capture(self):
             result = await super()._capture()
+            self._learning_capture_serial = getattr(self,'_learning_capture_serial',0)+1
             self._capture_menu_metadata = (id(self._v2_last_bgra), self.last_capture_end, float(result[1]))
             return result
 
@@ -182,7 +207,13 @@ def build_env_class():
             self._ppo_pause_visual_reference = None
             self.survival_rewards.reset()
             self.action_context.reset()
-            return super().reset(seed=seed, options=options)
+            self._learning_origin = None
+            self._learning_verified_duration = 0.
+            self._learning_excluded_pause = 0.
+            self._learning_pause_started = None
+            result = super().reset(seed=seed, options=options)
+            self._learning_origin = time.perf_counter()
+            return result
 
         def refresh_after_ppo_optimizer(self):
             """Rebuild four consecutive confident GAMEPLAY images, without keys.
@@ -526,6 +557,14 @@ def build_env_class():
                       f'ml_gameplay={probs.get("GAMEPLAY", 0.):.3f} '
                       f'boundary_rechecked={needs_boundary_recheck}', flush=True)
 
+                if getattr(self, 'settled_learning', False):
+                    # Preserve the last confident gameplay endpoint; paused
+                    # overlay captures must never become policy observations.
+                    self._learning_boundary_observation = self._pack(None, start_detection=False)[0]
+                    # Conservative: exclude the UI transaction from reward
+                    # time, including uncertain pause entry/verification.
+                    self._learning_pause_started = time.perf_counter()
+
                 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
                 pause_click_attempts = 1
                 try:
@@ -797,6 +836,9 @@ def build_env_class():
                     f'Pause-aware episode timer drifted {duration_drift:.3f}s')
             report['active_episode_clock_drift_s'] = round(duration_drift, 3)
             self._ppo_pause_pending = None
+            if getattr(self, 'settled_learning', False) and self._learning_pause_started is not None:
+                self._learning_excluded_pause += max(0.,finished_perf-self._learning_pause_started)
+                self._learning_pause_started = None
             return report
 
         @staticmethod
@@ -970,11 +1012,21 @@ def build_env_class():
                 return await self._step_browser(action)
             self.guard_allowed += 1
             self.action_context.note_action(int(action), time.perf_counter())
+            if getattr(self, 'settled_learning', False):
+                from train_rs_rl_early_death import ACTIONS
+                self._learning_dispatched_key = ACTIONS[int(action)]
             # Preserve the inherited tap, pacing and post-key screenshot.
             return await super()._step_browser(int(action))
 
         def step(self, action):
+            passive_kind = getattr(self, '_learning_passive_kind', None)
+            if passive_kind is not None:
+                self._learning_passive_kind = None
+                return self._settled_passive_step(passive_kind)
+            self._learning_dispatched_key = None
             self._guard_forced_terminal = False
+            timings = getattr(self,'step_timings',[])
+            timing_before = timings[-1] if timings else None
             obs, base_reward, died, truncated, info = super().step(int(action))
             if self._guard_forced_terminal:
                 # Separate successful GAMEPLAY->MENU detector from a template
@@ -988,7 +1040,7 @@ def build_env_class():
             # Only real elapsed gameplay (observed by the local game loop) is
             # rewarded. No coins, class confidence, lane assumptions, or
             # specific action get a reward. Avoid repeated-action exploits.
-            if getattr(self, '_ppo_menu_handoff_terminal_observed', False):
+            if getattr(self, '_ppo_menu_handoff_terminal_observed', False) and not getattr(self, 'settled_learning', False):
                 # Game was already dead when this rollout boundary was checked.
                 # Do not credit optimizer / idle menu / guard confirmation time.
                 anchor = self._ppo_boundary_menu_duration_at
@@ -998,7 +1050,14 @@ def build_env_class():
                 info['duration'] = round(
                     max(self.survival_rewards.last_duration, float(anchor)), 2)
             reward, pieces = self.survival_rewards.step(
-                info.get('duration', 0.), died)
+                self._learning_verified_duration if getattr(self, 'settled_learning', False) else info.get('duration', 0.), died)
+            if getattr(self, 'settled_learning', False):
+                timing_after = self.step_timings[-1] if self.step_timings else None
+                info.update(reward_duration_s=self.survival_rewards.last_duration,
+                    learning_action_suppressed=bool(self._guard_forced_terminal),
+                    learning_dispatched_key=self._learning_dispatched_key,
+                    learning_dispatch_at=(timing_after.get('press_timestamp')
+                        if timing_after is not timing_before and timing_after else None))
             self.reward_parts.update(pieces)
             info['reward_survival'] = round(pieces['survival'], 4)
             info['reward_milestones'] = round(pieces['milestones'], 4)
@@ -1015,6 +1074,35 @@ def build_env_class():
                 print('[PPO MENU HANDOFF] Terminal recorded by guarded env.step; '
                       f'death_reward={pieces["death"]:.4f}; NO movement key sent.', flush=True)
             return obs, float(reward), died, truncated, info
+
+        def _settled_passive_step(self, kind):
+            """Emit elapsed-time/death evidence with no sampled or sent action."""
+            terminal = bool(self._ppo_boundary_menu_pending)
+            if terminal:
+                # Existing independent guard must still confirm terminal MENU.
+                self._guard_forced_terminal = False
+                self._call(self._step_browser(0), timeout=25)
+                if not self._guard_forced_terminal:
+                    raise GuardUncertainError('Passive MENU settlement was not terminal')
+                obs = self._pack(None,start_detection=False)[0]
+            else:
+                obs = (getattr(self,'_learning_boundary_observation',None)
+                       if kind=='boundary' else self._learning_current_observation)
+                if obs is None:
+                    raise GuardUncertainError('Missing passive transition observation')
+            reward,pieces = self.survival_rewards.step(self._learning_verified_duration,terminal)
+            self.reward_parts.update(pieces)
+            self.training_steps += 1
+            self._ppo_menu_handoff_terminal_observed = False
+            self._ppo_boundary_menu_duration_at = None
+            info = dict(duration=round(self._learning_verified_duration,2),
+                reward_duration_s=self._learning_verified_duration,
+                reward_survival=pieces['survival'],reward_milestones=pieces['milestones'],
+                reward_death=pieces['death'],reward_v61=reward,
+                learning_action_suppressed=True,learning_dispatched_key=None,
+                termination_reason='death' if terminal else None,
+                ppo_menu_handoff_terminal=terminal,learning_passive_kind=kind)
+            return obs,float(reward),terminal,False,info
 
         def hazard_report(self):
             report = super().hazard_report()
@@ -1337,7 +1425,9 @@ def build_callback(a, output, raw=None):
                             time.monotonic(), time.perf_counter(), time.time())
                         print('[PPO MENU HANDOFF] Boundary MENU confirmed by '
                               'independent ML+template frames; no pause, reset or '
-                              'movement. Terminal reward deferred to next rollout step.',
+                              'movement. ' + ('Terminal settles before current rollout returns.'
+                                  if getattr(a,'settled_learning',False) else
+                                  'Terminal reward deferred to next rollout step.'),
                               flush=True)
                     else:
                         raise GuardUncertainError(
@@ -1346,12 +1436,16 @@ def build_callback(a, output, raw=None):
             # boundary (or independently confirmed terminal MENU). Never stall
             # active Unity in the middle of a PPO decision to write a ZIP.
             if self._checkpoint_due_at_boundary:
-                from tools.ppo_atomic_checkpoint_v176 import save_atomic_checkpoint
-                save_atomic_checkpoint(self.model, output/'latest.zip')
+                if getattr(a,'settled_learning',False):
+                    self.model._settled_checkpoint_due=True
+                else:
+                    from tools.ppo_atomic_checkpoint_v176 import save_atomic_checkpoint
+                    save_atomic_checkpoint(self.model, output/'latest.zip')
                 self.last_save = time.perf_counter()
                 self._checkpoint_due_at_boundary = False
-                print(f'[V612 SAVE] Atomic latest.zip at safe rollout boundary '
-                      f'after {self.num_timesteps} PPO steps', flush=True)
+                if not getattr(a,'settled_learning',False):
+                    print(f'[V612 SAVE] Atomic latest.zip at safe rollout boundary '
+                          f'after {self.num_timesteps} PPO steps', flush=True)
 
         def _on_rollout_start(self):
             record = None
@@ -1568,7 +1662,8 @@ def build_callback(a, output, raw=None):
                                   ('reward_death','death')):
                     self.reward_components[dest] += float(info.get(key,0.))
                 if 'episode' in info:
-                    secs=float(info.get('duration',info['episode']['t']))
+                    secs=float(info.get('reward_duration_s',info.get('duration',info['episode']['t']))
+                        if getattr(a,'settled_learning',False) else info.get('duration',info['episode']['t']))
                     self.episode_durations.append(secs)
                     self.episode_rewards.append(float(info['episode']['r']))
                     self.recent_episodes.append(secs)
@@ -1601,7 +1696,8 @@ def build_callback(a, output, raw=None):
                     save_atomic_checkpoint(self.model, output/'latest.zip')
                     print(f'[V612 SAVE] Atomic latest.zip after {self.num_timesteps} PPO steps',flush=True)
                     self.last_save=now
-            return (now-self.began) < a.max_minutes*60
+            return (True if getattr(a,'settled_learning',False)
+                    else (now-self.began) < a.max_minutes*60)
 
         def _on_training_end(self):
             if self.reward_step_audit_handle is not None:
@@ -1708,6 +1804,11 @@ def train(a, *, browser_session=None):
             print(f'[RESUME] PPO weights loaded from {a.resume}',flush=True)
         else:
             model=make_model(monitored,a)
+        if getattr(a,'settled_learning',False):
+            from tools.ppo_settled_learning import SettledPPO,reference_seconds_for
+            model.__class__ = SettledPPO
+            reference=reference_seconds_for(model,a.discount_reference_seconds)
+            model.configure_settled(raw,dest,reference,a.max_minutes)
         callback=build_callback(a,dest,raw=raw)
         print(f'[V612 TRAIN] PPO executing its OWN actions; no fixed jump; no demos. '
               f'RGB={a.resolution}, AUX={AUX_DIM}, YOLO={a.detector}, '
@@ -1731,7 +1832,36 @@ def train(a, *, browser_session=None):
         if raw is not None:
             report=build_report(a,raw,steps=raw.training_steps,
                                 started=started,callback=callback)
-            report['completed_requested_steps']=completed and raw.training_steps>=a.steps
+            if getattr(a,'settled_learning',False):
+                stats=model._settled_stats
+                stats['discarded_partial_transitions']=max(
+                    stats['discarded_partial_transitions'],
+                    stats['collected_transitions']-stats['completed_rollout_transitions'])
+                stats['completed_interactions_not_ledgered']=max(0,
+                    model.num_timesteps-model._settled_initial_timesteps-stats['collected_transitions'])
+                report['raw_environment_operations'] = raw.training_steps
+                report['steps'] = model._settled_stats['collected_transitions']
+                report['learning_transitions'] = model._settled_stats
+                report['reward_clock'] = 'verified_gameplay_only_excluding_pause_UI'
+                report['discount_reference_seconds'] = model.settled_reference_seconds
+                report['survival_reward_cap'] = 'uncapped_verified_time; no confirmation-time credit'
+                report['legacy_callback_action_counts'] = report['action_counts']
+                selected_counts,dispatched_counts=Counter(),Counter()
+                with (dest/'learning_transitions.jsonl').open() as ledger:
+                    for line in ledger:
+                        row=json.loads(line)
+                        if row['event']=='collected':
+                            if row['sampled_action'] is not None:
+                                selected_counts[str(row['sampled_action'])]+=1
+                            if row['command'] is not None:
+                                dispatched_counts[row['command']]+=1
+                report['action_counts']=dict(selected_counts)
+                report['dispatched_key_counts']=dict(dispatched_counts)
+                report['avg_steps_per_sec_including_resets'] = round(
+                    report['steps']/max(.001,report['wall_seconds']),2)
+            report['completed_requested_steps']=completed and (
+                model._settled_stats['completed_rollout_transitions']>=a.steps
+                if getattr(a,'settled_learning',False) else raw.training_steps>=a.steps)
             report['interrupted_or_time_limited']=not report['completed_requested_steps']
             write_json(dest/'v61_report.json',report)
             print('[V612 REPORT] '+json.dumps({k:report[k] for k in ('steps','episodes',
@@ -1833,6 +1963,13 @@ def parse_args(argv=None):
     p.add_argument('--rate-mode',choices=['uncapped','capped'],default='uncapped')
     p.add_argument('--reuse-observation-guard', action='store_true',
                    help='EXPERIMENTAL: reuse the confident gameplay check on the exact policy image for at most 20 ms; otherwise use normal preflight capture')
+    learning_mode=p.add_mutually_exclusive_group()
+    learning_mode.add_argument('--settled-learning',action='store_true',
+                   help='Corrected collector: settled boundary terminals, masked passive transitions, verified-time rewards and duration-aware discounts')
+    learning_mode.add_argument('--legacy-learning',action='store_true',
+                   help='Historical comparisons only: retain old transition/reward/discount semantics')
+    p.add_argument('--discount-reference-seconds',type=float,default=None,
+                   help='Explicit time unit for corrected gamma/lambda; otherwise inherit checkpoint unit, or 0.05s for legacy sources')
     p.add_argument('--resync-rollouts', action='store_true',
                    help='EXPERIMENTAL: passively rebuild 4-frame observation after PPO updates')
     p.add_argument('--pause-ppo-optimizer', action='store_true',
@@ -1893,6 +2030,14 @@ def parse_args(argv=None):
     p.add_argument('--probe-delays-ms',type=str,default='5,10',
                    help='Comma-separated Playwright tap durations for manual action audit')
     a=p.parse_args(argv)
+    if a.mode=='train' and a.pause_ppo_optimizer and a.resync_rollouts and not a.legacy_learning:
+        a.settled_learning=True
+    if a.settled_learning and (a.mode!='train' or not a.pause_ppo_optimizer or not a.resync_rollouts):
+        p.error('--settled-learning requires training with optimizer pause and rollout resync')
+    if a.settled_learning and a.recover_rollout_menu:
+        p.error('Corrected learning forbids abandoning episodes with --recover-rollout-menu')
+    if a.discount_reference_seconds is not None and not .001<=a.discount_reference_seconds<=1.:
+        p.error('Invalid discount reference interval')
     if a.override_ppo_settings and (a.mode != 'train' or a.resume is None):
         p.error('--override-ppo-settings requires resumed training')
     if a.target_kl is not None and not 0 < a.target_kl < 1:

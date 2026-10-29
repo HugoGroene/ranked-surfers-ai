@@ -141,7 +141,9 @@ class BoundaryTests(unittest.TestCase):
     @staticmethod
     def run_pause(e):
         real_sleep=asyncio.sleep
-        async def short_sleep(_):await real_sleep(.008)
+        # 8 ms can be below Windows' monotonic clock tick. Real production
+        # capture waits are >=33 ms; keep the shortened test wait above a tick.
+        async def short_sleep(_):await real_sleep(.020)
         with patch('asyncio.sleep',new=short_sleep):
             return e.pause_for_ppo_optimizer()
 
@@ -196,7 +198,7 @@ class BoundaryTests(unittest.TestCase):
 class ResumeTests(unittest.TestCase):
     def run_resume(self,e,m):
         real_sleep=asyncio.sleep
-        async def short_sleep(_):await real_sleep(.008)
+        async def short_sleep(_):await real_sleep(.020)
         def compensated(raw,dm,dp,*,monitor,elapsed_wall):
             self.assertIs(raw,e)
             self.assertIs(monitor,m)

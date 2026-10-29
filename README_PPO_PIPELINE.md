@@ -1,5 +1,53 @@
 # PPO pipeline foundation
 
+## 29 October: corrected learning transitions
+
+Pause-aware training now defaults to the corrected collector. The monitored
+manifest also passes `--settled-learning` explicitly. Use `--legacy-learning`
+only to reproduce historical training semantics; it retains the audited gaps.
+Training without optimizer pause remains the historical path. Evaluation still
+loads either checkpoint through ordinary PPO; its reported returns use the
+historical evaluation clock, so do not compare those returns with new training
+returns. Compare gameplay survival under matched evaluation flags instead.
+
+The correction settles boundary deaths before GAE/optimization and represents
+post-resume refresh as an explicit passive transition. Passive and suppressed
+actions have zero actor/entropy/KL contribution; value learning remains active.
+No global input cooldown or scripted steering was added.
+
+Gamma and lambda are now raised to `active_seconds / 0.05` per transition.
+`--discount-reference-seconds` declares that unit; the stored gamma/lambda
+coefficients retain their values. On resume the saved time unit is inherited
+unless explicitly overridden; a legacy checkpoint starts with 0.05 seconds.
+Survival rewards use confidently verified
+gameplay time with pause UI transactions excluded. They no longer apply the
+0.15-second per-decision cap on that verified clock, and terminal confirmation
+does not advance it. Coefficients remain 0.8/second, 0.15 per 0.5-second
+milestone and -1 death. This is a deliberate semantic correction, not a promise
+of equivalent historical reward totals or an independent Unity timer.
+
+Wall-time limits are soft boundaries: finish and optimize the current rollout,
+then stop without resuming. Reports separate raw environment operations,
+collected transitions, processed rollouts, unique optimizer-used transitions,
+optimizer sample presentations, selected actions and dispatched keys. A guard
+stop or interruption reports any discarded partial collection separately.
+
+The authoritative audit is `learning_transitions.jsonl`, with protocol settings
+and source hashes in `learning_protocol.json`. The old reward JSONL is a legacy
+diagnostic and must not be fed to the old reward replay checker for corrected
+runs. `tools.run_ppo_batch` selects the new audit automatically.
+
+```powershell
+& $py -B -m unittest discover -s tests -p test_ppo_settled_learning.py -v
+& $py -B -c "from pathlib import Path; from tools.ppo_settled_learning import audit_settled_ledger; print(audit_settled_ledger(Path('ai_data/rl_v2_runs/YOUR_RUN/learning_transitions.jsonl')))"
+```
+
+See [implementation and live validation](reports/ppo_settled_validation_20261029/README.md).
+These are correctness/safety gates, not evidence of better learned survival.
+The exact final-boundary MENU case has offline collector coverage; live
+validation exercised post-resume death, ordinary deaths, resets and deadline
+completion. Keep longer training monitored while collecting more evidence.
+
 The policy still learns autonomous control from survival/death rewards. No new
 BC loss, action rewards, movement cooldowns or recurrent architecture were added.
 Local Practice only. See the [validation report](reports/ppo_pipeline_foundation_20261028/README.md)

@@ -1,0 +1,9 @@
+{
+  "status": "PASS_SETTLED_LEARNING",
+  "transitions": 32768,
+  "processed_rollout_transitions": 32768,
+  "unique_transitions_used_by_optimizer": 32768,
+  "passive_resync_transitions": 63,
+  "terminal_transitions": 319,
+  "failures": []
+}

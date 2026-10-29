@@ -1,0 +1,1424 @@
+{
+  "sb3_version": "2.9.0",
+  "collector_source_sha256": "07f9eed35d9d7392f6ce287dc9d55aede83d8b0f93d34cb5d643410cdf11e3b7",
+  "runtime_sources_unchanged": true,
+  "source_sha256": {
+    "train_rs_v612_ppo.py": "c0580ff493d6edfc812feee8cea19d3289d83d66d65a034deeefded772ab2583",
+    "rs_v61_rewards.py": "965931c041a8e54daccf3befec1a49ad413eb1ac6be55218c339202104628d6d",
+    "tools\\ppo_optimizer_pause_clock.py": "3b7a6f612b69fc451e901404f28944a2b997083755b177e8f5e9a8112c4bd793",
+    "tools\\ppo_rollout_resync.py": "601232d39a48f819baba9a6eac89ccc683fa8deca2863a77d868c8fb5530db28"
+  },
+  "synthetic_cases": {
+    "normal_resync": {
+      "mode": "normal_resync",
+      "events": [
+        {
+          "event": "reset",
+          "after_total": 0
+        },
+        {
+          "event": "step",
+          "step": 1,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 1,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "step",
+          "step": 2,
+          "input_code": 1,
+          "next_code": 2,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.1
+        },
+        {
+          "event": "rollout_end",
+          "step": 2
+        },
+        {
+          "event": "passive_resync",
+          "step": 2,
+          "code": 102,
+          "unacted_seconds": 0.25
+        },
+        {
+          "event": "step",
+          "step": 3,
+          "input_code": 102,
+          "next_code": 103,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.12,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.25,
+          "duration": 0.4
+        },
+        {
+          "event": "step",
+          "step": 4,
+          "input_code": 103,
+          "next_code": 104,
+          "action": 4,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.039999999999999994,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.45
+        },
+        {
+          "event": "rollout_end",
+          "step": 4
+        }
+      ],
+      "buffer_additions": [
+        {
+          "step": 1,
+          "input_code": 0.0,
+          "action": 1,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        },
+        {
+          "step": 2,
+          "input_code": 1.0,
+          "action": 0,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        },
+        {
+          "step": 3,
+          "input_code": 102.0,
+          "action": 0,
+          "reward": 0.11999999731779099,
+          "episode_start": false
+        },
+        {
+          "step": 4,
+          "input_code": 103.0,
+          "action": 4,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        }
+      ],
+      "return_computations": [
+        {
+          "step": 2,
+          "boundary_callback_count": 0,
+          "last_done": false,
+          "bootstrap_value": 0.223729208111763,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.2626105546951294
+        },
+        {
+          "step": 4,
+          "boundary_callback_count": 1,
+          "last_done": false,
+          "bootstrap_value": 0.6902382969856262,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.7267871499061584
+        }
+      ],
+      "audit_rows": 4,
+      "pending_final_menu": false,
+      "total_timesteps": 4,
+      "callback_log": "[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n[PPO GAP] {\"event\": \"ppo_rollout_resume_gap\", \"boundary\": 1, \"timesteps\": 2, \"rollout_end_to_next_start_ms\": 116.44, \"last_env_step_to_next_start_ms\": 116.64, \"cached_frame_to_next_start_ms\": 116.67, \"last_env_step_done\": false, \"potentially_stale\": false, \"warning_threshold_ms\": 250.0, \"interpretation\": \"Timestamp age of cached observation at the next PPO rollout. Does not establish that Unity died or a specific action was wrong.\"}\n[PPO PAUSE] Resumed after optimizer with pause-aware clocks: {\"paused_wall_seconds\": 0.01, \"corrected_episode_timer\": true, \"corrected_action_timer\": true, \"corrected_monitor_timer\": true, \"active_episode_clock_drift_s\": 0.0}\n[PPO RESYNC] refreshed 4-frame stack; cached age now 0.0ms\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n"
+    },
+    "boundary_mid": {
+      "mode": "boundary_mid",
+      "events": [
+        {
+          "event": "reset",
+          "after_total": 0
+        },
+        {
+          "event": "step",
+          "step": 1,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 1,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "step",
+          "step": 2,
+          "input_code": 1,
+          "next_code": 2,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.1
+        },
+        {
+          "event": "rollout_end",
+          "step": 2
+        },
+        {
+          "event": "step",
+          "step": 3,
+          "input_code": 2,
+          "next_code": 3,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": true,
+          "reward": -0.992,
+          "done": true,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.11
+        },
+        {
+          "event": "reset",
+          "after_total": 3
+        },
+        {
+          "event": "step",
+          "step": 4,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 4,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "rollout_end",
+          "step": 4
+        }
+      ],
+      "buffer_additions": [
+        {
+          "step": 1,
+          "input_code": 0.0,
+          "action": 1,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        },
+        {
+          "step": 2,
+          "input_code": 1.0,
+          "action": 0,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        },
+        {
+          "step": 3,
+          "input_code": 2.0,
+          "action": 0,
+          "reward": -0.9919999837875366,
+          "episode_start": false
+        },
+        {
+          "step": 4,
+          "input_code": 0.0,
+          "action": 4,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        }
+      ],
+      "return_computations": [
+        {
+          "step": 2,
+          "boundary_callback_count": 0,
+          "last_done": false,
+          "bootstrap_value": 0.223729208111763,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.2626105546951294
+        },
+        {
+          "step": 4,
+          "boundary_callback_count": 1,
+          "last_done": false,
+          "bootstrap_value": 0.13914774358272552,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.1784520149230957
+        }
+      ],
+      "audit_rows": 4,
+      "pending_final_menu": false,
+      "total_timesteps": 4,
+      "callback_log": "[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).\n[PPO MENU HANDOFF] Boundary MENU confirmed by independent ML+template frames; no pause, reset or movement. Terminal reward deferred to next rollout step.\n[PPO GAP] {\"event\": \"ppo_rollout_resume_gap\", \"boundary\": 1, \"timesteps\": 2, \"rollout_end_to_next_start_ms\": 23.24, \"last_env_step_to_next_start_ms\": 23.46, \"cached_frame_to_next_start_ms\": 23.49, \"last_env_step_done\": false, \"potentially_stale\": false, \"warning_threshold_ms\": 250.0, \"interpretation\": \"Timestamp age of cached observation at the next PPO rollout. Does not establish that Unity died or a specific action was wrong.\"}\n[PPO MENU HANDOFF] MENU reverified after optimizer; menu_idle_seconds_excluded=0.031; next guarded PPO step must be TERMINAL and will record the actual death penalty; no movement key allowed.\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n"
+    },
+    "boundary_final": {
+      "mode": "boundary_final",
+      "events": [
+        {
+          "event": "reset",
+          "after_total": 0
+        },
+        {
+          "event": "step",
+          "step": 1,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 1,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "step",
+          "step": 2,
+          "input_code": 1,
+          "next_code": 2,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.1
+        },
+        {
+          "event": "rollout_end",
+          "step": 2
+        },
+        {
+          "event": "passive_resync",
+          "step": 2,
+          "code": 102,
+          "unacted_seconds": 0.25
+        },
+        {
+          "event": "step",
+          "step": 3,
+          "input_code": 102,
+          "next_code": 103,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.12,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.25,
+          "duration": 0.4
+        },
+        {
+          "event": "step",
+          "step": 4,
+          "input_code": 103,
+          "next_code": 104,
+          "action": 4,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.039999999999999994,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.45
+        },
+        {
+          "event": "rollout_end",
+          "step": 4
+        }
+      ],
+      "buffer_additions": [
+        {
+          "step": 1,
+          "input_code": 0.0,
+          "action": 1,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        },
+        {
+          "step": 2,
+          "input_code": 1.0,
+          "action": 0,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        },
+        {
+          "step": 3,
+          "input_code": 102.0,
+          "action": 0,
+          "reward": 0.11999999731779099,
+          "episode_start": false
+        },
+        {
+          "step": 4,
+          "input_code": 103.0,
+          "action": 4,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        }
+      ],
+      "return_computations": [
+        {
+          "step": 2,
+          "boundary_callback_count": 0,
+          "last_done": false,
+          "bootstrap_value": 0.223729208111763,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.2626105546951294
+        },
+        {
+          "step": 4,
+          "boundary_callback_count": 1,
+          "last_done": false,
+          "bootstrap_value": 0.6902382969856262,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.7267871499061584
+        }
+      ],
+      "audit_rows": 4,
+      "pending_final_menu": true,
+      "total_timesteps": 4,
+      "callback_log": "[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n[PPO GAP] {\"event\": \"ppo_rollout_resume_gap\", \"boundary\": 1, \"timesteps\": 2, \"rollout_end_to_next_start_ms\": 26.92, \"last_env_step_to_next_start_ms\": 27.11, \"cached_frame_to_next_start_ms\": 27.16, \"last_env_step_done\": false, \"potentially_stale\": false, \"warning_threshold_ms\": 250.0, \"interpretation\": \"Timestamp age of cached observation at the next PPO rollout. Does not establish that Unity died or a specific action was wrong.\"}\n[PPO PAUSE] Resumed after optimizer with pause-aware clocks: {\"paused_wall_seconds\": 0.01, \"corrected_episode_timer\": true, \"corrected_action_timer\": true, \"corrected_monitor_timer\": true, \"active_episode_clock_drift_s\": 0.0}\n[PPO RESYNC] refreshed 4-frame stack; cached age now 0.0ms\n[PPO MENU HANDOFF] Boundary MENU confirmed by independent ML+template frames; no pause, reset or movement. Terminal reward deferred to next rollout step.\n"
+    },
+    "post_resume_mid": {
+      "mode": "post_resume_mid",
+      "events": [
+        {
+          "event": "reset",
+          "after_total": 0
+        },
+        {
+          "event": "step",
+          "step": 1,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 1,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "step",
+          "step": 2,
+          "input_code": 1,
+          "next_code": 2,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.1
+        },
+        {
+          "event": "rollout_end",
+          "step": 2
+        },
+        {
+          "event": "step",
+          "step": 3,
+          "input_code": 2,
+          "next_code": 3,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": true,
+          "reward": -1.0,
+          "done": true,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.1
+        },
+        {
+          "event": "reset",
+          "after_total": 3
+        },
+        {
+          "event": "step",
+          "step": 4,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 4,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "rollout_end",
+          "step": 4
+        }
+      ],
+      "buffer_additions": [
+        {
+          "step": 1,
+          "input_code": 0.0,
+          "action": 1,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        },
+        {
+          "step": 2,
+          "input_code": 1.0,
+          "action": 0,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        },
+        {
+          "step": 3,
+          "input_code": 2.0,
+          "action": 0,
+          "reward": -1.0,
+          "episode_start": false
+        },
+        {
+          "step": 4,
+          "input_code": 0.0,
+          "action": 4,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        }
+      ],
+      "return_computations": [
+        {
+          "step": 2,
+          "boundary_callback_count": 0,
+          "last_done": false,
+          "bootstrap_value": 0.223729208111763,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.2626105546951294
+        },
+        {
+          "step": 4,
+          "boundary_callback_count": 1,
+          "last_done": false,
+          "bootstrap_value": 0.13914774358272552,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.1784520149230957
+        }
+      ],
+      "audit_rows": 4,
+      "pending_final_menu": false,
+      "total_timesteps": 4,
+      "callback_log": "[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n[PPO GAP] {\"event\": \"ppo_rollout_resume_gap\", \"boundary\": 1, \"timesteps\": 2, \"rollout_end_to_next_start_ms\": 25.94, \"last_env_step_to_next_start_ms\": 26.15, \"cached_frame_to_next_start_ms\": 26.2, \"last_env_step_done\": false, \"potentially_stale\": false, \"warning_threshold_ms\": 250.0, \"interpretation\": \"Timestamp age of cached observation at the next PPO rollout. Does not establish that Unity died or a specific action was wrong.\"}\n[PPO PAUSE] Resumed after optimizer with pause-aware clocks: {\"paused_wall_seconds\": 0.01, \"corrected_episode_timer\": true, \"corrected_action_timer\": true, \"corrected_monitor_timer\": true, \"active_episode_clock_drift_s\": 0.0}\n[PPO POST RESUME MENU] Confirmed MENU after 4 fresh ML+template captures; menu_idle_seconds_excluded=0.001; deferred guarded terminal with NO movement.\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n"
+    },
+    "death": {
+      "mode": "death",
+      "events": [
+        {
+          "event": "reset",
+          "after_total": 0
+        },
+        {
+          "event": "step",
+          "step": 1,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 1,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "step",
+          "step": 2,
+          "input_code": 1,
+          "next_code": 2,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": -0.96,
+          "done": true,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.1
+        },
+        {
+          "event": "reset",
+          "after_total": 2
+        },
+        {
+          "event": "rollout_end",
+          "step": 2
+        },
+        {
+          "event": "passive_resync",
+          "step": 2,
+          "code": 100,
+          "unacted_seconds": 0.25
+        },
+        {
+          "event": "step",
+          "step": 3,
+          "input_code": 100,
+          "next_code": 101,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.12,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.25,
+          "duration": 0.3
+        },
+        {
+          "event": "step",
+          "step": 4,
+          "input_code": 101,
+          "next_code": 102,
+          "action": 4,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.039999999999999994,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.35
+        },
+        {
+          "event": "rollout_end",
+          "step": 4
+        }
+      ],
+      "buffer_additions": [
+        {
+          "step": 1,
+          "input_code": 0.0,
+          "action": 1,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        },
+        {
+          "step": 2,
+          "input_code": 1.0,
+          "action": 0,
+          "reward": -0.9599999785423279,
+          "episode_start": false
+        },
+        {
+          "step": 3,
+          "input_code": 100.0,
+          "action": 0,
+          "reward": 0.11999999731779099,
+          "episode_start": true
+        },
+        {
+          "step": 4,
+          "input_code": 101.0,
+          "action": 4,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        }
+      ],
+      "return_computations": [
+        {
+          "step": 2,
+          "boundary_callback_count": 0,
+          "last_done": true,
+          "bootstrap_value": 0.0,
+          "stored_last_reward": -0.9599999785423279,
+          "last_return": -0.9599999785423279
+        },
+        {
+          "step": 4,
+          "boundary_callback_count": 1,
+          "last_done": false,
+          "bootstrap_value": 0.6848421096801758,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.7214179039001465
+        }
+      ],
+      "audit_rows": 4,
+      "pending_final_menu": false,
+      "total_timesteps": 4,
+      "callback_log": "[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n[PPO GAP] {\"event\": \"ppo_rollout_resume_gap\", \"boundary\": 1, \"timesteps\": 2, \"rollout_end_to_next_start_ms\": 26.55, \"last_env_step_to_next_start_ms\": 26.76, \"cached_frame_to_next_start_ms\": 26.82, \"last_env_step_done\": true, \"potentially_stale\": false, \"warning_threshold_ms\": 250.0, \"interpretation\": \"Timestamp age of cached observation at the next PPO rollout. Does not establish that Unity died or a specific action was wrong.\"}\n[PPO PAUSE] Resumed after optimizer with pause-aware clocks: {\"paused_wall_seconds\": 0.01, \"corrected_episode_timer\": true, \"corrected_action_timer\": true, \"corrected_monitor_timer\": true, \"active_episode_clock_drift_s\": 0.0}\n[PPO RESYNC] refreshed 4-frame stack; cached age now 0.0ms\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n"
+    },
+    "timeout": {
+      "mode": "timeout",
+      "events": [
+        {
+          "event": "reset",
+          "after_total": 0
+        },
+        {
+          "event": "step",
+          "step": 1,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 1,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        },
+        {
+          "event": "step",
+          "step": 2,
+          "input_code": 1,
+          "next_code": 2,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": true,
+          "passive_gap": 0.0,
+          "duration": 0.1
+        },
+        {
+          "event": "reset",
+          "after_total": 2
+        },
+        {
+          "event": "rollout_end",
+          "step": 2
+        },
+        {
+          "event": "passive_resync",
+          "step": 2,
+          "code": 100,
+          "unacted_seconds": 0.25
+        },
+        {
+          "event": "step",
+          "step": 3,
+          "input_code": 100,
+          "next_code": 101,
+          "action": 0,
+          "movement_dispatched": false,
+          "suppressed_by_handoff": false,
+          "reward": 0.12,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.25,
+          "duration": 0.3
+        },
+        {
+          "event": "step",
+          "step": 4,
+          "input_code": 101,
+          "next_code": 102,
+          "action": 4,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.039999999999999994,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.35
+        },
+        {
+          "event": "rollout_end",
+          "step": 4
+        }
+      ],
+      "buffer_additions": [
+        {
+          "step": 1,
+          "input_code": 0.0,
+          "action": 1,
+          "reward": 0.03999999910593033,
+          "episode_start": true
+        },
+        {
+          "step": 2,
+          "input_code": 1.0,
+          "action": 0,
+          "reward": 0.2626105546951294,
+          "episode_start": false
+        },
+        {
+          "step": 3,
+          "input_code": 100.0,
+          "action": 0,
+          "reward": 0.11999999731779099,
+          "episode_start": true
+        },
+        {
+          "step": 4,
+          "input_code": 101.0,
+          "action": 4,
+          "reward": 0.03999999910593033,
+          "episode_start": false
+        }
+      ],
+      "return_computations": [
+        {
+          "step": 2,
+          "boundary_callback_count": 0,
+          "last_done": true,
+          "bootstrap_value": 0.0,
+          "stored_last_reward": 0.2626105546951294,
+          "last_return": 0.2626105546951294
+        },
+        {
+          "step": 4,
+          "boundary_callback_count": 1,
+          "last_done": false,
+          "bootstrap_value": 0.6902382969856262,
+          "stored_last_reward": 0.03999999910593033,
+          "last_return": 0.7267871499061584
+        }
+      ],
+      "audit_rows": 4,
+      "pending_final_menu": false,
+      "total_timesteps": 4,
+      "callback_log": "[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n[PPO GAP] {\"event\": \"ppo_rollout_resume_gap\", \"boundary\": 1, \"timesteps\": 2, \"rollout_end_to_next_start_ms\": 26.33, \"last_env_step_to_next_start_ms\": 26.64, \"cached_frame_to_next_start_ms\": 26.68, \"last_env_step_done\": true, \"potentially_stale\": false, \"warning_threshold_ms\": 250.0, \"interpretation\": \"Timestamp age of cached observation at the next PPO rollout. Does not establish that Unity died or a specific action was wrong.\"}\n[PPO PAUSE] Resumed after optimizer with pause-aware clocks: {\"paused_wall_seconds\": 0.01, \"corrected_episode_timer\": true, \"corrected_action_timer\": true, \"corrected_monitor_timer\": true, \"active_episode_clock_drift_s\": 0.0}\n[PPO RESYNC] refreshed 4-frame stack; cached age now 0.0ms\n[PPO PAUSE] Verified frozen gameplay before optimizer; paused-track delta=0.000\n"
+    },
+    "time_budget_stop": {
+      "mode": "time_budget_stop",
+      "events": [
+        {
+          "event": "reset",
+          "after_total": 0
+        },
+        {
+          "event": "step",
+          "step": 1,
+          "input_code": 0,
+          "next_code": 1,
+          "action": 1,
+          "movement_dispatched": true,
+          "suppressed_by_handoff": false,
+          "reward": 0.04000000000000001,
+          "done": false,
+          "truncated": false,
+          "passive_gap": 0.0,
+          "duration": 0.05
+        }
+      ],
+      "buffer_additions": [],
+      "return_computations": [],
+      "audit_rows": 1,
+      "pending_final_menu": false,
+      "total_timesteps": 1,
+      "callback_log": "[PPO REWARD STEP AUDIT] Recording actual env reward components (observation only).\n"
+    }
+  },
+  "recorded_runs": [
+    {
+      "run": "v612_paused_state_v179_8h_20261028_045909",
+      "effective_settings": {
+        "mode": "train",
+        "run_name": "v612_paused_state_v179_8h_20261028_045909",
+        "resolution": [
+          512,
+          288
+        ],
+        "fps": 30,
+        "rate_mode": "uncapped",
+        "resync_rollouts": true,
+        "pause_ppo_optimizer": true,
+        "recover_rollout_menu": false,
+        "crop": [
+          0.0,
+          0.055,
+          1.0,
+          0.965
+        ],
+        "steps": 1000064,
+        "max_minutes": 480.0,
+        "n_steps": 128,
+        "batch_size": 32,
+        "n_epochs": 5,
+        "learning_rate": 0.0003,
+        "gamma": 0.995,
+        "ent_coef": 0.002,
+        "seed": 123,
+        "detector": "ai_data\\v5_hazards\\runs\\segment_round04\\weights\\best.pt",
+        "imgsz": 960,
+        "conf": 0.2,
+        "detect_every": 3,
+        "max_stale_ms": 300,
+        "press_delay_ms": 5,
+        "capture_mode": "fast",
+        "resize_method": "linear",
+        "torch_threads": 1,
+        "startup_grace": 0.1,
+        "restart_grace": 0.1,
+        "state_model": "checkpoints\\v612_snapshot_20261021\\screen_state_candidate_v2.pt",
+        "state_confidence": 0.9,
+        "menu_ready_timeout": 30.0,
+        "startup_timeout": 8.0,
+        "startup_motion_threshold": 2.2,
+        "save_overlays": 6,
+        "preview_delay": 0.2,
+        "episode_max_seconds": 15.0,
+        "reward_survival_rate": 0.8,
+        "reward_death_penalty": 1.0,
+        "reward_milestone_bonus": 0.15,
+        "reward_milestone_seconds": 0.5,
+        "log_every_seconds": 30.0,
+        "save_every_minutes": 4.0,
+        "audit_reward_timing": true,
+        "resume": "ai_data\\rl_v2_runs\\v612_paused_state_v179_test_20261028_045143\\latest.zip",
+        "eval_episodes": 20,
+        "stochastic_eval": false,
+        "eval_policy": "deterministic",
+        "assume_center_lane": false,
+        "probe_trials": 2,
+        "probe_delays_ms": "5,10",
+        "benchmark_action": "ppo",
+        "probe_delays": [
+          5,
+          10
+        ],
+        "schema": {
+          "feature_version": "v61_screen_columns_command_odometry_timing_v1",
+          "v6_base_version": "v6_seg9_3bands_2slots8_v1",
+          "classes": [
+            "coin",
+            "train_front",
+            "train_side",
+            "train_roof",
+            "ramp",
+            "barrier_jump",
+            "barrier_roll",
+            "barrier_either",
+            "tunnel_entrance"
+          ],
+          "image_frames": 4,
+          "image_channels": 12,
+          "v6_aux_dim": 467,
+          "screen_column_dim": 81,
+          "action_timing_dim": 5,
+          "commanded_lane_dim": 4,
+          "aux_dim": 557,
+          "warning": "Screen columns are NOT track lanes; commanded lane is unverified and disabled by default."
+        }
+      },
+      "groups": {
+        "all": {
+          "count": 386829,
+          "cap_excess_seconds": 2397.7199999999416,
+          "logged_survival": 16646.35200006806,
+          "death_penalties": 5553,
+          "increment_median_s": 0.050000000000000044,
+          "increment_p95_s": 0.07000000000000006,
+          "increment_max_s": 1.9099999999999997,
+          "exact_cap_count": 8354,
+          "auditor_tolerant_cap_count": 8345,
+          "counterfactual_uncapped_survival_difference": 1918.1759999999533
+        },
+        "nonterminal": {
+          "count": 381276,
+          "cap_excess_seconds": 872.2799999999992,
+          "logged_survival": 15979.99200006547,
+          "death_penalties": 0,
+          "increment_median_s": 0.050000000000000044,
+          "increment_p95_s": 0.07000000000000006,
+          "increment_max_s": 0.8700000000000001,
+          "exact_cap_count": 2802,
+          "auditor_tolerant_cap_count": 2797,
+          "counterfactual_uncapped_survival_difference": 697.8239999999994
+        },
+        "first_after_reset": {
+          "count": 5554,
+          "cap_excess_seconds": 16.169999999999995,
+          "logged_survival": 255.4959999999999,
+          "death_penalties": 0,
+          "increment_median_s": 0.06,
+          "increment_p95_s": 0.06,
+          "increment_max_s": 0.52,
+          "exact_cap_count": 51,
+          "auditor_tolerant_cap_count": 51,
+          "counterfactual_uncapped_survival_difference": 12.935999999999996
+        },
+        "terminal": {
+          "count": 5553,
+          "cap_excess_seconds": 1525.4399999999825,
+          "logged_survival": 666.3600000000222,
+          "death_penalties": 5553,
+          "increment_median_s": 0.40999999999999925,
+          "increment_p95_s": 0.4400000000000004,
+          "increment_max_s": 1.9099999999999997,
+          "exact_cap_count": 5552,
+          "auditor_tolerant_cap_count": 5548,
+          "counterfactual_uncapped_survival_difference": 1220.351999999986
+        },
+        "first_after_optimizer": {
+          "count": 3022,
+          "cap_excess_seconds": 954.5999999999995,
+          "logged_survival": 362.6400000000107,
+          "death_penalties": 246,
+          "increment_median_s": 0.46999999999999975,
+          "increment_p95_s": 0.5000000000000002,
+          "increment_max_s": 1.8799999999999994,
+          "exact_cap_count": 3021,
+          "auditor_tolerant_cap_count": 3018,
+          "counterfactual_uncapped_survival_difference": 763.6799999999996
+        },
+        "menu_handoff": {
+          "count": 209,
+          "cap_excess_seconds": 58.63999999999999,
+          "logged_survival": 25.08000000000003,
+          "death_penalties": 209,
+          "increment_median_s": 0.3600000000000003,
+          "increment_p95_s": 1.3239999999999925,
+          "increment_max_s": 1.8799999999999994,
+          "exact_cap_count": 208,
+          "auditor_tolerant_cap_count": 205,
+          "counterfactual_uncapped_survival_difference": 46.912
+        }
+      },
+      "last_audit_row": {
+        "step": 1662427,
+        "episode_duration_s": 0.61,
+        "done": false,
+        "truncated": false,
+        "environment_reward": 0.04800000041723251,
+        "reward_survival": 0.048,
+        "reward_milestones": 0.0,
+        "reward_death": 0.0,
+        "reward_v61": 0.048,
+        "ppo_menu_handoff_terminal": false
+      },
+      "final_requested_steps_completed": false,
+      "full_rollout_steps": 386816,
+      "trailing_incomplete_rollout_steps": 13,
+      "note": "Durations are trainer-observed, rounded to 0.01s; cap excess is not verified lost Unity gameplay time."
+    },
+    {
+      "run": "ppoctrl_20261028_02_train",
+      "effective_settings": {
+        "n_steps": 128,
+        "batch_size": 32,
+        "n_epochs": 5,
+        "learning_rate": 0.0003,
+        "gamma": 0.995,
+        "ent_coef": 0.002,
+        "target_kl": null,
+        "seed": 123,
+        "learning_rate_at_start": 0.0003
+      },
+      "groups": {
+        "all": {
+          "count": 32768,
+          "cap_excess_seconds": 200.24000000000012,
+          "logged_survival": 1105.695999999855,
+          "death_penalties": 346,
+          "increment_median_s": 0.040000000000000036,
+          "increment_p95_s": 0.06000000000000005,
+          "increment_max_s": 1.8900000000000006,
+          "exact_cap_count": 566,
+          "auditor_tolerant_cap_count": 555,
+          "counterfactual_uncapped_survival_difference": 160.19200000000012
+        },
+        "nonterminal": {
+          "count": 32422,
+          "cap_excess_seconds": 82.43000000000002,
+          "logged_survival": 1064.1839999999156,
+          "death_penalties": 0,
+          "increment_median_s": 0.040000000000000036,
+          "increment_p95_s": 0.06000000000000005,
+          "increment_max_s": 0.6999999999999993,
+          "exact_cap_count": 226,
+          "auditor_tolerant_cap_count": 226,
+          "counterfactual_uncapped_survival_difference": 65.94400000000002
+        },
+        "first_after_reset": {
+          "count": 347,
+          "cap_excess_seconds": 0.7,
+          "logged_survival": 17.775999999999982,
+          "death_penalties": 0,
+          "increment_median_s": 0.06,
+          "increment_p95_s": 0.08,
+          "increment_max_s": 0.52,
+          "exact_cap_count": 2,
+          "auditor_tolerant_cap_count": 2,
+          "counterfactual_uncapped_survival_difference": 0.5599999999999999
+        },
+        "terminal": {
+          "count": 346,
+          "cap_excess_seconds": 117.8099999999999,
+          "logged_survival": 41.51199999999989,
+          "death_penalties": 346,
+          "increment_median_s": 0.39,
+          "increment_p95_s": 1.7999999999999998,
+          "increment_max_s": 1.8900000000000006,
+          "exact_cap_count": 340,
+          "auditor_tolerant_cap_count": 329,
+          "counterfactual_uncapped_survival_difference": 94.24799999999993
+        },
+        "first_after_optimizer": {
+          "count": 255,
+          "cap_excess_seconds": 89.23000000000005,
+          "logged_survival": 30.600000000000076,
+          "death_penalties": 29,
+          "increment_median_s": 0.5,
+          "increment_p95_s": 0.6599999999999999,
+          "increment_max_s": 0.8,
+          "exact_cap_count": 254,
+          "auditor_tolerant_cap_count": 253,
+          "counterfactual_uncapped_survival_difference": 71.38400000000004
+        },
+        "menu_handoff": {
+          "count": 28,
+          "cap_excess_seconds": 6.149999999999999,
+          "logged_survival": 3.360000000000002,
+          "death_penalties": 28,
+          "increment_median_s": 0.39500000000000024,
+          "increment_p95_s": 0.49300000000000005,
+          "increment_max_s": 0.5599999999999996,
+          "exact_cap_count": 27,
+          "auditor_tolerant_cap_count": 26,
+          "counterfactual_uncapped_survival_difference": 4.919999999999999
+        }
+      },
+      "last_audit_row": {
+        "step": 1695195,
+        "episode_duration_s": 5.08,
+        "done": false,
+        "truncated": false,
+        "environment_reward": 0.04800000041723251,
+        "reward_survival": 0.048,
+        "reward_milestones": 0.0,
+        "reward_death": 0.0,
+        "reward_v61": 0.048,
+        "ppo_menu_handoff_terminal": false
+      },
+      "final_requested_steps_completed": true,
+      "full_rollout_steps": 32768,
+      "trailing_incomplete_rollout_steps": 0,
+      "note": "Durations are trainer-observed, rounded to 0.01s; cap excess is not verified lost Unity gameplay time."
+    },
+    {
+      "run": "ppoctrl_20261028_04_train",
+      "effective_settings": {
+        "n_steps": 512,
+        "batch_size": 32,
+        "n_epochs": 5,
+        "learning_rate": 0.0003,
+        "gamma": 0.995,
+        "ent_coef": 0.002,
+        "target_kl": null,
+        "seed": 123,
+        "learning_rate_at_start": 0.0003
+      },
+      "groups": {
+        "all": {
+          "count": 32768,
+          "cap_excess_seconds": 128.06999999999994,
+          "logged_survival": 1029.127999999974,
+          "death_penalties": 293,
+          "increment_median_s": 0.03999999999999998,
+          "increment_p95_s": 0.06000000000000005,
+          "increment_max_s": 1.9,
+          "exact_cap_count": 346,
+          "auditor_tolerant_cap_count": 341,
+          "counterfactual_uncapped_survival_difference": 102.45599999999996
+        },
+        "nonterminal": {
+          "count": 32475,
+          "cap_excess_seconds": 18.810000000000002,
+          "logged_survival": 993.9679999999858,
+          "death_penalties": 0,
+          "increment_median_s": 0.039999999999999925,
+          "increment_p95_s": 0.06,
+          "increment_max_s": 0.5300000000000002,
+          "exact_cap_count": 54,
+          "auditor_tolerant_cap_count": 54,
+          "counterfactual_uncapped_survival_difference": 15.048000000000002
+        },
+        "first_after_reset": {
+          "count": 294,
+          "cap_excess_seconds": 0.0,
+          "logged_survival": 13.86399999999998,
+          "death_penalties": 0,
+          "increment_median_s": 0.06,
+          "increment_p95_s": 0.08,
+          "increment_max_s": 0.08,
+          "exact_cap_count": 0,
+          "auditor_tolerant_cap_count": 0,
+          "counterfactual_uncapped_survival_difference": 0.0
+        },
+        "terminal": {
+          "count": 293,
+          "cap_excess_seconds": 109.25999999999998,
+          "logged_survival": 35.16000000000002,
+          "death_penalties": 293,
+          "increment_median_s": 0.3999999999999999,
+          "increment_p95_s": 1.8199999999999996,
+          "increment_max_s": 1.9,
+          "exact_cap_count": 292,
+          "auditor_tolerant_cap_count": 287,
+          "counterfactual_uncapped_survival_difference": 87.40799999999999
+        },
+        "first_after_optimizer": {
+          "count": 63,
+          "cap_excess_seconds": 20.44,
+          "logged_survival": 7.560000000000006,
+          "death_penalties": 9,
+          "increment_median_s": 0.5,
+          "increment_p95_s": 0.5299999999999999,
+          "increment_max_s": 0.5300000000000002,
+          "exact_cap_count": 63,
+          "auditor_tolerant_cap_count": 63,
+          "counterfactual_uncapped_survival_difference": 16.352
+        },
+        "menu_handoff": {
+          "count": 9,
+          "cap_excess_seconds": 1.6299999999999992,
+          "logged_survival": 1.08,
+          "death_penalties": 9,
+          "increment_median_s": 0.3799999999999999,
+          "increment_p95_s": 0.396,
+          "increment_max_s": 0.3999999999999999,
+          "exact_cap_count": 9,
+          "auditor_tolerant_cap_count": 9,
+          "counterfactual_uncapped_survival_difference": 1.3039999999999994
+        }
+      },
+      "last_audit_row": {
+        "step": 1695195,
+        "episode_duration_s": 1.59,
+        "done": false,
+        "truncated": false,
+        "environment_reward": 0.03200000151991844,
+        "reward_survival": 0.032,
+        "reward_milestones": 0.0,
+        "reward_death": 0.0,
+        "reward_v61": 0.032,
+        "ppo_menu_handoff_terminal": false
+      },
+      "final_requested_steps_completed": true,
+      "full_rollout_steps": 32768,
+      "trailing_incomplete_rollout_steps": 0,
+      "note": "Durations are trainer-observed, rounded to 0.01s; cap excess is not verified lost Unity gameplay time."
+    },
+    {
+      "run": "ppoctrl_20261028_06_train",
+      "effective_settings": {
+        "n_steps": 512,
+        "batch_size": 32,
+        "n_epochs": 5,
+        "learning_rate": 0.0003,
+        "gamma": 0.995,
+        "ent_coef": 0.002,
+        "target_kl": 0.03,
+        "seed": 123,
+        "learning_rate_at_start": 0.0003
+      },
+      "groups": {
+        "all": {
+          "count": 32768,
+          "cap_excess_seconds": 133.6599999999999,
+          "logged_survival": 1050.8879999999347,
+          "death_penalties": 329,
+          "increment_median_s": 0.040000000000000036,
+          "increment_p95_s": 0.06,
+          "increment_max_s": 1.8800000000000003,
+          "exact_cap_count": 385,
+          "auditor_tolerant_cap_count": 381,
+          "counterfactual_uncapped_survival_difference": 106.92799999999994
+        },
+        "nonterminal": {
+          "count": 32439,
+          "cap_excess_seconds": 20.969999999999995,
+          "logged_survival": 1011.4079999999844,
+          "death_penalties": 0,
+          "increment_median_s": 0.040000000000000036,
+          "increment_p95_s": 0.06,
+          "increment_max_s": 0.5500000000000003,
+          "exact_cap_count": 59,
+          "auditor_tolerant_cap_count": 59,
+          "counterfactual_uncapped_survival_difference": 16.775999999999996
+        },
+        "first_after_reset": {
+          "count": 330,
+          "cap_excess_seconds": 0.0,
+          "logged_survival": 15.743999999999971,
+          "death_penalties": 0,
+          "increment_median_s": 0.06,
+          "increment_p95_s": 0.08,
+          "increment_max_s": 0.08,
+          "exact_cap_count": 0,
+          "auditor_tolerant_cap_count": 0,
+          "counterfactual_uncapped_survival_difference": 0.0
+        },
+        "terminal": {
+          "count": 329,
+          "cap_excess_seconds": 112.68999999999996,
+          "logged_survival": 39.479999999999926,
+          "death_penalties": 329,
+          "increment_median_s": 0.3900000000000001,
+          "increment_p95_s": 1.8099999999999998,
+          "increment_max_s": 1.8800000000000003,
+          "exact_cap_count": 326,
+          "auditor_tolerant_cap_count": 322,
+          "counterfactual_uncapped_survival_difference": 90.15199999999997
+        },
+        "first_after_optimizer": {
+          "count": 63,
+          "cap_excess_seconds": 23.409999999999997,
+          "logged_survival": 7.560000000000006,
+          "death_penalties": 4,
+          "increment_median_s": 0.5,
+          "increment_p95_s": 0.5489999999999999,
+          "increment_max_s": 1.8600000000000003,
+          "exact_cap_count": 63,
+          "auditor_tolerant_cap_count": 63,
+          "counterfactual_uncapped_survival_difference": 18.727999999999998
+        },
+        "menu_handoff": {
+          "count": 4,
+          "cap_excess_seconds": 2.4400000000000013,
+          "logged_survival": 0.48,
+          "death_penalties": 4,
+          "increment_median_s": 0.42500000000000027,
+          "increment_p95_s": 1.65,
+          "increment_max_s": 1.8600000000000003,
+          "exact_cap_count": 4,
+          "auditor_tolerant_cap_count": 4,
+          "counterfactual_uncapped_survival_difference": 1.952000000000001
+        }
+      },
+      "last_audit_row": {
+        "step": 1695195,
+        "episode_duration_s": 1.09,
+        "done": false,
+        "truncated": false,
+        "environment_reward": 0.024000000208616257,
+        "reward_survival": 0.024,
+        "reward_milestones": 0.0,
+        "reward_death": 0.0,
+        "reward_v61": 0.024,
+        "ppo_menu_handoff_terminal": false
+      },
+      "final_requested_steps_completed": true,
+      "full_rollout_steps": 32768,
+      "trailing_incomplete_rollout_steps": 0,
+      "note": "Durations are trainer-observed, rounded to 0.01s; cap excess is not verified lost Unity gameplay time."
+    }
+  ],
+  "dispatch_evidence": [
+    {
+      "run": "v612_latency_pilot_30_20261028",
+      "decisions": 2804,
+      "commands": 2037,
+      "no_command_actions": {
+        "0": 749,
+        "3": 18
+      },
+      "failures": [],
+      "suppressed_nonzero_terminal": 18,
+      "linked_next_observations": 2774,
+      "note": "Command start/return are Playwright timings, not browser-event receipt or Unity response."
+    },
+    {
+      "run": "v612_latency_pilot_detect1_30_20261028",
+      "decisions": 2111,
+      "commands": 1538,
+      "no_command_actions": {
+        "0": 560,
+        "3": 13
+      },
+      "failures": [],
+      "suppressed_nonzero_terminal": 13,
+      "linked_next_observations": 2081,
+      "note": "Command start/return are Playwright timings, not browser-event receipt or Unity response."
+    },
+    {
+      "run": "v612_pipeline_baseline10_v2_20261028",
+      "decisions": 875,
+      "commands": 659,
+      "no_command_actions": {
+        "0": 214,
+        "3": 2
+      },
+      "failures": [],
+      "suppressed_nonzero_terminal": 2,
+      "linked_next_observations": 865,
+      "note": "Command start/return are Playwright timings, not browser-event receipt or Unity response."
+    },
+    {
+      "run": "v612_pipeline_prepared10_v2_20261028",
+      "decisions": 990,
+      "commands": 739,
+      "no_command_actions": {
+        "0": 248,
+        "3": 3
+      },
+      "failures": [],
+      "suppressed_nonzero_terminal": 3,
+      "linked_next_observations": 980,
+      "note": "Command start/return are Playwright timings, not browser-event receipt or Unity response."
+    }
+  ],
+  "cadence_illustrations": {
+    "gamma": 0.995,
+    "gae_lambda": 0.95,
+    "rows": [
+      {
+        "interval_s": 0.05192,
+        "decisions_per_second": 19.26040061633282,
+        "discount_after_5_seconds": 0.6171039343441959,
+        "discount_half_life_seconds": 7.179631189436279,
+        "gae_trace_half_life_seconds": 0.6391557969186326
+      },
+      {
+        "interval_s": 0.04019,
+        "decisions_per_second": 24.881811395869622,
+        "discount_after_5_seconds": 0.5360083169485367,
+        "discount_half_life_seconds": 5.557576608309785,
+        "gae_trace_half_life_seconds": 0.4947548435701048
+      },
+      {
+        "interval_s": 0.03538,
+        "decisions_per_second": 28.264556246466928,
+        "discount_after_5_seconds": 0.49243817879087093,
+        "discount_half_life_seconds": 4.892437432246833,
+        "gae_trace_half_life_seconds": 0.4355418354195151
+      },
+      {
+        "interval_s": 0.05,
+        "decisions_per_second": 20.0,
+        "discount_after_5_seconds": 0.6057704364907279,
+        "discount_half_life_seconds": 6.914128649303042,
+        "gae_trace_half_life_seconds": 0.6155198352452163
+      },
+      {
+        "interval_s": 0.04,
+        "decisions_per_second": 25.0,
+        "discount_after_5_seconds": 0.5344229416520514,
+        "discount_half_life_seconds": 5.531302919442434,
+        "gae_trace_half_life_seconds": 0.49241586819617306
+      }
+    ],
+    "note": "Constant-interval illustrations, not measured per-episode discount schedules."
+  }
+}

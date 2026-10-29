@@ -1,0 +1,143 @@
+{
+  "v612_settled_smoke_20261029_144837": {
+    "audit": {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 256,
+      "processed_rollout_transitions": 256,
+      "unique_transitions_used_by_optimizer": 256,
+      "passive_resync_transitions": 1,
+      "terminal_transitions": 2,
+      "failures": []
+    },
+    "stats": {
+      "collected_transitions": 256,
+      "optimized_transitions": 256,
+      "actor_transitions": 253,
+      "passive_transitions": 3,
+      "boundary_settlements": 2,
+      "completed_rollout_transitions": 256,
+      "optimizer_sample_presentations": 1280,
+      "discarded_partial_transitions": 0,
+      "stop_reason": null
+    },
+    "completed_requested_steps": true,
+    "saved_num_timesteps": 1662683,
+    "guard": {
+      "preflight_gameplay_allowed": 253,
+      "preflight_rechecks_on_transient": 2,
+      "preflight_confirmed_menu": 2,
+      "uncertain_state_abort": 0,
+      "ml_menu_without_template": 1,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": false,
+      "preflight_checks_every_decision": true,
+      "prepared_observation_guard_enabled": true,
+      "prepared_observation_guard_hits": 225,
+      "prepared_observation_guard_fallbacks": 34,
+      "prepared_observation_guard_late_fallbacks": 4,
+      "prepared_observation_max_age_ms": 20.0,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    }
+  },
+  "v612_settled_gate_20261029_train": {
+    "audit": {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 1024,
+      "processed_rollout_transitions": 1024,
+      "unique_transitions_used_by_optimizer": 1024,
+      "passive_resync_transitions": 7,
+      "terminal_transitions": 10,
+      "failures": []
+    },
+    "stats": {
+      "collected_transitions": 1024,
+      "optimized_transitions": 1024,
+      "actor_transitions": 1011,
+      "passive_transitions": 13,
+      "boundary_settlements": 8,
+      "completed_rollout_transitions": 1024,
+      "optimizer_sample_presentations": 5120,
+      "discarded_partial_transitions": 0,
+      "stop_reason": null
+    },
+    "completed_requested_steps": true,
+    "saved_num_timesteps": 1663451,
+    "guard": {
+      "preflight_gameplay_allowed": 1011,
+      "preflight_rechecks_on_transient": 7,
+      "preflight_confirmed_menu": 7,
+      "uncertain_state_abort": 0,
+      "ml_menu_without_template": 7,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": false,
+      "preflight_checks_every_decision": true,
+      "prepared_observation_guard_enabled": true,
+      "prepared_observation_guard_hits": 960,
+      "prepared_observation_guard_fallbacks": 70,
+      "prepared_observation_guard_late_fallbacks": 12,
+      "prepared_observation_max_age_ms": 20.0,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    }
+  },
+  "v612_settled_deadline_20261029_145734": {
+    "audit": {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 128,
+      "processed_rollout_transitions": 128,
+      "unique_transitions_used_by_optimizer": 128,
+      "passive_resync_transitions": 0,
+      "terminal_transitions": 0,
+      "failures": []
+    },
+    "stats": {
+      "collected_transitions": 128,
+      "optimized_transitions": 128,
+      "actor_transitions": 128,
+      "passive_transitions": 0,
+      "boundary_settlements": 1,
+      "completed_rollout_transitions": 128,
+      "optimizer_sample_presentations": 640,
+      "discarded_partial_transitions": 0,
+      "stop_reason": "wall_time_at_optimized_rollout_boundary"
+    },
+    "completed_requested_steps": false,
+    "saved_num_timesteps": 1662555,
+    "guard": {
+      "preflight_gameplay_allowed": 128,
+      "preflight_rechecks_on_transient": 0,
+      "preflight_confirmed_menu": 0,
+      "uncertain_state_abort": 0,
+      "ml_menu_without_template": 0,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": false,
+      "preflight_checks_every_decision": true,
+      "prepared_observation_guard_enabled": true,
+      "prepared_observation_guard_hits": 118,
+      "prepared_observation_guard_fallbacks": 13,
+      "prepared_observation_guard_late_fallbacks": 3,
+      "prepared_observation_max_age_ms": 20.0,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    }
+  },
+  "source_checkpoint_sha256": "ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc",
+  "checkpoint_load_evaluation": {
+    "episodes": 5,
+    "mean_survival_seconds": 5.03,
+    "guard": {
+      "preflight_gameplay_allowed": 585,
+      "preflight_rechecks_on_transient": 2,
+      "preflight_confirmed_menu": 2,
+      "uncertain_state_abort": 0,
+      "ml_menu_without_template": 2,
+      "visual_gameplay_recoveries": 0,
+      "guard_hard_stopped": false,
+      "preflight_checks_every_decision": true,
+      "prepared_observation_guard_enabled": true,
+      "prepared_observation_guard_hits": 572,
+      "prepared_observation_guard_fallbacks": 18,
+      "prepared_observation_guard_late_fallbacks": 3,
+      "prepared_observation_max_age_ms": 20.0,
+      "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+    }
+  }
+}

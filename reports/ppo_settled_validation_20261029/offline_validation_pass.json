@@ -1,0 +1,27 @@
+{
+  "tests_run": 204,
+  "failures": 0,
+  "errors": 0,
+  "successful": true,
+  "patterns": [
+    "test_ppo_browser_session.py",
+    "test_ppo_browser_focus.py",
+    "test_ppo_long_episode_limit.py",
+    "test_ppo_prepared_guard.py",
+    "test_ppo_checkpoint_settings.py",
+    "test_ppo_eval_prediction.py",
+    "test_ppo_reaction_latency.py",
+    "test_ppo_pause_runtime_v179.py",
+    "test_ppo_current_runtime.py",
+    "test_demo_bc_feature_cache.py",
+    "test_demo_review_queue.py",
+    "test_ppo_settled_learning.py"
+  ],
+  "source_sha256": {
+    "train_rs_v612_ppo.py": "0002e1afcb05af8afc672a9b621e75bd6451000ec8ebfc3fff95b6b40a4039c0",
+    "tools/ppo_settled_learning.py": "33abfe3bb0975829a3b6dec96e298a7592eea90b9610de74206d9218ed0c725b",
+    "tools/run_ppo_batch.py": "f57b83790a7e25592ad268d517fc5bbcda3ab113d9dee9241cea05cada7884f2",
+    "tests/test_ppo_settled_learning.py": "0b499a8f20b10fe79cb22ff63b8db8eadb5e10f4cb66e903074c50560a2c6476",
+    "tests/test_ppo_current_runtime.py": "13230aee70fb1900f29e05076443d23cd2a4c40d6f46b18458fdb2c4b06ca767"
+  }
+}

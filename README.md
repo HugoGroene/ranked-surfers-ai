@@ -8,6 +8,30 @@ Screenshot-based reinforcement learning for a **locally hosted Practice copy** o
 
 ## Current status: recovered 28 October development
 
+**29 October learning-correctness correction:** pause-aware training now uses
+an episode-aware collector with pre-GAE boundary settlement, actor-masked
+passive resync transitions, verified-time survival rewards, elapsed-time
+discounting and full-rollout deadline completion. Reward coefficients and
+network/schema are unchanged, but timing/return semantics deliberately differ
+from historical runs. See [implementation and live gates](reports/ppo_settled_validation_20261029/README.md)
+and [current pipeline usage](README_PPO_PIPELINE.md). The findings and proposed
+next work below describe the earlier snapshot. These corrections have passed
+short live gates; the first corrected learning-rate comparison is complete below. Use `--legacy-learning`
+only for explicit historical reproduction.
+
+**29 October current results:** both corrected PPO arms completed 32,768
+transitions from the small BC pilot, with rollout 512 and 100-episode matched
+evaluations. Fresh pilot mean: 4.6586 s; learning rate 0.0001: 4.7756 s;
+0.0003: 4.4793 s. Neither established an improvement. No learning-rate winner
+was adopted; repeat evaluations were deferred in favor of failure diagnosis.
+See [exact results](reports/ppo_lr_comparison_20261029/README.md).
+
+**Capture issue remains open:** inspected PPO/detector source images include
+browser chrome, whereas BC records a calibrated canvas before applying its
+crop. Their 512x288 images therefore have different framing. This affects PPO
+capture as well as BC compatibility; it is not merely a recorder issue and has
+not been fixed. See [diagnosis and limitations](reports/ppo_failure_diagnosis_20261029/README.md).
+
 The priority is an environment and PPO learning pipeline that supports effective
 autonomous learning from survival/death rewards. BC remains an optional starting
 point, not an action quota or a requirement to imitate human movement forever.
@@ -18,7 +42,7 @@ Better runtime throughput is measured separately from better gameplay.
 | Longer episodes | Default cap 300 seconds; death/timeout distinction, reset and bootstrap handling; a training episode reached 17.09 seconds | Multi-minute model survival is not demonstrated; pass 15 explicitly for historical comparisons |
 | Persistent Chromium | One owned window and worker across the final seven-stage batch; six reuses and clean closure | Keep the desktop visible/unobstructed; Windows may still refuse initial focus |
 | Fresher action inputs | Optional exact-observation safety reading, single-use identity/timestamp checks, 20 ms deadline and fresh-check fallback | Opt-in; median image age improved, rare fallback tails remain; Unity response time is not measured |
-| Controlled PPO settings | Explicit saved-setting overrides, effective-setting reports, rollout 128/512 and target-KL comparisons | No winning learning configuration established; exploration and learning-rate comparisons remain open |
+| Controlled PPO settings | Explicit saved-setting overrides, effective-setting reports, rollout 128/512, target-KL and learning-rate comparisons | No winning learning configuration established; exploration remains unresolved |
 
 See [pipeline usage](README_PPO_PIPELINE.md),
 [implementation/tests/latency validation](reports/ppo_pipeline_foundation_20261028/README.md)
@@ -98,15 +122,20 @@ Do not promote the newest checkpoint merely because it is newest.
 
 ### Next learning work
 
-First audit transition/reward alignment, time-limit bootstrapping, pause/resume
-boundaries, capped intervals and the relationship between decision cadence and
-per-step discounting. Preserve reward semantics until a separate experiment is
-authorized. Then compare PPO learning rate 0.0001 versus 0.0003 from the same
-preserved source at rollout 512, holding other settings fixed, with meaningful
-equal budgets and matched evaluations. This comparison has **not** run yet.
-Promote settings based on survival/control and stable learning, then schedule
-longer monitored training. Additional BC and recurrent memory remain separate
-optional experiments; neither is required to complete this foundation audit.
+The correctness audit, focused fixes and first corrected learning-rate comparison
+are complete. Neither learning rate earned promotion. Diagnose capture alignment,
+action coverage and failures before drawing conclusions from further training.
+BC remains an optional initialization; the current PPO collector does not replay
+demonstrations or apply an integrated imitation loss. Recurrent memory is deferred.
+
+The user requested a three-hour continuation from the eight-hour PPO plus larger
+BC checkpoint (`bc_sampled_batch_20261028_1740_v2/latest.zip`). Commands were
+provided; launch/completion is not yet confirmed. That checkpoint stores rollout
+128 and learning rate 0.0003. The initially supplied command overrode these to
+512 and 0.0001; the latter was a new conservative choice, not an adopted test
+winner. Actual run metadata must establish which settings were used. Historical
+and corrected training returns are not directly comparable; evaluate source and
+output checkpoints under matching gameplay evaluation settings.
 
 No cloud resources were provisioned. The persistent batch runner is sequential
 automation, not parallel environment collection. Raw models/data stay local;

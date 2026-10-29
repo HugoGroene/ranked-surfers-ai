@@ -146,17 +146,25 @@ def main():
                 if not report['completed_requested_steps']:
                     raise RuntimeError(f'{args.run_name}: incomplete training; subsequent stages blocked')
                 if args.audit_reward_timing:
-                    effective_path = directory/'v61_effective_ppo_settings.json'
-                    rollout = (json.loads(effective_path.read_text())['effective_settings']['n_steps']
-                               if effective_path.exists() else args.n_steps)
-                    stability = audit_training_log(read_training_log(log_path),
-                        min_resumes=max(1, args.steps//rollout-1), min_steps=args.steps)
-                    replay = audit_reward_steps((directory/'ppo_reward_step_audit.jsonl').read_text(),
-                                               minimum_steps=args.steps)
-                    audits = {'stability': stability, 'reward_replay': replay}
-                    (options.report/(args.run_name+'_audits.json')).write_text(json.dumps(audits, indent=2)+'\n')
-                    if stability['status'] != 'PASS_STABILITY_CANDIDATE' or replay['status'] != 'PASS_REWARD_REPLAY':
-                        raise RuntimeError(f'{args.run_name}: audit failed; subsequent stages blocked')
+                    if getattr(args,'settled_learning',False):
+                        from tools.ppo_settled_learning import audit_settled_ledger
+                        result=audit_settled_ledger(directory/'learning_transitions.jsonl',
+                            minimum=args.steps,reference=args.discount_reference_seconds)
+                        (options.report/(args.run_name+'_audits.json')).write_text(json.dumps(result,indent=2)+'\n')
+                        if result['status']!='PASS_SETTLED_LEARNING':
+                            raise RuntimeError(f'{args.run_name}: corrected transition audit failed')
+                    else:
+                        effective_path = directory/'v61_effective_ppo_settings.json'
+                        rollout = (json.loads(effective_path.read_text())['effective_settings']['n_steps']
+                                   if effective_path.exists() else args.n_steps)
+                        stability = audit_training_log(read_training_log(log_path),
+                            min_resumes=max(1, args.steps//rollout-1), min_steps=args.steps)
+                        replay = audit_reward_steps((directory/'ppo_reward_step_audit.jsonl').read_text(),
+                                                   minimum_steps=args.steps)
+                        audits = {'stability': stability, 'reward_replay': replay}
+                        (options.report/(args.run_name+'_audits.json')).write_text(json.dumps(audits, indent=2)+'\n')
+                        if stability['status'] != 'PASS_STABILITY_CANDIDATE' or replay['status'] != 'PASS_REWARD_REPLAY':
+                            raise RuntimeError(f'{args.run_name}: audit failed; subsequent stages blocked')
             elif report['eval_episodes'] != args.eval_episodes:
                 raise RuntimeError(f'{args.run_name}: incomplete evaluation; subsequent stages blocked')
             state['completed'].append({'run_name': args.run_name, 'mode': args.mode,

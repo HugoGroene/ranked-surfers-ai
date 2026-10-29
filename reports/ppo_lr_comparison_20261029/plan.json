@@ -1,0 +1,30 @@
+{
+  "source_checkpoint": "ai_data/demonstrations_v13/bc_runs/bc_20261028_152607/model.zip",
+  "source_sha256": "ca99e521298e783eec6f5b11de11fa21eaa03631842801457e4ea3974643c5bc",
+  "source_timesteps": 1662427,
+  "training_steps_per_arm": 32768,
+  "rollout": 512,
+  "batch_size": 32,
+  "n_epochs": 5,
+  "gamma": 0.995,
+  "gae_lambda": 0.95,
+  "ent_coef": 0.002,
+  "target_kl": null,
+  "reference_seconds": 0.05,
+  "learning_rates": [
+    0.0001,
+    0.0003
+  ],
+  "seed": 123,
+  "evaluation_episodes": 100,
+  "repeat_rule": "Repeat both trained-checkpoint evaluations in reverse order if abs(primary mean difference)<0.5s OR independent-episode bootstrap 95% CI includes zero.",
+  "bootstrap_resamples": 20000,
+  "bootstrap_seed": 20261029,
+  "scope": "No runtime changes during collection; independent equal-budget arms from pilot, corrected semantics throughout. BC remains initialization only.",
+  "limitations": [
+    "One training seed per arm",
+    "Sequential unpaired procedural maps",
+    "Episode bootstrap omits training-seed/session variation",
+    "Equal transition counts include passive transitions and may differ in actual actor sample count/active duration"
+  ]
+}

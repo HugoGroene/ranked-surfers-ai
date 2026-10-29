@@ -1,0 +1,35 @@
+======================================================================
+ERROR: test_resume_paused_track_moving_cannot_retry (test_ppo_current_runtime.ResumeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<CURRENT TRAINER resume_after_ppo_optimizer>", line 753, in resume
+  File "C:\Users\Hugo\Documents\ranked-surfers-ai-claude\ranked-surfers-ai-new\tests\test_ppo_current_runtime.py", line 58, in click
+    raise PlaywrightTimeoutError('Resume target detached')
+playwright._impl._errors.TimeoutError: Resume target detached
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Hugo\Documents\ranked-surfers-ai-claude\ranked-surfers-ai-new\tests\test_ppo_current_runtime.py", line 251, in test_resume_paused_track_moving_cannot_retry
+    self.run_resume(e,m)
+  File "C:\Users\Hugo\Documents\ranked-surfers-ai-claude\ranked-surfers-ai-new\tests\test_ppo_current_runtime.py", line 206, in run_resume
+    return e.resume_after_ppo_optimizer(m)
+  File "<CURRENT TRAINER resume_after_ppo_optimizer>", line 819, in resume_after_ppo_optimizer
+  File "C:\Users\Hugo\Documents\ranked-surfers-ai-claude\ranked-surfers-ai-new\tests\test_ppo_current_runtime.py", line 125, in <lambda>
+    e._call=lambda coro,timeout:asyncio.run(coro)
+  File "C:\Users\Hugo\AppData\Local\Programs\Python\Python310\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\Hugo\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "<CURRENT TRAINER resume_after_ppo_optimizer>", line 786, in resume
+  File "C:\Users\Hugo\Documents\ranked-surfers-ai-claude\ranked-surfers-ai-new\tools\ppo_pause_freeze_window.py", line 42, in observe
+    raise ValueError('Nonincreasing capture clock')
+ValueError: Nonincreasing capture clock
+
+Stdout:
+[PPO RESUME CLICK] Timed out; checking overlay before any retry.
+
+----------------------------------------------------------------------
+Ran 204 tests in 8.923s
+
+FAILED (errors=1)
