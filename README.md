@@ -499,3 +499,13 @@ The shared-worker preview (--preview-port 8001) now provides a compact six-tile 
 Thirty-minute headless diagnostics can retain five-minute snapshots via --save-every-minutes 5. The dashboard now shows connected red graph points, PPO update statistics and sampled system performance using the existing telemetry stream. Preserve the run directory (including config.json, progress.csv, worker ledgers, survival.json, system_usage.jsonl and checkpoint snapshots) for post-run analysis.
 
 Reaction-speed status: the dashboard now supports Hide previews for metrics-only viewing, and workers skip preview JPEG encoding while hidden. New timing diagnostics separate policy-image age from safety-frame age. Six-worker screenshot-request-to-command p95 remained about 190ms without preview images; optimize capture/decision alignment before assuming higher throughput produces fast late-game reactions. See reports/REACTION_LATENCY_20261030.md.
+
+Experimental headless capture: `--headless-capture playwright|cdp|stream` selects
+the existing method (default), direct CDP screenshots, or a latest-frame CDP
+stream. Direct CDP did not materially reduce capture latency. Streaming reduced
+isolated capture to about 17ms and helped one worker, but six-worker median
+observation-to-command latency regressed to about 130ms. It is **not the default
+or a validated six-worker speed improvement**. It retains HTML overlays and
+uses bounded, movement-free MENU confirmation extensions with the existing
+terminal acceptance rules. See [capture investigation](reports/CDP_CAPTURE_20261030.md)
+and [headless options](README_HEADLESS_PARALLEL.md).

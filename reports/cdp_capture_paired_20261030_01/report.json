@@ -1,0 +1,25 @@
+{
+  "synthetic_same_pixels_mean_absolute_difference": 0.0,
+  "paired_capture_ms": {
+    "playwright": {
+      "count": 97,
+      "median_ms": 50.71009999664966,
+      "p95_ms": 66.03678000392392,
+      "max_ms": 69.90689999656752
+    },
+    "cdp": {
+      "count": 97,
+      "median_ms": 49.82630000449717,
+      "p95_ms": 51.7801399983,
+      "max_ms": 60.53299999621231
+    }
+  },
+  "cdp_only": {
+    "captures": 101,
+    "seconds": 5,
+    "identical_consecutive_images": 0,
+    "median_ms": 49.00440000346862,
+    "p95_ms": 51.32460000459105
+  },
+  "note": "Capture calls, not unique Unity ticks or policy throughput. Image motion does not establish gameplay/input response."
+}

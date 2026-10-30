@@ -1,0 +1,81 @@
+{
+  "error": null,
+  "guard_hard_stopped": false,
+  "learning_transitions": {
+    "collected_transitions": 256,
+    "optimized_transitions": 256,
+    "actor_transitions": 249,
+    "passive_transitions": 7,
+    "boundary_settlements": 2,
+    "completed_rollout_transitions": 256,
+    "optimizer_sample_presentations": 1280,
+    "discarded_partial_transitions": 0,
+    "stop_reason": null,
+    "completed_interactions_not_ledgered": 0
+  },
+  "policy_replica_only": true,
+  "optimizer_updates_in_worker": 0,
+  "reaction_latency": {
+    "window_samples": 220,
+    "metrics": {
+      "policy_request_to_command_ms": {
+        "count": 220,
+        "median_ms": 132.47499999852153,
+        "p95_ms": 164.9020449949603,
+        "max_ms": 258.46769999770913
+      },
+      "guard_browser_swap_to_command_ms": {
+        "count": 220,
+        "median_ms": 42.16104999795789,
+        "p95_ms": 55.07452500605722,
+        "max_ms": 67.63440000941046
+      },
+      "policy_image_reply_to_command_ms": {
+        "count": 220,
+        "median_ms": 97.66404999390943,
+        "p95_ms": 122.02497000325819,
+        "max_ms": 223.16950000822544
+      },
+      "policy_capture_complete_to_command_ms": {
+        "count": 220,
+        "median_ms": 83.94484999735141,
+        "p95_ms": 106.17219999476218,
+        "max_ms": 208.40879999741446
+      },
+      "command_roundtrip_ms": {
+        "count": 220,
+        "median_ms": 17.178749993036035,
+        "p95_ms": 29.334344998642337,
+        "max_ms": 38.971200003288686
+      },
+      "guard_image_reply_to_command_ms": {
+        "count": 220,
+        "median_ms": 24.19709999958286,
+        "p95_ms": 30.848545000480954,
+        "max_ms": 36.36199999891687
+      },
+      "guard_capture_complete_to_command_ms": {
+        "count": 220,
+        "median_ms": 10.17350000620354,
+        "p95_ms": 18.70868499900098,
+        "max_ms": 19.897099991794676
+      },
+      "policy_browser_swap_to_command_ms": {
+        "count": 220,
+        "median_ms": 115.23095000302419,
+        "p95_ms": 145.81142999450094,
+        "max_ms": 238.18140001094434
+      },
+      "guard_request_to_command_ms": {
+        "count": 220,
+        "median_ms": 58.44670000078622,
+        "p95_ms": 72.76710500009358,
+        "max_ms": 99.94480000750627
+      }
+    },
+    "note": "Command issue time, not Unity response. Browser screenshot presentation time is unknown."
+  },
+  "capture_backend": "stream",
+  "stream_reads": 608,
+  "surface_fallbacks": 0
+}

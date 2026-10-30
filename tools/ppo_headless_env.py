@@ -16,7 +16,17 @@ class BrowserImage:
         pass
 
 
-def install(trainer):
+def compose_guard_frame(image,left,top,width=1920,height=1080):
+    """Same BGRA pixels as the historical padded guard, using contiguous copies."""
+    h,w=image.shape[:2]
+    if image.ndim!=3 or image.shape[2]!=3 or min(left,top,width-left-w,height-top-h)<0:
+        raise GuardUncertainError('Canvas does not fit guard image')
+    bgra=cv2.cvtColor(image,cv2.COLOR_BGR2BGRA)
+    return cv2.copyMakeBorder(bgra,top,height-top-h,left,width-left-w,
+                             cv2.BORDER_CONSTANT,value=(0,0,0,255))
+
+
+def install(trainer,capture='playwright'):
     original = trainer.build_env_class
 
     def build():
@@ -40,6 +50,7 @@ def install(trainer):
                 self._headless_errors = []
                 self.page.on('pageerror', lambda error: self._headless_errors.append(str(error)))
                 cdp = await self.context.new_cdp_session(self.page)
+                self._headless_cdp=cdp
                 await cdp.send('Emulation.setFocusEmulationEnabled', {'enabled':True})
                 await self.page.goto('http://localhost:8000', wait_until='domcontentloaded')
                 try:
@@ -63,24 +74,35 @@ def install(trainer):
                 self._background_geometry_invalid = None
                 self._background_view = await self._background_geometry()
                 await self._background_install_geometry_watch()
+                self._headless_backend=capture
+                if capture in ('cdp','stream'):
+                    from tools.ppo_cdp_capture import CdpCanvasCapture
+                    self._headless_source=await CdpCanvasCapture.create(cdp,self.canvas,width,height)
+                    if capture=='stream':
+                        from tools.ppo_cdp_stream import LatestFrameStream
+                        self._headless_source=LatestFrameStream(cdp,self._headless_source,width,height)
+                        await self._headless_source.start()
                 await self._headless_image()
 
             async def _headless_image(self):
                 from rs_practice_controller import screenshot_canvas
                 began = time.perf_counter()
-                data = await screenshot_canvas(self.page,self.canvas,image_type='jpeg',quality=90)
+                if self._background_geometry_invalid:
+                    raise GuardUncertainError(self._background_geometry_invalid)
+                data = (await self._headless_source.capture() if capture in ('cdp','stream') else
+                        await screenshot_canvas(self.page,self.canvas,image_type='jpeg',quality=90))
                 received=time.perf_counter()
                 image = cv2.imdecode(np.frombuffer(data,np.uint8),cv2.IMREAD_COLOR)
                 width,height = self._headless_wh
                 if image is None or image.shape != (height,width,3):
                     raise GuardUncertainError('Headless canvas shape changed')
-                raw = np.zeros((1080,1920,4),dtype=np.uint8)
-                raw[:,:,3] = 255
                 left = self._background_canvas['left']
-                raw[87:87+height,left:left+width,:3] = image
+                raw=compose_guard_frame(image,left,87)
                 self.grabber.image = raw
                 self._headless_capture_ms = (time.perf_counter()-began)*1000
                 self._headless_capture_timing=dict(request_started_at=began,image_received_at=received)
+                if capture=='stream':
+                    self._headless_capture_timing.update(self._headless_source.last_timing)
 
             async def _capture(self):
                 await self._headless_image()
@@ -94,6 +116,8 @@ def install(trainer):
             async def _headless_reload_after_time_limit(self):
                 import rs_practice_controller as ctrl
                 from tools.ppo_background_display import apply_viewport_layout
+                if capture=='stream':
+                    await self._headless_source.close()
                 await self.page.goto('http://localhost:8000',wait_until='domcontentloaded',timeout=45000)
                 self.canvas = await ctrl.find_canvas(self.page,timeout=60)
                 await apply_viewport_layout(self.page)
@@ -101,6 +125,14 @@ def install(trainer):
                 self._background_geometry_invalid = None
                 self._background_view = await self._background_geometry()
                 await self._background_install_geometry_watch()
+                if capture in ('cdp','stream'):
+                    from tools.ppo_cdp_capture import CdpCanvasCapture
+                    session=self._headless_cdp
+                    self._headless_source=await CdpCanvasCapture.create(session,self.canvas,*self._headless_wh)
+                    if capture=='stream':
+                        from tools.ppo_cdp_stream import LatestFrameStream
+                        self._headless_source=LatestFrameStream(session,self._headless_source,*self._headless_wh)
+                        await self._headless_source.start()
                 await self._headless_image()
                 self._game_fullscreen = False
 

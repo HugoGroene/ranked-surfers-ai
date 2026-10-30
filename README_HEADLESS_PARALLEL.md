@@ -86,3 +86,65 @@ To reopen the saved new-run graph later without starting training:
 Older reports without episode metrics are not automatically backfilled. Historical
 installer scripts/docs are retained for provenance; do not reapply them to the
 current trainer without their explicit source/version checks.
+
+## Experimental capture backends
+
+`--headless-capture` applies with `--headless`:
+
+| Value | Behavior | Status |
+|---|---|---|
+| `playwright` | Existing canvas-clipped rendered-page screenshot | Default |
+| `cdp` | Direct CDP surface screenshot with cached, verified canvas clip | Similar capture median; no demonstrated speed improvement |
+| `stream` | Demand-acknowledged latest rendered-page frame | Experimental; improves one-worker timing, regresses six-worker median |
+
+Streaming keeps one latest image slot, checks viewport geometry and browser frame
+timestamps, and requires a new frame presented after each capture request. It
+does not return a cached image when a static Pause panel produces no new frame:
+after 150ms it requests an independent surface screenshot. A stream frame must
+be no more than 50ms old at capture return; existing downstream freshness guards
+still apply. Neither bound guarantees that the selected policy action remains
+that recent at dispatch. Both sources include rendered HTML overlays.
+
+Faster sampling exposed nearly corroborated MENU transitions exhausting the
+original six-capture window. Only stream workers may add up to six passive
+MENU-only checks when the last five readings consistently predict MENU, at least
+four have template corroboration, and at least one has strong menu evidence.
+The existing terminal acceptance rules still decide confirmation; this extension
+can never authorize a gameplay action. Conflicting gameplay evidence aborts it.
+
+Two six-worker updates completed with all six settled-learning audits passing,
+but median request-to-command latency was 128-133ms versus 89-97ms in the earlier
+warmed screenshot test. Keep the default for now. The independent surface
+fallback is unit-tested; successful live stream runs did not exercise it.
+The 300-second stream teardown/reload path also needs live verification.
+
+Full measurements, failed attempts and remaining bottlenecks:
+[CDP capture investigation](reports/CDP_CAPTURE_20261030.md). Diagnostic checkpoints
+are separate outputs and have not earned promotion. No long training was started.
+
+## Approved five-hour continuation (30 October)
+
+The user selected a five-hour overnight diagnostic instead of the proposed
+30-minute run. Start from the substantial large-BC continuation named above,
+not a short stream benchmark checkpoint. Use six headless workers, explicit
+`--headless-capture playwright`, `--framing-profile canvas_v1`,
+`--canvas-policy-input`, `--max-minutes 300`, `--steps 768000`,
+`--save-every-minutes 5`, `--worker-timeout 160`, `--telemetry` and
+`--preview-port 8001`, with a new timestamped report directory. The step ceiling
+is deliberately high enough to let wall time control the run at measured rates.
+Source LR .0003, 128 steps per worker, batch 32 and five epochs are retained;
+six workers produce an aggregate 768-transition update.
+
+Run `server.py` in a separate terminal if the local server is not already running.
+Use the metrics-only dashboard button to stop preview image encoding/fetching.
+No visible game window or virtual monitor is required. Keep Windows awake during
+the run. The time budget excludes startup and finishes a complete shared update,
+so actual elapsed time can exceed five hours. Safety stops still end the run.
+
+The source checkpoint uses legacy framing; this continuation explicitly uses the
+current whole-canvas profile. Tomorrow compare the source and new checkpoint
+under identical whole-canvas evaluation conditions before claiming improvement.
+Inspect parallel_training.json, all six worker audits, optimized coverage,
+survival.json, progress.csv, latency metrics and system_usage.jsonl. Evaluate
+visible-browser transfer separately. The assistant supplies commands; this
+document does not establish that the overnight run was started or completed.

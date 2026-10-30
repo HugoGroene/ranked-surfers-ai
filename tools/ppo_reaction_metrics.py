@@ -22,6 +22,7 @@ def command_latency(policy,guard,dispatch_at,roundtrip_ms=None):
     result={}
     for name,source in [('policy',policy or {}),('guard',guard or {})]:
         for field,label in [('request_started_at','request_to_command_ms'),
+                            ('browser_frame_at','browser_swap_to_command_ms'),
                             ('image_received_at','image_reply_to_command_ms'),
                             ('captured_at','capture_complete_to_command_ms')]:
             stamp=source.get(field)
@@ -42,4 +43,4 @@ def latency_summary(samples):
             result[key]=dict(count=len(values),median_ms=float(np.median(values)),
                              p95_ms=float(np.percentile(values,95)),max_ms=float(max(values)))
     return dict(window_samples=len(samples),metrics=result,
-                note='Command issue time, not Unity response. Browser screenshot presentation time is unknown.')
+                note='Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown.')

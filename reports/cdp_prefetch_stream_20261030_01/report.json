@@ -1,0 +1,82 @@
+{
+  "synthetic_same_pixels_mean_absolute_difference": 0.0,
+  "paired_capture_ms": {
+    "playwright": {
+      "count": 49,
+      "median_ms": 50.60980000416748,
+      "p95_ms": 68.04965999617706,
+      "max_ms": 69.01960000686813
+    },
+    "cdp": {
+      "count": 49,
+      "median_ms": 49.63409999618307,
+      "p95_ms": 51.53263999382034,
+      "max_ms": 52.35260000335984
+    }
+  },
+  "cdp_only": {
+    "captures": 101,
+    "seconds": 5,
+    "identical_consecutive_images": 0,
+    "median_ms": 49.06300001312047,
+    "p95_ms": 51.06169999635313
+  },
+  "stream_probe": {
+    "frames": 179,
+    "first": [
+      {
+        "received": 97592.1663086,
+        "wall": 1793328159.6363661,
+        "metadata": {
+          "offsetTop": 0,
+          "pageScaleFactor": 1,
+          "deviceWidth": 1920,
+          "deviceHeight": 945,
+          "scrollOffsetX": 0,
+          "scrollOffsetY": 0,
+          "timestamp": 1793328159.633212,
+          "monotonicTimestamp": 97592.162824
+        }
+      },
+      {
+        "received": 97592.1811417,
+        "wall": 1793328159.6498852,
+        "metadata": {
+          "offsetTop": 0,
+          "pageScaleFactor": 1,
+          "deviceWidth": 1920,
+          "deviceHeight": 945,
+          "scrollOffsetX": 0,
+          "scrollOffsetY": 0,
+          "timestamp": 1793328159.649878,
+          "monotonicTimestamp": 97592.17949
+        }
+      }
+    ],
+    "last": [
+      {
+        "received": 97595.1299712,
+        "wall": 1793328162.5994122,
+        "metadata": {
+          "offsetTop": 0,
+          "pageScaleFactor": 1,
+          "deviceWidth": 1920,
+          "deviceHeight": 945,
+          "scrollOffsetX": 0,
+          "scrollOffsetY": 0,
+          "timestamp": 1793328162.59976,
+          "monotonicTimestamp": 97595.129372
+        }
+      }
+    ]
+  },
+  "demand_stream": {
+    "captures": 295,
+    "median_ms": 16.87750000564847,
+    "p95_ms": 18.82742000016151,
+    "max_ms": 38.858899992192164,
+    "stream_reads": 295,
+    "surface_fallbacks": 0
+  },
+  "note": "Capture calls, not unique Unity ticks or policy throughput. Image motion does not establish gameplay/input response."
+}

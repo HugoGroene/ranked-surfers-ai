@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "shape": [
+    945,
+    1920,
+    3
+  ],
+  "mean_absolute_difference": 0.0,
+  "html_overlay_difference": 0.0,
+  "stream_reads": 1,
+  "fallback_reads": 0
+}

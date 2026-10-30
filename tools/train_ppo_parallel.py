@@ -29,7 +29,7 @@ def worker_main(index, display, options, connection, abort):
                 import train_rs_v612_ppo as trainer
                 if options.get('headless'):
                     from tools.ppo_headless_env import install
-                    install(trainer)
+                    install(trainer,options.get('headless_capture','playwright'))
                     time.sleep(index*2.)  # Avoid simultaneous Unity/server startup bursts.
                 from tools.ppo_parallel_learning import install_policy, rollout_packet
                 from tools.ppo_settled_learning import SettledPPO
@@ -176,6 +176,11 @@ def worker_main(index, display, options, connection, abort):
                         policy_replica_only=True, optimizer_updates_in_worker=0)
                     from tools.ppo_reaction_metrics import latency_summary
                     summary['reaction_latency']=latency_summary(list(getattr(raw,'_reaction_samples',[])))
+                    source=getattr(raw,'_headless_source',None)
+                    summary['capture_backend']=getattr(raw,'_headless_backend',None)
+                    if hasattr(source,'stream_reads'):
+                        summary['stream_reads']=source.stream_reads
+                        summary['surface_fallbacks']=source.fallback_reads
                     (output/'result.json').write_text(json.dumps(summary, indent=2), encoding='utf8')
                 if monitored is not None:
                     monitored.close()
@@ -209,6 +214,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--displays', type=int, nargs='+', required=True)
     parser.add_argument('--headless', action='store_true', help='Experimental browser capture; displays are worker IDs, no monitors required')
+    parser.add_argument('--headless-capture',choices=['playwright','cdp','stream'],default='playwright',
+                        help='Headless browser image backend; cdp uses a validated direct surface clip')
     parser.add_argument('--framing-profile', choices=['legacy','canvas_v1'], default='legacy')
     parser.add_argument('--checkpoint', type=Path, required=True)
     parser.add_argument('--steps', type=int, default=65536, help='Total transitions across workers; complete cohorts only')

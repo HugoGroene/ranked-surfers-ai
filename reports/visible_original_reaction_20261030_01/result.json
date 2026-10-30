@@ -1,0 +1,66 @@
+{
+  "status": "COMPLETE",
+  "model_updated": false,
+  "framing_profile": "legacy",
+  "source_sha256": "779d295ec4fe04e569511987c3867ac8d68cf8a22eb12c547f028c591763907b",
+  "seconds": 30,
+  "steps": 633,
+  "episodes": 6,
+  "wall_seconds": 30.03054439999687,
+  "reaction_latency": {
+    "window_samples": 485,
+    "metrics": {
+      "guard_capture_complete_to_command_ms": {
+        "count": 485,
+        "median_ms": 12.456900003599003,
+        "p95_ms": 18.47982000035699,
+        "max_ms": 19.937699995352887
+      },
+      "policy_capture_complete_to_command_ms": {
+        "count": 485,
+        "median_ms": 12.559199996758252,
+        "p95_ms": 40.23757999239024,
+        "max_ms": 62.975399996503256
+      },
+      "policy_image_reply_to_command_ms": {
+        "count": 485,
+        "median_ms": 13.744099996984005,
+        "p95_ms": 41.57736000197473,
+        "max_ms": 64.11039999511559
+      },
+      "guard_request_to_command_ms": {
+        "count": 485,
+        "median_ms": 27.372399999876507,
+        "p95_ms": 34.11107999563683,
+        "max_ms": 40.0182000012137
+      },
+      "policy_request_to_command_ms": {
+        "count": 485,
+        "median_ms": 27.581999995163642,
+        "p95_ms": 53.733440005453254,
+        "max_ms": 75.0452999927802
+      },
+      "command_roundtrip_ms": {
+        "count": 485,
+        "median_ms": 16.361100002541207,
+        "p95_ms": 21.599539995077066,
+        "max_ms": 24.5205000101123
+      },
+      "guard_image_reply_to_command_ms": {
+        "count": 485,
+        "median_ms": 13.61380000889767,
+        "p95_ms": 19.646940007805824,
+        "max_ms": 21.728499996243045
+      }
+    },
+    "note": "Command issue time, not Unity response. Browser screenshot presentation time is unknown."
+  },
+  "mss_capture_ms": {
+    "count": 710,
+    "median_ms": 13.621250007417984,
+    "p95_ms": 16.025930006435374,
+    "max_ms": 18.289700004970655
+  },
+  "guard_hard_stopped": false,
+  "source_unchanged": true
+}

@@ -977,6 +977,12 @@ def build_env_class():
                     if reading.ml_menu and not reading.menu_evidence:
                         self.guard_ml_menu_disagreements += 1
                     decision = sequence_decision(readings, max_frames=6)
+                if decision=='ABORT' and getattr(self,'_headless_backend',None)=='stream':
+                    from tools.ppo_stream_menu_tail import pending_menu_tail,confirm_menu_tail
+                    if pending_menu_tail(readings):
+                        print('[V612 GUARD] Completing a corroborated MENU transition; '
+                              'bounded MENU-only rechecks; NO movement.',flush=True)
+                        frame,decision=await confirm_menu_tail(readings,sample,asyncio.sleep)
                 if decision == 'TERMINAL':
                     self.guard_confirmed_menu += 1
                     self._guard_forced_terminal = True
@@ -994,7 +1000,7 @@ def build_env_class():
                 if decision == 'ABORT':
                     self.guard_aborts += 1
                     self._guard_hard_stopped = True
-                    image = self._guard_diagnostic(readings, reason='ambiguous UI after six captures')
+                    image = self._guard_diagnostic(readings, reason=f'ambiguous UI after {len(readings)} captures')
                     raise GuardUncertainError(
                         f'[V612 GUARD] SAFETY STOP after {len(readings)} '
                         f'unresolved captures; NO key sent. '
