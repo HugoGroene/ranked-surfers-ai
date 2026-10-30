@@ -1,0 +1,10 @@
+{
+  "status": "STOPPED",
+  "rounds": 0,
+  "optimized_transitions": 0,
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "error": "RuntimeError('Worker 0: expected rollout, received TimeoutError()')",
+  "source_unchanged": true,
+  "active_wall_seconds": 38.202751799995895,
+  "optimized_transitions_per_second": 0.0
+}

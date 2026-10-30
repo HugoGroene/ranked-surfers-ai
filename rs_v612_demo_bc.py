@@ -18,7 +18,7 @@ import numpy as np
 from rs_v61_features import AUX_DIM, FEATURE_VERSION, ACTION_NAMES
 
 
-def approved_runs(root):
+def approved_runs(root, framing_profile='legacy'):
     result = []
     for folder in sorted((root/'runs').glob('demo_*')):
         path = folder/'manifest.json'
@@ -26,6 +26,9 @@ def approved_runs(root):
             continue
         m = json.loads(path.read_text(encoding='utf-8'))
         if m.get('status') != 'approved':
+            continue
+        from tools.ppo_framing import manifest_profile
+        if manifest_profile(m) != framing_profile:
             continue
         if m.get('schema') != 1 or m.get('feature_version') != FEATURE_VERSION or m.get('aux_dim') != AUX_DIM:
             raise RuntimeError(f'Incompatible approved demo: {folder}')
@@ -127,13 +130,15 @@ def main():
     p.add_argument('--holdout-fraction', type=float, default=.20)
     p.add_argument('--none-fraction', type=float, default=.35)
     p.add_argument('--seed', type=int, default=77)
+    p.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='legacy',
+                   help='Select only approved recordings of this framing version; never mix profiles')
     a = p.parse_args()
     if not a.checkpoint.is_file():
         p.error('Checkpoint not found')
     if not (1 <= a.epochs <= 20 and 1 <= a.batch_size <= 64 and 0 < a.lr <= 1e-3
             and .05 <= a.holdout_fraction <= .5 and 0 < a.none_fraction < 1):
         p.error('Invalid BC configuration')
-    found = approved_runs(a.root)
+    found = approved_runs(a.root,a.framing_profile)
     if len(found) < 3:
         p.error('Collect at least 3 explicitly approved runs to train with a run-level holdout')
     rng = random.Random(a.seed)
@@ -157,6 +162,7 @@ def main():
     np.random.seed(a.seed)
     # Do not change input file. Actor-only BC preserves the visual feature extractor and critic.
     model = PPO.load(str(a.checkpoint), device='cuda' if torch.cuda.is_available() else 'cpu')
+    model.framing_profile = a.framing_profile
     policy = model.policy
     for param in policy.parameters():
         param.requires_grad_(False)
@@ -165,7 +171,8 @@ def main():
         param.requires_grad_(True)
     optimizer = torch.optim.Adam(actor, lr=a.lr)
     device = policy.device
-    report = {'source_checkpoint':str(a.checkpoint), 'train_folders':[str(x.folder) for x in training],
+    report = {'source_checkpoint':str(a.checkpoint), 'framing_profile':a.framing_profile,
+              'train_folders':[str(x.folder) for x in training],
               'validation_folders':[str(x.folder) for x in validation], 'samples':len(samples),
               'training_class_counts':{ACTION_NAMES[k]:v for k,v in counts.items()}, 'epochs':[]}
 

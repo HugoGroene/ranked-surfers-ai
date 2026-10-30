@@ -1,0 +1,73 @@
+{
+  "display": 2,
+  "steps": 13,
+  "error": null,
+  "guard_hard_stopped": false,
+  "webgl_renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Ti (0x00002803) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "episodes": 1,
+  "wall_seconds": 15.35103929998877,
+  "background_polls": 9,
+  "motion_polls": 8,
+  "polls": 9,
+  "canvas_keydowns": {
+    "r": 1,
+    "ArrowUp": 8,
+    "ArrowDown": 4
+  },
+  "guard": {
+    "preflight_gameplay_allowed": 12,
+    "preflight_rechecks_on_transient": 1,
+    "preflight_confirmed_menu": 1,
+    "uncertain_state_abort": 0,
+    "ml_menu_without_template": 4,
+    "visual_gameplay_recoveries": 0,
+    "guard_hard_stopped": false,
+    "preflight_checks_every_decision": true,
+    "prepared_observation_guard_enabled": true,
+    "prepared_observation_guard_hits": 4,
+    "prepared_observation_guard_fallbacks": 10,
+    "prepared_observation_guard_late_fallbacks": 1,
+    "prepared_observation_max_age_ms": 20.0,
+    "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+  },
+  "capture_backend": "dxgi",
+  "native_presentations": 59,
+  "cached_ui_reads": 103,
+  "stage_timings": {
+    "capture_grab_ms": {
+      "count": 151,
+      "median_ms": 0.3,
+      "p95_ms": 3.7,
+      "p99_ms": 7.17,
+      "mean_ms": 1.48
+    },
+    "capture_alignment_ms": {
+      "count": 151,
+      "median_ms": 0.0,
+      "p95_ms": 0.06,
+      "p99_ms": 0.08,
+      "mean_ms": 0.01
+    },
+    "capture_menu_ms": {
+      "count": 151,
+      "median_ms": 1.03,
+      "p95_ms": 1.61,
+      "p99_ms": 1.79,
+      "mean_ms": 1.09
+    },
+    "pack_ms": {
+      "count": 14,
+      "median_ms": 8.06,
+      "p95_ms": 46.05,
+      "p99_ms": 95.88,
+      "mean_ms": 15.44
+    },
+    "game_crop_ms": {
+      "count": 14,
+      "median_ms": 1.0,
+      "p95_ms": 1.39,
+      "p99_ms": 1.64,
+      "mean_ms": 1.05
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "status": "STOPPED",
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "workers": 1,
+  "measured_seconds": 30.0,
+  "valid_decisions": 4,
+  "aggregate_decisions_per_second": null,
+  "partial_decisions_per_second": 0.13333333333333333,
+  "model_updated": false,
+  "shared_learner": false,
+  "input_response_verified": false,
+  "note": "Transport/motion evidence needs review; no claim of learning speedup or Unity input causality",
+  "results": [
+    {
+      "display": 2,
+      "steps": 4,
+      "error": "GuardUncertainError('[BACKGROUND] No recent acquired GPU frame; NO movement sent')",
+      "guard_hard_stopped": true,
+      "webgl_renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Ti (0x00002803) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "stage_timings": {
+        "capture_grab_ms": {
+          "count": 192,
+          "median_ms": 0.21,
+          "p95_ms": 2.21,
+          "p99_ms": 2.56,
+          "mean_ms": 0.78
+        },
+        "capture_alignment_ms": {
+          "count": 192,
+          "median_ms": 0.0,
+          "p95_ms": 0.04,
+          "p99_ms": 0.07,
+          "mean_ms": 0.01
+        },
+        "capture_menu_ms": {
+          "count": 192,
+          "median_ms": 0.93,
+          "p95_ms": 1.24,
+          "p99_ms": 1.51,
+          "mean_ms": 0.95
+        },
+        "pack_ms": {
+          "count": 6,
+          "median_ms": 7.91,
+          "p95_ms": 78.41,
+          "p99_ms": 97.12,
+          "mean_ms": 23.44
+        },
+        "game_crop_ms": {
+          "count": 6,
+          "median_ms": 1.05,
+          "p95_ms": 1.16,
+          "p99_ms": 1.17,
+          "mean_ms": 1.07
+        }
+      }
+    }
+  ],
+  "source_unchanged": true
+}

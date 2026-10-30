@@ -1,0 +1,6 @@
+{
+  "display": 2,
+  "steps": 0,
+  "error": "RuntimeError('Expected one owned Chromium window, found 0')",
+  "guard_hard_stopped": false
+}

@@ -1,0 +1,22 @@
+{
+  "status": "STOPPED",
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "workers": 1,
+  "measured_seconds": 20.0,
+  "valid_decisions": 0,
+  "aggregate_decisions_per_second": null,
+  "partial_decisions_per_second": 0.0,
+  "model_updated": false,
+  "shared_learner": false,
+  "input_response_verified": false,
+  "note": "Transport/motion evidence needs review; no claim of learning speedup or Unity input causality",
+  "results": [
+    {
+      "display": 2,
+      "steps": 0,
+      "error": "GuardUncertainError('[BACKGROUND] Capture verification stopped: [BACKGROUND] Chromium minimized; capture is not trustworthy')",
+      "guard_hard_stopped": true
+    }
+  ],
+  "source_unchanged": true
+}

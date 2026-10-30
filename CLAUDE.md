@@ -29,6 +29,17 @@ Their branch/commit metadata is stale; trust code and raw reports over prose.
   by the assistant. For tests longer than a few minutes, give the user commands
   to run in a separate terminal, including the local server command. Do not
   spend assistant credits polling long runs; inspect saved artifacts afterward.
+- Current background path is headless Chromium with local browser-image capture;
+  VDD is disabled and should stay disabled unless the user explicitly requests it.
+  Physical NVIDIA monitor stays 1920x1080 at 144 Hz; do not change brightness,
+  HDR or colour settings. canvas_v1 uses whole 1920x945 canvas to 512x288 policy.
+  Legacy capture remains available explicitly for reproduction.
+- Up to six headless worker replicas feed one shared settled PPO optimizer.
+  Preserve source rollout 128 per worker and LR .0003 unless explicitly changed;
+  aggregate rollout grows with worker count (768 with six). Dashboard at localhost
+  8001 reuses existing frames/telemetry; never add desktop captures for previews.
+  Persistent graph dots are fixed completed-time samples, not a moving bucket.
+  Thirty-minute user-run diagnostic is pending; do not claim learning improvement.
 - Label claims: [repo] verified here, [local] verified in original repo, [doc] docs only, [hyp] hypothesis.
 - PPO baseline: original repo `ai_data/rl_v2_runs/v612_overnight_next_420min_press5_20261027_094116/latest.zip`
   (SHA-256 6e49da55…e773f0): 4.61 s mean [95% CI 4.26–4.99], 0 LEFT/RIGHT. A 240-min checkpoint

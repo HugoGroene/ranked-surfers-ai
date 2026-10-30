@@ -1,0 +1,5332 @@
+{
+  "comparisons": [
+    {
+      "title": "Legacy fractions on padded desktop (simulation)",
+      "source_shape": [
+        1080,
+        1920,
+        3
+      ],
+      "crop_rect": [
+        0,
+        59,
+        1920,
+        1042
+      ],
+      "native_shape": [
+        983,
+        1920,
+        3
+      ]
+    },
+    {
+      "title": "Current headless: fractions inside canvas",
+      "source_shape": [
+        937,
+        1904,
+        3
+      ],
+      "crop_rect": [
+        0,
+        52,
+        1904,
+        904
+      ],
+      "native_shape": [
+        852,
+        1904,
+        3
+      ]
+    },
+    {
+      "title": "Candidate: whole canvas, letterboxed",
+      "source_shape": [
+        937,
+        1904,
+        3
+      ],
+      "crop_rect": [
+        0,
+        0,
+        1904,
+        937
+      ],
+      "native_shape": [
+        937,
+        1904,
+        3
+      ]
+    }
+  ],
+  "actual_saved_headless_equal": true,
+  "historical_native_shape": [
+    983,
+    1920,
+    3
+  ],
+  "bc_manifests": [
+    {
+      "run": "demo_20261027_211547_738959",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261027_211627_127845",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261027_211822_036384",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261027_211841_149579",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261027_211844_541805",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261027_211845_625831",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145407_966680",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145438_471297",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145501_178756",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145511_936811",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145515_779430",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145548_721806",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145605_925515",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145631_029216",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145643_190732",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145706_224680",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145719_894240",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145728_823411",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145742_323747",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145805_464929",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145830_927998",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145848_974604",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145918_817660",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_145935_070014",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_150006_469386",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_150022_370982",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_150025_761594",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_150100_323415",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_150120_051792",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_150144_472981",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160800_895699",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160826_706622",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160838_798006",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160844_767126",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160851_525087",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160857_467739",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160911_023876",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_160919_754269",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161000_121719",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161019_205874",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161041_399596",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161113_772849",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161129_270905",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161135_835382",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161142_267371",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161203_615156",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161213_482047",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161223_710859",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161230_754532",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161233_800417",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161257_293965",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161314_457396",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161321_519884",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161400_413880",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161418_443678",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161443_561307",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161500_286974",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161521_961625",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161531_242238",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161541_773150",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161618_258684",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161635_024929",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161638_343925",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161706_511744",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161718_822461",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161743_939127",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161807_213106",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161848_963171",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161908_830252",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161910_044656",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161913_468728",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161932_812926",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_161948_154972",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162004_309832",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162013_061625",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162020_854133",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162028_500638",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162054_763907",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162112_024606",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162120_811586",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162138_016498",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162146_747221",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162218_251652",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162232_852942",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162236_043018",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162243_304763",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162305_702326",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162349_406196",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162410_464786",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162413_189780",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162427_695138",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162451_802458",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162508_854971",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162521_117525",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162538_503673",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162547_699889",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162606_850534",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162624_390185",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162647_553635",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162712_188113",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162723_346032",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162729_838238",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162746_785310",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162815_932640",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162829_204213",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162831_795458",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162847_541676",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162853_623421",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162903_773459",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162925_044242",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162934_315054",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_162952_342009",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163032_787269",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163052_654063",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163059_016442",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163116_477386",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163125_944657",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163131_581824",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163140_194230",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163145_387279",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163222_731861",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163240_462373",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163244_565231",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163302_931360",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163312_336917",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163320_185312",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163335_727744",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163344_231250",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163408_880755",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163450_325325",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163516_684708",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163530_880130",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163617_794932",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163641_066648",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163650_134279",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163711_634653",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163752_335872",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163810_745527",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163816_520111",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163857_075126",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163928_523839",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163942_436759",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_163955_022137",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164013_180705",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164030_572213",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164038_379233",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164047_068206",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164107_479201",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164138_471117",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164152_578497",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164215_859325",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164246_808046",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164307_072967",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164318_026584",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164323_719982",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164327_272326",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164331_422661",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164339_916919",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164359_923862",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164408_450164",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164411_365272",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164445_663111",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164502_420062",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164521_714554",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164535_471225",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164552_767207",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164610_618472",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164628_114244",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164642_456535",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164724_561841",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164744_930980",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164800_918253",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164843_620860",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164903_629316",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164916_487297",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_164951_217567",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165006_404664",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165011_208751",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165020_608185",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165054_058088",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165111_959241",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165129_010992",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165135_817469",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165144_407861",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165213_507449",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165235_105146",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165313_915707",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165344_557400",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165410_110492",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165447_204588",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165505_311463",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165526_542453",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165554_835410",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165607_333905",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165625_449995",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165642_250840",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165648_649804",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165655_904559",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165710_864290",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165734_651814",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165745_517102",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165752_488522",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165802_756663",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165814_407986",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165841_393158",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165859_945329",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165913_850403",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165933_397056",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165941_505113",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165945_798759",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165953_402801",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_165957_441549",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170022_996267",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170035_691515",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170039_005040",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170046_505978",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170050_842770",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170053_853934",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170111_642688",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170127_894945",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170142_791886",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170151_439512",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170207_149860",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170239_140625",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170300_794875",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170310_025833",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170349_141880",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170409_038879",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170413_315760",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170425_685980",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170447_785679",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170520_943419",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170537_455489",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170606_294348",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170625_218981",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170636_777745",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170707_093420",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170729_642611",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170800_688222",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170832_831064",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170848_293921",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170853_318605",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170928_180063",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_170954_977818",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171007_059239",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171012_127348",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171020_337881",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171045_827483",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171056_825042",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171118_180971",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171146_375418",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171159_351504",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171211_984723",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171219_929652",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171230_378798",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171301_528516",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171329_084469",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171341_641644",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171344_509402",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171351_433150",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171359_072402",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171415_130266",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171453_877852",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171512_971630",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171520_773475",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171542_587474",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171552_183773",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171613_021379",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171622_497168",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171630_476173",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171637_871901",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171642_571640",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171651_031593",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171717_113571",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171756_132445",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171831_869651",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171848_021405",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171852_272366",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171921_711168",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171938_164935",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_171940_023928",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172004_024942",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172016_953837",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172042_954043",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172057_275802",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172100_818910",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172115_716454",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172123_710306",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172131_621023",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172139_372184",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172142_659972",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172148_763322",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172209_159082",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172229_568321",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172247_969285",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172256_044561",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172321_057715",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172332_338754",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172353_159768",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172406_094058",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172420_716503",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172431_212456",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172500_610811",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172514_728757",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172538_260033",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172608_769656",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172628_212865",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172636_786007",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172657_360787",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172738_465635",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172758_920909",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172759_964073",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172807_604996",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172846_061810",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172906_866975",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172915_781685",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172925_461057",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172935_410052",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_172957_306969",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_173006_908768",
+      "status": "candidate",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    },
+    {
+      "run": "demo_20261028_173014_650646",
+      "status": "approved",
+      "region": {
+        "left": 0,
+        "top": 87,
+        "width": 1920,
+        "height": 945
+      },
+      "preview_shape": [
+        945,
+        1920
+      ],
+      "preview_exists": true,
+      "frames_exists": true
+    }
+  ],
+  "bc_example_video": {
+    "frames": 597,
+    "fps": 20.0,
+    "width": 960.0,
+    "height": 472.0
+  },
+  "detector_train_args": {
+    "task": "segment",
+    "mode": "train",
+    "model": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai\\ai_data\\v5_hazards\\runs\\segment_round03\\weights\\best.pt",
+    "data": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai\\ai_data\\v5_hazards\\export_round04_fixed\\segment\\data.yaml",
+    "epochs": 35,
+    "time": null,
+    "patience": 100,
+    "batch": 2,
+    "imgsz": 960,
+    "save": true,
+    "save_period": -1,
+    "cache": false,
+    "device": "0",
+    "workers": 2,
+    "project": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai\\ai_data\\v5_hazards\\runs",
+    "name": "segment_round04",
+    "exist_ok": false,
+    "pretrained": true,
+    "cls_remap": true,
+    "optimizer": "AdamW",
+    "verbose": true,
+    "seed": 0,
+    "deterministic": true,
+    "single_cls": false,
+    "rect": false,
+    "cos_lr": false,
+    "close_mosaic": 10,
+    "resume": false,
+    "amp": true,
+    "fraction": 1.0,
+    "profile": false,
+    "freeze": null,
+    "multi_scale": 0.0,
+    "compile": false,
+    "channels_last": null,
+    "overlap_mask": true,
+    "mask_ratio": 4,
+    "dropout": 0.0,
+    "val": true,
+    "split": "val",
+    "save_json": false,
+    "conf": null,
+    "iou": 0.7,
+    "max_det": 300,
+    "quantize": null,
+    "dnn": false,
+    "plots": true,
+    "nms": null,
+    "source": null,
+    "vid_stride": 1,
+    "stream_buffer": false,
+    "visualize": false,
+    "augment": false,
+    "agnostic_nms": false,
+    "classes": null,
+    "retina_masks": false,
+    "embed": null,
+    "show": false,
+    "save_frames": false,
+    "save_txt": false,
+    "save_conf": false,
+    "save_crop": false,
+    "show_labels": true,
+    "show_conf": true,
+    "show_boxes": true,
+    "line_width": null,
+    "format": "torchscript",
+    "optimize": false,
+    "dynamic": false,
+    "simplify": true,
+    "opset": null,
+    "workspace": null,
+    "lr0": 0.000769,
+    "lrf": 0.01,
+    "momentum": 0.937,
+    "weight_decay": 0.0005,
+    "warmup_epochs": 3.0,
+    "warmup_momentum": 0.8,
+    "warmup_bias_lr": 0.0,
+    "distill_model": null,
+    "dis": 6.0,
+    "box": 7.5,
+    "cls": 0.5,
+    "cls_pw": 0.0,
+    "dfl": 1.5,
+    "pose": 12.0,
+    "kobj": 1.0,
+    "rle": 1.0,
+    "angle": 1.0,
+    "dlog": 1.0,
+    "dgrad": 0.5,
+    "dlam": 1.0,
+    "nbs": 64,
+    "hsv_h": 0.015,
+    "hsv_s": 0.7,
+    "hsv_v": 0.4,
+    "degrees": 0.0,
+    "translate": 0.1,
+    "scale": 0.5,
+    "shear": 0.0,
+    "perspective": 0.0,
+    "flipud": 0.0,
+    "fliplr": 0.5,
+    "bgr": 0.0,
+    "mosaic": 1.0,
+    "mixup": 0.0,
+    "cutmix": 0.0,
+    "copy_paste": 0.0,
+    "copy_paste_mode": "flip",
+    "auto_augment": "randaugment",
+    "erasing": 0.4,
+    "cfg": null,
+    "tracker": "tracktrack.yaml"
+  },
+  "caveats": [
+    "Same-frame desktop panel uses black padding, not historical Chrome/taskbar pixels.",
+    "Historical policy reconstructed from JPEG source, not original tensor.",
+    "Video frame index does not establish exact alignment to BC sample index.",
+    "No classifier thresholds, weights or default capture paths changed."
+  ]
+}

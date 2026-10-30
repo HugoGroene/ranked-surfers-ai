@@ -1,0 +1,40 @@
+{
+  "status": "COMPLETE",
+  "rounds": 1,
+  "optimized_transitions": 128,
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "processed_transitions": 128,
+  "active_wall_seconds": 24.570994599998812,
+  "stop_reason": "steps",
+  "workers": [
+    {
+      "op": "finished",
+      "worker": 0,
+      "transitions": {
+        "collected_transitions": 128,
+        "optimized_transitions": 128,
+        "actor_transitions": 126,
+        "passive_transitions": 2,
+        "boundary_settlements": 1,
+        "completed_rollout_transitions": 128,
+        "optimizer_sample_presentations": 640,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    }
+  ],
+  "audits": [
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 128,
+      "processed_rollout_transitions": 128,
+      "unique_transitions_used_by_optimizer": 128,
+      "passive_resync_transitions": 0,
+      "terminal_transitions": 3,
+      "failures": []
+    }
+  ],
+  "source_unchanged": true,
+  "optimized_transitions_per_second": 5.209394331965959
+}

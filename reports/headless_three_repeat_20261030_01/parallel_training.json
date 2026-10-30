@@ -1,0 +1,8 @@
+{
+  "status": "STOPPED",
+  "rounds": 0,
+  "optimized_transitions": 0,
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "error": "RuntimeError(\"Worker 0: expected ready, received RuntimeError('No visible <canvas> found. Check the local game and browser Console.')\")",
+  "source_unchanged": true
+}

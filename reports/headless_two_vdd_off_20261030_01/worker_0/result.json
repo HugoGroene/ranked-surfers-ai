@@ -1,0 +1,23 @@
+{
+  "worker": 0,
+  "training": false,
+  "movement_inputs": false,
+  "gameplay_verified": false,
+  "error": null,
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Ti (0x00002803) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "captures": 225,
+  "capture_ms": {
+    "median": 66.69409999449272,
+    "p95": 76.39339999877846,
+    "max": 91.859399995883
+  },
+  "capture_rate": 15.0,
+  "changed_frames": 217,
+  "frame_shape": [
+    937,
+    1904,
+    3
+  ],
+  "page_errors": [],
+  "note": "Image motion does not prove gameplay. Review saved images; no input-response or PPO validation."
+}

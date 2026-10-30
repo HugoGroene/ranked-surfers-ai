@@ -1,0 +1,18 @@
+{
+  "error": "TimeoutError()",
+  "guard_hard_stopped": false,
+  "learning_transitions": {
+    "collected_transitions": 8,
+    "optimized_transitions": 0,
+    "actor_transitions": 7,
+    "passive_transitions": 1,
+    "boundary_settlements": 0,
+    "completed_rollout_transitions": 0,
+    "optimizer_sample_presentations": 0,
+    "discarded_partial_transitions": 8,
+    "stop_reason": null,
+    "completed_interactions_not_ledgered": 0
+  },
+  "policy_replica_only": true,
+  "optimizer_updates_in_worker": 0
+}

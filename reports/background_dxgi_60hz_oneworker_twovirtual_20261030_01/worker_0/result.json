@@ -1,0 +1,44 @@
+{
+  "display": 2,
+  "steps": 7,
+  "error": "GuardUncertainError('[BACKGROUND] No recent acquired GPU frame; NO movement sent')",
+  "guard_hard_stopped": true,
+  "webgl_renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Ti (0x00002803) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "stage_timings": {
+    "capture_grab_ms": {
+      "count": 140,
+      "median_ms": 0.2,
+      "p95_ms": 2.13,
+      "p99_ms": 4.93,
+      "mean_ms": 0.82
+    },
+    "capture_alignment_ms": {
+      "count": 140,
+      "median_ms": 0.0,
+      "p95_ms": 0.04,
+      "p99_ms": 0.06,
+      "mean_ms": 0.01
+    },
+    "capture_menu_ms": {
+      "count": 140,
+      "median_ms": 0.96,
+      "p95_ms": 1.37,
+      "p99_ms": 1.59,
+      "mean_ms": 1.0
+    },
+    "pack_ms": {
+      "count": 8,
+      "median_ms": 7.75,
+      "p95_ms": 68.52,
+      "p99_ms": 93.44,
+      "mean_ms": 19.54
+    },
+    "game_crop_ms": {
+      "count": 8,
+      "median_ms": 1.01,
+      "p95_ms": 1.15,
+      "p99_ms": 1.17,
+      "mean_ms": 1.02
+    }
+  }
+}

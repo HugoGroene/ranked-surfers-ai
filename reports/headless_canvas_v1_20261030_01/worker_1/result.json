@@ -1,0 +1,18 @@
+{
+  "error": null,
+  "guard_hard_stopped": false,
+  "learning_transitions": {
+    "collected_transitions": 256,
+    "optimized_transitions": 256,
+    "actor_transitions": 252,
+    "passive_transitions": 4,
+    "boundary_settlements": 2,
+    "completed_rollout_transitions": 256,
+    "optimizer_sample_presentations": 1280,
+    "discarded_partial_transitions": 0,
+    "stop_reason": null,
+    "completed_interactions_not_ledgered": 0
+  },
+  "policy_replica_only": true,
+  "optimizer_updates_in_worker": 0
+}

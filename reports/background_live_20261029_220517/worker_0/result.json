@@ -1,0 +1,6 @@
+{
+  "display": 2,
+  "steps": 0,
+  "error": "RuntimeError(\"[SCREEN STATE] MENU not confirmed within 30.0s; last_probs={'MENU': 0.027584077790379524, 'LOADING': 0.0021461041178554296, 'GAMEPLAY': 0.9674426317214966, 'OTHER': 0.002827195217832923}. No R or arrow keys sent. Image: reports\\\\background_live_20261029_220517\\\\worker_0\\\\state_ep0001_menu_not_ready.jpg\")",
+  "guard_hard_stopped": false
+}

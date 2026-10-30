@@ -36,3 +36,9 @@ rankedsurfers-downloaded/cdn-cgi/
 /ai_data/demonstrations_*/
 *.bak
 /reports/**/video/
+
+# Headless training outputs: keep models and detailed traces local.
+/reports/**/*.zip
+/reports/**/learning_transitions.jsonl
+/reports/**/ppo_reward_step_audit.jsonl
+/reports/**/system_usage.jsonl

@@ -1,0 +1,11 @@
+{
+  "synthetic_data": true,
+  "layout": {
+    "columns": 3,
+    "figures": 6,
+    "points": 299,
+    "horizontalOverflow": false
+  },
+  "tablet_columns": 2,
+  "page_errors": []
+}

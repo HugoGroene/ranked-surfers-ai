@@ -1,0 +1,165 @@
+{
+  "status": "COMPLETE",
+  "rounds": 5,
+  "optimized_transitions": 3840,
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "processed_transitions": 3840,
+  "active_wall_seconds": 208.66611270001158,
+  "stop_reason": "wall_time_after_shared_update",
+  "workers": [
+    {
+      "op": "finished",
+      "worker": 0,
+      "transitions": {
+        "collected_transitions": 640,
+        "optimized_transitions": 640,
+        "actor_transitions": 623,
+        "passive_transitions": 17,
+        "boundary_settlements": 5,
+        "completed_rollout_transitions": 640,
+        "optimizer_sample_presentations": 3200,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    },
+    {
+      "op": "finished",
+      "worker": 1,
+      "transitions": {
+        "collected_transitions": 640,
+        "optimized_transitions": 640,
+        "actor_transitions": 623,
+        "passive_transitions": 17,
+        "boundary_settlements": 5,
+        "completed_rollout_transitions": 640,
+        "optimizer_sample_presentations": 3200,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    },
+    {
+      "op": "finished",
+      "worker": 2,
+      "transitions": {
+        "collected_transitions": 640,
+        "optimized_transitions": 640,
+        "actor_transitions": 622,
+        "passive_transitions": 18,
+        "boundary_settlements": 5,
+        "completed_rollout_transitions": 640,
+        "optimizer_sample_presentations": 3200,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    },
+    {
+      "op": "finished",
+      "worker": 3,
+      "transitions": {
+        "collected_transitions": 640,
+        "optimized_transitions": 640,
+        "actor_transitions": 624,
+        "passive_transitions": 16,
+        "boundary_settlements": 5,
+        "completed_rollout_transitions": 640,
+        "optimizer_sample_presentations": 3200,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    },
+    {
+      "op": "finished",
+      "worker": 4,
+      "transitions": {
+        "collected_transitions": 640,
+        "optimized_transitions": 640,
+        "actor_transitions": 621,
+        "passive_transitions": 19,
+        "boundary_settlements": 5,
+        "completed_rollout_transitions": 640,
+        "optimizer_sample_presentations": 3200,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    },
+    {
+      "op": "finished",
+      "worker": 5,
+      "transitions": {
+        "collected_transitions": 640,
+        "optimized_transitions": 640,
+        "actor_transitions": 625,
+        "passive_transitions": 15,
+        "boundary_settlements": 5,
+        "completed_rollout_transitions": 640,
+        "optimizer_sample_presentations": 3200,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    }
+  ],
+  "audits": [
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 640,
+      "processed_rollout_transitions": 640,
+      "unique_transitions_used_by_optimizer": 640,
+      "passive_resync_transitions": 4,
+      "terminal_transitions": 26,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 640,
+      "processed_rollout_transitions": 640,
+      "unique_transitions_used_by_optimizer": 640,
+      "passive_resync_transitions": 4,
+      "terminal_transitions": 25,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 640,
+      "processed_rollout_transitions": 640,
+      "unique_transitions_used_by_optimizer": 640,
+      "passive_resync_transitions": 4,
+      "terminal_transitions": 25,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 640,
+      "processed_rollout_transitions": 640,
+      "unique_transitions_used_by_optimizer": 640,
+      "passive_resync_transitions": 4,
+      "terminal_transitions": 25,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 640,
+      "processed_rollout_transitions": 640,
+      "unique_transitions_used_by_optimizer": 640,
+      "passive_resync_transitions": 4,
+      "terminal_transitions": 26,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 640,
+      "processed_rollout_transitions": 640,
+      "unique_transitions_used_by_optimizer": 640,
+      "passive_resync_transitions": 4,
+      "terminal_transitions": 27,
+      "failures": []
+    }
+  ],
+  "source_unchanged": true,
+  "optimized_transitions_per_second": 18.402604765636134
+}

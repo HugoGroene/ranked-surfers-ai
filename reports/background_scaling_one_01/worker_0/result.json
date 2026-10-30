@@ -1,0 +1,6 @@
+{
+  "display": 2,
+  "steps": 6,
+  "error": "TimeoutError()",
+  "guard_hard_stopped": false
+}

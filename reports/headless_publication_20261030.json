@@ -1,0 +1,23 @@
+{
+  "branch": "headless-parallel",
+  "offline_tests": {"run": 137, "failures": 0, "errors": 0},
+  "dashboard_browser_check": {
+    "synthetic_metrics": true,
+    "desktop_columns": 3,
+    "worker_tiles": 6,
+    "horizontal_overflow": false,
+    "new_points_preserve_previous_points": true,
+    "page_errors": []
+  },
+  "graph_fix": "Immutable points every 10 seconds; previous samples never replaced",
+  "planned_diagnostic_started": false,
+  "selected_checkpoint_sha256": "66dc546f04253d9d2cf4aeb5af0764d9500c70ce78439159e518d5a96553bc9e",
+  "local_assets_excluded": ["model weights", "raw demonstrations", "videos", "telemetry logs", "recovered private conversation prompts"],
+  "notes": [
+    "Two-, three-, four- and six-worker short shared PPO checks completed; summaries retained.",
+    "Visible-browser whole-canvas calibration is not yet live-validated.",
+    "Throughput and training curves do not establish improved model quality.",
+    "Six-worker whole-canvas check reached 92.4% system RAM and 7343 MiB VRAM.",
+    "VDD remains disabled; no reboot test performed."
+  ]
+}

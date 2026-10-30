@@ -1160,6 +1160,7 @@ async def capture_loop(a):
 
             canvas_view = await read_view()
             static_info = {'recorder_version': RECORDER_VERSION, 'git': git_state(),
+                           'framing_profile': getattr(a,'framing_profile','legacy'),
                            'cli_args': {k: str(v) for k, v in vars(a).items()},
                            'platform': platform.platform(),
                            'python': sys.version.split()[0], 'opencv': cv2.__version__}
@@ -1333,9 +1334,13 @@ async def capture_loop(a):
                                 print('YOLO failed; stopping recorder rather than saving mismatched features:', e, flush=True)
                                 raise
                             future = None
-                        native = cv2.cvtColor(crop_game(shot, DEFAULT_CROP), cv2.COLOR_BGRA2RGB)
-                        rgb = fit_rgb_to_target(native, (512,288), interpolation=cv2.INTER_LINEAR)
-                        frame = np.ascontiguousarray(rgb.transpose(2,0,1))
+                        if getattr(a,'framing_profile','legacy') == 'canvas_v1':
+                            from tools.ppo_framing import canvas_observation
+                            frame,native = canvas_observation(shot)
+                        else:
+                            native = cv2.cvtColor(crop_game(shot, DEFAULT_CROP), cv2.COLOR_BGRA2RGB)
+                            rgb = fit_rgb_to_target(native, (512,288), interpolation=cv2.INTER_LINEAR)
+                            frame = np.ascontiguousarray(rgb.transpose(2,0,1))
                         timing['preprocess_done'] = time.perf_counter()
                         # Human review shows the ENTIRE canvas, while V6.1 PPO still sees
                         # the exact crop+letterbox input it was trained on.
@@ -1388,6 +1393,7 @@ def main():
     rec.add_argument('--detector', type=Path, default=Path('ai_data/v5_hazards/runs/segment_round04/weights/best.pt'))
     rec.add_argument('--state-model', type=Path, default=Path('ai_data/v4_screen_states_rebuild_01/screen_state_candidate_v2.pt'))
     rec.add_argument('--fps', type=int, default=20)
+    rec.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='legacy')
     rec.add_argument('--detect-every', type=int, default=3)
     rec.add_argument('--imgsz', type=int, default=960)
     rec.add_argument('--conf', type=float, default=.20)

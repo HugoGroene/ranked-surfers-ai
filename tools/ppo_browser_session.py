@@ -17,6 +17,7 @@ class PersistentBrowserSession:
         self.resources = {}
         self.launches = self.reuses = 0
         self.closed = False
+        self.capture_profile = None
 
     def acquire(self, env):
         url = urlsplit(env.args.url)
@@ -41,6 +42,12 @@ class PersistentBrowserSession:
             raise RuntimeError('Only the current lease may use the browser')
         if not self.resources.get('browser'):
             return False
+        profile = (getattr(env, '_background_display_index', None),
+                   bool(getattr(env, '_background_canvas_policy', False)),
+                   getattr(env, '_background_capture_mode', 'mss'),
+                   getattr(env, '_framing_profile', 'legacy'))
+        if profile != self.capture_profile:
+            raise RuntimeError('Capture mode/display changed inside a persistent session; start a new session')
         if (not self.resources['browser'].is_connected() or self.resources.get('page') is None
                 or self.resources['page'].is_closed()):
             raise RuntimeError('Persistent browser disconnected; abort batch instead of replacing its window')
@@ -54,6 +61,10 @@ class PersistentBrowserSession:
             raise RuntimeError('Only the current lease may register resources')
         if not self.resources.get('browser') and env.browser is not None:
             self.launches += 1
+            self.capture_profile = (getattr(env, '_background_display_index', None),
+                                    bool(getattr(env, '_background_canvas_policy', False)),
+                                    getattr(env, '_background_capture_mode', 'mss'),
+                                    getattr(env, '_framing_profile', 'legacy'))
         for key in RESOURCES:
             if getattr(env, key, None) is not None:
                 self.resources[key] = getattr(env, key)

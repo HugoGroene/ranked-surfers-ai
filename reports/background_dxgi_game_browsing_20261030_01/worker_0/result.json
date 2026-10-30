@@ -1,0 +1,7 @@
+{
+  "display": 2,
+  "steps": 4,
+  "error": "GuardUncertainError('[BACKGROUND] No recent native gameplay presentation; NO movement sent')",
+  "guard_hard_stopped": true,
+  "webgl_renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Ti (0x00002803) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}

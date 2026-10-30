@@ -1,2 +1,4 @@
 *.pt filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
+# Historical installer payloads are exact source snapshots; preserve their bytes.
+tools/_ppo_*_payload/*.txt -text -whitespace

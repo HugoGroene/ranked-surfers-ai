@@ -1,0 +1,16 @@
+{
+  "displays": [
+    2,
+    3
+  ],
+  "checkpoint": "ai_data\\demonstrations_v13\\bc_runs\\bc_sampled_batch_20261028_1740_v2\\latest.zip",
+  "seconds": 15.0,
+  "startup_timeout": 90.0,
+  "state_model": "checkpoints\\v612_snapshot_20261021\\screen_state_candidate_v2.pt",
+  "detector": "ai_data\\v5_hazards\\runs\\segment_round04\\weights\\best.pt",
+  "canvas_policy_input": true,
+  "background_capture": "dxgi",
+  "report": "reports\\background_dxgi_60hz_two_15s_20261030_01",
+  "preview_port": null,
+  "telemetry": true
+}

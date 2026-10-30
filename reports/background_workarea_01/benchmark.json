@@ -1,0 +1,48 @@
+{
+  "status": "COMPLETE_FIXED_POLICY_DIAGNOSTIC",
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "workers": 1,
+  "measured_seconds": 20.0,
+  "valid_decisions": 262,
+  "aggregate_decisions_per_second": 13.1,
+  "partial_decisions_per_second": 13.1,
+  "model_updated": false,
+  "shared_learner": false,
+  "input_response_verified": false,
+  "note": "Transport/motion evidence needs review; no claim of learning speedup or Unity input causality",
+  "results": [
+    {
+      "display": 2,
+      "steps": 262,
+      "error": null,
+      "guard_hard_stopped": false,
+      "episodes": 3,
+      "wall_seconds": 20.10919200000353,
+      "background_polls": 24,
+      "motion_polls": 23,
+      "polls": 24,
+      "canvas_keydowns": {
+        "r": 3,
+        "ArrowDown": 100,
+        "ArrowUp": 84
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 259,
+        "preflight_rechecks_on_transient": 3,
+        "preflight_confirmed_menu": 3,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 6,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "prepared_observation_guard_enabled": true,
+        "prepared_observation_guard_hits": 237,
+        "prepared_observation_guard_fallbacks": 25,
+        "prepared_observation_guard_late_fallbacks": 0,
+        "prepared_observation_max_age_ms": 20.0,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      }
+    }
+  ],
+  "source_unchanged": true
+}

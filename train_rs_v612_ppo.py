@@ -42,10 +42,16 @@ def build_env_class():
 
     OldEnv = bench.build_live_env_class()
 
-    class PPOV61Env(OldEnv):
+    from tools.ppo_background_display import BackgroundDisplayMixin
+
+    class PPOV61Env(BackgroundDisplayMixin, OldEnv):
         """Preserve proven V4/V5 control, extend PPO observations without rules."""
         async def _open_browser(self):
             await super()._open_browser()
+            if getattr(self,'_framing_profile','legacy') == 'canvas_v1' and not self._background_enabled():
+                await self._calibrate_policy_canvas()
+            if getattr(self, '_background_display_index', None) is not None:
+                return
             from tools.ppo_browser_focus import ensure_startup_focus
             try:
                 await ensure_startup_focus(self.page)
@@ -53,6 +59,10 @@ def build_env_class():
                 raise GuardUncertainError(f'[PPO FOCUS] Startup stopped: {exc}') from exc
 
         def __init__(self, cfg, output, demos, detector, *, a):
+            self._framing_profile = getattr(a,'framing_profile','legacy')
+            self._background_display_index = getattr(a, 'background_display', None)
+            self._background_canvas_policy = bool(getattr(a, 'canvas_policy_input', False))
+            self._background_capture_mode = getattr(a, 'background_capture', 'mss')
             if a.benchmark_action != 'ppo':
                 raise ValueError('V6 learning must execute the PPO-sampled action')
             self.reward_survival_rate = float(a.reward_survival_rate)
@@ -122,7 +132,8 @@ def build_env_class():
                 self.native_history.append(frame)
             packed = np.concatenate(tuple(self.native_history), axis=0)
             now = time.perf_counter()
-            source_at = self.last_capture_end or now
+            native_present = self._background_present_at()
+            source_at = native_present if native_present is not None else (self.last_capture_end or now)
             if self.previous_observation_at is not None:
                 self.frame_intervals.append(max(0., source_at-self.previous_observation_at))
             self.previous_observation_at = source_at
@@ -170,20 +181,24 @@ def build_env_class():
                         confidence=self.state_confidence, menu_threshold=self.args.threshold)
                     if reading.verdict == 'PLAY' and self.last_capture_end is not None:
                         if getattr(self, 'settled_learning', False) and self._learning_origin is not None:
-                            at = float(self.last_capture_end)
+                            at = float(source_at)
                             ongoing_pause = (max(0.,at-self._learning_pause_started)
                                 if self._learning_pause_started is not None else 0.)
                             self._learning_verified_duration = max(self._learning_verified_duration,
                                 at-self._learning_origin-self._learning_excluded_pause-ongoing_pause)
                         from tools.ppo_prepared_guard import PreparedGameplayReading
+                        native_sample = getattr(getattr(self, 'grabber', None), 'last_sample', None)
                         self._prepared_gameplay_reading = PreparedGameplayReading(
                             id(self._v2_last_bgra), self.last_capture_end,
-                            state, dict(probabilities), menu_score)
+                            state, dict(probabilities), menu_score, presented_at=native_present,
+                            source_acquired_at=native_sample.received_at if native_sample is not None else None)
             self.pack_ms.append((time.perf_counter()-start)*1000)
             result = {'image': packed, 'aux': aux}
             self._learning_current_observation = result
             self._learning_observation_capture = dict(
                 serial=getattr(self,'_learning_capture_serial',None),captured_at=self.last_capture_end)
+            if native_present is not None:
+                self._learning_observation_capture['native_present_at'] = native_present
             return result, fresh, age_ms
 
         async def _capture(self):
@@ -245,6 +260,7 @@ def build_env_class():
                 self.previous_observation_at = None
                 observation = None
                 accepted_traces = []
+                previous_native_present = None
                 for attempt in range(MAX_RESYNC_CAPTURES):
                     if attempt:
                         await asyncio.sleep(.033)
@@ -282,6 +298,17 @@ def build_env_class():
                                           f'for {paused_frame_skips} frames; no keys sent')
                         continue
                     state, probs = self._read_screen_state()
+                    if state == 'GAMEPLAY' and getattr(self, '_background_capture_mode', 'mss') == 'dxgi':
+                        distinct, previous_native_present = self._background_resync_present(previous_native_present)
+                        if not distinct:
+                            window = ResyncWindow()
+                            self.native_history.clear()
+                            self.frame_intervals.clear()
+                            self.previous_observation_at = None
+                            accepted_traces.clear()
+                            observation = None
+                            print('[PPO RESYNC NATIVE] Cached/old GPU frame excluded; no gameplay vote.', flush=True)
+                            continue
                     # A terminal screen can appear AFTER Unity resumes, while
                     # we are passively capturing the four fresh PPO frames.
                     # Record its FIRST corroborated observation timestamp,
@@ -1010,7 +1037,14 @@ def build_env_class():
                 # A scheduler stall must fall back to the original fresh guard.
                 self.prepared_guard_late_fallbacks += 1
                 return await self._step_browser(action)
+            if (getattr(self, '_background_capture_mode', 'mss') == 'dxgi'
+                    and not self._background_action_frame_current()):
+                return await self._background_retry_action_frame(action)
             self.guard_allowed += 1
+            if getattr(self, '_background_capture_mode', 'mss') == 'dxgi':
+                # The post-action policy observation must have a new native
+                # presentation. Static UI inspection remains explicitly separate.
+                self.grabber.require_new = True
             self.action_context.note_action(int(action), time.perf_counter())
             if getattr(self, 'settled_learning', False):
                 from train_rs_rl_early_death import ACTIONS
@@ -1804,6 +1838,7 @@ def train(a, *, browser_session=None):
             print(f'[RESUME] PPO weights loaded from {a.resume}',flush=True)
         else:
             model=make_model(monitored,a)
+        model.framing_profile = getattr(a,'framing_profile','legacy')
         if getattr(a,'settled_learning',False):
             from tools.ppo_settled_learning import SettledPPO,reference_seconds_for
             model.__class__ = SettledPPO
@@ -1960,6 +1995,14 @@ def parse_args(argv=None):
     p.add_argument('--run-name',default='v61_ppo_'+datetime.now().strftime('%Y%m%d_%H%M%S'))
     p.add_argument('--resolution',type=bench.shape,default=(512,288))
     p.add_argument('--fps',type=int,default=30)
+    p.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='legacy',
+                   help='canvas_v1: whole calibrated game canvas for PPO/detector; separate guard inputs')
+    p.add_argument('--background-display',type=int,default=None,
+                   help='EXPERIMENTAL non-primary MSS display index; page focus emulation, no OS activation')
+    p.add_argument('--background-capture',choices=['mss','dxgi'],default='mss',
+                   help='EXPERIMENTAL background capture backend; DXGI requires isolated optional dependencies')
+    p.add_argument('--canvas-policy-input',action='store_true',
+                   help='With --background-display, crop policy/detector inside pixel-calibrated canvas (changes framing)')
     p.add_argument('--rate-mode',choices=['uncapped','capped'],default='uncapped')
     p.add_argument('--reuse-observation-guard', action='store_true',
                    help='EXPERIMENTAL: reuse the confident gameplay check on the exact policy image for at most 20 ms; otherwise use normal preflight capture')
@@ -2030,6 +2073,15 @@ def parse_args(argv=None):
     p.add_argument('--probe-delays-ms',type=str,default='5,10',
                    help='Comma-separated Playwright tap durations for manual action audit')
     a=p.parse_args(argv)
+    if a.framing_profile == 'canvas_v1' and (a.resolution != (512,288) or a.resize_method != 'linear'
+                                             or tuple(a.crop) != tuple(bench.DEFAULT_CROP)):
+        p.error('canvas_v1 fixes 512x288 linear whole-canvas preprocessing; custom crop/resize settings are incompatible')
+    if a.background_display is not None and (a.background_display < 1 or a.capture_mode != 'fast'):
+        p.error('--background-display requires index >=1 and --capture-mode fast')
+    if a.canvas_policy_input and a.background_display is None:
+        p.error('--canvas-policy-input requires --background-display')
+    if a.background_capture != 'mss' and a.background_display is None:
+        p.error('--background-capture dxgi requires --background-display')
     if a.mode=='train' and a.pause_ppo_optimizer and a.resync_rollouts and not a.legacy_learning:
         a.settled_learning=True
     if a.settled_learning and (a.mode!='train' or not a.pause_ppo_optimizer or not a.resync_rollouts):

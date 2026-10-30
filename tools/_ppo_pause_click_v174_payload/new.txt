@@ -1,0 +1,106 @@
+                # The Pause control can vanish *before* click (v1.7.1), or
+                # detach *while Playwright waits for a stable click target*
+                # (v1.7.4). In both cases, use fresh classifier/template
+                # captures before sending another click. A click timeout alone
+                # is NOT evidence that the click failed: check overlay first.
+                async def recheck_pause_control(reason, *, after_click=False):
+                    from tools.ppo_pause_control_recheck_v171 import (
+                        PauseControlRecheck, MAX_RECHECK_CAPTURES)
+                    window = PauseControlRecheck(
+                        confidence=self.state_confidence,
+                        threshold=self.args.threshold,
+                        motion_threshold=self.startup_motion_threshold)
+                    for recheck_index in range(MAX_RECHECK_CAPTURES):
+                        if recheck_index:
+                            await asyncio.sleep(.075)
+                        focused = bool(await page.evaluate(
+                            'document.hasFocus() && document.visibilityState === "visible"'))
+                        if not focused:
+                            raise GuardUncertainError(
+                                f'Browser focus lost during {reason}; NO inputs sent')
+                        if await overlay.is_visible():
+                            if after_click:
+                                print('[PPO PAUSE CLICK] Pause overlay appeared '
+                                      f'during {reason}; verify frozen track, '
+                                      'do not click again.', flush=True)
+                                return 'OVERLAY'
+                            raise GuardUncertainError(
+                                'Unexpected Pause overlay during missing-control recheck')
+                        count = await pause_button.count()
+                        if count > 1:
+                            raise GuardUncertainError(
+                                'Ambiguous multiple site Pause game buttons; NO click')
+                        visible = count == 1 and await pause_button.is_visible()
+                        _legacy, score, _unused = await self._capture()
+                        new_state, new_probs = self._read_screen_state()
+                        decision = window.observe(
+                            state=new_state, probabilities=new_probs,
+                            menu_score=score, observed_mono=_time.monotonic(),
+                            focused=focused, button_count=count,
+                            button_visible=visible)
+                        if decision == 'MENU':
+                            first_menu = window.first_menu_observed_mono
+                            if first_menu is None:
+                                raise GuardUncertainError(
+                                    'Corroborated MENU missing observation-time anchor')
+                            self._ppo_boundary_menu_duration_at = max(
+                                float(self.survival_rewards.last_duration),
+                                first_menu - float(self.episode_start))
+                            print('[PPO PAUSE CONTROL] ' + reason + '; MENU '
+                                  f'corroborated after {len(window.readings)} frames; '
+                                  'no movement, no restart.', flush=True)
+                            # The unchanged rollout callback independently
+                            # re-confirms MENU, then records the terminal
+                            # penalty via the normal no-key input guard.
+                            raise GuardUncertainError(
+                                f'Not verified GAMEPLAY at rollout end: MENU, '
+                                f'menu={score:.3f}')
+                        if decision == 'READY':
+                            print('[PPO PAUSE CONTROL] ' + reason + '; Pause '
+                                  'button visible with two GAMEPLAY frames '
+                                  f'after {len(window.readings)} checks.', flush=True)
+                            return 'READY'
+                        if decision == 'ABORT':
+                            break
+                    import cv2
+                    diagnostic = (self.output_dir /
+                        f'ppo_pause_control_ep{self.episode_number:04d}.jpg')
+                    if self._v2_last_bgra is not None:
+                        cv2.imwrite(str(diagnostic), cv2.cvtColor(
+                            self._v2_last_bgra, cv2.COLOR_BGRA2BGR))
+                    raise GuardUncertainError(
+                        f'Pause control unresolved after {reason}; '
+                        f'{window.diagnostic()}; diagnostic={diagnostic}; '
+                        'NO inputs sent')
+
+                if await pause_button.count() != 1 or not await pause_button.is_visible():
+                    await recheck_pause_control('Missing Pause button')
+
+                from playwright.async_api import TimeoutError as PlaywrightTimeoutError
+                try:
+                    await pause_button.click(timeout=1800)
+                except PlaywrightTimeoutError as exc:
+                    # DOM detachment/unstable target is not proof of MENU and
+                    # not proof the click was ineffective. Never blindly retry.
+                    print('[PPO PAUSE CLICK] Initial click timed out; '
+                          'checking overlay and fresh screen evidence.', flush=True)
+                    result = await recheck_pause_control(
+                        'Pause click timeout', after_click=True)
+                    if result == 'READY':
+                        # At most ONE retry, after two newly observed PLAY
+                        # frames and a unique visible Pause button.
+                        if await overlay.is_visible():
+                            print('[PPO PAUSE CLICK] Overlay appeared before '
+                                  'retry; no second click.', flush=True)
+                        else:
+                            try:
+                                await pause_button.click(timeout=1200)
+                            except PlaywrightTimeoutError as second_exc:
+                                result = await recheck_pause_control(
+                                    'Second Pause click timeout', after_click=True)
+                                if result == 'READY':
+                                    raise GuardUncertainError(
+                                        'Pause control timed out twice despite '
+                                        'verified gameplay; NO third click') from second_exc
+                                # OVERLAY means it may have clicked; strict
+                                # frozen-scene confirmation below is mandatory.

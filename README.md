@@ -1,12 +1,22 @@
 # Ranked Surfers AI — PPO V6.1.2 + Human Demonstrations V1.3
 
-**Last updated: 29 October 2026.** Development branch: [`claude-development`](https://github.com/HugoGroene/ranked-surfers-ai/tree/claude-development).
+**Last updated: 30 October 2026.** Development branch: [`headless-parallel`](https://github.com/HugoGroene/ranked-surfers-ai/tree/headless-parallel).
 
 Screenshot-based reinforcement learning for a **locally hosted Practice copy** of the Unity WebGL endless runner Ranked Surfers. This project uses Stable-Baselines3 PPO, native game-canvas screen capture, asynchronous nine-class YOLO segmentation, and a fail-closed gameplay/menu guard. The separate **experimental human-demonstration V1.3** workflow records manual gameplay, permits reviewing and trimming good segments, and can fine-tune a **copy** of the existing PPO model using behavioral cloning (BC). Neither recorder nor trainer is intended for public ranked/live matches.
 
 > **Repository vs. local assets:** Source, tests and selected experiment reports are versioned; working checkpoints, raw demonstrations, review videos and feature caches remain local. A fresh clone does not include the latest models or a Python environment. The older Git-LFS milestone is not the current working policy. The 27 October workflow below is historical; use the current status and pipeline guide first.
 
 ## Current status: recovered 28 October development
+
+**Headless parallel PPO (experimental):** up to six independent local Unity browsers
+feed one shared, settled-learning PPO optimizer. A six-worker whole-canvas check
+completed five updates and all learning audits at 18.4 optimized transitions/s;
+this does not establish improved policy quality or long-run stability. The virtual
+display driver is disabled. The dashboard provides a six-tile grid, persistent
+survival curve and training/system statistics. Start with the
+[headless parallel guide](README_HEADLESS_PARALLEL.md),
+[whole-canvas profile](README_PPO_CANVAS_V1.md) and
+[diagnostic details](README_PPO_BACKGROUND.md).
 
 **29 October learning-correctness correction:** pause-aware training now uses
 an episode-aware collector with pre-GAE boundary settlement, actor-masked
@@ -481,3 +491,9 @@ Preserve the newest `ai_data/rl_v2_runs/.../latest.zip` separately (ideally with
 4. Only after that result, consider further PPO or more complex imitation (DAgger-style corrections, decaying demonstration loss). Keep reward changes, LSTM, YOLO resize, and action timing separate from this experiment.
 
 The code samples assume you have the required local model assets, working `.venv`, Unity game files and a compatible Windows display. A Python test passing or a ZIP being pushed **does not** prove real-time capture quality or better survival.
+
+Whole-canvas migration: see [README_PPO_CANVAS_V1.md](README_PPO_CANVAS_V1.md). The explicit --framing-profile canvas_v1 option is shared by PPO training/evaluation, shared headless workers, new BC recording and BC training selection. It uses the calibrated whole canvas and retains separate raw safety inputs; detector weights and existing checkpoints/demos are preserved. Legacy framing remains the default for reproduction.
+
+The shared-worker preview (--preview-port 8001) now provides a compact six-tile grid and a persistent rolling-mean episode-duration chart with a fixed requested-runtime x-axis. See README_PPO_BACKGROUND.md for metric definitions and reopening saved dashboards using tools.ppo_worker_preview --report PATH --port 8001.
+
+Thirty-minute headless diagnostics can retain five-minute snapshots via --save-every-minutes 5. The dashboard now shows connected red graph points, PPO update statistics and sampled system performance using the existing telemetry stream. Preserve the run directory (including config.json, progress.csv, worker ledgers, survival.json, system_usage.jsonl and checkpoint snapshots) for post-run analysis.

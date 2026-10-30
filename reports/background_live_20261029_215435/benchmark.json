@@ -1,0 +1,6 @@
+{
+  "status": "STOPPED",
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "error": "RuntimeError('Worker startup failed/timed out; inspect worker.log')",
+  "source_unchanged": true
+}

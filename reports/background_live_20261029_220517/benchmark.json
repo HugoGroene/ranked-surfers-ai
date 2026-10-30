@@ -1,0 +1,22 @@
+{
+  "status": "STOPPED",
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "workers": 1,
+  "measured_seconds": 20.0,
+  "valid_decisions": 0,
+  "aggregate_decisions_per_second": null,
+  "partial_decisions_per_second": 0.0,
+  "model_updated": false,
+  "shared_learner": false,
+  "input_response_verified": false,
+  "note": "Transport/motion evidence needs review; no claim of learning speedup or Unity input causality",
+  "results": [
+    {
+      "display": 2,
+      "steps": 0,
+      "error": "RuntimeError(\"[SCREEN STATE] MENU not confirmed within 30.0s; last_probs={'MENU': 0.027584077790379524, 'LOADING': 0.0021461041178554296, 'GAMEPLAY': 0.9674426317214966, 'OTHER': 0.002827195217832923}. No R or arrow keys sent. Image: reports\\\\background_live_20261029_220517\\\\worker_0\\\\state_ep0001_menu_not_ready.jpg\")",
+      "guard_hard_stopped": false
+    }
+  ],
+  "source_unchanged": true
+}

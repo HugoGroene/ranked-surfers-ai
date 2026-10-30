@@ -1,0 +1,72 @@
+                # React can remove the Pause control AFTER the pre-pause
+                # GAMEPLAY capture (e.g. on an emerging death transition).
+                # Recover only with fresh, independently guarded observations.
+                if await pause_button.count() != 1 or not await pause_button.is_visible():
+                    from tools.ppo_pause_control_recheck_v171 import (
+                        PauseControlRecheck, MAX_RECHECK_CAPTURES)
+                    window = PauseControlRecheck(
+                        confidence=self.state_confidence,
+                        threshold=self.args.threshold,
+                        motion_threshold=self.startup_motion_threshold)
+                    for recheck_index in range(MAX_RECHECK_CAPTURES):
+                        if recheck_index:
+                            await asyncio.sleep(.075)
+                        if await overlay.is_visible():
+                            raise GuardUncertainError(
+                                'Unexpected Pause overlay during missing-control recheck')
+                        focused = bool(await page.evaluate(
+                            'document.hasFocus() && document.visibilityState === "visible"'))
+                        count = await pause_button.count()
+                        if count > 1:
+                            raise GuardUncertainError(
+                                'Ambiguous multiple site Pause game buttons; NO click')
+                        visible = count == 1 and await pause_button.is_visible()
+                        _legacy, score, _unused = await self._capture()
+                        new_state, new_probs = self._read_screen_state()
+                        decision = window.observe(
+                            state=new_state, probabilities=new_probs,
+                            menu_score=score, observed_mono=_time.monotonic(),
+                            focused=focused, button_count=count,
+                            button_visible=visible)
+                        if decision == 'MENU':
+                            # Anchor survival at the FIRST corroborated MENU
+                            # observation, not the last confirmation; no menu
+                            # waiting time is credited to the terminal reward.
+                            first_menu = window.first_menu_observed_mono
+                            if first_menu is None:
+                                raise GuardUncertainError(
+                                    'Corroborated MENU missing observation-time anchor')
+                            self._ppo_boundary_menu_duration_at = max(
+                                float(self.survival_rewards.last_duration),
+                                first_menu - float(self.episode_start))
+                            print('[PPO PAUSE CONTROL] Missing button; MENU '
+                                  f'corroborated after {len(window.readings)} frames; '
+                                  'no Pause click, no movement, no restart.', flush=True)
+                            # The existing v1.7 callback repeats independent
+                            # confirmation and defers a REAL terminal reward.
+                            raise GuardUncertainError(
+                                f'Not verified GAMEPLAY at rollout end: MENU, '
+                                f'menu={score:.3f}')
+                        if decision == 'READY':
+                            print('[PPO PAUSE CONTROL] Pause button reappeared '
+                                  f'with two positive GAMEPLAY frames after '
+                                  f'{len(window.readings)} checks.', flush=True)
+                            break
+                        if decision == 'ABORT':
+                            break
+                    else:
+                        decision = 'ABORT'
+                    if decision != 'READY':
+                        # Preserve the latest screenshot for inspection without
+                        # trusting it for an R or any movement command.
+                        import cv2
+                        diagnostic = (self.output_dir /
+                            f'ppo_pause_control_ep{self.episode_number:04d}.jpg')
+                        if self._v2_last_bgra is not None:
+                            cv2.imwrite(str(diagnostic), cv2.cvtColor(
+                                self._v2_last_bgra, cv2.COLOR_BGRA2BGR))
+                        raise GuardUncertainError(
+                            'Pause control unavailable/ambiguous after bounded '
+                            f'guarded checks; {window.diagnostic()}; '
+                            f'diagnostic={diagnostic}; NO inputs sent')
+                await pause_button.click(timeout=1800)

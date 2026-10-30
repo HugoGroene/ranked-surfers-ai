@@ -1,0 +1,22 @@
+{
+  "status": "STOPPED",
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "workers": 1,
+  "measured_seconds": 45.0,
+  "valid_decisions": 6,
+  "aggregate_decisions_per_second": null,
+  "partial_decisions_per_second": 0.13333333333333333,
+  "model_updated": false,
+  "shared_learner": false,
+  "input_response_verified": false,
+  "note": "Transport/motion evidence needs review; no claim of learning speedup or Unity input causality",
+  "results": [
+    {
+      "display": 2,
+      "steps": 6,
+      "error": "TimeoutError()",
+      "guard_hard_stopped": false
+    }
+  ],
+  "source_unchanged": true
+}

@@ -1,0 +1,89 @@
+{
+  "status": "COMPLETE_FIXED_POLICY_DIAGNOSTIC",
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "workers": 1,
+  "measured_seconds": 30.0,
+  "valid_decisions": 13,
+  "aggregate_decisions_per_second": 0.43333333333333335,
+  "partial_decisions_per_second": 0.43333333333333335,
+  "model_updated": false,
+  "shared_learner": false,
+  "input_response_verified": false,
+  "note": "Transport/motion evidence needs review; no claim of learning speedup or Unity input causality",
+  "results": [
+    {
+      "display": 2,
+      "steps": 13,
+      "error": null,
+      "guard_hard_stopped": false,
+      "webgl_renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Ti (0x00002803) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "episodes": 1,
+      "wall_seconds": 30.0396272999933,
+      "background_polls": 8,
+      "motion_polls": 12,
+      "polls": 13,
+      "canvas_keydowns": {
+        "r": 2,
+        "ArrowUp": 7,
+        "ArrowDown": 5
+      },
+      "guard": {
+        "preflight_gameplay_allowed": 12,
+        "preflight_rechecks_on_transient": 2,
+        "preflight_confirmed_menu": 2,
+        "uncertain_state_abort": 0,
+        "ml_menu_without_template": 8,
+        "visual_gameplay_recoveries": 0,
+        "guard_hard_stopped": false,
+        "preflight_checks_every_decision": true,
+        "prepared_observation_guard_enabled": true,
+        "prepared_observation_guard_hits": 0,
+        "prepared_observation_guard_fallbacks": 14,
+        "prepared_observation_guard_late_fallbacks": 0,
+        "prepared_observation_max_age_ms": 20.0,
+        "warning": "One screenshot cannot prevent a game ending between capture and keypress."
+      },
+      "capture_backend": "dxgi",
+      "native_presentations": 45,
+      "cached_ui_reads": 40,
+      "stage_timings": {
+        "capture_grab_ms": {
+          "count": 82,
+          "median_ms": 1.88,
+          "p95_ms": 2.64,
+          "p99_ms": 3.59,
+          "mean_ms": 1.34
+        },
+        "capture_alignment_ms": {
+          "count": 82,
+          "median_ms": 0.0,
+          "p95_ms": 456.11,
+          "p99_ms": 1401.43,
+          "mean_ms": 136.58
+        },
+        "capture_menu_ms": {
+          "count": 82,
+          "median_ms": 0.94,
+          "p95_ms": 1.37,
+          "p99_ms": 1.79,
+          "mean_ms": 1.0
+        },
+        "pack_ms": {
+          "count": 16,
+          "median_ms": 7.93,
+          "p95_ms": 35.84,
+          "p99_ms": 92.09,
+          "mean_ms": 14.4
+        },
+        "game_crop_ms": {
+          "count": 16,
+          "median_ms": 1.04,
+          "p95_ms": 1.4,
+          "p99_ms": 1.41,
+          "mean_ms": 1.07
+        }
+      }
+    }
+  ],
+  "source_unchanged": true
+}

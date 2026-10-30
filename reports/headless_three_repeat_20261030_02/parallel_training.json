@@ -1,0 +1,90 @@
+{
+  "status": "COMPLETE",
+  "rounds": 2,
+  "optimized_transitions": 768,
+  "source_sha256": "9963b7229d2aa5dae4514cad359c1f904d6ee24f721137ab298d55d7618c5936",
+  "processed_transitions": 768,
+  "active_wall_seconds": 51.10582740000973,
+  "stop_reason": "steps",
+  "workers": [
+    {
+      "op": "finished",
+      "worker": 0,
+      "transitions": {
+        "collected_transitions": 256,
+        "optimized_transitions": 256,
+        "actor_transitions": 253,
+        "passive_transitions": 3,
+        "boundary_settlements": 2,
+        "completed_rollout_transitions": 256,
+        "optimizer_sample_presentations": 1280,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    },
+    {
+      "op": "finished",
+      "worker": 1,
+      "transitions": {
+        "collected_transitions": 256,
+        "optimized_transitions": 256,
+        "actor_transitions": 250,
+        "passive_transitions": 6,
+        "boundary_settlements": 2,
+        "completed_rollout_transitions": 256,
+        "optimizer_sample_presentations": 1280,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    },
+    {
+      "op": "finished",
+      "worker": 2,
+      "transitions": {
+        "collected_transitions": 256,
+        "optimized_transitions": 256,
+        "actor_transitions": 253,
+        "passive_transitions": 3,
+        "boundary_settlements": 2,
+        "completed_rollout_transitions": 256,
+        "optimizer_sample_presentations": 1280,
+        "discarded_partial_transitions": 0,
+        "stop_reason": null
+      },
+      "guard_hard_stopped": false
+    }
+  ],
+  "audits": [
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 256,
+      "processed_rollout_transitions": 256,
+      "unique_transitions_used_by_optimizer": 256,
+      "passive_resync_transitions": 1,
+      "terminal_transitions": 6,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 256,
+      "processed_rollout_transitions": 256,
+      "unique_transitions_used_by_optimizer": 256,
+      "passive_resync_transitions": 1,
+      "terminal_transitions": 6,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 256,
+      "processed_rollout_transitions": 256,
+      "unique_transitions_used_by_optimizer": 256,
+      "passive_resync_transitions": 1,
+      "terminal_transitions": 6,
+      "failures": []
+    }
+  ],
+  "source_unchanged": true,
+  "optimized_transitions_per_second": 15.027640468254189
+}
