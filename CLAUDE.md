@@ -59,3 +59,5 @@ Never install packages without approval.
 ## Git
 - Never `git add .`/`-A`; stage explicit files. `ai_data/demonstrations_*` is not ignored.
 - Commit/push only when asked.
+
+- Reaction latency is now a priority: six-worker screenshot-request-to-command p95 ~190ms even without previews. A fresh guard frame can accompany an older policy decision. Do not equate aggregate optimized throughput with per-worker response speed, or promise screenshot timing equals GPU presentation / Unity action response. Policy warmup is implemented; steady-state capture and guard alignment still need optimization. Metrics-only preview mode stops image fetches and shared-worker thumbnail encoding, not game observations.

@@ -10,7 +10,7 @@ from tools.ppo_survival_metrics import survival_curve
 
 async def main():
     from playwright.async_api import async_playwright
-    output=Path('reports/dashboard_ui_check_20261030_03')
+    output=Path('reports/dashboard_ui_check_20261030_04')
     output.mkdir(exist_ok=False)
     with tempfile.TemporaryDirectory() as directory:
         folder=Path(directory)
@@ -49,6 +49,8 @@ async def main():
                 try:
                     page=await browser.new_page(viewport=dict(width=1920,height=1080))
                     page.on('pageerror',lambda e:errors.append(str(e)))
+                    images=[]
+                    page.on('request',lambda request: images.append(request.url) if '/live.jpg?' in request.url else None)
                     await page.goto(f'http://127.0.0.1:{server.server_port}/')
                     await page.wait_for_selector('#chart polyline')
                     await page.wait_for_function('Array.from(document.images).every(i=>i.complete && i.naturalWidth>0)')
@@ -66,6 +68,22 @@ async def main():
                     (folder/'survival.json').write_text(json.dumps(after))
                     await page.wait_for_function('n => document.querySelectorAll("#chart circle").length === n',
                                                  arg=len(after['points']))
+                    await page.locator('#previewToggle').click()
+                    await page.wait_for_function("document.querySelector('#previewState').textContent.includes('worker JPEG previews paused')")
+                    assert await page.locator('#previews').is_hidden()
+                    assert json.loads((folder/'preview_control.json').read_text())['enabled'] is False
+                    before_images=len(images)
+                    await page.wait_for_timeout(2200)
+                    assert len(images)==before_images,'Hidden previews still requested images'
+                    assert await page.locator('#chart').is_visible()
+                    await page.reload()
+                    await page.wait_for_selector('#chart polyline')
+                    assert await page.locator('#previews').is_hidden(),'Metrics-only preference lost on reload'
+                    assert len(images)==before_images,'Reload requested disabled previews'
+                    await page.locator('#previewToggle').click()
+                    await page.wait_for_function("document.querySelector('#previewState').textContent==='Preview images enabled'")
+                    await page.wait_for_function('Array.from(document.images).every(i=>i.complete && i.naturalWidth>0)')
+                    assert json.loads((folder/'preview_control.json').read_text())['enabled'] is True
                     await page.screenshot(path=str(output/'desktop_demo.png'),full_page=True)
                     await page.set_viewport_size(dict(width=800,height=1000))
                     columns=await page.evaluate("getComputedStyle(document.querySelector('main')).gridTemplateColumns.split(' ').length")

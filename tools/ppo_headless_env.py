@@ -69,6 +69,7 @@ def install(trainer):
                 from rs_practice_controller import screenshot_canvas
                 began = time.perf_counter()
                 data = await screenshot_canvas(self.page,self.canvas,image_type='jpeg',quality=90)
+                received=time.perf_counter()
                 image = cv2.imdecode(np.frombuffer(data,np.uint8),cv2.IMREAD_COLOR)
                 width,height = self._headless_wh
                 if image is None or image.shape != (height,width,3):
@@ -79,6 +80,7 @@ def install(trainer):
                 raw[87:87+height,left:left+width,:3] = image
                 self.grabber.image = raw
                 self._headless_capture_ms = (time.perf_counter()-began)*1000
+                self._headless_capture_timing=dict(request_started_at=began,image_received_at=received)
 
             async def _capture(self):
                 await self._headless_image()

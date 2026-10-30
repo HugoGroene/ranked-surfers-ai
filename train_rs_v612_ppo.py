@@ -197,6 +197,7 @@ def build_env_class():
             self._learning_current_observation = result
             self._learning_observation_capture = dict(
                 serial=getattr(self,'_learning_capture_serial',None),captured_at=self.last_capture_end)
+            self._learning_observation_capture.update(getattr(self,'_headless_capture_timing',{}))
             if native_present is not None:
                 self._learning_observation_capture['native_present_at'] = native_present
             return result, fresh, age_ms
@@ -1050,6 +1051,8 @@ def build_env_class():
                 from train_rs_rl_early_death import ACTIONS
                 self._learning_dispatched_key = ACTIONS[int(action)]
             # Preserve the inherited tap, pacing and post-key screenshot.
+            self._reaction_guard_capture=dict(getattr(self,'_headless_capture_timing',{}),
+                                              captured_at=self.last_capture_end)
             return await super()._step_browser(int(action))
 
         def step(self, action):
@@ -1061,6 +1064,7 @@ def build_env_class():
             self._guard_forced_terminal = False
             timings = getattr(self,'step_timings',[])
             timing_before = timings[-1] if timings else None
+            policy_capture=dict(getattr(self,'_learning_observation_capture',{}) or {})
             obs, base_reward, died, truncated, info = super().step(int(action))
             if self._guard_forced_terminal:
                 # Separate successful GAMEPLAY->MENU detector from a template
@@ -1092,6 +1096,14 @@ def build_env_class():
                     learning_dispatched_key=self._learning_dispatched_key,
                     learning_dispatch_at=(timing_after.get('press_timestamp')
                         if timing_after is not timing_before and timing_after else None))
+                from tools.ppo_reaction_metrics import command_latency
+                reaction=command_latency(policy_capture,getattr(self,'_reaction_guard_capture',{}),
+                    info['learning_dispatch_at'],timing_after.get('press_roundtrip_ms') if timing_after else None)
+                info['reaction_latency']=reaction
+                if reaction is not None:
+                    if not hasattr(self,'_reaction_samples'):
+                        self._reaction_samples=deque(maxlen=1000)
+                    self._reaction_samples.append(reaction)
             self.reward_parts.update(pieces)
             info['reward_survival'] = round(pieces['survival'], 4)
             info['reward_milestones'] = round(pieces['milestones'], 4)

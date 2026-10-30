@@ -4,6 +4,7 @@
 *{box-sizing:border-box}body{margin:16px auto;padding:0 16px;max-width:1640px;background:#10151e;color:#e5edf7;font:14px system-ui}
 header{display:flex;justify-content:space-between;align-items:center;gap:16px}h1{font-size:21px;margin:0 0 4px}p{margin:5px 0 12px;color:#a6b5ca}
 main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+main[hidden]{display:none}button{background:#283e54;color:#edf4ff;border:1px solid #54728e;border-radius:6px;padding:8px 14px;cursor:pointer}#previewState{font-size:12px;color:#a6b5ca;margin-left:10px}.controls{margin-bottom:10px}
 .stats{background:#1b2533;border:1px solid #2a394d;border-radius:8px;padding:9px 12px;margin:0 0 10px;font-size:12px;line-height:1.7;color:#b8c8dc;font-variant-numeric:tabular-nums}
 figure{margin:0;padding:7px;background:#1b2533;border:1px solid #2a394d;border-radius:8px;min-width:0}
 img{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border-radius:3px}figcaption{padding:6px 2px 0;font-size:12px;color:#afc1d7}
@@ -13,12 +14,24 @@ svg{display:block;width:100%;height:195px}#runtime{font-variant-numeric:tabular-
 </style>
 <header><div><h1>Practice training</h1><p>Policy previews · one frame per second</p></div><div id="runtime">Waiting for shared update</div></header>
 <div class="stats"><div id="system">System telemetry waiting / enable --telemetry</div><div id="learning">Learning statistics waiting for first update</div><div id="batch">Run settings waiting</div></div>
-<main>__TILES__</main>
+<div class="stats"><div id="reaction">Policy screenshot request to input command: waiting for measurements. Unity response time is not measured.</div></div>
+<div class="controls"><button id="previewToggle" type="button" aria-pressed="true">Hide previews</button><span id="previewState">Metrics remain live when previews are off</span></div>
+<main id="previews">__TILES__</main>
 <section><h2>Mean run duration <span id="mean"></span></h2><p id="detail">Waiting for completed episodes</p>
 <svg id="chart" viewBox="0 0 1200 195" role="img" aria-label="Rolling mean run duration over requested training runtime"></svg>
 <p>Training trend, not a fixed-policy evaluation. X-axis shows the requested runtime; rollout completion may extend beyond it.</p></section>
 <script>
 const count=__WORKERS__;let busy=false,tick=0;
+let imagesEnabled=localStorage.getItem('ppoImagesEnabled')!=='false';
+const reactionLines=Array.from({length:count},(_,i)=>`W${i+1}: waiting`);
+async function setPreviews(enabled){imagesEnabled=enabled;localStorage.setItem('ppoImagesEnabled',String(enabled));
+ document.getElementById('previews').hidden=!enabled;
+ const button=document.getElementById('previewToggle');button.textContent=enabled?'Hide previews':'Show previews';button.setAttribute('aria-pressed',String(enabled));
+ if(!enabled)for(const img of document.images)img.removeAttribute('src');
+ try{const r=await fetch('/preview-control',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled})});if(!r.ok)throw Error();
+ document.getElementById('previewState').textContent=enabled?'Preview images enabled':'Images off; worker JPEG previews paused; metrics continue';
+ }catch(e){document.getElementById('previewState').textContent=enabled?'Images enabled':'Image downloads off; worker control unavailable on this server';}}
+document.getElementById('previewToggle').onclick=()=>setPreviews(!imagesEnabled);
 const number=(v,n=2)=>Number.isFinite(v)?v.toFixed(n):'—';
 const fmt=t=>t>=3600?(t/3600).toFixed(1)+'h':t>=60?(t/60).toFixed(1)+'m':Math.round(t)+'s';
 function draw(s){const W=1200,H=195,L=65,R=20,T=15,B=40,points=s.points;
@@ -36,8 +49,11 @@ function draw(s){const W=1200,H=195,L=65,R=20,T=15,B=40,points=s.points;
 }
 async function json(path){const r=await fetch(path+'?t='+Date.now(),{cache:'no-store'});return r.ok?await r.json():null;}
 async function update(){if(busy)return;busy=true;tick++;try{await Promise.all(Array.from({length:count},async(_,i)=>{
- const img=document.getElementById('i'+i);if(img.complete||!img.src)img.src='worker_'+i+'/live.jpg?t='+Date.now();
- try{const s=await json('worker_'+i+'/live.json');if(s)document.getElementById('s'+i).textContent=`Worker ${i+1} | ${s.phase} | ${s.steps} transitions | ${s.episodes??0} episodes | sampled L/R/J/Roll ${s.sampled_action_counts?.['1']??0}/${s.sampled_action_counts?.['2']??0}/${s.sampled_action_counts?.['3']??0}/${s.sampled_action_counts?.['4']??0} | recent mean ${number(s.recent_mean_seconds)}s | image ${Math.max(0,Date.now()/1000-s.updated_at).toFixed(1)}s old`;}catch(e){}}));
+ const img=document.getElementById('i'+i);if(imagesEnabled&&(img.complete||!img.src))img.src='worker_'+i+'/live.jpg?t='+Date.now();
+ try{const s=await json('worker_'+i+'/live.json');if(s)document.getElementById('s'+i).textContent=`Worker ${i+1} | ${s.phase} | ${s.steps} transitions | ${s.episodes??0} episodes | sampled L/R/J/Roll ${s.sampled_action_counts?.['1']??0}/${s.sampled_action_counts?.['2']??0}/${s.sampled_action_counts?.['3']??0}/${s.sampled_action_counts?.['4']??0} | recent mean ${number(s.recent_mean_seconds)}s | image ${Math.max(0,Date.now()/1000-(s.image_updated_at??s.updated_at)).toFixed(1)}s old`;if(s){const m=s.reaction_latency?.metrics||{},r=m.policy_request_to_command_ms;
+ reactionLines[i]=r?`W${i+1}: median ${number(r.median_ms,0)} / p95 ${number(r.p95_ms,0)} / max ${number(r.max_ms,0)} ms`:`W${i+1}: waiting`;
+ document.getElementById('reaction').textContent='Policy screenshot request -> input command (last up to 1000 sent actions): '+reactionLines.join(' | ')+'. GPU presentation and Unity response times unknown.';}
+ }catch(e){}}));
  try{const s=await json('runtime.json');if(s){
  const elapsed=s.finished?s.elapsed_seconds:(s.started_wall?Math.max(0,Date.now()/1000-s.started_wall):s.elapsed_seconds);
  document.getElementById('runtime').textContent=`${s.finished?(s.status||'Finished')+' | ':''}${s.rounds} updates | ${s.optimized_transitions} optimized | ${fmt(elapsed)} / ${fmt(s.requested_seconds||elapsed)} | ${s.optimized_per_second.toFixed(1)} transitions/s`;
@@ -53,5 +69,5 @@ async function update(){if(busy)return;busy=true;tick++;try{await Promise.all(Ar
  }}catch(e){}
  }
  }finally{busy=false;}}
-update();setInterval(update,1000);
+setPreviews(imagesEnabled);update();setInterval(update,1000);
 </script></html>

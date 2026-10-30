@@ -216,6 +216,7 @@ class SettledPPO(PPO):
                 episode=episode_before,kind='passive_resync' if passive else 'policy',
                 sampled_action=None if passive else int(actions[0]),
                 actor_mask=actor,command=dispatched,dispatch_at=dispatch_at,source_capture=prior_capture,
+                reaction_latency=info.get('reaction_latency'),
                 next_capture=getattr(raw,'_learning_observation_capture',None),
                 active_seconds=dt,discount=self.gamma**(dt/self.settled_reference_seconds),
                 environment_reward=raw_reward,buffer_reward=float(rewards[0]),

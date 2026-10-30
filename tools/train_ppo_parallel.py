@@ -55,6 +55,8 @@ def worker_main(index, display, options, connection, abort):
                 collector.configure_settled(raw, output, options['reference_seconds'])
                 # Only the coordinator optimizes. Replica momentum is never used.
                 collector.policy.optimizer.state.clear()
+                from tools.ppo_reaction_metrics import warm_policy
+                warm_policy(collector.policy,collector.observation_space)
                 connection.send(dict(op='ready', worker=index))
                 initialized = False
                 version_expected = 0
@@ -70,11 +72,31 @@ def worker_main(index, display, options, connection, abort):
                         original_step = callback._on_step
                         preview_at = [0.]
                         episode_count = [0]
+                        last_image_at=[None]
+                        reaction_status=[{}]
+                        reaction_updated=[0.]
                         def preview_status(phase,steps):
                             recent=callback.episode_durations[-25:]
+                            if time.perf_counter()-reaction_updated[0] >= 5:
+                                from tools.ppo_reaction_metrics import latency_summary
+                                reaction_status[0]=latency_summary(list(getattr(raw,'_reaction_samples',[])))
+                                reaction_updated[0]=time.perf_counter()
                             return dict(phase=phase,steps=steps,episodes=len(callback.episode_durations),
                                 recent_mean_seconds=sum(recent)/len(recent) if recent else None,
+                                reaction_latency=reaction_status[0],image_updated_at=last_image_at[0],
                                 sampled_action_counts=dict(callback.action_total))
+                        def publish_preview(image,phase,steps):
+                            from tools.ppo_worker_preview import previews_enabled,write_preview,write_status
+                            status=preview_status(phase,steps)
+                            enabled=previews_enabled(output.parent)
+                            status['images_enabled']=enabled
+                            if enabled:
+                                stamp=time.time()
+                                status['image_updated_at']=stamp
+                                if write_preview(output,image,status,now=stamp):
+                                    last_image_at[0]=stamp
+                            else:
+                                write_status(output,status)
                         def step_callback():
                             allowed = bool(original_step())
                             now = time.perf_counter()
@@ -89,10 +111,9 @@ def worker_main(index, display, options, connection, abort):
                                     print(f'[DASHBOARD] Episode metric unavailable: {exc}',flush=True)
                                 episode_count[0] = len(callback.episode_durations)
                             if options.get('preview_port') and now-preview_at[0] >= 1.:
-                                from tools.ppo_worker_preview import write_preview
                                 observation = callback.locals.get('new_obs', collector._last_obs)
-                                write_preview(output, observation['image'][0], preview_status('collecting',
-                                    collector._settled_stats['collected_transitions']+1))
+                                publish_preview(observation['image'][0],'collecting',
+                                    collector._settled_stats['collected_transitions']+1)
                                 preview_at[0] = now
                             return allowed and not abort.is_set()
                         callback._on_step = step_callback
@@ -106,9 +127,8 @@ def worker_main(index, display, options, connection, abort):
                             and not getattr(raw, '_ppo_boundary_menu_pending', False)):
                         raise RuntimeError('Worker did not reach a verified frozen/menu barrier')
                     if options.get('preview_port'):
-                        from tools.ppo_worker_preview import write_preview
-                        write_preview(output, collector._last_obs['image'][0], preview_status(
-                            'paused for shared update',collector._settled_stats['collected_transitions']))
+                        publish_preview(collector._last_obs['image'][0],'paused for shared update',
+                                        collector._settled_stats['collected_transitions'])
                     packet = rollout_packet(collector.rollout_buffer, index,
                                             command['version'], command['policy_hash'])
                     connection.send(dict(op='rollout', **packet))
@@ -154,6 +174,8 @@ def worker_main(index, display, options, connection, abort):
                     summary = dict(error=error, guard_hard_stopped=raw._guard_hard_stopped,
                         learning_transitions=getattr(collector, '_settled_stats', {}),
                         policy_replica_only=True, optimizer_updates_in_worker=0)
+                    from tools.ppo_reaction_metrics import latency_summary
+                    summary['reaction_latency']=latency_summary(list(getattr(raw,'_reaction_samples',[])))
                     (output/'result.json').write_text(json.dumps(summary, indent=2), encoding='utf8')
                 if monitored is not None:
                     monitored.close()
