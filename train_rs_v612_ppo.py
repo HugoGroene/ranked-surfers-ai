@@ -1556,7 +1556,8 @@ def build_callback(a, output, raw=None):
                 try:
                     if raw is None:
                         raise RuntimeError("No raw environment for resync")
-                    observation, skip_reason, capture_at = raw.refresh_after_ppo_optimizer()
+                    from tools.ppo_resync_freshness import verified_refresh
+                    observation, skip_reason, capture_at = verified_refresh(raw)
                     if observation is None:
                         # v1.7.3: MENU may appear DURING resync after the game
                         # resumes. Confirm with four fresh ML+template captures,
