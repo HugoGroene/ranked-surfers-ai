@@ -228,6 +228,7 @@ class SettledPPO(PPO):
                 active_seconds=dt,discount=self.gamma**(dt/self.settled_reference_seconds),
                 environment_reward=raw_reward,buffer_reward=float(rewards[0]),
                 done=bool(dones[0]),truncated=bool(infos[0].get('TimeLimit.truncated',False)),
+                terminal_evidence_source=infos[0].get('terminal_evidence_source'),
                 reward_substeps=parts))
             self._settled_stats['collected_transitions'] += 1
             self._settled_stats['actor_transitions' if actor else 'passive_transitions'] += 1

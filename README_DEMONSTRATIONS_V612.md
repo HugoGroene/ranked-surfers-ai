@@ -1,5 +1,14 @@
 # Human demonstration recorder + behavioral cloning — V1.3
 
+**Audit patch update:** the recorder and both BC CLIs now default to clean
+`canvas_v1` framing and detector off. Older recordings retain their original
+framing and require explicit matching selection; none are modified or approved
+by this update. Detector-off BC converts only detector auxiliary fields in memory,
+preserving action/timing context. Feature caches must match the new input contract.
+The older setup notes and results below are historical. See
+[the current input-contract guide](README_PPO_AUDIT_PATCH.md) before new BC work.
+
+
 **Updated: 27 October 2026 · Windows · local Practice only · experimental.**
 
 Source branch: [`demo-recorder-debug-20261027`](https://github.com/HugoGroene/ranked-surfers-ai/tree/demo-recorder-debug-20261027), user-confirmed latest commit `943909d`. The tracked `rs_v612_demo.py` is **V1.3** (calibrated fast MSS capture), not the V1.1 version described in the old README. The separate `rs_v612_demo_bc.py` was introduced with the original demonstration integration. This recorder does **not** play the game, send movement controls, or automatically restart it.

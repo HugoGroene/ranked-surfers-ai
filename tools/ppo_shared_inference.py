@@ -180,6 +180,7 @@ def serve(control,resources,options):
         from rs_v5_shadow_segmentation import detect_v5,check_model_names
         torch.set_num_threads(1)
         model=PPO.load(options['checkpoint'],device=options.get('inference_device') or ('cuda' if torch.cuda.is_available() else 'cpu'))
+        model.set_random_seed(options.get('inference_seed', 1000126))
         model.policy.optimizer.state.clear()
         model.rollout_buffer=None
         model.policy.set_training_mode(False)

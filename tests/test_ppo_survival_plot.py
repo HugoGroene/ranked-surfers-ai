@@ -11,6 +11,17 @@ from tools.plot_ppo_survival import build_figure,end_plot_mode,finish_plot,plot_
 
 
 class SurvivalPlotTests(unittest.TestCase):
+    def test_overall_trajectory_uses_all_completed_episodes(self):
+        from tools.ppo_survival_metrics import survival_curve
+        data=survival_curve([dict(at=1,duration=2),dict(at=11,duration=8),
+                             dict(at=21,duration=14)],0,30,window=1,elapsed_seconds=30)
+        figure=build_figure(data,{})
+        try:
+            self.assertEqual(list(figure.axes[0].lines[0].get_ydata()),[2,8,14])
+            self.assertEqual(list(figure.axes[0].lines[1].get_ydata()),[2,5,8])
+            self.assertEqual(list(figure.axes[0].lines[1].get_xdata()),[10/60,20/60,30/60])
+        finally:plt.close(figure)
+
     def data(self):
         return dict(requested_seconds=300,window_episodes=100,completed_episodes=123,
             overall_mean_seconds=4.,time_limited_episodes=1,

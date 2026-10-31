@@ -32,13 +32,13 @@ def actor_distribution(policy, features):
     return policy._get_action_dist_from_latent(latent)
 
 
-def make_split(root, seed, holdout):
-    found = approved_runs(root)
+def make_split(root, seed, holdout, framing_profile='legacy', detector_mode='on'):
+    found = approved_runs(root, framing_profile)
     if len(found) < 3:
         raise ValueError('At least three explicitly approved runs are required')
     random.Random(seed).shuffle(found)
     count = max(1, round(len(found)*holdout))
-    return [Replay(*x) for x in found[count:]], [Replay(*x) for x in found[:count]]
+    return [Replay(*x, detector_mode=detector_mode) for x in found[count:]], [Replay(*x, detector_mode=detector_mode) for x in found[:count]]
 
 
 def cache_features(model, runs, indices, batch_size, label):
@@ -131,8 +131,12 @@ def train(args):
     torch.set_num_threads(1)
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
+    from tools.ppo_observation_contract import requested_contract, validate_checkpoint, attach_contract
+    contract = requested_contract(args)
+    validate_checkpoint(args.checkpoint, contract)
     source_sha = hashlib.sha256(args.checkpoint.read_bytes()).hexdigest()
     model = PPO.load(str(args.checkpoint), device='cuda' if torch.cuda.is_available() else 'cpu')
+    attach_contract(model, contract)
     policy = model.policy
     if not policy.share_features_extractor:
         raise ValueError('Only the existing shared frozen extractor is supported')
@@ -140,7 +144,7 @@ def train(args):
            for layer in policy.modules()):
         raise ValueError('Stateful/stochastic layers require a separate cache-equivalence audit')
     original = {key: value.detach().cpu().clone() for key, value in policy.state_dict().items()}
-    training, validation = make_split(args.root, args.seed, args.holdout_fraction)
+    training, validation = make_split(args.root, args.seed, args.holdout_fraction, args.framing_profile, args.detector_mode)
     train_ids = sample_weights(training, none_fraction=args.none_fraction, seed=args.seed)
     validation_ids = [(j, int(i)) for j, replay in enumerate(validation) for i in replay.indices]
     counts = Counter(int(training[j].actions[i]) for j, i in train_ids)
@@ -150,7 +154,7 @@ def train(args):
     if not validation_counts[1] or not validation_counts[2]:
         raise ValueError('Whole-run holdout needs LEFT and RIGHT examples')
     args.output.mkdir(parents=True)
-    config = dict(vars(args), source_sha256=source_sha,
+    config = dict(vars(args), source_sha256=source_sha, observation_contract=contract,
                   training_sampler='Globally shuffled cached examples each epoch',
                   checkpoint_selection=f'Lowest {args.selection_metric} holdout cross-entropy, including epoch zero',
                   training_runs=[str(r.folder) for r in training],
@@ -166,8 +170,8 @@ def train(args):
     policy.eval()
     if args.feature_cache:
         old_config = json.loads((args.feature_cache/'config.json').read_text())
-        for key in ('source_sha256', 'training_runs', 'validation_runs'):
-            if old_config[key] != config[key]:
+        for key in ('source_sha256', 'training_runs', 'validation_runs', 'observation_contract'):
+            if old_config.get(key) != config[key]:
                 raise ValueError('Feature cache source/split changed: '+key)
         x_train, y_train, origins = read_feature_cache(
             args.feature_cache, 'training_features.npz', training, train_ids)
@@ -262,6 +266,8 @@ if __name__ == '__main__':
     parser.add_argument('--selection-metric', choices=['natural', 'macro'], default='natural')
     parser.add_argument('--holdout-fraction', type=float, default=.20)
     parser.add_argument('--none-fraction', type=float, default=.35)
+    parser.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='canvas_v1')
+    parser.add_argument('--detector-mode',choices=['off','on'],default='off',help='Off converts detector aux to unavailable; old feature caches require regeneration')
     parser.add_argument('--seed', type=int, default=77)
     args = parser.parse_args()
     if not (1 <= args.min_epochs <= args.max_epochs <= 200 and args.patience >= 1

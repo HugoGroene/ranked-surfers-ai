@@ -1,0 +1,59 @@
+{
+  "episodes": 2706,
+  "first100_mean": 3.680718837000005,
+  "last100_mean": 3.7611033920000225,
+  "episode_quartile_means": [
+    3.7743367443131493,
+    3.9020428540620347,
+    4.077175610798809,
+    4.138885904142025
+  ],
+  "median": 3.7565446499993413,
+  "p95": 7.017320550000022,
+  "over10": 18,
+  "actions": {
+    "4": 60433,
+    "0": 81543,
+    "3": 100500,
+    "2": 1677,
+    "1": 52
+  },
+  "latency_ms": {
+    "median": 32.08605000008902,
+    "p95": 38.61798499993369,
+    "p99": 54.50205999984043,
+    "maximum": 141.3626000000079
+  },
+  "audits": [
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 82432,
+      "processed_rollout_transitions": 82432,
+      "unique_transitions_used_by_optimizer": 82432,
+      "passive_resync_transitions": 643,
+      "terminal_transitions": 894,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 82432,
+      "processed_rollout_transitions": 82432,
+      "unique_transitions_used_by_optimizer": 82432,
+      "passive_resync_transitions": 643,
+      "terminal_transitions": 895,
+      "failures": []
+    },
+    {
+      "status": "PASS_SETTLED_LEARNING",
+      "transitions": 82432,
+      "processed_rollout_transitions": 82432,
+      "unique_transitions_used_by_optimizer": 82432,
+      "passive_resync_transitions": 643,
+      "terminal_transitions": 917,
+      "failures": []
+    }
+  ],
+  "checkpoint_crc_error": null,
+  "checkpoint_timesteps": 2133918,
+  "checkpoint_sha256": "fcfdb5091f61d84b508e108263e71f5c344591266e90923c98288c04ac087661"
+}

@@ -1056,14 +1056,17 @@ async def capture_loop(a):
     if (url_parts.scheme != 'http' or url_parts.hostname not in {'127.0.0.1','localhost'}
             or url_parts.username or url_parts.password):
         raise ValueError('Only local HTTP Practice URLs on localhost are permitted')
-    if not a.detector.is_file() or not a.state_model.is_file():
+    detector_enabled = getattr(a, 'detector_mode', 'off') == 'on'
+    if (detector_enabled and not a.detector.is_file()) or not a.state_model.is_file():
         raise FileNotFoundError('Missing YOLO detector or screen-state checkpoint')
     import mss
     from playwright.async_api import async_playwright
-    from ultralytics import YOLO
     import rs_practice_controller as controller
-    detector = YOLO(str(a.detector))
-    check_model_names(detector)
+    detector = None
+    if detector_enabled:
+        from ultralytics import YOLO
+        detector = YOLO(str(a.detector))
+        check_model_names(detector)
     states = ScreenStateClassifier(a.state_model)
     commands = queue.Queue()
     stop = threading.Event()
@@ -1160,7 +1163,8 @@ async def capture_loop(a):
 
             canvas_view = await read_view()
             static_info = {'recorder_version': RECORDER_VERSION, 'git': git_state(),
-                           'framing_profile': getattr(a,'framing_profile','legacy'),
+                           'framing_profile': getattr(a,'framing_profile','canvas_v1'),
+                           'detector_mode': getattr(a,'detector_mode','off'),
                            'cli_args': {k: str(v) for k, v in vars(a).items()},
                            'platform': platform.platform(),
                            'python': sys.version.split()[0], 'opencv': cv2.__version__}
@@ -1357,7 +1361,7 @@ async def capture_loop(a):
                                         'canvas_jpeg':encoded.tobytes(), 'detection':last_detection,
                                         'timing':timing})
                         recent_timings.append(timing)
-                        if len(samples)%a.detect_every == 1 and future is None:
+                        if detector_enabled and len(samples)%a.detect_every == 1 and future is None:
                             future = pool.submit(detect_v5, detector, native.copy(), captured_at,
                                                  episode, request_id, a.imgsz, a.conf)
                             request_id += 1
@@ -1393,7 +1397,8 @@ def main():
     rec.add_argument('--detector', type=Path, default=Path('ai_data/v5_hazards/runs/segment_round04/weights/best.pt'))
     rec.add_argument('--state-model', type=Path, default=Path('ai_data/v4_screen_states_rebuild_01/screen_state_candidate_v2.pt'))
     rec.add_argument('--fps', type=int, default=20)
-    rec.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='legacy')
+    rec.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='canvas_v1')
+    rec.add_argument('--detector-mode',choices=['off','on'],default='off',help='No object detector by default; screen-state safety classifier remains active')
     rec.add_argument('--detect-every', type=int, default=3)
     rec.add_argument('--imgsz', type=int, default=960)
     rec.add_argument('--conf', type=float, default=.20)

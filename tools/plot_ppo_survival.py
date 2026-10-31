@@ -25,6 +25,10 @@ def build_figure(survival,runtime):
         raise ValueError('Invalid survival plot point')
     if any(float(p['seconds'])>requested for p in points):
         raise ValueError('Plot point exceeds requested duration')
+    overall=[p for p in points if p.get('overall_mean_seconds') is not None]
+    if any(not math.isfinite(float(p['overall_mean_seconds'])) or
+           float(p['overall_mean_seconds'])<0 for p in overall):
+        raise ValueError('Invalid overall mean plot point')
     figure,axis=plt.subplots(figsize=(11,5.5),layout='constrained')
     x=[float(p['seconds'])/60 for p in points]
     y=[float(p['mean_seconds']) for p in points]
@@ -33,14 +37,18 @@ def build_figure(survival,runtime):
         axis.plot(x,y,color='#238b72',linewidth=2,marker='o',markersize=3.5,
             markerfacecolor='#df4040',markeredgecolor='#df4040',
             label=f'Rolling mean (up to {window} completed episodes)')
+        if overall:
+            axis.plot([float(p['seconds'])/60 for p in overall],
+                      [float(p['overall_mean_seconds']) for p in overall],
+                      color='#3569c8',linewidth=2,label='Overall mean (all episodes completed so far)')
         axis.legend(loc='best')
     else:
         axis.text(.5,.5,'No completed episodes at sampled times',
             ha='center',va='center',transform=axis.transAxes)
     axis.set_xlim(0,requested/60)
-    axis.set_ylim(0,max(5.,max(y,default=0)*1.15))
+    axis.set_ylim(0,max(5.,max(y+[float(p['overall_mean_seconds']) for p in overall],default=0)*1.15))
     axis.set_xlabel('Training elapsed time (minutes; full requested duration)')
-    axis.set_ylabel('Rolling mean active survival (seconds)')
+    axis.set_ylabel('Mean active survival (seconds)')
     axis.grid(True,alpha=.25)
     mean=survival.get('overall_mean_seconds')
     mean_text=f'{mean:.2f}s' if mean is not None else 'n/a'

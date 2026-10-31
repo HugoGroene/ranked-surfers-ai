@@ -1,5 +1,15 @@
 # Opt-in scaling paths and detector ablation
 
+**Audit patch update:** continue using the explicit optimized pipeline flags.
+`--detector-mode off` and `--framing-profile canvas_v1` are now defaults; shared
+training checks the source checkpoint contract before launching workers.
+`--worker-seed-base` optionally selects the base for distinct sampling seeds;
+`--allow-input-migration` is required only for an intentional training input
+change and is rejected for frozen comparisons. Finalization protects committed
+updates before best-effort cleanup; interruptions inside optimization retain the
+previous checkpoint. See [details and limits](README_PPO_AUDIT_PATCH.md).
+
+
 These changes keep the existing rewards, five actions, four-frame image and
 557-value auxiliary schema. Each optimization is independently selected; the
 previous per-worker model/renderer and pipe transport remain defaults. Source
@@ -67,6 +77,11 @@ with red dots for the latest up to 100 completed episodes across workers, sample
 every 10 seconds. The x axis spans the full requested runtime in minutes; the
 y axis is pause-aware active survival in seconds. Earlier dots remain fixed.
 Time-limit episodes are included, with their count displayed separately.
+New runs also save and plot a blue overall-mean trajectory: at each timestamp,
+this is the mean of all completed episodes so far across workers, rather than
+just the recent 100. It changes more slowly as the run grows. Older saved runs
+without per-point overall means retain the rolling curve and final overall mean
+in the title; a historical trajectory is not invented from that final value.
 
 The figure is also saved as `survival_curve.png` in the run folder. Replotting
 preserves prior images by using numbered filenames. Close the plot window to
@@ -183,3 +198,7 @@ that is not a complete solution. Keep those paths experimental. Full evidence:
 Final offline validation: 211 focused pipeline tests and 100 existing project
 tests passed. JavaScript syntax and Git whitespace checks passed. Full ON/OFF/OFF/ON
 ablation and long-run stability of these new options remain untested.
+
+## Up to 48 hours
+
+`--max-minutes 2880` is the maximum training duration. Collection finishes at a complete shared update. The step budget also stops training: choose a sufficiently large multiple of 384 for three 128-step workers, for example `--steps 12000000`. Retain periodic checkpoints. This enables the duration; 48-hour reliability has not been live-tested.

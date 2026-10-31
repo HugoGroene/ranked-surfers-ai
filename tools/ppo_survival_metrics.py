@@ -18,12 +18,15 @@ def survival_curve(events, started, requested_seconds, window=100, interval=10, 
     if horizon >= requested_seconds and (not boundaries or boundaries[-1] != requested_seconds):
         boundaries.append(requested_seconds)
     index=0
+    total_duration=0.
     for boundary in boundaries:
         while index < len(valid) and valid[index]['at']-started <= boundary:
             recent.append(valid[index]['duration'])
+            total_duration+=valid[index]['duration']
             index+=1
         if recent:
-            points.append(dict(seconds=boundary,mean_seconds=sum(recent)/len(recent),samples=len(recent)))
+            points.append(dict(seconds=boundary,mean_seconds=sum(recent)/len(recent),samples=len(recent),
+                               overall_mean_seconds=total_duration/index,completed_episodes=index))
     truncated=sum(e.get('reason') == 'time_limit' for e in valid)
     latest=valid[-window:]
     return dict(requested_seconds=requested_seconds,window_episodes=window,interval_seconds=interval,

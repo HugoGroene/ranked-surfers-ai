@@ -1,5 +1,24 @@
 # Ranked Surfers AI — PPO V6.1.2 + Human Demonstrations V1.3
 
+**Applied audit follow-up (31 October):** detector-free operation is now the default
+for training, evaluation and recording, with `canvas_v1` framing. Checkpoint input
+contracts prevent silent changes; workers receive distinct sampling seeds;
+evaluation explicitly reports completion and separate survival clocks; final
+checkpoint/report handling survives individual cleanup failures. Historical
+results below retain their original definitions. See
+[the audit patch guide](README_PPO_AUDIT_PATCH.md) for flags, BC compatibility and
+validation limits. The screen-state safety classifier remains enabled.
+
+The detector-off two-hour continuation completed 247,296 optimized transitions
+with all three learning audits passing. Matched 100-episode deterministic
+evaluations measured 4.44 seconds before versus 4.38 seconds afterward; no clear
+improvement or regression was established. Both selected zero lateral actions.
+Controlled 5 ms input probes subsequently showed LEFT/RIGHT and JUMP responses;
+BC and exploration changes remain deferred. Startup camera settling is not the
+same as classifier GAMEPLAY confirmation. The diagnostic lead-in is not applied
+to training. See [overnight readiness and remaining limits](reports/OVERNIGHT_READINESS_20261031.md).
+
+
 **Last updated: 31 October 2026.** Development branch: [`headless-parallel`](https://github.com/HugoGroene/ranked-surfers-ai/tree/headless-parallel).
 
 31 October opt-in pipeline work: shared rollout transport, exact compact frame
@@ -599,3 +618,5 @@ and corroboration on both final frames. Terminal acceptance rules, classifier
 weights and capture-age limits are unchanged. Exact failure replay and actual
 guard tests cover recovery and refusal paths; live recovery remains unverified.
 See [evidence and checkpoint status](reports/MENU_CONFIRMATION_20261031.md).
+
+Training now accepts up to `--max-minutes 2880` (48 hours). See README_PPO_SCALING.md for the independent step-budget limit and validation caveat.

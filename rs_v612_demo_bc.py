@@ -38,7 +38,8 @@ def approved_runs(root, framing_profile='legacy'):
 
 class Replay:
     """Lazy per-run loader; only manifest-approved and hand-selected intervals."""
-    def __init__(self, folder, manifest):
+    def __init__(self, folder, manifest, detector_mode="on"):
+        self.detector_mode = detector_mode
         self.folder = folder
         self.m = manifest
         self.actions = np.load(folder/'actions.npy', mmap_mode='r', allow_pickle=False)
@@ -74,8 +75,12 @@ class Replay:
 
     def sample(self, i):
         self.load()
+        aux = np.asarray(self._aux[i], dtype=np.float32)
+        if self.detector_mode == "off":
+            from tools.ppo_detector_off_features import detector_off_aux
+            aux = detector_off_aux(aux)
         return (np.concatenate([self._frames[max(0,i-j)] for j in (3,2,1,0)], axis=0),
-                np.asarray(self._aux[i], dtype=np.float32), int(self.actions[i]))
+                aux, int(self.actions[i]))
 
 
 def sample_weights(replays, *, none_fraction=.35, seed=77):
@@ -130,7 +135,8 @@ def main():
     p.add_argument('--holdout-fraction', type=float, default=.20)
     p.add_argument('--none-fraction', type=float, default=.35)
     p.add_argument('--seed', type=int, default=77)
-    p.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='legacy',
+    p.add_argument('--detector-mode',choices=['off','on'],default='off',help='Off converts only detector-derived aux fields to unavailable; source recordings stay intact')
+    p.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='canvas_v1',
                    help='Select only approved recordings of this framing version; never mix profiles')
     a = p.parse_args()
     if not a.checkpoint.is_file():
@@ -138,14 +144,17 @@ def main():
     if not (1 <= a.epochs <= 20 and 1 <= a.batch_size <= 64 and 0 < a.lr <= 1e-3
             and .05 <= a.holdout_fraction <= .5 and 0 < a.none_fraction < 1):
         p.error('Invalid BC configuration')
+    from tools.ppo_observation_contract import requested_contract, validate_checkpoint, attach_contract
+    contract = requested_contract(a)
+    validate_checkpoint(a.checkpoint, contract)
     found = approved_runs(a.root,a.framing_profile)
     if len(found) < 3:
         p.error('Collect at least 3 explicitly approved runs to train with a run-level holdout')
     rng = random.Random(a.seed)
     rng.shuffle(found)
     n_val = max(1, round(len(found)*a.holdout_fraction))
-    validation = [Replay(*x) for x in found[:n_val]]
-    training = [Replay(*x) for x in found[n_val:]]
+    validation = [Replay(*x, detector_mode=a.detector_mode) for x in found[:n_val]]
+    training = [Replay(*x, detector_mode=a.detector_mode) for x in found[n_val:]]
     samples = sample_weights(training, none_fraction=a.none_fraction, seed=a.seed)
     validation_indices = [(j, int(i)) for j, r in enumerate(validation) for i in r.indices]
     counts = Counter(int(training[j].actions[i]) for j,i in samples)
@@ -162,7 +171,7 @@ def main():
     np.random.seed(a.seed)
     # Do not change input file. Actor-only BC preserves the visual feature extractor and critic.
     model = PPO.load(str(a.checkpoint), device='cuda' if torch.cuda.is_available() else 'cpu')
-    model.framing_profile = a.framing_profile
+    attach_contract(model, contract)
     policy = model.policy
     for param in policy.parameters():
         param.requires_grad_(False)
@@ -171,7 +180,7 @@ def main():
         param.requires_grad_(True)
     optimizer = torch.optim.Adam(actor, lr=a.lr)
     device = policy.device
-    report = {'source_checkpoint':str(a.checkpoint), 'framing_profile':a.framing_profile,
+    report = {'source_checkpoint':str(a.checkpoint), 'framing_profile':a.framing_profile, 'observation_contract':contract,
               'train_folders':[str(x.folder) for x in training],
               'validation_folders':[str(x.folder) for x in validation], 'samples':len(samples),
               'training_class_counts':{ACTION_NAMES[k]:v for k,v in counts.items()}, 'epochs':[]}
@@ -190,8 +199,8 @@ def main():
 
     baseline = eval_loss(validation, validation_indices)
     report['validation_before'] = baseline
-    best = float('inf')
-    best_actor = None
+    best = baseline['cross_entropy']
+    best_actor = [p.detach().cpu().clone() for p in actor]
     for epoch in range(a.epochs):
         policy.train()
         total_loss, total = 0., 0

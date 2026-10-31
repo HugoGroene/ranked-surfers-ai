@@ -2,7 +2,7 @@
 """LOCAL Ranked Surfers V6.1.2: PPO with richer perception, rewards, input probe.
 
 Unlike rs_v5_segmentation_live_benchmark.py, PPO's sampled movement is actually
-executed and the nine-class YOLO features are included in the observation.
+executed. Object detection is off by default; auxiliary shape is preserved.
 No demonstrations, scripted hazard decisions, reward from detector predictions,
 or live/ranked website access. Original V4/V5 scripts and checkpoints untouched.
 
@@ -104,6 +104,8 @@ def build_env_class():
             self.prepared_guard_late_fallbacks = 0
             self.reuse_observation_guard = bool(getattr(a, 'reuse_observation_guard', False))
             self.settled_learning = bool(getattr(a, 'settled_learning', False))
+            self.verified_progress = self.settled_learning or (getattr(a, 'mode', None) == 'eval'
+                and not getattr(a, 'legacy_eval_metrics', False))
             self._learning_origin = None
             self._learning_verified_duration = 0.
             self._learning_excluded_pause = 0.
@@ -112,7 +114,7 @@ def build_env_class():
             self._learning_current_observation = None
             self._learning_dispatched_key = None
             self._learning_capture_serial = 0
-            if getattr(self, 'settled_learning', False):
+            if self.verified_progress:
                 from tools.ppo_settled_learning import VerifiedProgressRewards
                 self.survival_rewards = VerifiedProgressRewards(
                     self.reward_survival_rate,self.reward_milestone_bonus,
@@ -181,7 +183,7 @@ def build_env_class():
                 self.column_nonzero_observations += 1
             self.last_aux = aux
             self._prepared_gameplay_reading = None
-            if getattr(self, 'reuse_observation_guard', False) or getattr(self, 'settled_learning', False):
+            if getattr(self, 'reuse_observation_guard', False) or getattr(self, 'verified_progress', False):
                 captured = getattr(self, '_capture_menu_metadata', None)
                 if captured is not None and captured[:2] == (id(self._v2_last_bgra), self.last_capture_end):
                     state, probabilities = self._read_screen_state()
@@ -189,7 +191,7 @@ def build_env_class():
                     reading = screen_gate(state, probabilities, menu_score,
                         confidence=self.state_confidence, menu_threshold=self.args.threshold)
                     if reading.verdict == 'PLAY' and self.last_capture_end is not None:
-                        if getattr(self, 'settled_learning', False) and self._learning_origin is not None:
+                        if getattr(self, 'verified_progress', False) and self._learning_origin is not None:
                             at = float(source_at)
                             ongoing_pause = (max(0.,at-self._learning_pause_started)
                                 if self._learning_pause_started is not None else 0.)
@@ -1091,6 +1093,8 @@ def build_env_class():
                 info['v612_guard_confirmed_menu'] = True
             self._ppo_time_limit_pending = bool(truncated and not died)
             info['termination_reason'] = 'death' if died else ('time_limit' if truncated else None)
+            info['terminal_evidence_source'] = ('ml_visual_preflight' if self._guard_forced_terminal else
+                'inherited_template' if died else 'time_limit' if truncated else None)
             info['v612_guard_allowed'] = self.guard_allowed
             info['v612_guard_rechecks'] = self.guard_rechecks
             # Only real elapsed gameplay (observed by the local game loop) is
@@ -1106,7 +1110,9 @@ def build_env_class():
                 info['duration'] = round(
                     max(self.survival_rewards.last_duration, float(anchor)), 2)
             reward, pieces = self.survival_rewards.step(
-                self._learning_verified_duration if getattr(self, 'settled_learning', False) else info.get('duration', 0.), died)
+                self._learning_verified_duration if getattr(self, 'verified_progress', False) else info.get('duration', 0.), died)
+            if getattr(self, 'verified_progress', False):
+                info['reward_duration_s'] = self.survival_rewards.last_duration
             if getattr(self, 'settled_learning', False):
                 timing_after = self.step_timings[-1] if self.step_timings else None
                 info.update(reward_duration_s=self.survival_rewards.last_duration,
@@ -1165,6 +1171,7 @@ def build_env_class():
                 reward_death=pieces['death'],reward_v61=reward,
                 learning_action_suppressed=True,learning_dispatched_key=None,
                 termination_reason='death' if terminal else None,
+                terminal_evidence_source='ml_visual_boundary' if terminal else None,
                 ppo_menu_handoff_terminal=terminal,learning_passive_kind=kind)
             return obs,float(reward),terminal,False,info
 
@@ -1853,6 +1860,9 @@ def build_report(a, raw, *, steps, started, callback=None, mode='train'):
 
 
 def train(a, *, browser_session=None):
+    from tools.ppo_observation_contract import requested_contract, validate_checkpoint, attach_contract
+    contract = requested_contract(a)
+    input_check = validate_checkpoint(a.resume, contract, allow_migration=getattr(a, 'allow_input_migration', False)) if a.resume else None
     import torch
     from stable_baselines3 import PPO
     from train_rs_v2_verify import RUN_ROOT
@@ -1862,6 +1872,9 @@ def train(a, *, browser_session=None):
         raise SystemExit(f'Run directory already exists: {dest}. Use unique --run-name.')
     dest.mkdir(parents=True,exist_ok=True)
     write_json(dest/'v61_config.json', dict(vars(a), schema=shape_description()))
+    from tools.ppo_run_integrity import source_manifest
+    write_json(dest/'source_manifest.json', source_manifest(Path(__file__).resolve().parent,
+        assets=[a.state_model], contract=contract))
     started=time.perf_counter()
     monitored=raw=model=callback=None
     completed=False
@@ -1879,8 +1892,8 @@ def train(a, *, browser_session=None):
             print(f'[RESUME] PPO weights loaded from {a.resume}',flush=True)
         else:
             model=make_model(monitored,a)
-        model.framing_profile = getattr(a,'framing_profile','legacy')
-        model.detector_mode = getattr(a,'detector_mode','on')
+        attach_contract(model, contract)
+        write_json(dest/'input_contract.json', input_check or dict(requested=contract))
         if getattr(a,'settled_learning',False):
             from tools.ppo_settled_learning import SettledPPO,reference_seconds_for
             model.__class__ = SettledPPO
@@ -1955,6 +1968,12 @@ def train(a, *, browser_session=None):
 
 
 def evaluate(a, *, browser_session=None):
+    from tools.ppo_observation_contract import requested_contract, validate_checkpoint
+    from tools.ppo_eval_summary import episode_metrics, completion
+    contract = requested_contract(a)
+    learned = a.stochastic_eval or a.eval_policy in ('deterministic', 'stochastic')
+    input_check = validate_checkpoint(a.resume, contract) if learned else None
+    legacy_metrics = bool(getattr(a, 'legacy_eval_metrics', False))
     import torch
     from stable_baselines3 import PPO
     from train_rs_v2_verify import RUN_ROOT
@@ -1962,10 +1981,15 @@ def evaluate(a, *, browser_session=None):
     if dest.exists() and any(dest.iterdir()):
         raise SystemExit(f'Evaluation folder exists: {dest}')
     dest.mkdir(parents=True,exist_ok=True)
-    write_json(dest/'v61_eval_config.json', dict(vars(a),schema=shape_description()))
+    write_json(dest/'v61_eval_config.json', dict(vars(a),schema=shape_description(), input_contract=input_check or contract))
+    from tools.ppo_run_integrity import source_manifest
+    write_json(dest/'source_manifest.json', source_manifest(Path(__file__).resolve().parent,
+        assets=[a.state_model], contract=contract))
     started=time.perf_counter()
     monitored=raw=None
     durations=[];scores=[];actions=Counter(); steps=0
+    wall_durations=[]; verified_durations=[]; terminal_sources=Counter()
+    stop_reason='error'; eval_error=None
     termination_reasons=Counter()
     prob_sums=np.zeros(5,dtype=np.float64)
     prob_samples=0
@@ -1978,6 +2002,9 @@ def evaluate(a, *, browser_session=None):
                         device='cuda' if torch.cuda.is_available() else 'cpu')
                if eval_policy in ('deterministic','stochastic') else None)
         rng=np.random.default_rng(a.seed)
+        if model is not None:
+            from tools.ppo_reaction_metrics import warm_policy
+            warm_policy(model.policy, model.observation_space)
         obs,info=monitored.reset()
         while len(durations)<a.eval_episodes and time.perf_counter()-started<a.max_minutes*60:
             if eval_policy == 'random':
@@ -1997,22 +2024,36 @@ def evaluate(a, *, browser_session=None):
             actions[action]+=1;steps+=1
             if done or trunc:
                 termination_reasons['death' if done else 'time_limit'] += 1
-                durations.append(float(info.get('duration',0.)))
+                primary, wall, verified = episode_metrics(info, legacy=legacy_metrics)
+                durations.append(primary); wall_durations.append(wall)
+                verified_durations.append(verified)
+                terminal_sources[info.get('terminal_evidence_source') or 'unknown'] += 1
                 scores.append(float(info.get('episode',{}).get('r',0.)))
                 print(f'[V61 EVAL] episode {len(durations)}/{a.eval_episodes}: '
                       f'{durations[-1]:.2f}s; return={scores[-1]:.2f}; '
                       f'actions={dict(actions)}',flush=True)
                 if len(durations)<a.eval_episodes:
                     obs,info=monitored.reset()
+        stop_reason = 'episodes' if len(durations) == a.eval_episodes else 'wall_time'
     except KeyboardInterrupt:
+        stop_reason = 'interrupted'
         print('[V61 EVAL] Interrupted; saving partial statistics.',flush=True)
     except GuardUncertainError as exc:
+        stop_reason = 'ui_safety_stop'; eval_error = repr(exc)
         print(str(exc), flush=True)
         print('[V612 EVAL] UI safety stop. Partial evaluation will be saved.',flush=True)
+    except Exception as exc:
+        eval_error = repr(exc)
+        raise
     finally:
         if raw is not None:
             report=build_report(a,raw,steps=steps,started=started,mode='eval')
-            report.update({'eval_episodes':len(durations),'durations_seconds':durations,
+            report.update(completion(a.eval_episodes, len(durations), stop_reason))
+            report.update({'eval_episodes':len(durations),'episodes':len(durations),'durations_seconds':durations,
+                           'survival_metric':'legacy_episode_wall_seconds' if legacy_metrics else 'verified_gameplay_seconds',
+                           'wall_durations_seconds':wall_durations, 'verified_durations_seconds':verified_durations,
+                           'terminal_evidence_counts':dict(terminal_sources), 'error':eval_error,
+                           'return_metric':'legacy_rewards' if legacy_metrics else 'verified_progress_rewards',
                            'eval_termination_counts':dict(termination_reasons),
                            'mean_survival_seconds':round(float(np.mean(durations)),2) if durations else None,
                            'median_survival_seconds':round(float(np.median(durations)),2) if durations else None,
@@ -2029,6 +2070,8 @@ def evaluate(a, *, browser_session=None):
             monitored.close()
         elif raw is not None:
             raw.close()
+    return stop_reason == 'episodes' and len(durations) == a.eval_episodes
+
 
 
 def parse_args(argv=None):
@@ -2037,7 +2080,7 @@ def parse_args(argv=None):
     p.add_argument('--run-name',default='v61_ppo_'+datetime.now().strftime('%Y%m%d_%H%M%S'))
     p.add_argument('--resolution',type=bench.shape,default=(512,288))
     p.add_argument('--fps',type=int,default=30)
-    p.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='legacy',
+    p.add_argument('--framing-profile',choices=['legacy','canvas_v1'],default='canvas_v1',
                    help='canvas_v1: whole calibrated game canvas for PPO/detector; separate guard inputs')
     p.add_argument('--background-display',type=int,default=None,
                    help='EXPERIMENTAL non-primary MSS display index; page focus emulation, no OS activation')
@@ -2076,8 +2119,8 @@ def parse_args(argv=None):
                    help='Explicitly override only these saved settings when resuming training; all others retain checkpoint values')
     p.add_argument('--seed',type=int,default=123)
     p.add_argument('--detector',type=Path,default=Path('ai_data/v5_hazards/runs/segment_round04/weights/best.pt'))
-    p.add_argument('--detector-mode',choices=['on','off'],default='on',
-                   help='Ablation: off omits YOLO and represents detector fields as unavailable; safety classifier stays enabled')
+    p.add_argument('--detector-mode',choices=['on','off'],default='off',
+                   help='Default off: no object detector; unavailable feature encoding preserved. On is historical reproduction only; safety classifier remains enabled')
     p.add_argument('--cache-detector-features',action='store_true',
                    help='Cache immutable detector geometry; still check source age and episode every observation')
     p.add_argument('--imgsz',type=int,default=960)
@@ -2109,6 +2152,8 @@ def parse_args(argv=None):
                    help='OPT-IN: write read-only per-step reward/timing evidence for offline audit')
     p.add_argument('--resume',type=Path,default=None,
                    help='Only V6.1 checkpoints work; V6 has a different aux dimension.')
+    p.add_argument('--allow-input-migration',action='store_true',help='Training only: explicitly allow and record a checkpoint input-contract change')
+    p.add_argument('--legacy-eval-metrics',action='store_true',help='Evaluation only: historical episode-wall clock and reward reporting')
     p.add_argument('--eval-episodes',type=int,default=20)
     p.add_argument('--stochastic-eval',action='store_true',help='Compatibility alias for --eval-policy stochastic')
     p.add_argument('--eval-policy',choices=['deterministic','stochastic','random','none'],
@@ -2119,7 +2164,11 @@ def parse_args(argv=None):
     p.add_argument('--probe-delays-ms',type=str,default='5,10',
                    help='Comma-separated Playwright tap durations for manual action audit')
     a=p.parse_args(argv)
-    if a.framing_profile == 'canvas_v1' and (a.resolution != (512,288) or a.resize_method != 'linear'
+    if a.allow_input_migration and (a.mode != 'train' or a.resume is None):
+        p.error('--allow-input-migration requires resumed training')
+    if a.legacy_eval_metrics and a.mode != 'eval':
+        p.error('--legacy-eval-metrics requires evaluation')
+    if a.mode != 'check' and a.framing_profile == 'canvas_v1' and (a.resolution != (512,288) or a.resize_method != 'linear'
                                              or tuple(a.crop) != tuple(bench.DEFAULT_CROP)):
         p.error('canvas_v1 fixes 512x288 linear whole-canvas preprocessing; custom crop/resize settings are incompatible')
     if a.background_display is not None and (a.background_display < 1 or a.capture_mode != 'fast'):
@@ -2164,7 +2213,7 @@ def parse_args(argv=None):
             p.error(f'Missing V5 model or V4 screen state classifier: {a.detector}, {a.state_model}')
         if not 0.5 <= a.state_confidence < 1.0:
             p.error('State confidence must be in [0.5,1)')
-        if not (0 < a.max_minutes <= 480 and 1 <= a.fps <= 30 and
+        if not (0 < a.max_minutes <= 2880 and 1 <= a.fps <= 30 and
                 0 <= a.torch_threads <= 32 and a.steps >= a.n_steps and
                 1 <= a.detect_every <= 50 and 1 <= a.press_delay_ms <= 100 and
                 10 <= a.max_stale_ms <= 5000 and 1 <= a.menu_ready_timeout <= 90 and
@@ -2199,4 +2248,4 @@ if __name__=='__main__':
     elif args.mode=='train':
         train(args)
     else:
-        evaluate(args)
+        raise SystemExit(0 if evaluate(args) else 2)

@@ -13,6 +13,9 @@ from multiprocessing.connection import wait
 from pathlib import Path
 import time
 import traceback
+import sys
+from tools.ppo_run_integrity import atomic_json, finalize_run, source_manifest, worker_seed
+from tools.ppo_observation_contract import requested_contract, validate_checkpoint, attach_contract
 
 
 def worker_main(index, display, options, connection, abort, resources=None):
@@ -42,12 +45,12 @@ def worker_main(index, display, options, connection, abort, resources=None):
                 args = trainer.parse_args([
                     '--mode', 'train', '--run-name', output.name, '--resume', options['checkpoint'],
                     '--steps', str(options['steps']//options['workers']), '--n-steps', str(steps),
-                    '--max-minutes', '480', '--pause-ppo-optimizer', '--resync-rollouts',
+                    '--max-minutes', '2880', '--pause-ppo-optimizer', '--resync-rollouts',
                     '--audit-reward-timing', '--settled-learning', '--reuse-observation-guard',
                     '--resolution', '512x288', '--fps', '30', '--rate-mode', 'uncapped',
                     '--press-delay-ms', '5', '--state-model', options['state_model'],
                     '--detector', options['detector'], '--background-display', str(display),
-                    '--detector-mode',options.get('detector_mode','on'),
+                    '--detector-mode',options.get('detector_mode','off'),
                     *(['--cache-detector-features'] if options.get('cache_detector_features') else []),
                     '--background-capture', options.get('background_capture', 'mss'),
                     '--episode-max-seconds', '300',
@@ -91,6 +94,10 @@ def worker_main(index, display, options, connection, abort, resources=None):
                 else:
                     from tools.ppo_shared_inference import RemotePolicy
                     collector.policy=RemotePolicy(inference_client,collector.observation_space)
+                sampling_seed = options['sampling_seeds'][index]
+                collector.set_random_seed(sampling_seed)
+                atomic_json(output/'sampling_seed.json', dict(seed=sampling_seed, worker=index,
+                    scope='remote service' if inference_client is not None else 'local Python/Torch sampling'))
                 if resources.get('rollout_slot'):
                     from tools.ppo_rollout_transport import RolloutSlot
                     rollout_slot=RolloutSlot(descriptor=resources['rollout_slot'])
@@ -141,7 +148,8 @@ def worker_main(index, display, options, connection, abort, resources=None):
                                         for duration in callback.episode_durations[episode_count[0]:]:
                                             info = next((i for i in callback.locals.get('infos',[]) if 'episode' in i),{})
                                             episodes.write(json.dumps(dict(at=now,duration=duration,
-                                                reason=info.get('termination_reason'),worker=index))+'\n')
+                                                reason=info.get('termination_reason'),worker=index,
+                                                terminal_evidence_source=info.get('terminal_evidence_source')))+'\n')
                                 except OSError as exc:
                                     print(f'[DASHBOARD] Episode metric unavailable: {exc}',flush=True)
                                 episode_count[0] = len(callback.episode_durations)
@@ -294,7 +302,9 @@ def main(argv=None):
     parser.add_argument('--benchmark-only',action='store_true',help='Frozen-policy pipeline diagnostic; no optimizer updates or saved checkpoints')
     parser.add_argument('--headless-capture',choices=['playwright','cdp','stream','electron'],default='playwright',
                         help='Headless browser image backend; cdp uses a validated direct surface clip')
-    parser.add_argument('--framing-profile', choices=['legacy','canvas_v1'], default='legacy')
+    parser.add_argument('--framing-profile', choices=['legacy','canvas_v1'], default='canvas_v1')
+    parser.add_argument('--allow-input-migration',action='store_true',help='Explicitly allow and record a training input-contract change; not for frozen comparisons')
+    parser.add_argument('--worker-seed-base',type=int,default=None,help='Derive reproducible distinct worker seeds; default inherits checkpoint seed')
     parser.add_argument('--checkpoint', type=Path, required=True)
     parser.add_argument('--steps', type=int, default=65536, help='Total transitions across workers; complete cohorts only')
     parser.add_argument('--max-minutes', type=float, default=180.)
@@ -302,7 +312,7 @@ def main(argv=None):
     parser.add_argument('--worker-timeout', type=float, default=180.)
     parser.add_argument('--state-model', type=Path, default=Path('checkpoints/v612_snapshot_20261021/screen_state_candidate_v2.pt'))
     parser.add_argument('--detector', type=Path, default=Path('ai_data/v5_hazards/runs/segment_round04/weights/best.pt'))
-    parser.add_argument('--detector-mode',choices=['on','off'],default='on')
+    parser.add_argument('--detector-mode',choices=['on','off'],default='off',help='Default off. Object detector on is retained only for historical reproduction.')
     parser.add_argument('--canvas-policy-input', action='store_true')
     parser.add_argument('--background-capture', choices=['mss','dxgi'], default='mss')
     parser.add_argument('--preview-port', type=int, default=None)
@@ -313,6 +323,10 @@ def main(argv=None):
     parser.add_argument('--report', type=Path, required=True)
     args = parser.parse_args(argv)
     count = len(args.displays)
+    if args.allow_input_migration and args.benchmark_only:
+        parser.error('Frozen comparisons must match the checkpoint input contract')
+    if args.worker_seed_base is not None and not 0 <= args.worker_seed_base < 2**32:
+        parser.error('--worker-seed-base must be in [0, 2**32)')
     if args.compact_observations and args.rollout_transport!='shared_memory':
         parser.error('Compact observations require shared-memory rollout transport')
     if not 1<=args.preview_fps<=30 or not 1<=args.inference_timeout_ms<=100 or not 0<=args.inference_batch_wait_ms<=2:
@@ -326,7 +340,7 @@ def main(argv=None):
         parser.error('Shared-memory transport requires --headless --headless-capture electron')
     if not 1 <= count <= (6 if args.headless else 2) or len(set(args.displays)) != count:
         parser.error('Supports up to six headless workers or two dedicated displays')
-    if not 0 < args.max_minutes <= 480 or args.save_every_minutes <= 0 or args.worker_timeout < 15:
+    if not 0 < args.max_minutes <= 2880 or args.save_every_minutes <= 0 or args.worker_timeout < 15:
         parser.error('Invalid time limits')
     if args.preview_port is not None and not 1024 <= args.preview_port <= 65535:
         parser.error('Invalid preview port')
@@ -335,6 +349,8 @@ def main(argv=None):
             parser.error(f'Missing local asset: {path}')
     if args.report.exists():
         parser.error('Report directory exists; choose a new name')
+    contract = requested_contract(args)
+    input_check = validate_checkpoint(args.checkpoint, contract, allow_migration=args.allow_input_migration)
     import mss
     from tools.ppo_background_display import select_display
     if not args.headless:
@@ -362,21 +378,33 @@ def main(argv=None):
         from tools.ppo_compact_buffer import CompactTimedDictBuffer
         buffer_class=CompactTimedDictBuffer
     configure_learner(model, args.report, count, reference,buffer_class=buffer_class)
-    model.framing_profile = args.framing_profile
-    model.detector_mode=args.detector_mode
+    attach_contract(model, contract)
+    base_seed = args.worker_seed_base if args.worker_seed_base is not None else model.seed
+    if base_seed is None:base_seed = 123
+    sampling_seeds = [worker_seed(base_seed, i) for i in range(count)]
+    model.sampling_seeds = sampling_seeds
     options = {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
-    options.update(worker_steps=worker_steps, workers=count, reference_seconds=reference)
+    options.update(worker_steps=worker_steps, workers=count, reference_seconds=reference,
+                   sampling_seeds=sampling_seeds, inference_seed=worker_seed(base_seed, count))
     config = dict(options, aggregate_transitions_per_update=cohort, learning_rate=model.lr_schedule(1.),
                   batch_size=model.batch_size, n_epochs=model.n_epochs, gamma=model.gamma,
                   gae_lambda=model.gae_lambda, source_sha256=source_hash,
                   optimizer='disabled frozen-policy diagnostic' if args.benchmark_only else 'one shared masked PPO',
                   policy_inference='shared versioned service' if args.shared_inference else 'per-worker synchronized replicas')
-    (args.report/'config.json').write_text(json.dumps(config, indent=2), encoding='utf8')
+    config.update(input_contract=input_check, sampling_seed_base=base_seed)
+    atomic_json(args.report/'config.json', config)
+    source_root=Path(__file__).resolve().parents[1]
+    atomic_json(args.report/'source_manifest.json', source_manifest(source_root,
+        assets=[args.state_model, source_root/'rankedsurfers-downloaded/release.json',
+                source_root/'rankedsurfers-downloaded/game/releases/ae44e7782a4c8bbe5b10/arena.html',
+                source_root/'rankedsurfers-downloaded/game/releases/a470c570db438c3e31be/render-budget.js'],
+        contract=contract, seeds=sampling_seeds))
     report = dict(status='STARTING', rounds=0, optimized_transitions=0,processed_transitions=0,source_sha256=source_hash,
                   benchmark_only=args.benchmark_only,model_updated=False)
     def save_report():
-        (args.report/'parallel_training.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+        atomic_json(args.report/'parallel_training.json', report)
     save_report()
+    learner_update_in_progress = False
     ctx = mp.get_context('spawn')
     abort = ctx.Event()
     connections, processes = [], []
@@ -460,7 +488,10 @@ def main(argv=None):
             before_updates = model._n_updates
             before_samples = model._settled_stats['optimizer_sample_presentations']
             update_started=time.perf_counter()
-            if not args.benchmark_only:model.train()
+            if not args.benchmark_only:
+                learner_update_in_progress = True
+                model.train()
+                learner_update_in_progress = False
             else:
                 model._settled_stats['completed_rollout_transitions']+=cohort
                 model.parallel_used_indices=[]
@@ -523,53 +554,56 @@ def main(argv=None):
         report.update(status='STOPPED', error=repr(exc))
         raise
     finally:
+        original_failure = sys.exc_info()[0] is not None
         abort.set()
-        if sampler is not None:
-            sampler.close()
-        for connection in connections:
-            try:
-                connection.send(dict(op='stop'))
-            except (OSError, EOFError):
-                pass
-        for process in processes:
-            process.join(timeout=30.)
-            if process.is_alive():
-                process.terminate()
-                process.join(timeout=5.)
-        for connection in connections:
-            connection.close()
-        if inference_host is not None:inference_host.close()
-        if electron_group is not None:electron_group.close()
-        # Drop all borrowed views before unmapping coordinator-owned slots.
+        def checkpoint_final():
+            if learner_update_in_progress:
+                report['final_checkpoint_skipped'] = 'optimizer interrupted; retain prior atomic checkpoint'
+            elif report['optimized_transitions']:
+                save_atomic_checkpoint(model, args.report/'latest.zip')
+                report['final_checkpoint_transitions'] = report['optimized_transitions']
+        def persist_final():
+            report['source_unchanged'] = hashlib.sha256(args.checkpoint.read_bytes()).hexdigest() == source_hash
+            if args.benchmark_only:
+                report['policy_unchanged'] = policy_hash(policy_arrays(model.policy)) == initial_policy_digest
+            if started is not None:
+                report['active_wall_seconds'] = time.perf_counter()-started
+                report['optimized_transitions_per_second'] = report['optimized_transitions']/report['active_wall_seconds']
+                report['processed_transitions_per_second'] = report['processed_transitions']/report['active_wall_seconds']
+                runtime.update(finished=True,status=report['status'],elapsed_seconds=report['active_wall_seconds'],
+                    optimized_per_second=report['optimized_transitions_per_second'])
+                atomic_json(args.report/'runtime.json', runtime)
+            save_report()
+        def stop_connection(connection):
+            try:connection.send(dict(op='stop'))
+            except (OSError, EOFError):pass
+        def stop_process(process):
+            try:process.join(timeout=30.)
+            finally:
+                if process.is_alive():
+                    process.terminate()
+                    process.join(timeout=5.)
+        cleanup = []
+        if sampler is not None:cleanup.append(('telemetry', sampler.close))
+        cleanup.extend((f'stop_worker_{i}', lambda c=c:stop_connection(c)) for i,c in enumerate(connections))
+        cleanup.extend((f'join_worker_{i}', lambda p=p:stop_process(p)) for i,p in enumerate(processes))
+        cleanup.extend((f'close_pipe_{i}', c.close) for i,c in enumerate(connections))
+        if inference_host is not None:cleanup.append(('inference', inference_host.close))
+        if electron_group is not None:cleanup.append(('electron', electron_group.close))
         if slots:
             packets=None
-            model.rollout_buffer.reset()
-            for slot in slots:slot.close()
+            cleanup.append(('release_buffer_views', model.rollout_buffer.reset))
+            cleanup.extend((f'rollout_slot_{i}', slot.close) for i,slot in enumerate(slots))
         if preview is not None:
-            preview.shutdown()
-            preview.server_close()
-        if survival_metrics is not None:
-            try:
-                survival_metrics.close()
-            except OSError as exc:
-                report['dashboard_error'] = repr(exc)
-        if report['optimized_transitions']:
-            save_atomic_checkpoint(model, args.report/'latest.zip')
-        report['source_unchanged'] = hashlib.sha256(args.checkpoint.read_bytes()).hexdigest() == source_hash
-        if args.benchmark_only:
-            report['policy_unchanged']=policy_hash(policy_arrays(model.policy))==initial_policy_digest
-        if started is not None:
-            report['active_wall_seconds'] = time.perf_counter()-started
-            report['optimized_transitions_per_second'] = report['optimized_transitions']/report['active_wall_seconds']
-            report['processed_transitions_per_second']=report['processed_transitions']/report['active_wall_seconds']
-            runtime.update(finished=True,status=report['status'],elapsed_seconds=report['active_wall_seconds'],
-                           optimized_per_second=report['optimized_transitions_per_second'])
-            (args.report/'runtime.json').write_text(json.dumps(runtime),encoding='utf8')
-        save_report()
+            cleanup.extend([('preview_shutdown', preview.shutdown), ('preview_close', preview.server_close)])
+        if survival_metrics is not None:cleanup.append(('survival_metrics', survival_metrics.close))
+        errors = finalize_run(report, checkpoint_final, cleanup, persist_final)
         if survival_metrics is not None and started is not None:
             print(format_terminal_stats(survival_metrics.snapshot(),report['active_wall_seconds'],
                 report['processed_transitions'] if args.benchmark_only else report['optimized_transitions'],
                 time.perf_counter(),args.benchmark_only),flush=True)
+        if errors and not original_failure:
+            raise RuntimeError('Run finalization failed; inspect parallel_training.json')
     print(json.dumps(report, indent=2))
     from tools.plot_ppo_survival import finish_plot
     finish_plot(args.report,args.end_plot,args.preview_port,args.benchmark_only)
