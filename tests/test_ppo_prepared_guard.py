@@ -24,6 +24,71 @@ class PreparedGuardTests(unittest.TestCase):
 
 
 class ActualPreparedGuardTests(unittest.IsolatedAsyncioTestCase):
+    async def test_recorded_two_dip_menu_uses_original_confirmation_without_movement(self):
+        from tests.test_ppo_stream_menu_tail import two_dip_failure
+        env=self.environment()
+        env._headless_backend='electron'
+        readings=two_dip_failure()
+        scores=[r.menu_score for r in readings]+[.60]
+        states=[r.state for r in readings]+['MENU']
+        probabilities=[{'GAMEPLAY':r.gameplay_probability,'MENU':r.menu_probability}
+                       for r in readings]+[{'MENU':1.}]
+        env._capture=AsyncMock(side_effect=[(env._v2_last_chw,s,None) for s in scores])
+        env._read_screen_state=Mock(side_effect=list(zip(states,probabilities)))
+        with patch('time.perf_counter',return_value=10.05),patch('asyncio.sleep',new=AsyncMock()):
+            await env._step_browser(1)
+        self.assertEqual(env._capture.await_count,7)
+        self.assertTrue(env._guard_forced_terminal)
+        self.assertFalse(env._guard_hard_stopped)
+        env.page.keyboard.press.assert_not_awaited()
+        env.action_context.note_action.assert_not_called()
+
+    async def test_recorded_two_dip_menu_still_stops_without_new_corroboration(self):
+        from tests.test_ppo_stream_menu_tail import two_dip_failure
+        from rs_v612_gameplay_guard import GuardUncertainError
+        env=self.environment()
+        env._headless_backend='electron'
+        readings=two_dip_failure()
+        scores=[r.menu_score for r in readings]+[.10]*6
+        states=[r.state for r in readings]+['MENU']*6
+        env._capture=AsyncMock(side_effect=[(env._v2_last_chw,s,None) for s in scores])
+        env._read_screen_state=Mock(side_effect=[(s,{s:1.}) for s in states])
+        with patch('time.perf_counter',return_value=10.05),patch('asyncio.sleep',new=AsyncMock()):
+            with self.assertRaisesRegex(GuardUncertainError,'SAFETY STOP'):
+                await env._step_browser(1)
+        self.assertEqual(env._capture.await_count,12)
+        self.assertTrue(env._guard_hard_stopped)
+        self.assertFalse(env._guard_forced_terminal)
+        env.page.keyboard.press.assert_not_awaited()
+
+    async def test_electron_menu_animation_confirms_without_movement(self):
+        env=self.environment()
+        env._headless_backend='electron'
+        scores=[.560689865987547,.9994769327335497,.6310866392463845,
+            .5213169475469391,.7388194849442891,.6766063125611257,.60]
+        states=['GAMEPLAY']+['MENU']*6
+        env._capture=AsyncMock(side_effect=[(env._v2_last_chw,s,None) for s in scores])
+        env._read_screen_state=Mock(side_effect=[(s,{s:1.}) for s in states])
+        with patch('time.perf_counter',return_value=10.05),patch('asyncio.sleep',new=AsyncMock()):
+            await env._step_browser(1)
+        self.assertEqual(env._capture.await_count,7)
+        self.assertTrue(env._guard_forced_terminal)
+        env.page.keyboard.press.assert_not_awaited()
+
+    async def test_electron_menu_extension_stops_on_gameplay_disagreement(self):
+        from rs_v612_gameplay_guard import GuardUncertainError
+        env=self.environment()
+        env._headless_backend='electron'
+        scores=[.560689865987547,.9994769327335497,.6310866392463845,
+            .5213169475469391,.7388194849442891,.6766063125611257,0.]
+        states=['GAMEPLAY']+['MENU']*5+['GAMEPLAY']
+        env._capture=AsyncMock(side_effect=[(env._v2_last_chw,s,None) for s in scores])
+        env._read_screen_state=Mock(side_effect=[(s,{s:1.}) for s in states])
+        with patch('time.perf_counter',return_value=10.05),patch('asyncio.sleep',new=AsyncMock()):
+            with self.assertRaises(GuardUncertainError):await env._step_browser(1)
+        self.assertTrue(env._guard_hard_stopped)
+        env.page.keyboard.press.assert_not_awaited()
+
     def environment(self, *, expired=False, next_menu=False):
         from train_rs_v612_ppo import build_env_class
         env = object.__new__(build_env_class())

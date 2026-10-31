@@ -1,0 +1,67 @@
+{
+  "modules": [
+    "tests.test_ppo_background_display",
+    "tests.test_ppo_browser_focus",
+    "tests.test_ppo_browser_session",
+    "tests.test_ppo_cdp_capture",
+    "tests.test_ppo_cdp_stream",
+    "tests.test_ppo_checkpoint_settings",
+    "tests.test_ppo_current_runtime",
+    "tests.test_ppo_detector_benchmark",
+    "tests.test_ppo_dxgi_source",
+    "tests.test_ppo_electron_capture",
+    "tests.test_ppo_eval_prediction",
+    "tests.test_ppo_frame_state_cache",
+    "tests.test_ppo_framing",
+    "tests.test_ppo_long_episode_limit",
+    "tests.test_ppo_parallel_learning",
+    "tests.test_ppo_pause_runtime_v179",
+    "tests.test_ppo_pipeline_profile",
+    "tests.test_ppo_post_resume_candidate",
+    "tests.test_ppo_prepared_guard",
+    "tests.test_ppo_reaction_latency",
+    "tests.test_ppo_reaction_metrics",
+    "tests.test_ppo_resync_freshness",
+    "tests.test_ppo_resync_live_v178",
+    "tests.test_ppo_scaling_controls",
+    "tests.test_ppo_scaling_storage",
+    "tests.test_ppo_settled_learning",
+    "tests.test_ppo_shared_frame",
+    "tests.test_ppo_shared_inference",
+    "tests.test_ppo_speed_analysis",
+    "tests.test_ppo_stream_menu_tail",
+    "tests.test_ppo_survival_metrics",
+    "tests.test_ppo_survival_plot",
+    "test_rs_v612_demo",
+    "test_rs_v612_demo_diagnostics",
+    "test_rs_v612_demo_recording",
+    "test_rs_v612_guard",
+    "test_rs_v61"
+  ],
+  "exit_code": 0,
+  "tests": 322,
+  "seconds": 15.353,
+  "passed": true,
+  "javascript_checks": [
+    {
+      "file": "tools\\electron_worker\\main.cjs",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "file": "tools\\electron_worker\\multi.cjs",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "file": "tools\\electron_worker\\shared_frame.cjs",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "file": "tools/ppo_dashboard.html script",
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "run": "reports\\v612_speed3_detectoroff_15m_20261031_133058",
+  "completion": "COMPLETE",
+  "active_seconds": 903.7251001000113,
+  "optimized": 30336,
+  "optimized_per_second": 33.567729829173544,
+  "episodes": {
+    "count": 355,
+    "mean": 3.759344261971099,
+    "median": 3.2902204999991227,
+    "max": 10.925299399968935
+  },
+  "first100": {
+    "count": 100,
+    "mean": 3.718615494998521,
+    "median": 3.252092149996315,
+    "max": 10.925299399968935
+  },
+  "last100": {
+    "count": 100,
+    "mean": 3.9283283729999674,
+    "median": 3.7636588500026846,
+    "max": 7.584019700036151
+  },
+  "time_limits": 0,
+  "termination_reasons": {
+    "death": 355
+  },
+  "per_worker": [
+    {
+      "worker": 0,
+      "episodes": 123,
+      "mean": 3.62461878130131,
+      "max": 9.459577400004491
+    },
+    {
+      "worker": 1,
+      "episodes": 114,
+      "mean": 3.8894997306998813,
+      "max": 9.432619699975476
+    },
+    {
+      "worker": 2,
+      "episodes": 118,
+      "mean": 3.7740350305075636,
+      "max": 10.925299399968935
+    }
+  ],
+  "actor_action_counts": {
+    "4": 9621,
+    "3": 13285,
+    "0": 6981,
+    "1": 28,
+    "2": 32
+  },
+  "commands": {
+    "ArrowDown": 9621,
+    "ArrowUp": 13285,
+    "ArrowLeft": 28,
+    "ArrowRight": 32
+  },
+  "active_step_seconds": {
+    "count": 30336,
+    "median_ms": 47.46504999639001,
+    "p95_ms": 52.88205001124879,
+    "p99_ms": 83.81091999908678,
+    "max_ms": 357.5262000085786,
+    "above_100ms": 235,
+    "above_150ms": 228
+  },
+  "training_statistics": {
+    "train/approx_kl": {
+      "first": 0.02960751677552859,
+      "last": 0.032744729443362056,
+      "median": 0.03031637540984627,
+      "max": 0.06772309159471963
+    },
+    "train/clip_fraction": {
+      "first": 0.15572916666666667,
+      "last": 0.18431107799212137,
+      "median": 0.17445174331466357,
+      "max": 0.29525649497906364
+    },
+    "train/value_loss": {
+      "first": 0.33235390931367875,
+      "last": 0.21550641246140004,
+      "median": 0.20885887257754804,
+      "max": 0.46748120362559953
+    },
+    "train/explained_variance": {
+      "first": 0.538663923740387,
+      "last": 0.8276275992393494,
+      "median": 0.7655518054962158,
+      "max": 0.9157385230064392
+    },
+    "train/entropy_loss": {
+      "first": -0.5917090237140655,
+      "last": -0.6411146074533463,
+      "median": -0.6309955497582753,
+      "max": -0.5407511254151662
+    }
+  },
+  "resource_usage": {
+    "cpu_mean_percent": {
+      "median": 23.996874999999996,
+      "max": 44.1
+    },
+    "cpu_busiest_core_percent": {
+      "median": 62.7,
+      "max": 98.8
+    },
+    "memory_percent": {
+      "median": 65.8,
+      "max": 68.4
+    },
+    "active_cpu_mean_percent": {
+      "median": 23.953125,
+      "max": 37.050000000000004
+    },
+    "active_cpu_busiest_core_percent": {
+      "median": 62.5,
+      "max": 98.8
+    },
+    "active_memory_percent": {
+      "median": 65.85,
+      "max": 68.4
+    },
+    "active_nvidia_memory_mib": {
+      "median": 3611.0,
+      "max": 3691.0
+    }
+  },
+  "checkpoints": {
+    "checkpoint_000009984.zip": {
+      "sha256": "0ec9beebaef44b65a2c29b443cf42040b54cc405bd885b0620876b137dbf370a",
+      "crc_error": null,
+      "num_timesteps": 1856670,
+      "updates": 68150,
+      "detector_mode": "off"
+    },
+    "checkpoint_000020352.zip": {
+      "sha256": "9f57e89f8bca588cfccb8e7e99aadcca6f33ce16820ea2c4e7924412e979e894",
+      "crc_error": null,
+      "num_timesteps": 1867038,
+      "updates": 68285,
+      "detector_mode": "off"
+    },
+    "checkpoint_000030336.zip": {
+      "sha256": "b6d324b12a458e5e2eef8019babfcf426d680aefb7e349784b06fa05a85a4244",
+      "crc_error": null,
+      "num_timesteps": 1877022,
+      "updates": 68415,
+      "detector_mode": "off"
+    },
+    "latest.prev.zip": {
+      "sha256": "b6d324b12a458e5e2eef8019babfcf426d680aefb7e349784b06fa05a85a4244",
+      "crc_error": null,
+      "num_timesteps": 1877022,
+      "updates": 68415,
+      "detector_mode": "off"
+    },
+    "latest.zip": {
+      "sha256": "b6d324b12a458e5e2eef8019babfcf426d680aefb7e349784b06fa05a85a4244",
+      "crc_error": null,
+      "num_timesteps": 1877022,
+      "updates": 68415,
+      "detector_mode": "off"
+    }
+  },
+  "wall_thirds": [
+    {
+      "start_s": 0,
+      "end_s": 300,
+      "count": 115,
+      "mean": 3.7813238878243443,
+      "median": 3.3032383999961894,
+      "max": 10.925299399968935
+    },
+    {
+      "start_s": 300,
+      "end_s": 600,
+      "count": 127,
+      "mean": 3.5399695385820835,
+      "median": 2.976599299989175,
+      "max": 9.432619699975476
+    },
+    {
+      "start_s": 600,
+      "end_s": 904.7251001000113,
+      "count": 113,
+      "mean": 3.9835295088496987,
+      "median": 3.756287500000326,
+      "max": 9.448603700002423
+    }
+  ],
+  "latency_thirds": [
+    {
+      "start_s": 0,
+      "end_s": 300,
+      "stats": {
+        "count": 7767,
+        "median_ms": 31.60690001095645,
+        "p95_ms": 38.57069999794476,
+        "p99_ms": 44.22338199336083,
+        "max_ms": 82.07990002119914,
+        "above_100ms": 0,
+        "above_150ms": 0
+      }
+    },
+    {
+      "start_s": 300,
+      "end_s": 600,
+      "stats": {
+        "count": 7638,
+        "median_ms": 31.396250007674098,
+        "p95_ms": 38.12817000725772,
+        "p99_ms": 41.9427060201997,
+        "max_ms": 84.76720002363436,
+        "above_100ms": 0,
+        "above_150ms": 0
+      }
+    },
+    {
+      "start_s": 600,
+      "end_s": 904.7251001000113,
+      "stats": {
+        "count": 7501,
+        "median_ms": 31.705500005045906,
+        "p95_ms": 38.06540000368841,
+        "p99_ms": 42.21640000469051,
+        "max_ms": 79.49370000278577,
+        "above_100ms": 0,
+        "above_150ms": 0
+      }
+    }
+  ]
+}

@@ -30,6 +30,9 @@ def policy_hash(arrays):
 
 
 def install_policy(policy, arrays, expected):
+    if hasattr(policy,'bind_version'):
+        policy.bind_version(expected)
+        return
     import torch
     if policy_hash(arrays) != expected:
         raise ValueError('Policy transport hash mismatch')
@@ -59,9 +62,12 @@ def merge_rollouts(buffer, packets, worker_steps, version, digest):
             raise ValueError('Observation schema mismatch')
         for key, target in buffer.observations.items():
             source = packet['observations'][key]
-            if source.shape != target[section].shape or source.dtype != target.dtype:
+            if source.shape != (worker_steps,*target.shape[1:]) or source.dtype != target.dtype:
                 raise ValueError('Observation shape/dtype mismatch')
-            target[section] = source
+            if hasattr(target,'borrow'):
+                target.borrow(begin,source)
+            else:
+                target[section] = source[:] if hasattr(source,'refs') else source
         for key in BUFFER_FIELDS:
             target, source = getattr(buffer, key), packet[key]
             if source.shape != target[section].shape or not np.isfinite(source).all():
@@ -90,14 +96,14 @@ class SharedRolloutPPO(SettledPPO):
             self.n_steps = worker_steps  # checkpoints retain steps per worker
 
 
-def configure_learner(model, output, worker_count, reference_seconds):
+def configure_learner(model, output, worker_count, reference_seconds, *, buffer_class=TimedDictBuffer):
     from stable_baselines3.common.logger import configure
     if model.n_envs != 1 or model.use_sde:
         raise ValueError('Source must be a one-environment discrete PPO checkpoint')
     if model.target_kl is not None:
         raise ValueError('Prototype requires the existing no-KL-stop setting for exact worker sample accounting')
     model.__class__ = SharedRolloutPPO
-    model.rollout_buffer = TimedDictBuffer(model.n_steps*worker_count,
+    model.rollout_buffer = buffer_class(model.n_steps*worker_count,
         model.observation_space, model.action_space, device=model.device,
         gamma=model.gamma, gae_lambda=model.gae_lambda, n_envs=1)
     model.rollout_buffer.reference_seconds = reference_seconds

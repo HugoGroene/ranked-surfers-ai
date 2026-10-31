@@ -1,0 +1,120 @@
+{
+  "runs": [
+    {
+      "report": "reports\\v612_speed3_detectoroff_15m_20261031_133058",
+      "workers": 3,
+      "detector": "off",
+      "compact": false,
+      "shared_inference": false,
+      "electron_host": "per_worker",
+      "benchmark_only": false,
+      "source_sha256": "93cc8f240342dff3b1b418e547d56e1415e5b5704a98b6a5c168e5adf8b324dd",
+      "valid": true,
+      "failures": [],
+      "throughput": 33.567729829173544,
+      "throughput_metric": "optimized/s",
+      "all": {
+        "count": 22966,
+        "median_ms": 31.571150000672787,
+        "p95_ms": 38.2815999982995,
+        "p99_ms": 42.82357000629413,
+        "max_ms": 150.63190000364557,
+        "above_100ms": 3,
+        "above_150ms": 1
+      },
+      "steady": {
+        "count": 22906,
+        "median_ms": 31.566800011205487,
+        "p95_ms": 38.26540000591194,
+        "p99_ms": 42.67076000833187,
+        "max_ms": 84.76720002363436,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "worst_worker_p95_ms": 38.38034000364132,
+      "guard_age": {
+        "count": 22966,
+        "median_ms": 14.148100002785213,
+        "p95_ms": 16.65984999272041,
+        "p99_ms": 18.396984996797975,
+        "max_ms": 20.003500016173348,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "per_worker": [
+        {
+          "worker": 0,
+          "all": {
+            "count": 7753,
+            "median_ms": 31.554100016364828,
+            "p95_ms": 38.40393999125808,
+            "p99_ms": 43.717147981515105,
+            "max_ms": 120.93770000501536,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 7733,
+            "median_ms": 31.54779999749735,
+            "p95_ms": 38.38034000364132,
+            "p99_ms": 43.4599120065105,
+            "max_ms": 84.76720002363436,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 1,
+          "all": {
+            "count": 7616,
+            "median_ms": 31.562949996441603,
+            "p95_ms": 38.26419999677455,
+            "p99_ms": 42.44963999371979,
+            "max_ms": 150.63190000364557,
+            "above_100ms": 1,
+            "above_150ms": 1
+          },
+          "steady": {
+            "count": 7596,
+            "median_ms": 31.562050004140474,
+            "p95_ms": 38.253974984399974,
+            "p99_ms": 42.378920014016344,
+            "max_ms": 84.5188999956008,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 2,
+          "all": {
+            "count": 7597,
+            "median_ms": 31.615300016710535,
+            "p95_ms": 38.16843999666162,
+            "p99_ms": 42.16968800057657,
+            "max_ms": 136.0547999793198,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 7577,
+            "median_ms": 31.60690001095645,
+            "p95_ms": 38.153020007302985,
+            "p99_ms": 42.058331980369985,
+            "max_ms": 82.07990002119914,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "lowest_latency": "reports\\v612_speed3_detectoroff_15m_20261031_133058",
+    "highest_throughput": "reports\\v612_speed3_detectoroff_15m_20261031_133058",
+    "pareto_candidates": [
+      "reports\\v612_speed3_detectoroff_15m_20261031_133058"
+    ]
+  },
+  "excluded_initial_commands_per_worker": 20,
+  "note": "Latency is screenshot-request to command issue, not Unity response. Warmup exclusion is descriptive. Short stochastic diagnostics can vary; memory is not used to rank configurations."
+}

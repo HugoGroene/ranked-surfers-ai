@@ -40,6 +40,8 @@ def distance_band(y2):
 
 def detect_v5(model, frame_rgb, captured_at, episode, request_id, imgsz, conf):
     """Called from existing V4 single-worker asynchronous inference pool."""
+    if hasattr(model,'detect_frame'):
+        return model.detect_frame(frame_rgb,captured_at,episode,request_id,imgsz,conf)
     began = time.perf_counter()
     # Ultralytics takes OpenCV BGR numpy images; V4 stores native frames as RGB.
     # Keep the original exact-source RGB frame untouched for mask overlays.

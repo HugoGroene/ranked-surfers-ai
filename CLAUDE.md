@@ -61,3 +61,25 @@ Never install packages without approval.
 - Commit/push only when asked.
 
 - Reaction latency is now a priority: six-worker screenshot-request-to-command p95 ~190ms even without previews. A fresh guard frame can accompany an older policy decision. Do not equate aggregate optimized throughput with per-worker response speed, or promise screenshot timing equals GPU presentation / Unity action response. Policy warmup is implemented; steady-state capture and guard alignment still need optimization. Metrics-only preview mode stops image fetches and shared-worker thumbnail encoding, not game observations.
+- 31 October user clarification: do not sacrifice reaction speed for memory savings.
+  Short speed checks favor separate hosts/inference and three dense-buffer workers;
+  detector-off actual updates measured 29.9/s, 32/38ms steady median/p95 versus
+  detector-on 27.5/s, 33/61ms. Defaults are unchanged; detector-off changes inputs,
+  and no model-quality benefit is established. See reports/SPEED_SELECTION_20261031.md.
+- The subsequent 15-minute detector-off run completed 30,336 optimized transitions
+  at 33.57/s; three audits passed, steady command latency 31.6/38.3ms median/p95.
+  Overall survival 3.76s, recent100 3.93s, max 10.93s; no policy improvement proven.
+  Latest continuation: reports/v612_speed3_detectoroff_15m_20261031_133058/latest.zip.
+  Terminal summaries reuse cached five-second survival aggregation; preserve this
+  low-overhead design. See reports/SPEED3_DIAGNOSTIC_15M_20261031.md.
+- Post-training Matplotlib plots: --end-plot auto (default) opens after successful
+  no-dashboard training and worker cleanup; show forces a window, save writes PNG
+  only, off disables. Auto skips frozen benchmarks. Plot saved survival.json points
+  on the full requested-time axis; never add plotting work during collection.
+  Close the window to return to PowerShell. README_PPO_SCALING.md documents controls.
+- Latest completed diagnostic: one worker, five minutes, 5,376 optimized steps,
+  17.50/s, 25.6/33.6ms steady median/p95, 50 episodes, mean 3.96s; audit passed.
+  Checkpoint reports/v612_speed1_detectoroff_5m_20261031_135701/latest.zip is off-mode.
+  Later preview30 test was stopped early; saved report remains RUNNING (11 updates,
+  4,224 optimized steps). Preserve its partial model but do not claim completion.
+  See reports/SINGLE_WORKER_PREVIEW_20261031.md. Background gaming/Resolve untested.

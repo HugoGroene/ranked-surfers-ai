@@ -19,10 +19,12 @@ class ResyncWindow:
         self.observed = 0
         self.discarded_before_last_retry = 0
         self.last_reason = None
+        self.menu_candidate = False
 
     def observe(self, *, state, probs, menu_score, confidence, menu_threshold):
         """Return ACCEPT/DONE/RETRY/ABORT. Never authorizes an action directly."""
         self.observed += 1
+        self.menu_candidate = False
         try:
             score = float(menu_score)
             p_game = float((probs or {}).get('GAMEPLAY', 0.0))
@@ -37,6 +39,9 @@ class ResyncWindow:
                 or not 0 <= score <= 1 or not 0 <= p_game <= 1 or not 0 <= p_menu <= 1):
             self.last_reason = 'invalid score/probabilities'
             return 'ABORT'
+        # Candidate means "request independent confirmation", never terminal
+        # acceptance. Early menu animation may have a weak template score.
+        self.menu_candidate = state == 'MENU' and p_menu >= conf
         if state == 'GAMEPLAY' and p_game >= conf and score < threshold*.85:
             self.accepted += 1
             self.last_reason = None

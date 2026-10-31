@@ -25,9 +25,12 @@ def survival_curve(events, started, requested_seconds, window=100, interval=10, 
         if recent:
             points.append(dict(seconds=boundary,mean_seconds=sum(recent)/len(recent),samples=len(recent)))
     truncated=sum(e.get('reason') == 'time_limit' for e in valid)
+    latest=valid[-window:]
     return dict(requested_seconds=requested_seconds,window_episodes=window,interval_seconds=interval,
                 completed_episodes=len(valid),time_limited_episodes=truncated,
                 overall_mean_seconds=sum(e['duration'] for e in valid)/len(valid) if valid else None,
+                recent_mean_seconds=sum(e['duration'] for e in latest)/len(latest) if latest else None,
+                recent_samples=len(latest),
                 best_seconds=max((e['duration'] for e in valid),default=None),
                 points=points,metric='Rolling mean of last 100 completed episodes across all workers; immutable completed-time samples; active reward duration; time-limited episodes included')
 
@@ -37,6 +40,8 @@ class SurvivalMetrics:
         self.folder,self.workers,self.started,self.requested = Path(folder),workers,started,requested_seconds
         self.stop = threading.Event()
         self.points = {}
+        self.snapshot_lock = threading.Lock()
+        self.latest_summary = None
         self.thread = threading.Thread(target=self.run,daemon=True,name='survival-metrics')
 
     def update(self):
@@ -59,6 +64,16 @@ class SurvivalMetrics:
         tmp = self.folder/'survival.partial.json'
         tmp.write_text(json.dumps(result),encoding='utf8')
         tmp.replace(self.folder/'survival.json')
+        summary={key:result[key] for key in ('completed_episodes','time_limited_episodes',
+            'overall_mean_seconds','recent_mean_seconds','recent_samples','best_seconds')}
+        summary['updated_at']=time.perf_counter()
+        with self.snapshot_lock:
+            self.latest_summary=summary
+
+    def snapshot(self):
+        """Small cached summary; no file reads or episode scans on the optimizer path."""
+        with self.snapshot_lock:
+            return dict(self.latest_summary) if self.latest_summary is not None else None
 
     def run(self):
         while not self.stop.wait(5):

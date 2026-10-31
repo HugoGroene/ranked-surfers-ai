@@ -1,0 +1,638 @@
+{
+  "runs": [
+    {
+      "report": "reports\\speed_screen_4_on_20261031_01",
+      "workers": 4,
+      "detector": "on",
+      "compact": true,
+      "shared_inference": false,
+      "electron_host": "per_worker",
+      "benchmark_only": true,
+      "source_sha256": "93cc8f240342dff3b1b418e547d56e1415e5b5704a98b6a5c168e5adf8b324dd",
+      "valid": true,
+      "failures": [],
+      "throughput": 38.033598197239776,
+      "throughput_metric": "processed/s without optimization",
+      "all": {
+        "count": 851,
+        "median_ms": 36.51079998235218,
+        "p95_ms": 80.65619999251794,
+        "p99_ms": 91.6068000078667,
+        "max_ms": 137.66110001597553,
+        "above_100ms": 4,
+        "above_150ms": 0
+      },
+      "steady": {
+        "count": 771,
+        "median_ms": 36.362199985887855,
+        "p95_ms": 80.33805000013672,
+        "p99_ms": 84.93908000527878,
+        "max_ms": 98.38260000105947,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "worst_worker_p95_ms": 81.05484002153388,
+      "guard_age": {
+        "count": 851,
+        "median_ms": 15.575099998386577,
+        "p95_ms": 19.048100017243996,
+        "p99_ms": 19.790200007264502,
+        "max_ms": 19.99569998588413,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "per_worker": [
+        {
+          "worker": 0,
+          "all": {
+            "count": 217,
+            "median_ms": 37.54229997866787,
+            "p95_ms": 82.13026000885293,
+            "p99_ms": 92.80000800383277,
+            "max_ms": 129.53100001323037,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 197,
+            "median_ms": 37.565099977655336,
+            "p95_ms": 81.05484002153388,
+            "p99_ms": 86.64756001089695,
+            "max_ms": 97.2868999815546,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 1,
+          "all": {
+            "count": 207,
+            "median_ms": 36.177099973428994,
+            "p95_ms": 81.20042000955435,
+            "p99_ms": 91.15360198193228,
+            "max_ms": 131.56470001558773,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 187,
+            "median_ms": 36.177099973428994,
+            "p95_ms": 79.79750001104547,
+            "p99_ms": 85.00001399719618,
+            "max_ms": 91.35479998076335,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 2,
+          "all": {
+            "count": 198,
+            "median_ms": 36.07149999879766,
+            "p95_ms": 80.65982498810627,
+            "p99_ms": 91.21672497829424,
+            "max_ms": 133.35489999735728,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 178,
+            "median_ms": 35.84479998971801,
+            "p95_ms": 80.38166001351783,
+            "p99_ms": 83.19755000906295,
+            "max_ms": 98.38260000105947,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 3,
+          "all": {
+            "count": 229,
+            "median_ms": 36.24180000042543,
+            "p95_ms": 78.7428800133057,
+            "p99_ms": 86.93199601373635,
+            "max_ms": 137.66110001597553,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 209,
+            "median_ms": 35.78189999097958,
+            "p95_ms": 77.93071999331005,
+            "p99_ms": 83.4643799997866,
+            "max_ms": 87.95100002316758,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        }
+      ]
+    },
+    {
+      "report": "reports\\speed_screen_4_off_20261031_01",
+      "workers": 4,
+      "detector": "off",
+      "compact": true,
+      "shared_inference": false,
+      "electron_host": "per_worker",
+      "benchmark_only": true,
+      "source_sha256": "93cc8f240342dff3b1b418e547d56e1415e5b5704a98b6a5c168e5adf8b324dd",
+      "valid": true,
+      "failures": [],
+      "throughput": 53.599752859098814,
+      "throughput_metric": "processed/s without optimization",
+      "all": {
+        "count": 826,
+        "median_ms": 34.79155000241008,
+        "p95_ms": 72.78967501042644,
+        "p99_ms": 83.77194999775384,
+        "max_ms": 132.5669000216294,
+        "above_100ms": 4,
+        "above_150ms": 0
+      },
+      "steady": {
+        "count": 746,
+        "median_ms": 34.80814999784343,
+        "p95_ms": 72.02800000231946,
+        "p99_ms": 82.12645500316283,
+        "max_ms": 89.08809997956268,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "worst_worker_p95_ms": 75.52349499019327,
+      "guard_age": {
+        "count": 826,
+        "median_ms": 15.544549998594448,
+        "p95_ms": 18.575300004158635,
+        "p99_ms": 19.571500015445054,
+        "max_ms": 20.006500009912997,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "per_worker": [
+        {
+          "worker": 0,
+          "all": {
+            "count": 202,
+            "median_ms": 34.77480000583455,
+            "p95_ms": 73.65561999176862,
+            "p99_ms": 84.05596599506681,
+            "max_ms": 118.44630000996403,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 182,
+            "median_ms": 34.48069999285508,
+            "p95_ms": 73.02885501849231,
+            "p99_ms": 82.10469398618443,
+            "max_ms": 84.06779999495484,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 1,
+          "all": {
+            "count": 221,
+            "median_ms": 34.559199993964285,
+            "p95_ms": 64.88360001822002,
+            "p99_ms": 82.39418002194728,
+            "max_ms": 132.5669000216294,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 201,
+            "median_ms": 34.616899996763095,
+            "p95_ms": 64.88360001822002,
+            "p99_ms": 80.52889999817125,
+            "max_ms": 89.08809997956268,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 2,
+          "all": {
+            "count": 212,
+            "median_ms": 34.86954998516012,
+            "p95_ms": 75.52349499019327,
+            "p99_ms": 85.09036899689814,
+            "max_ms": 118.64890001015738,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 192,
+            "median_ms": 34.77240000211168,
+            "p95_ms": 75.52349499019327,
+            "p99_ms": 82.57668901846047,
+            "max_ms": 87.0508000080008,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 3,
+          "all": {
+            "count": 191,
+            "median_ms": 35.1688000082504,
+            "p95_ms": 68.93085000046995,
+            "p99_ms": 80.35660999885293,
+            "max_ms": 127.22610001219437,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 171,
+            "median_ms": 35.17940000165254,
+            "p95_ms": 67.91744999645744,
+            "p99_ms": 80.10483000252862,
+            "max_ms": 82.3132999939844,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        }
+      ]
+    },
+    {
+      "report": "reports\\speed_screen_2_off_20261031_01",
+      "workers": 2,
+      "detector": "off",
+      "compact": true,
+      "shared_inference": false,
+      "electron_host": "per_worker",
+      "benchmark_only": true,
+      "source_sha256": "93cc8f240342dff3b1b418e547d56e1415e5b5704a98b6a5c168e5adf8b324dd",
+      "valid": true,
+      "failures": [],
+      "throughput": 28.016744097679176,
+      "throughput_metric": "processed/s without optimization",
+      "all": {
+        "count": 378,
+        "median_ms": 30.307650013128296,
+        "p95_ms": 37.87880000018049,
+        "p99_ms": 47.27754000254241,
+        "max_ms": 116.07590000494383,
+        "above_100ms": 2,
+        "above_150ms": 0
+      },
+      "steady": {
+        "count": 338,
+        "median_ms": 30.34425000078045,
+        "p95_ms": 37.87880000018049,
+        "p99_ms": 39.65207599801943,
+        "max_ms": 61.21970000094734,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "worst_worker_p95_ms": 37.96618500055046,
+      "guard_age": {
+        "count": 378,
+        "median_ms": 13.399350005784072,
+        "p95_ms": 15.680555005383212,
+        "p99_ms": 17.343668994726613,
+        "max_ms": 19.16480000363663,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "per_worker": [
+        {
+          "worker": 0,
+          "all": {
+            "count": 200,
+            "median_ms": 29.575849999673665,
+            "p95_ms": 37.96618500055046,
+            "p99_ms": 39.95650099968751,
+            "max_ms": 101.96990001713857,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 180,
+            "median_ms": 29.821999996784143,
+            "p95_ms": 37.96618500055046,
+            "p99_ms": 39.549091996159405,
+            "max_ms": 61.1129000026267,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 1,
+          "all": {
+            "count": 178,
+            "median_ms": 30.897449993062764,
+            "p95_ms": 37.829139990208205,
+            "p99_ms": 47.302104002155644,
+            "max_ms": 116.07590000494383,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 158,
+            "median_ms": 30.79119998437818,
+            "p95_ms": 37.829139990208205,
+            "p99_ms": 40.8605109935161,
+            "max_ms": 61.21970000094734,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        }
+      ]
+    },
+    {
+      "report": "reports\\speed_screen_3_off_20261031_01",
+      "workers": 3,
+      "detector": "off",
+      "compact": true,
+      "shared_inference": false,
+      "electron_host": "per_worker",
+      "benchmark_only": true,
+      "source_sha256": "93cc8f240342dff3b1b418e547d56e1415e5b5704a98b6a5c168e5adf8b324dd",
+      "valid": true,
+      "failures": [],
+      "throughput": 41.9374904340378,
+      "throughput_metric": "processed/s without optimization",
+      "all": {
+        "count": 661,
+        "median_ms": 32.65149999060668,
+        "p95_ms": 44.71449999255128,
+        "p99_ms": 69.01733999839053,
+        "max_ms": 124.88990000565536,
+        "above_100ms": 3,
+        "above_150ms": 0
+      },
+      "steady": {
+        "count": 601,
+        "median_ms": 32.53610001411289,
+        "p95_ms": 43.805799999972805,
+        "p99_ms": 64.6065000037197,
+        "max_ms": 74.81849999749102,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "worst_worker_p95_ms": 46.16377998609094,
+      "guard_age": {
+        "count": 661,
+        "median_ms": 14.532799978042021,
+        "p95_ms": 17.809200013289228,
+        "p99_ms": 19.140419992618263,
+        "max_ms": 19.93660000152886,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "per_worker": [
+        {
+          "worker": 0,
+          "all": {
+            "count": 207,
+            "median_ms": 32.52439998323098,
+            "p95_ms": 48.26868999516589,
+            "p99_ms": 71.63834999373648,
+            "max_ms": 124.88990000565536,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 187,
+            "median_ms": 32.395899994298816,
+            "p95_ms": 46.16377998609094,
+            "p99_ms": 70.21634999255181,
+            "max_ms": 74.81849999749102,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 1,
+          "all": {
+            "count": 213,
+            "median_ms": 32.76719999848865,
+            "p95_ms": 42.49677998013794,
+            "p99_ms": 64.12774800090118,
+            "max_ms": 124.05169999692589,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 193,
+            "median_ms": 32.590299990260974,
+            "p95_ms": 41.27412000088952,
+            "p99_ms": 60.93606798211106,
+            "max_ms": 65.42729999637231,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 2,
+          "all": {
+            "count": 241,
+            "median_ms": 32.47029997874051,
+            "p95_ms": 43.810200004372746,
+            "p99_ms": 67.04453999409449,
+            "max_ms": 110.55009998381138,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 221,
+            "median_ms": 32.42250002222136,
+            "p95_ms": 43.810200004372746,
+            "p99_ms": 63.749699998879834,
+            "max_ms": 69.12840000586584,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        }
+      ]
+    },
+    {
+      "report": "reports\\speed_screen_3_off_dense_20261031_01",
+      "workers": 3,
+      "detector": "off",
+      "compact": false,
+      "shared_inference": false,
+      "electron_host": "per_worker",
+      "benchmark_only": true,
+      "source_sha256": "93cc8f240342dff3b1b418e547d56e1415e5b5704a98b6a5c168e5adf8b324dd",
+      "valid": true,
+      "failures": [],
+      "throughput": 39.42056997680082,
+      "throughput_metric": "processed/s without optimization",
+      "all": {
+        "count": 668,
+        "median_ms": 31.718599988380447,
+        "p95_ms": 40.086094989965204,
+        "p99_ms": 66.61711698659936,
+        "max_ms": 131.23639998957515,
+        "above_100ms": 3,
+        "above_150ms": 0
+      },
+      "steady": {
+        "count": 608,
+        "median_ms": 31.678250001277775,
+        "p95_ms": 39.76142999890726,
+        "p99_ms": 60.83974897745058,
+        "max_ms": 68.87250000727363,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "worst_worker_p95_ms": 41.110554989427314,
+      "guard_age": {
+        "count": 668,
+        "median_ms": 14.30205001088325,
+        "p95_ms": 16.47307000675937,
+        "p99_ms": 17.780307006905787,
+        "max_ms": 19.021799991605803,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "per_worker": [
+        {
+          "worker": 0,
+          "all": {
+            "count": 220,
+            "median_ms": 31.474899995373562,
+            "p95_ms": 41.720870004792225,
+            "p99_ms": 68.548963010835,
+            "max_ms": 131.23639998957515,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 200,
+            "median_ms": 31.678250001277775,
+            "p95_ms": 41.110554989427314,
+            "p99_ms": 67.68312300700926,
+            "max_ms": 68.87250000727363,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 1,
+          "all": {
+            "count": 218,
+            "median_ms": 31.74729998863768,
+            "p95_ms": 39.291174995014444,
+            "p99_ms": 58.74918200599486,
+            "max_ms": 129.90820000413805,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 198,
+            "median_ms": 31.654799982788973,
+            "p95_ms": 38.88538500177673,
+            "p99_ms": 44.435706986405435,
+            "max_ms": 66.09739997657016,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        },
+        {
+          "worker": 2,
+          "all": {
+            "count": 230,
+            "median_ms": 32.01199999602977,
+            "p95_ms": 39.99712999211624,
+            "p99_ms": 64.85634499287701,
+            "max_ms": 129.41069999942556,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 210,
+            "median_ms": 31.793899994227104,
+            "p95_ms": 39.68107001855969,
+            "p99_ms": 58.990455997700316,
+            "max_ms": 66.0683999885805,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        }
+      ]
+    },
+    {
+      "report": "reports\\speed_screen_1_off_20261031_01",
+      "workers": 1,
+      "detector": "off",
+      "compact": true,
+      "shared_inference": false,
+      "electron_host": "per_worker",
+      "benchmark_only": true,
+      "source_sha256": "93cc8f240342dff3b1b418e547d56e1415e5b5704a98b6a5c168e5adf8b324dd",
+      "valid": true,
+      "failures": [],
+      "throughput": 16.467477198894894,
+      "throughput_metric": "processed/s without optimization",
+      "all": {
+        "count": 215,
+        "median_ms": 27.99490001052618,
+        "p95_ms": 35.00485999975353,
+        "p99_ms": 44.585505995200876,
+        "max_ms": 106.53810002258979,
+        "above_100ms": 1,
+        "above_150ms": 0
+      },
+      "steady": {
+        "count": 195,
+        "median_ms": 28.031299996655434,
+        "p95_ms": 34.922260002349496,
+        "p99_ms": 40.899826009990655,
+        "max_ms": 58.461699984036386,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "worst_worker_p95_ms": 34.922260002349496,
+      "guard_age": {
+        "count": 215,
+        "median_ms": 12.27509998716414,
+        "p95_ms": 13.55881000345107,
+        "p99_ms": 15.96559599856846,
+        "max_ms": 18.74219998717308,
+        "above_100ms": 0,
+        "above_150ms": 0
+      },
+      "per_worker": [
+        {
+          "worker": 0,
+          "all": {
+            "count": 215,
+            "median_ms": 27.99490001052618,
+            "p95_ms": 35.00485999975353,
+            "p99_ms": 44.585505995200876,
+            "max_ms": 106.53810002258979,
+            "above_100ms": 1,
+            "above_150ms": 0
+          },
+          "steady": {
+            "count": 195,
+            "median_ms": 28.031299996655434,
+            "p95_ms": 34.922260002349496,
+            "p99_ms": 40.899826009990655,
+            "max_ms": 58.461699984036386,
+            "above_100ms": 0,
+            "above_150ms": 0
+          }
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "lowest_latency": "reports\\speed_screen_1_off_20261031_01",
+    "highest_throughput": "reports\\speed_screen_4_off_20261031_01",
+    "pareto_candidates": [
+      "reports\\speed_screen_4_off_20261031_01",
+      "reports\\speed_screen_2_off_20261031_01",
+      "reports\\speed_screen_3_off_20261031_01",
+      "reports\\speed_screen_3_off_dense_20261031_01",
+      "reports\\speed_screen_1_off_20261031_01"
+    ]
+  },
+  "excluded_initial_commands_per_worker": 20,
+  "note": "Latency is screenshot-request to command issue, not Unity response. Warmup exclusion is descriptive. Short stochastic diagnostics can vary; memory is not used to rank configurations."
+}

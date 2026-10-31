@@ -1,6 +1,55 @@
 # Ranked Surfers AI — PPO V6.1.2 + Human Demonstrations V1.3
 
-**Last updated: 30 October 2026.** Development branch: [`headless-parallel`](https://github.com/HugoGroene/ranked-surfers-ai/tree/headless-parallel).
+**Last updated: 31 October 2026.** Development branch: [`headless-parallel`](https://github.com/HugoGroene/ranked-surfers-ai/tree/headless-parallel).
+
+31 October opt-in pipeline work: shared rollout transport, exact compact frame
+storage, detector geometry caching/OpenCV thread limits, shared policy/YOLO
+inference, an optional multi-window Electron host, frozen-policy detector on/off
+diagnostics, and adjustable latest-frame previews. Existing paths remain defaults.
+See [flags, safeguards and validation status](README_PPO_SCALING.md) before use.
+Short four-worker checks favor keeping separate inference/renderer processes:
+the storage/preparation bundle completed 1024 optimized transitions at 27.3/s,
+with request-to-command median/p95 39/81ms. Sharing inference and the Electron
+host completed the same budget at 19.9/s and 59/118ms, using less sampled RAM
+and VRAM. Six shared-host attempts remain unreliable and are not recommended
+for unattended training. These are engineering checks, not learning comparisons.
+See [the dated implementation and test report](reports/SCALING_PIPELINE_20261031.md).
+
+**Latest speed checks:** prioritize reaction speed over RAM savings. Three separate
+Electron/inference workers with shared-memory transfers and dense rollout storage
+completed two updates at 29.9 optimized transitions/s with the detector off;
+steady request-to-command median/p95 was 32/38ms. The matched detector-on check
+measured 27.5/s and 33/61ms. All worker learning audits passed. One worker had the
+lowest reaction latency; four had the highest frozen-policy collection throughput
+but worse tails. Detector-off changes policy inputs and is not a demonstrated
+learning improvement. Defaults remain unchanged. See the
+[configuration, full timings and limitations](reports/SPEED_SELECTION_20261031.md).
+
+The 15-minute follow-up completed 30,336 optimized transitions at 33.57/s with
+all learning audits passing and steady median/p95 reaction latency 31.6/38.3ms.
+Overall training survival was 3.76s; latest-100 mean was 3.93s. Better evaluated
+policy quality remains unproven. Terminal output now includes overall/recent
+survival, episode count and throughput without requiring the dashboard. See
+[the run analysis and statistic definitions](reports/SPEED3_DIAGNOSTIC_15M_20261031.md).
+Without a dashboard, successful training now opens a saved Matplotlib survival
+curve after workers stop. `--end-plot show|save|off` overrides the default auto
+behavior; see [plot controls](README_PPO_SCALING.md#plot-the-mean-curve-after-training).
+
+**Background/viewer follow-up:** one worker completed five minutes at 17.50
+optimized transitions/s with 25.6/33.6ms steady median/p95 reaction latency,
+passing its learning audit. Median whole-system CPU/GPU utilization was 9.1/9%,
+but sampled GPU utilization peaked at 73%; gaming/Resolve coexistence remains
+untested. Three workers delivered 33.57/s, so one provided about 52% of aggregate
+throughput with lower load. A subsequent three-worker 30-FPS-cap viewer check
+looked fine to the user and was stopped early; its saved report is unfinalized,
+so it is not a completed benchmark. See
+[exact results, checkpoint hashes and limits](reports/SINGLE_WORKER_PREVIEW_20261031.md).
+
+Publication verification on 31 October: **322 offline tests passed**, including
+parallel learning, capture/guard regressions, shared transports/inference,
+terminal/plot controls and existing demonstration tests. Electron and dashboard
+JavaScript syntax checks passed. See the
+[recorded check list](reports/github_publish_validation_20261031_01/summary.json).
 
 Screenshot-based reinforcement learning for a **locally hosted Practice copy** of the Unity WebGL endless runner Ranked Surfers. This project uses Stable-Baselines3 PPO, native game-canvas screen capture, asynchronous nine-class YOLO segmentation, and a fail-closed gameplay/menu guard. The separate **experimental human-demonstration V1.3** workflow records manual gameplay, permits reviewing and trimming good segments, and can fine-tune a **copy** of the existing PPO model using behavioral cloning (BC). Neither recorder nor trainer is intended for public ranked/live matches.
 
@@ -59,8 +108,9 @@ See [pipeline usage](README_PPO_PIPELINE.md),
 and [remote/parallel scaling assessment](reports/ppo_pipeline_foundation_20261028/SCALING.md).
 The policy architecture, four-frame RGB/557-D observation, five-action mapping,
 reward coefficients and normal confidence thresholds remain unchanged. No
-recurrent model, integrated demonstration loss, detector removal or parallel
-simulation backend was added.
+recurrent model or integrated demonstration loss was added. Later headless work
+added parallel collection and an optional detector-off mode; the recovered
+experiments below describe the earlier baseline.
 
 ### Completed learning experiments
 
@@ -509,3 +559,43 @@ or a validated six-worker speed improvement**. It retains HTML overlays and
 uses bounded, movement-free MENU confirmation extensions with the existing
 terminal acceptance rules. See [capture investigation](reports/CDP_CAPTURE_20261030.md)
 and [headless options](README_HEADLESS_PARALLEL.md).
+
+An additional opt-in `--headless-capture electron` prototype uses raw composited
+BGRA frames with no JPEG/Base64 stage. One and four workers passed short live
+checks; six stopped with stale frames and 99% RAM usage. Four workers completed
+1024 optimized transitions with all audits passing, 97-101ms median policy
+request-to-command latency and 125-131ms p95, with peak RAM 87.2%. These are
+diagnostics, not proof of long-run stability or better learning. Electron workers
+are muted by default. Playwright remains the default and fallback. See
+[Electron setup and validation](README_ELECTRON_CAPTURE.md).
+
+For comparable per-stage timings on either backend, use the opt-in
+`--profile-reaction` flag. The [pipeline profiling guide](README_PPO_PIPELINE_PROFILE.md)
+explains the short four-worker check, buffered traces, CUDA event limits and
+analysis of policy/guard frame lineage. Profiling does not change safety thresholds.
+The [31 October profile comparison](reports/PIPELINE_PROFILE_20261031.md) identified
+raw frame reception and guard recapture as substantial costs. A frame-sized
+Electron receive buffer passed two short four-worker checks, with pooled
+request-to-command median 54-57ms and p95 116-120ms. Playwright remains the default.
+
+The next optional transfer path, `--electron-transport shared_memory`, replaces
+bulk socket pixels with a validated Windows mapping. `--reuse-frame-state`
+reuses classification only within an identical capture; each new capture is
+still classified. See [shared-memory setup and safeguards](README_PPO_SHARED_MEMORY.md).
+
+31 October MENU recovery fix: a valid, confident post-resume MENU prediction
+now requests bounded independent confirmation even when its first template score
+is weak. Terminal acceptance still requires four consecutive fresh ML+template
+confirmations; ML alone cannot authorize movement, a death or a restart. The
+overnight failure is reproduced in regression tests, including passive terminal
+credit and safe refusal cases. 162 focused tests pass; live recovery has not yet
+been validated. This changes recovery routing, not capture speed or rewards.
+
+31 October normal-play MENU follow-up: the four-worker shared-memory continuation
+stopped after 53 updates (27136 optimized transitions) when two animated template
+dips prevented entry to the MENU-only extra-check path. A narrowly supported
+candidate can now request fresh checks with repeated strong template evidence
+and corroboration on both final frames. Terminal acceptance rules, classifier
+weights and capture-age limits are unchanged. Exact failure replay and actual
+guard tests cover recovery and refusal paths; live recovery remains unverified.
+See [evidence and checkpoint status](reports/MENU_CONFIRMATION_20261031.md).

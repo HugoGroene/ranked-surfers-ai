@@ -19,14 +19,14 @@ class BrowserImage:
 def compose_guard_frame(image,left,top,width=1920,height=1080):
     """Same BGRA pixels as the historical padded guard, using contiguous copies."""
     h,w=image.shape[:2]
-    if image.ndim!=3 or image.shape[2]!=3 or min(left,top,width-left-w,height-top-h)<0:
+    if image.ndim!=3 or image.shape[2] not in (3,4) or min(left,top,width-left-w,height-top-h)<0:
         raise GuardUncertainError('Canvas does not fit guard image')
-    bgra=cv2.cvtColor(image,cv2.COLOR_BGR2BGRA)
+    bgra=cv2.cvtColor(image,cv2.COLOR_BGR2BGRA) if image.shape[2]==3 else image
     return cv2.copyMakeBorder(bgra,top,height-top-h,left,width-left-w,
                              cv2.BORDER_CONSTANT,value=(0,0,0,255))
 
 
-def install(trainer,capture='playwright'):
+def install(trainer,capture='playwright',*,profile=False,electron_transport='socket',electron_window=None):
     original = trainer.build_env_class
 
     def build():
@@ -39,14 +39,28 @@ def install(trainer,capture='playwright'):
                 self.grabber = BrowserImage()
                 self.grabber.image = None
                 self.playwright = await ctrl.async_playwright().start()
-                self.browser = await self.playwright.chromium.launch(headless=True,
-                    args=['--enable-gpu', *BACKGROUND_SWITCHES])
                 clean = getattr(self,'_framing_profile','legacy') == 'canvas_v1'
                 self._headless_wh = (1920,945) if clean else (1904,937)
                 width,height = self._headless_wh
-                self.context = await self.browser.new_context(
-                    viewport={'width':width,'height':height}, device_scale_factor=1)
-                self.page = await self.context.new_page()
+                if capture=='electron':
+                    from tools.ppo_electron_capture import ElectronCapture
+                    if electron_window is None:
+                        self._electron_host=await ElectronCapture.launch(
+                            self.playwright,self.output_dir/'electron',width,height,profile=profile,
+                            transport=electron_transport)
+                    else:
+                        self._electron_host=await ElectronCapture.attach(
+                            self.playwright,electron_window,width,height,transport=electron_transport)
+                    self.browser=self._electron_host.browser
+                    self.context=self._electron_host.context
+                    self.page=self._electron_host.page
+                    self._headless_source=self._electron_host
+                else:
+                    self.browser = await self.playwright.chromium.launch(headless=True,
+                        args=['--enable-gpu', *BACKGROUND_SWITCHES])
+                    self.context = await self.browser.new_context(
+                        viewport={'width':width,'height':height}, device_scale_factor=1)
+                    self.page = await self.context.new_page()
                 self._headless_errors = []
                 self.page.on('pageerror', lambda error: self._headless_errors.append(str(error)))
                 cdp = await self.context.new_cdp_session(self.page)
@@ -89,20 +103,25 @@ def install(trainer,capture='playwright'):
                 began = time.perf_counter()
                 if self._background_geometry_invalid:
                     raise GuardUncertainError(self._background_geometry_invalid)
-                data = (await self._headless_source.capture() if capture in ('cdp','stream') else
+                data = (await self._headless_source.capture() if capture in ('cdp','stream','electron') else
                         await screenshot_canvas(self.page,self.canvas,image_type='jpeg',quality=90))
                 received=time.perf_counter()
-                image = cv2.imdecode(np.frombuffer(data,np.uint8),cv2.IMREAD_COLOR)
+                image = data if capture=='electron' else cv2.imdecode(np.frombuffer(data,np.uint8),cv2.IMREAD_COLOR)
+                decoded_at=time.perf_counter() if profile else None
                 width,height = self._headless_wh
-                if image is None or image.shape != (height,width,3):
+                if image is None or image.shape != (height,width,4 if capture=='electron' else 3):
                     raise GuardUncertainError('Headless canvas shape changed')
                 left = self._background_canvas['left']
                 raw=compose_guard_frame(image,left,87)
                 self.grabber.image = raw
                 self._headless_capture_ms = (time.perf_counter()-began)*1000
                 self._headless_capture_timing=dict(request_started_at=began,image_received_at=received)
-                if capture=='stream':
+                if capture in ('stream','electron'):
                     self._headless_capture_timing.update(self._headless_source.last_timing)
+                if profile:
+                    values=self._headless_capture_timing.setdefault('capture_profile',{})
+                    values.update(decode_ms=(decoded_at-received)*1000,
+                                  guard_compose_ms=(time.perf_counter()-decoded_at)*1000)
 
             async def _capture(self):
                 await self._headless_image()
@@ -139,6 +158,19 @@ def install(trainer,capture='playwright'):
             async def _background_verify_window(self):
                 if await self._background_geometry() != self._background_view:
                     raise GuardUncertainError('Headless geometry changed')
+
+            async def _close_browser(self):
+                if getattr(getattr(self,'_electron_host',None),'shared_host',False):
+                    try:await self._electron_host.close()
+                    finally:
+                        # Do not close a browser/context owned by sibling workers.
+                        if self.playwright is not None:await self.playwright.stop()
+                    return
+                try:
+                    if getattr(self,'_electron_host',None) is not None:
+                        await self._electron_host.close()
+                finally:
+                    await super()._close_browser()
 
         return HeadlessEnv
     trainer.build_env_class = build

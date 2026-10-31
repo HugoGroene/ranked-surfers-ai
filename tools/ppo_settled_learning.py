@@ -81,12 +81,12 @@ class TimedDictBuffer(DictRolloutBuffer):
 
 class SettledPPO(PPO):
     """Single DummyVecEnv + Monitor; explicit corrected collection protocol."""
-    def configure_settled(self, raw, output, reference_seconds=.05, max_minutes=None):
+    def configure_settled(self, raw, output, reference_seconds=.05, max_minutes=None, *, buffer_class=TimedDictBuffer):
         if self.n_envs!=1 or self.use_sde:
             raise ValueError('Settled collector requires one discrete local environment')
         if not np.isfinite(reference_seconds) or reference_seconds<=0:
             raise ValueError('Invalid time-discount reference')
-        self.rollout_buffer = TimedDictBuffer(self.n_steps,self.observation_space,
+        self.rollout_buffer = buffer_class(self.n_steps,self.observation_space,
             self.action_space,device=self.device,gamma=self.gamma,
             gae_lambda=self.gae_lambda,n_envs=1)
         self.rollout_buffer.reference_seconds = reference_seconds
@@ -143,15 +143,22 @@ class SettledPPO(PPO):
             old_obs = self._last_obs
             reward_before = raw.survival_rewards.last_duration
             episode_before = raw.episode_number
+            profiler=getattr(raw,'_pipeline_profiler',None)
+            profile_row=(profiler.begin_policy(int(self.num_timesteps)+1,prior_capture,passive)
+                         if profiler is not None else None)
             with th.no_grad():
                 tensor = obs_as_tensor(old_obs,self.device)
+                if profiler is not None:profiler.tensor_ready(profile_row)
                 if passive:
                     values = self.policy.predict_values(tensor)
                     actions = np.array([0])
                     log_probs = th.zeros(1,device=self.device)
                 else:
                     sampled,values,log_probs = self.policy(tensor)
+                if profiler is not None:profiler.forward_enqueued(profile_row)
+                if not passive:
                     actions = sampled.cpu().numpy()
+            if profiler is not None:profiler.policy_ready(profile_row)
             new_obs,rewards,dones,infos = (
                 self._passive_step(env,'resync') if passive else env.step(actions))
             info = infos[0]

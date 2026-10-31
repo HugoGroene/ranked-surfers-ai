@@ -14,6 +14,9 @@ D3D11. Checkpoints, raw demonstrations and Python environments remain local.
   linear letterbox to 512x288; separate raw safety images. Detector weights unchanged.
   New BC recording/training supports this version; historical datasets stay legacy.
 - Six previews in three columns/two rows; one preview/s from existing images.
+  The preview cap is adjustable to 1/5/10/15/30 FPS; encoding is background,
+  latest-only work and never requests extra game captures. Actual unique FPS is
+  limited by collected observations. See [scaling options](README_PPO_SCALING.md).
   The graph appends immutable points at 10-second boundaries and retains all points
   for the full requested runtime. Each averages the last 100 completed episodes,
   pooled across workers. Time-limited episodes are included and counted explicitly.
@@ -21,6 +24,12 @@ D3D11. Checkpoints, raw demonstrations and Python environments remain local.
   CPU/RAM/GPU/VRAM. Telemetry/graph refresh every five seconds in the browser.
 - Atomic latest checkpoint plus separate numbered snapshots at save barriers.
   Source checkpoint remains unchanged. Saved dashboards can be reopened without PPO.
+- Terminal survival summaries work without a dashboard. After successful training,
+  `--end-plot auto` (default) opens the same saved survival curve in Matplotlib
+  when no dashboard was enabled, and saves a PNG. Use show/save/off to override;
+  frozen benchmarks skip automatic plots. The window opens only after workers
+  stop and results are saved. Close it to return to the terminal. See
+  [post-training plot options](README_PPO_SCALING.md#plot-the-mean-curve-after-training).
 
 ## Evidence and limitations
 
@@ -96,6 +105,13 @@ current trainer without their explicit source/version checks.
 | `playwright` | Existing canvas-clipped rendered-page screenshot | Default |
 | `cdp` | Direct CDP surface screenshot with cached, verified canvas clip | Similar capture median; no demonstrated speed improvement |
 | `stream` | Demand-acknowledged latest rendered-page frame | Experimental; improves one-worker timing, regresses six-worker median |
+| `electron` | Raw offscreen rendered-page bitmap | Short checks passed with one/four workers; six failed freshness/memory checks; see [Electron guide](README_ELECTRON_CAPTURE.md) |
+
+Electron transport can optionally use `--electron-transport shared_memory` with
+the isolated Koffi dependency. `--reuse-frame-state` caches the frozen classifier
+only for an identical capture, without creating new evidence or changing frame
+freshness. See [setup and results](README_PPO_SHARED_MEMORY.md). Socket transfer
+and the default Playwright backend remain available.
 
 Streaming keeps one latest image slot, checks viewport geometry and browser frame
 timestamps, and requires a new frame presented after each capture request. It
@@ -106,11 +122,25 @@ still apply. Neither bound guarantees that the selected policy action remains
 that recent at dispatch. Both sources include rendered HTML overlays.
 
 Faster sampling exposed nearly corroborated MENU transitions exhausting the
-original six-capture window. Only stream workers may add up to six passive
+original six-capture window. Stream and Electron workers may add up to six passive
 MENU-only checks when the last five readings consistently predict MENU, at least
 four have template corroboration, and at least one has strong menu evidence.
+An additional animation-dip candidate may request the same bounded checks when
+those five readings contain two strong template hits, at least three corroborated
+readings, and corroboration on BOTH final frames. This only requests new evidence;
+it cannot confirm a terminal from the original six captures.
+Repeated moderate evidence can also request these checks when at least four of
+the five MENU readings are corroborated and the last three are corroborated.
+It still needs a new capture to complete the original four-consecutive rule.
 The existing terminal acceptance rules still decide confirmation; this extension
 can never authorize a gameplay action. Conflicting gameplay evidence aborts it.
+
+The four-worker two-hour attempt on 31 October stopped after 53 shared updates
+and 27136 optimized transitions because the old candidate gate excluded this
+two-dip pattern. Exact evidence replay and actual runtime tests cover the routing
+fix; no classifier retraining or terminal threshold change was made. The existing
+six extra captures at 45ms intervals remain the bound. See the
+[failure, checkpoint verification and validation limits](reports/MENU_CONFIRMATION_20261031.md).
 
 Two six-worker updates completed with all six settled-learning audits passing,
 but median request-to-command latency was 128-133ms versus 89-97ms in the earlier
@@ -148,3 +178,27 @@ Inspect parallel_training.json, all six worker audits, optimized coverage,
 survival.json, progress.csv, latency metrics and system_usage.jsonl. Evaluate
 visible-browser transfer separately. The assistant supplies commands; this
 document does not establish that the overnight run was started or completed.
+
+### Actual overnight outcome and recovery fix (31 October)
+
+`reports/v612_canvas_6workers_5h_20261030_042039` stopped after 2727.28 active
+seconds, 74 shared updates and 56832 optimized transitions. The saved latest.zip
+passes ZIP integrity checks and contains 1769886 total timesteps; the source is
+unchanged. All committed worker ledger prefixes pass the settled-learning audit.
+Workers 2, 4 and 5 each have one unoptimized trailing transition, which makes
+their untrimmed ledgers fail full coverage as expected after interruption.
+
+Worker 0 reached a rendered MENU during post-resume refresh (ML .999, template
+.484). The former .544 candidate-entry requirement prevented independent
+confirmation from even starting. The current fix allows a valid confident MENU
+prediction to request the existing bounded confirmation path. It still requires
+four consecutive fresh ML+template corroborations before terminal handling and
+guarded restart. Eight inconclusive confirmation captures still stop safely.
+Invalid evidence, focus loss, Pause exclusion and freshness checks remain active.
+
+162 focused tests pass, including replay of the failed values, persistent weak
+templates, gameplay disagreement and integrated passive terminal/death credit.
+An older uncertainty fixture was updated to include the later verified Pause
+reference through the shared runtime fixture. No live test or new long run was
+started for this fix; no checkpoint or historical result was modified. The fix
+does not promise recovery from every possible UI failure or improve capture speed.

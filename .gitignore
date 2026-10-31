@@ -42,3 +42,6 @@ rankedsurfers-downloaded/cdn-cgi/
 /reports/**/learning_transitions.jsonl
 /reports/**/ppo_reward_step_audit.jsonl
 /reports/**/system_usage.jsonl
+/reports/**/electron/profile/
+/reports/**/pipeline_profile.jsonl
+/reports/**/decisions.jsonl

@@ -79,6 +79,10 @@ def build_env_class():
             self.stale_observation_count = 0
             self.hazard_nonzero_observations = 0
             self.last_aux = None
+            self._detector_feature_cache = None
+            if getattr(a,'cache_detector_features',False):
+                from tools.ppo_detector_features import DetectorFeatureCache
+                self._detector_feature_cache=DetectorFeatureCache()
             self.action_context = ActionContext(assume_center=bool(a.assume_center_lane))
             self.column_nonzero_observations = 0
             self.guard_allowed = 0
@@ -150,9 +154,14 @@ def build_env_class():
                 else:
                     self.detector_skipped_busy += 1
 
-            hazards, age_ms, fresh = encode_hazards(
-                self.last_detection, now=now, episode_tag=self.episode_tag,
-                max_stale_ms=self.max_stale_s*1000.)
+            columns=None
+            if self._detector_feature_cache is not None:
+                hazards,age_ms,fresh,columns=self._detector_feature_cache.read(
+                    self.last_detection,now=now,episode_tag=self.episode_tag,max_stale_ms=self.max_stale_s*1000.)
+            else:
+                hazards, age_ms, fresh = encode_hazards(
+                    self.last_detection, now=now, episode_tag=self.episode_tag,
+                    max_stale_ms=self.max_stale_s*1000.)
             self.hazard_observation_count += 1
             if not fresh:
                 self.stale_observation_count += 1
@@ -166,7 +175,7 @@ def build_env_class():
                              now-self.episode_started, self.frame_intervals, age_ms,
                              snapshot=self.last_detection, episode_tag=self.episode_tag,
                              now=now, action_context=self.action_context,
-                             max_stale_ms=self.max_stale_s*1000.)
+                             max_stale_ms=self.max_stale_s*1000.,precomputed_columns=columns)
             # Screen-column summaries are supplementary; they don't imply danger.
             if aux[V6_AUX_DIM:V6_AUX_DIM+SCREEN_COLUMN_DIM].any():
                 self.column_nonzero_observations += 1
@@ -312,18 +321,21 @@ def build_env_class():
                             continue
                     # A terminal screen can appear AFTER Unity resumes, while
                     # we are passively capturing the four fresh PPO frames.
-                    # Record its FIRST corroborated observation timestamp,
-                    # but never authorize a menu from ML confidence alone.
-                    if (state == 'MENU' and
-                            probs.get('MENU', 0.) >= self.state_confidence and
-                            menu_score >= float(self.args.threshold) * .80 and
-                            self._ppo_post_resume_menu_candidate is None):
-                        self._ppo_post_resume_menu_candidate = (
-                            time.monotonic(), time.perf_counter(), time.time())
+                    # A confident MENU prediction requests independent checks
+                    # even if the first animated template is weak. It cannot
+                    # authorize a terminal/reset: the callback still requires
+                    # four fresh, consecutive ML+template confirmations.
                     decision = window.observe(
                         state=state, probs=probs, menu_score=menu_score,
                         confidence=self.state_confidence,
                         menu_threshold=self.args.threshold)
+                    if (window.menu_candidate and
+                            self._ppo_post_resume_menu_candidate is None):
+                        self._ppo_post_resume_menu_candidate = (
+                            time.monotonic(), time.perf_counter(), time.time())
+                        print('[PPO POST RESUME MENU] Candidate requests independent '
+                              f'confirmation; initial menu_score={menu_score:.3f}; '
+                              'NO movement or terminal accepted.', flush=True)
                     resumed_at = getattr(self, '_ppo_resume_trace_start_perf', None)
                     since_resume_ms = ((time.perf_counter() - resumed_at) * 1000.0
                                        if resumed_at is not None else None)
@@ -977,7 +989,7 @@ def build_env_class():
                     if reading.ml_menu and not reading.menu_evidence:
                         self.guard_ml_menu_disagreements += 1
                     decision = sequence_decision(readings, max_frames=6)
-                if decision=='ABORT' and getattr(self,'_headless_backend',None)=='stream':
+                if decision=='ABORT' and getattr(self,'_headless_backend',None) in ('stream','electron'):
                     from tools.ppo_stream_menu_tail import pending_menu_tail,confirm_menu_tail
                     if pending_menu_tail(readings):
                         print('[V612 GUARD] Completing a corroborated MENU transition; '
@@ -1159,7 +1171,8 @@ def build_env_class():
         def hazard_report(self):
             report = super().hazard_report()
             report['v5_segmentation']['shadow_only'] = False
-            report['v5_segmentation']['fed_into_ppo'] = True
+            report['v5_segmentation']['fed_into_ppo'] = self.detector_model is not None
+            report['detector_mode']=getattr(self,'detector_mode','on')
             report['v5_segmentation']['feature_version'] = FEATURE_VERSION
             report['v5_segmentation']['screen_column_nonzero_observations'] = self.column_nonzero_observations
             report['v5_segmentation']['assumed_lane_unverified'] = self.action_context.assume_center
@@ -1290,6 +1303,8 @@ def read_policy_probs(model, obs):
     """Return actual current categorical policy probabilities (not action counts)."""
     if obs is None:
         return None
+    if hasattr(model.policy,'diagnostic_snapshot'):
+        return model.policy.diagnostic_snapshot()
     try:
         import torch
         with torch.no_grad():
@@ -1761,21 +1776,27 @@ def build_callback(a, output, raw=None):
     return V61Callback()
 
 
-def create_live_env(a, output, *, browser_session=None):
+def create_live_env(a, output, *, browser_session=None, detector_service=None):
     from stable_baselines3.common.monitor import Monitor
     import train_rs_v2_verify as v2
     from train_rs_v3_ppo import v2_args
-    from ultralytics import YOLO
     from rs_v5_shadow_segmentation import check_model_names, detect_v5
 
-    detector = YOLO(str(a.detector))
-    check_model_names(detector)
+    detector=None
+    if getattr(a,'detector_mode','on')=='on':
+        if detector_service is not None:
+            detector=detector_service
+        else:
+            from ultralytics import YOLO
+            detector=YOLO(str(a.detector))
+        check_model_names(detector)
     if a.torch_threads > 0:
         import torch
         torch.set_num_threads(a.torch_threads)
     # Warm up before measuring, avoiding GPU first-run stalls.
-    _ = detect_v5(detector,np.zeros((576,1024,3),dtype=np.uint8),
-                  time.perf_counter(),0,0,a.imgsz,a.conf)
+    if detector is not None and detector_service is None:
+        _ = detect_v5(detector,np.zeros((576,1024,3),dtype=np.uint8),
+                      time.perf_counter(),0,0,a.imgsz,a.conf)
     arg = argparse.Namespace(url='http://localhost:8000', fps=a.fps,
                              max_minutes=a.max_minutes,fullscreen=True)
     cfg=v2_args(arg)
@@ -1785,6 +1806,7 @@ def create_live_env(a, output, *, browser_session=None):
     Env=build_env_class()
     demos=v2.DemoStore(v2.DEMO_ROOT,max_samples=100,load_existing=False)
     raw=Env(cfg,output,demos,detector,a=a)
+    raw.detector_mode=getattr(a,'detector_mode','on')
     if a.mode == 'train':
         # Full reward audits stream to disk; keep only recent debug timing
         # dictionaries in RAM during multi-hour training.
@@ -1858,6 +1880,7 @@ def train(a, *, browser_session=None):
         else:
             model=make_model(monitored,a)
         model.framing_profile = getattr(a,'framing_profile','legacy')
+        model.detector_mode = getattr(a,'detector_mode','on')
         if getattr(a,'settled_learning',False):
             from tools.ppo_settled_learning import SettledPPO,reference_seconds_for
             model.__class__ = SettledPPO
@@ -2053,6 +2076,10 @@ def parse_args(argv=None):
                    help='Explicitly override only these saved settings when resuming training; all others retain checkpoint values')
     p.add_argument('--seed',type=int,default=123)
     p.add_argument('--detector',type=Path,default=Path('ai_data/v5_hazards/runs/segment_round04/weights/best.pt'))
+    p.add_argument('--detector-mode',choices=['on','off'],default='on',
+                   help='Ablation: off omits YOLO and represents detector fields as unavailable; safety classifier stays enabled')
+    p.add_argument('--cache-detector-features',action='store_true',
+                   help='Cache immutable detector geometry; still check source age and episode every observation')
     p.add_argument('--imgsz',type=int,default=960)
     p.add_argument('--conf',type=float,default=.20)
     p.add_argument('--detect-every',type=int,default=3)
@@ -2133,7 +2160,7 @@ def parse_args(argv=None):
         if a.resolution==(512,288):
             print('[CHECK] Tip: use --resolution 160x96 for a faster offline test.',flush=True)
     else:
-        if not a.detector.is_file() or not a.state_model.is_file():
+        if (a.detector_mode=='on' and not a.detector.is_file()) or not a.state_model.is_file():
             p.error(f'Missing V5 model or V4 screen state classifier: {a.detector}, {a.state_model}')
         if not 0.5 <= a.state_confidence < 1.0:
             p.error('State confidence must be in [0.5,1)')

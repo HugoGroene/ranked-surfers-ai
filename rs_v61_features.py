@@ -117,9 +117,10 @@ class ActionContext:
 
 def encode_aux(hazards, action_history, episode_seconds, frame_intervals,
                detection_age_ms, *, snapshot, episode_tag, now, action_context,
-               max_stale_ms=300.):
+               max_stale_ms=300., precomputed_columns=None):
     base=encode_v6_aux(hazards,action_history,episode_seconds,frame_intervals,detection_age_ms)
-    columns=screen_columns(snapshot,episode_tag=episode_tag,now=now,max_stale_ms=max_stale_ms)
+    columns=(screen_columns(snapshot,episode_tag=episode_tag,now=now,max_stale_ms=max_stale_ms)
+             if precomputed_columns is None else precomputed_columns)
     result=np.concatenate([base,columns,action_context.vector(now)]).astype(np.float32)
     if result.shape != (AUX_DIM,) or not np.isfinite(result).all() or np.any(result<0) or np.any(result>1):
         raise RuntimeError(f'Invalid V6.1 feature shape/range: {result.shape}')
