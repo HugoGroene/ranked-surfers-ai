@@ -9,6 +9,14 @@ results below retain their original definitions. See
 [the audit patch guide](README_PPO_AUDIT_PATCH.md) for flags, BC compatibility and
 validation limits. The screen-state safety classifier remains enabled.
 
+Latest readiness check: 15 minutes, 31,872 optimized transitions at 34.95/s,
+all three audits passed. The 3/4/5/6-worker training benchmark completed all stages;
+three workers retain the best reaction speed (about 32 ms median, 39 ms p95).
+Four gains throughput but worsens p95 to about 70 ms; six is slower overall.
+Recommended continuation: three separate Electron hosts, shared-memory frame and
+rollout transfers, detector off, dense buffers, no dashboard. Latest continuation
+checkpoint: `reports/v612_readiness_15m_20261031_203221/latest.zip` (local only).
+
 The detector-off two-hour continuation completed 247,296 optimized transitions
 with all three learning audits passing. Matched 100-episode deterministic
 evaluations measured 4.44 seconds before versus 4.38 seconds afterward; no clear
