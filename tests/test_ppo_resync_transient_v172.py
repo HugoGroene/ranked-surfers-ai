@@ -263,17 +263,15 @@ class InstallerTests(unittest.TestCase):
 
     def test_exact_one_method_change(self):
         # No classifier or reward modifications hidden in the installer.
-        if not (ROOT / 'train_rs_v612_ppo.py').is_file():
-            self.skipTest('Not running in local repository')
-        installed = (ROOT / 'train_rs_v612_ppo.py').read_bytes()
-        if installed.count(patch.OLD) == 1:
-            self.assertEqual(installed.count(patch.NEW),0)
-            changed = installed.replace(patch.OLD, patch.NEW)
-            self.assertEqual(changed.replace(patch.NEW, patch.OLD),installed)
-        elif installed.count(patch.NEW) == 1:
-            self.assertEqual(installed.count(patch.OLD),0)
-        else:
-            self.fail('Installed trainer has neither exact v1.7.1 nor v1.7.2 method')
+        # Test the historical installer's exact input, not today's superseded
+        # trainer method (covered separately by the live-method offline tests).
+        prefix=b'# classifier and reward code before the replacement\n'
+        suffix=b'\n# classifier and reward code after the replacement\n'
+        installed=prefix+patch.OLD+suffix
+        self.assertEqual(installed.count(patch.OLD),1)
+        changed=installed.replace(patch.OLD,patch.NEW)
+        self.assertEqual(changed,prefix+patch.NEW+suffix)
+        self.assertEqual(changed.replace(patch.NEW,patch.OLD),installed)
 
     def test_refuse_modified_trainer(self):
         with tempfile.TemporaryDirectory() as d:

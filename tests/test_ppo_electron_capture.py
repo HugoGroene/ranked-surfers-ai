@@ -17,6 +17,20 @@ def metadata(**changes):
 
 
 class ElectronCaptureTests(unittest.TestCase):
+    def test_monotonic_bound_ignores_wall_clock_jumps(self):
+        for stamp in [0,1e20,None]:
+            frame,timing=decode_frame(metadata(paint_wall=stamp),bytes(8),2,1,1,
+                                     10.02,500,request_started=10.)
+            self.assertAlmostEqual(timing['frame_age_upper_bound_ms'],20.)
+            self.assertNotIn('paint_callback_at',timing)
+
+    def test_monotonic_bound_rejects_old_and_invalid_requests(self):
+        with self.assertRaises(StaleElectronFrame):
+            decode_frame(metadata(),bytes(8),2,1,1,10.06,500,request_started=10.)
+        for received in [9.,float('nan')]:
+            with self.assertRaises(GuardUncertainError):
+                decode_frame(metadata(),bytes(8),2,1,1,received,500,request_started=10.)
+
     def test_raw_channels_orientation_and_guard_padding(self):
         pixels=bytes([0,0,255,255,255,0,0,255])
         frame,timing=decode_frame(metadata(),pixels,2,1,1,time.perf_counter(),time.time())

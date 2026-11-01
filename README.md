@@ -1,5 +1,14 @@
 # Ranked Surfers AI — PPO V6.1.2 + Human Demonstrations V1.3
 
+**1 November experiment update:** the isolated road-vision suite now compares
+policy crops, existing/new spatial encoders, 128–384 pixel road inputs and four
+temporal spacing patterns. Full-resolution Electron shared-texture capture feeds
+the experimental paths. Production defaults are unchanged. See
+[overnight commands and observation details](development/experiments/road_vision/OVERNIGHT.md)
+and [the pre-run review](reports/PRE_OVERNIGHT_REVIEW_20261101.md).
+All smoke checks precede longer scratch training; completed stages are resumable.
+No new configuration is yet a proven learning winner.
+
 **Applied audit follow-up (31 October):** detector-free operation is now the default
 for training, evaluation and recording, with `canvas_v1` framing. Checkpoint input
 contracts prevent silent changes; workers receive distinct sampling seeds;

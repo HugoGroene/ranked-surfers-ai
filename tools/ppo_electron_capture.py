@@ -21,7 +21,7 @@ class StaleElectronFrame(GuardUncertainError):
     pass
 
 
-def decode_frame(metadata,pixels,width,height,previous_serial,received,wall):
+def decode_frame(metadata,pixels,width,height,previous_serial,received,wall,request_started=None):
     expected=width*height*4
     if (metadata.get('width')!=width or metadata.get('height')!=height or
         metadata.get('channels')!=4 or metadata.get('format')!='BGRA' or
@@ -30,6 +30,19 @@ def decode_frame(metadata,pixels,width,height,previous_serial,received,wall):
     serial=metadata.get('serial')
     if not isinstance(serial,int) or isinstance(serial,bool) or serial<=previous_serial:
         raise GuardUncertainError('Electron reused or regressed frame serial')
+    # Both Electron hosts answer a request only with a subsequent paint callback.
+    # The Python monotonic request roundtrip therefore bounds callback age above,
+    # including bitmap extraction, transport and scheduling, without clock sync.
+    if request_started is not None:
+        age=received-request_started
+        if not math.isfinite(age) or age<0:
+            raise GuardUncertainError(f'Electron monotonic request clock invalid: age={age!r}')
+        if age>.05:
+            raise StaleElectronFrame(f'Electron frame age upper bound {age*1000:.3f}ms exceeds 50ms; serial={serial}')
+        return np.frombuffer(pixels,np.uint8).reshape(height,width,4),dict(
+            frame_age_upper_bound_ms=age*1000,electron_serial=serial,
+            frame_clock_kind='monotonic request roundtrip upper bound',
+            capture_kind='electron_raw_bitmap')
     stamp=metadata.get('paint_wall')
     if not isinstance(stamp,(int,float)) or not math.isfinite(stamp) or wall-stamp<-.003:
         raise GuardUncertainError('Electron frame clock invalid')
@@ -171,7 +184,8 @@ class ElectronCapture:
             metadata,pixels,header_at,payload_at=await asyncio.wait_for(receive(),timeout=2.)
             received=time.perf_counter()
             try:
-                image,timing=decode_frame(metadata,pixels,self.width,self.height,self.serial,received,time.time())
+                image,timing=decode_frame(metadata,pixels,self.width,self.height,self.serial,
+                                         received,time.time(),request_started=began)
             except StaleElectronFrame:
                 self.serial=metadata['serial']
                 raise

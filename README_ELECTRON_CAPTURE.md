@@ -33,12 +33,17 @@ Dependencies are isolated under ignored `development/local/electron_worker`:
 
 ```powershell
 npm.cmd install --prefix development/local/electron_worker --ignore-scripts `
-  --no-audit --no-fund --save-exact electron@45.2.1
+  --no-audit --no-fund --save-exact electron@45.2.1 koffi@3.3.6
 node development/local/electron_worker/node_modules/electron/install.js
 ```
 
 The runtime must exist at
 `development/local/electron_worker/node_modules/electron/dist/electron.exe`.
+Koffi 3.3.6 is also required for the shared-memory and experimental D3D11 bridge.
+Existing installations need no reinstall for this batch. The optional shared-GPU
+texture experiment and its limits are documented in
+`development/experiments/capture_pipeline/README.md`; the bitmap path described
+above remains available.
 The official installer downloads and verifies the release. On this machine its
 download stalled; a bounded direct download from the official GitHub release
 was used instead, with SHA256 checked against the pinned package's checksums.json
@@ -118,3 +123,14 @@ with two strong template hits, three corroborated readings and corroboration
 on both final frames. Original terminal rules and the six-extra-capture bound
 are unchanged. Offline failure replay passes; live recovery is still unverified.
 See [the focused recovery report](reports/MENU_CONFIRMATION_20261031.md).
+# Frame-clock correction (1 November)
+
+Live capture now bounds frame age with Python's monotonic request-to-receipt
+duration. Both Electron hosts only answer with a paint callback occurring after
+the request; the roundtrip is therefore a conservative upper bound on callback
+age. The 50 ms bound, serial/geometry checks and bounded stale-frame retries
+remain enabled. Wall-clock corrections no longer invalidate fresh frames.
+The bound includes waiting for paint, so it can reject some frames previously
+accepted. This change passed 13 capture tests but requires a short live benchmark
+before another overnight run. Paint-callback timing is no longer inferred from
+cross-process wall clocks; request-to-command metrics remain available.

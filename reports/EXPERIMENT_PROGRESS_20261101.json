@@ -1,0 +1,1710 @@
+{
+  "purpose": "Cumulative evidence; distinct stages retained, no pooled learning winner",
+  "capture_batches": [
+    {
+      "report": "reports/capture_matrix_20261101_154254_066769/comparison.json",
+      "sha256": "f0d7c7251e17544197750ab46acd7e6adc8bb62ab1746f013871cf374379d20c",
+      "status": "COMPLETE",
+      "source_unchanged": true,
+      "model_updated": false,
+      "checkpoint": {
+        "path": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\v612_3workers_menu_recovery_24h_20261101_111341\\latest.zip",
+        "sha256": "c733ca3fcfd8228b7b1c724968d6d8a7c674128292e3aaf9ddc13b3990b5058a",
+        "num_timesteps": 3493278
+      },
+      "calibration_stages": 5,
+      "frozen_stages": [
+        {
+          "arm": "bitmap_100",
+          "workers": 1,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w1_00_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 18.924843095430084,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 710,
+              "median_ms": 26.325850005378015,
+              "p95_ms": 34.386865004489664,
+              "max_ms": 108.88980000163428
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_75",
+          "workers": 1,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w1_01_bitmap_75",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 19.520827583046263,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 794,
+              "median_ms": 26.418600005854387,
+              "p95_ms": 33.666729996184586,
+              "max_ms": 109.10810000495985
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_50",
+          "workers": 1,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w1_02_bitmap_50",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 20.275801173611974,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 751,
+              "median_ms": 25.59340000152588,
+              "p95_ms": 33.92444999917643,
+              "max_ms": 98.58089999761432
+            }
+          ]
+        },
+        {
+          "arm": "gpu_100",
+          "workers": 1,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w1_03_gpu_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 21.055580997382815,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 825,
+              "median_ms": 23.93730000767391,
+              "p95_ms": 33.545940008480095,
+              "max_ms": 110.33340000722092
+            }
+          ]
+        },
+        {
+          "arm": "gpu_half_readback",
+          "workers": 1,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w1_04_gpu_half_readback",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 20.812288092593818,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 804,
+              "median_ms": 23.063100001309067,
+              "p95_ms": 33.407715002977056,
+              "max_ms": 98.39179999835324
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 1,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w1_05_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 19.056637062306116,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 748,
+              "median_ms": 26.179349995800294,
+              "p95_ms": 34.23109000068507,
+              "max_ms": 111.79819999961182
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w3_00_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 47.77463993189213,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 587,
+              "median_ms": 32.56150000379421,
+              "p95_ms": 38.57232000736985,
+              "max_ms": 152.4135999934515
+            },
+            {
+              "count": 585,
+              "median_ms": 32.707799997297116,
+              "p95_ms": 39.42220000026282,
+              "max_ms": 136.43619998765644
+            },
+            {
+              "count": 584,
+              "median_ms": 32.3699000000488,
+              "p95_ms": 39.4122699930449,
+              "max_ms": 135.94079999893438
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_75",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w3_01_bitmap_75",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 46.69365511292627,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 650,
+              "median_ms": 31.990849995054305,
+              "p95_ms": 38.72681000357261,
+              "max_ms": 125.129799998831
+            },
+            {
+              "count": 590,
+              "median_ms": 32.23539999453351,
+              "p95_ms": 39.72528000304007,
+              "max_ms": 122.6979999919422
+            },
+            {
+              "count": 555,
+              "median_ms": 32.482800001162104,
+              "p95_ms": 39.065230000414886,
+              "max_ms": 118.39970000437461
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_50",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w3_02_bitmap_50",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 42.59209709913344,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 522,
+              "median_ms": 32.588449998002034,
+              "p95_ms": 38.81948500129511,
+              "max_ms": 103.7351000122726
+            },
+            {
+              "count": 575,
+              "median_ms": 32.57859998848289,
+              "p95_ms": 39.62418000155594,
+              "max_ms": 123.20780000300147
+            },
+            {
+              "count": 509,
+              "median_ms": 32.3837000032654,
+              "p95_ms": 39.43731999024748,
+              "max_ms": 137.47429999057204
+            }
+          ]
+        },
+        {
+          "arm": "gpu_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w3_03_gpu_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 48.918947550951586,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 577,
+              "median_ms": 32.058800003142096,
+              "p95_ms": 38.52088000276126,
+              "max_ms": 125.19130000146106
+            },
+            {
+              "count": 598,
+              "median_ms": 31.984600005671382,
+              "p95_ms": 38.470809997670585,
+              "max_ms": 106.22909999801777
+            },
+            {
+              "count": 598,
+              "median_ms": 31.85615000256803,
+              "p95_ms": 38.588979996711714,
+              "max_ms": 101.98069999751169
+            }
+          ]
+        },
+        {
+          "arm": "gpu_half_readback",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w3_04_gpu_half_readback",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 49.389104605653415,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 601,
+              "median_ms": 31.38570000010077,
+              "p95_ms": 37.07099999883212,
+              "max_ms": 111.53679998824373
+            },
+            {
+              "count": 647,
+              "median_ms": 30.928799998946488,
+              "p95_ms": 37.18692999682389,
+              "max_ms": 112.35199999646284
+            },
+            {
+              "count": 614,
+              "median_ms": 31.683449997217394,
+              "p95_ms": 36.77045500371605,
+              "max_ms": 107.06729999219533
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_154254_066769\\w3_05_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 45.961228349559725,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 582,
+              "median_ms": 32.40345000085654,
+              "p95_ms": 37.79979500031913,
+              "max_ms": 117.11369999102317
+            },
+            {
+              "count": 611,
+              "median_ms": 31.933699996443465,
+              "p95_ms": 38.29274999588961,
+              "max_ms": 119.9754999979632
+            },
+            {
+              "count": 613,
+              "median_ms": 31.819199997698888,
+              "p95_ms": 38.754140003584325,
+              "max_ms": 132.28789999266155
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "report": "reports/capture_matrix_20261101_161307_636905/comparison.json",
+      "sha256": "31e3773061ba988446b4fbb3e6e92245c7fa2910b2e947e7ddad05d7c989e16d",
+      "status": "COMPLETE",
+      "source_unchanged": true,
+      "model_updated": false,
+      "checkpoint": {
+        "path": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\v612_3workers_menu_recovery_24h_20261101_111341\\latest.zip",
+        "sha256": "c733ca3fcfd8228b7b1c724968d6d8a7c674128292e3aaf9ddc13b3990b5058a",
+        "num_timesteps": 3493278
+      },
+      "calibration_stages": 2,
+      "frozen_stages": [
+        {
+          "arm": "bitmap_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r0_w3_00_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 48.374944748513144,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 613,
+              "median_ms": 32.74910000618547,
+              "p95_ms": 39.53822000476066,
+              "max_ms": 119.78339999041054
+            },
+            {
+              "count": 645,
+              "median_ms": 32.56089999922551,
+              "p95_ms": 39.48616000998299,
+              "max_ms": 78.65820000006352
+            },
+            {
+              "count": 583,
+              "median_ms": 32.32880000723526,
+              "p95_ms": 38.76569999847561,
+              "max_ms": 124.1674999910174
+            }
+          ]
+        },
+        {
+          "arm": "gpu_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r0_w3_01_gpu_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 48.089577658550624,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 594,
+              "median_ms": 31.382300003315322,
+              "p95_ms": 37.878310005180545,
+              "max_ms": 99.84399999666493
+            },
+            {
+              "count": 592,
+              "median_ms": 32.21040000062203,
+              "p95_ms": 38.00857500100392,
+              "max_ms": 99.86319999734405
+            },
+            {
+              "count": 626,
+              "median_ms": 31.306800003221724,
+              "p95_ms": 37.733825000032084,
+              "max_ms": 118.92609999631532
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r0_w3_02_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 47.26134432648097,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 624,
+              "median_ms": 32.327799999620765,
+              "p95_ms": 39.36699000332738,
+              "max_ms": 130.33279999217484
+            },
+            {
+              "count": 618,
+              "median_ms": 32.799599997815676,
+              "p95_ms": 39.12597500675474,
+              "max_ms": 125.89370000932831
+            },
+            {
+              "count": 604,
+              "median_ms": 32.35965000203578,
+              "p95_ms": 38.56731499035959,
+              "max_ms": 117.78589998721145
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 4,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r0_w4_00_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 55.200044066389886,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 542,
+              "median_ms": 33.851649990538135,
+              "p95_ms": 70.3564899980847,
+              "max_ms": 129.9489000084577
+            },
+            {
+              "count": 550,
+              "median_ms": 33.91754999756813,
+              "p95_ms": 63.6395449968404,
+              "max_ms": 140.4301000002306
+            },
+            {
+              "count": 541,
+              "median_ms": 34.11480000067968,
+              "p95_ms": 74.00209999468643,
+              "max_ms": 142.11070000601467
+            },
+            {
+              "count": 572,
+              "median_ms": 33.91379999811761,
+              "p95_ms": 76.25485000316985,
+              "max_ms": 139.6316000027582
+            }
+          ]
+        },
+        {
+          "arm": "gpu_100",
+          "workers": 4,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r0_w4_01_gpu_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 57.26039880994892,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 536,
+              "median_ms": 32.87629999977071,
+              "p95_ms": 40.28345000551781,
+              "max_ms": 110.70280001149513
+            },
+            {
+              "count": 506,
+              "median_ms": 32.92719999444671,
+              "p95_ms": 39.913499993417645,
+              "max_ms": 101.93260000960436
+            },
+            {
+              "count": 470,
+              "median_ms": 33.35194999817759,
+              "p95_ms": 39.744599990081035,
+              "max_ms": 128.14349999825936
+            },
+            {
+              "count": 534,
+              "median_ms": 32.688000006601214,
+              "p95_ms": 40.045469999313354,
+              "max_ms": 117.20759999298025
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 4,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r0_w4_02_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 56.20236980490812,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 508,
+              "median_ms": 33.93099999811966,
+              "p95_ms": 69.35391000079106,
+              "max_ms": 131.7099000007147
+            },
+            {
+              "count": 537,
+              "median_ms": 34.30849999131169,
+              "p95_ms": 71.93153999978676,
+              "max_ms": 113.63789999450091
+            },
+            {
+              "count": 481,
+              "median_ms": 33.956799990846775,
+              "p95_ms": 71.81590000982396,
+              "max_ms": 120.00289998832159
+            },
+            {
+              "count": 511,
+              "median_ms": 34.13650000584312,
+              "p95_ms": 65.6511000051978,
+              "max_ms": 126.17289999616332
+            }
+          ]
+        },
+        {
+          "arm": "gpu_100",
+          "workers": 4,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r1_w4_00_gpu_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 60.146161839863474,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 606,
+              "median_ms": 33.5874500015052,
+              "p95_ms": 40.784399996482534,
+              "max_ms": 122.28490000416059
+            },
+            {
+              "count": 583,
+              "median_ms": 33.48330000881106,
+              "p95_ms": 40.620649997435976,
+              "max_ms": 122.27409999468364
+            },
+            {
+              "count": 583,
+              "median_ms": 33.160599996335804,
+              "p95_ms": 40.96256999619072,
+              "max_ms": 118.68359999789391
+            },
+            {
+              "count": 630,
+              "median_ms": 33.26835000189021,
+              "p95_ms": 40.68458499750704,
+              "max_ms": 183.2670000003418
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 4,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r1_w4_01_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 51.39912852117512,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 514,
+              "median_ms": 36.28824999759672,
+              "p95_ms": 78.72261500378954,
+              "max_ms": 140.59089998772833
+            },
+            {
+              "count": 515,
+              "median_ms": 35.902800009353086,
+              "p95_ms": 77.87600999727145,
+              "max_ms": 122.52879999869037
+            },
+            {
+              "count": 536,
+              "median_ms": 35.33780000725528,
+              "p95_ms": 78.00694999605184,
+              "max_ms": 138.54640000499785
+            },
+            {
+              "count": 512,
+              "median_ms": 35.51779999543214,
+              "p95_ms": 78.8250449935731,
+              "max_ms": 144.44469999580178
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 4,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r1_w4_02_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 45.590275416169185,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 456,
+              "median_ms": 36.5596499905223,
+              "p95_ms": 79.44142499763984,
+              "max_ms": 141.31069999712054
+            },
+            {
+              "count": 443,
+              "median_ms": 36.62810000241734,
+              "p95_ms": 78.5427799943136,
+              "max_ms": 144.46700000553392
+            },
+            {
+              "count": 448,
+              "median_ms": 36.55910000088625,
+              "p95_ms": 79.92236499922,
+              "max_ms": 145.23339999141172
+            },
+            {
+              "count": 479,
+              "median_ms": 36.40199999790639,
+              "p95_ms": 80.83573000767501,
+              "max_ms": 142.62070000404492
+            }
+          ]
+        },
+        {
+          "arm": "gpu_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r1_w3_00_gpu_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 46.831055083037725,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 620,
+              "median_ms": 33.26180001022294,
+              "p95_ms": 39.98873499367618,
+              "max_ms": 126.62239999917801
+            },
+            {
+              "count": 642,
+              "median_ms": 33.12320000259206,
+              "p95_ms": 40.11521499851369,
+              "max_ms": 128.03779999376275
+            },
+            {
+              "count": 582,
+              "median_ms": 33.11109999776818,
+              "p95_ms": 40.46798500130535,
+              "max_ms": 129.841399990255
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r1_w3_01_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 44.71595002784389,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 579,
+              "median_ms": 33.111500000813976,
+              "p95_ms": 43.06110000034096,
+              "max_ms": 140.906200002064
+            },
+            {
+              "count": 604,
+              "median_ms": 32.9109999947832,
+              "p95_ms": 42.932150001433925,
+              "max_ms": 140.81880000594538
+            },
+            {
+              "count": 625,
+              "median_ms": 33.174100011819974,
+              "p95_ms": 41.41124000016134,
+              "max_ms": 129.20549999398645
+            }
+          ]
+        },
+        {
+          "arm": "bitmap_100",
+          "workers": 3,
+          "report": "C:\\Users\\Hugo\\Documents\\ranked-surfers-ai-claude\\ranked-surfers-ai-new\\reports\\capture_matrix_20261101_161307_636905\\r1_w3_02_bitmap_100",
+          "status": "COMPLETE_FROZEN_POLICY_DIAGNOSTIC",
+          "processed_per_second": 43.76219442914393,
+          "optimized_transitions": 0,
+          "policy_request_to_command_ms": [
+            {
+              "count": 579,
+              "median_ms": 33.25619999668561,
+              "p95_ms": 54.12790999398573,
+              "max_ms": 131.39640000008512
+            },
+            {
+              "count": 575,
+              "median_ms": 33.28940000210423,
+              "p95_ms": 43.173969999770605,
+              "max_ms": 145.00949998910073
+            },
+            {
+              "count": 609,
+              "median_ms": 33.303599993814714,
+              "p95_ms": 43.54877999867314,
+              "max_ms": 81.52229999541305
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "temporal_smoke": {
+    "report": "reports\\temporal_batch_20261101_163025_951906\\comparison.json",
+    "sha256": "658eaa729138854b0a1998c4f83ea4d341ca5a6362bafae8d8cc6c726e20df83",
+    "results": {
+      "rows": [
+        {
+          "name": "wide8_60_seed123",
+          "training_status": "COMPLETE",
+          "evaluation_status": "NOT_RUN",
+          "optimized_transitions": 640,
+          "optimized_per_second": 9.980718141459398,
+          "training_seconds": 64.12364229999366,
+          "reaction_latency": {
+            "window_samples": 485,
+            "metrics": {
+              "command_roundtrip_ms": {
+                "count": 485,
+                "median_ms": 16.780699996161275,
+                "p95_ms": 23.08690000209026,
+                "max_ms": 28.73340000223834
+              },
+              "guard_image_reply_to_command_ms": {
+                "count": 485,
+                "median_ms": 18.66429999063257,
+                "p95_ms": 21.309239996480756,
+                "max_ms": 24.203000008128583
+              },
+              "policy_image_reply_to_command_ms": {
+                "count": 485,
+                "median_ms": 18.820500001311302,
+                "p95_ms": 37.7154000103466,
+                "max_ms": 94.02789999148808
+              },
+              "policy_request_to_command_ms": {
+                "count": 485,
+                "median_ms": 33.96210000209976,
+                "p95_ms": 53.50655999500277,
+                "max_ms": 103.60049999144394
+              },
+              "policy_capture_complete_to_command_ms": {
+                "count": 485,
+                "median_ms": 15.529200012679212,
+                "p95_ms": 34.91658000857484,
+                "max_ms": 91.94549999665469
+              },
+              "guard_capture_complete_to_command_ms": {
+                "count": 485,
+                "median_ms": 15.416299997013994,
+                "p95_ms": 17.68393999664113,
+                "max_ms": 19.931699993321672
+              },
+              "guard_request_to_command_ms": {
+                "count": 485,
+                "median_ms": 33.52390001236927,
+                "p95_ms": 36.95735999790486,
+                "max_ms": 67.76679999893531
+              }
+            },
+            "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+          },
+          "capture": {
+            "captures": 2702,
+            "wall_seconds": 67.85298670000338,
+            "achieved_capture_hz": 39.82138637384204,
+            "requested_capture_hz": 60.0,
+            "includes_pauses": true,
+            "packs": 681,
+            "valid_slot_fraction": 0.7571585903083701
+          },
+          "eligible_for_comparison": false
+        },
+        {
+          "name": "wide4_60_seed123",
+          "training_status": "COMPLETE",
+          "evaluation_status": "NOT_RUN",
+          "optimized_transitions": 640,
+          "optimized_per_second": 10.470451059489383,
+          "training_seconds": 61.124396300001536,
+          "reaction_latency": {
+            "window_samples": 488,
+            "metrics": {
+              "guard_request_to_command_ms": {
+                "count": 488,
+                "median_ms": 32.18114999617683,
+                "p95_ms": 36.11587500345195,
+                "max_ms": 49.66489999787882
+              },
+              "policy_capture_complete_to_command_ms": {
+                "count": 488,
+                "median_ms": 13.876600001822226,
+                "p95_ms": 54.50142999907257,
+                "max_ms": 95.00560000014957
+              },
+              "policy_image_reply_to_command_ms": {
+                "count": 488,
+                "median_ms": 17.20529999874998,
+                "p95_ms": 57.84634499941603,
+                "max_ms": 97.04690000216942
+              },
+              "policy_request_to_command_ms": {
+                "count": 488,
+                "median_ms": 32.42649999447167,
+                "p95_ms": 71.35094000041136,
+                "max_ms": 113.9268999977503
+              },
+              "command_roundtrip_ms": {
+                "count": 488,
+                "median_ms": 18.11295000516111,
+                "p95_ms": 23.347024999384303,
+                "max_ms": 30.837999991490506
+              },
+              "guard_image_reply_to_command_ms": {
+                "count": 488,
+                "median_ms": 16.99240000016289,
+                "p95_ms": 20.36678500007838,
+                "max_ms": 23.058899998432025
+              },
+              "guard_capture_complete_to_command_ms": {
+                "count": 488,
+                "median_ms": 13.703450000321027,
+                "p95_ms": 16.893559998425186,
+                "max_ms": 19.968000007793307
+              }
+            },
+            "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+          },
+          "capture": {
+            "captures": 2699,
+            "wall_seconds": 63.61564650000946,
+            "achieved_capture_hz": 42.42666935719342,
+            "requested_capture_hz": 60.0,
+            "includes_pauses": true,
+            "packs": 679,
+            "valid_slot_fraction": 0.7801914580265096
+          },
+          "eligible_for_comparison": false
+        },
+        {
+          "name": "wide6_60_seed123",
+          "training_status": "COMPLETE",
+          "evaluation_status": "NOT_RUN",
+          "optimized_transitions": 640,
+          "optimized_per_second": 10.472163268668398,
+          "training_seconds": 61.11440240000957,
+          "reaction_latency": {
+            "window_samples": 513,
+            "metrics": {
+              "policy_image_reply_to_command_ms": {
+                "count": 513,
+                "median_ms": 17.102400001022033,
+                "p95_ms": 41.138539998792076,
+                "max_ms": 95.08309999364428
+              },
+              "guard_request_to_command_ms": {
+                "count": 513,
+                "median_ms": 31.941399996867403,
+                "p95_ms": 36.34465999493841,
+                "max_ms": 41.84970000642352
+              },
+              "guard_capture_complete_to_command_ms": {
+                "count": 513,
+                "median_ms": 13.68190000357572,
+                "p95_ms": 16.97847999748774,
+                "max_ms": 19.40679999825079
+              },
+              "guard_image_reply_to_command_ms": {
+                "count": 513,
+                "median_ms": 16.86679999693297,
+                "p95_ms": 20.50786000036169,
+                "max_ms": 22.550800000317395
+              },
+              "command_roundtrip_ms": {
+                "count": 513,
+                "median_ms": 16.97050000075251,
+                "p95_ms": 22.84535999642685,
+                "max_ms": 29.66680000827182
+              },
+              "policy_capture_complete_to_command_ms": {
+                "count": 513,
+                "median_ms": 13.879899997846223,
+                "p95_ms": 38.772379996953504,
+                "max_ms": 92.94810000574216
+              },
+              "policy_request_to_command_ms": {
+                "count": 513,
+                "median_ms": 32.325000007404014,
+                "p95_ms": 51.56444000313053,
+                "max_ms": 113.32930000207853
+              }
+            },
+            "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+          },
+          "capture": {
+            "captures": 2676,
+            "wall_seconds": 64.85175190000155,
+            "achieved_capture_hz": 41.26334172323163,
+            "requested_capture_hz": 60.0,
+            "includes_pauses": true,
+            "packs": 680,
+            "valid_slot_fraction": 0.7644607843137254
+          },
+          "eligible_for_comparison": false
+        },
+        {
+          "name": "wide12_60_seed123",
+          "training_status": "STOPPED",
+          "evaluation_status": "NOT_RUN",
+          "optimized_transitions": 0,
+          "optimized_per_second": 0.0,
+          "training_seconds": null,
+          "reaction_latency": {
+            "window_samples": 0,
+            "metrics": {},
+            "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+          },
+          "capture": {
+            "captures": 26,
+            "wall_seconds": 3.8490897999872686,
+            "achieved_capture_hz": 6.754843703590911,
+            "requested_capture_hz": 60.0,
+            "includes_pauses": true,
+            "packs": 0,
+            "valid_slot_fraction": 0.0
+          },
+          "eligible_for_comparison": false
+        },
+        {
+          "name": "short4_60_seed123",
+          "training_status": "NOT_RUN",
+          "evaluation_status": "NOT_RUN",
+          "eligible_for_comparison": false
+        },
+        {
+          "name": "wide8_30_seed123",
+          "training_status": "NOT_RUN",
+          "evaluation_status": "NOT_RUN",
+          "eligible_for_comparison": false
+        }
+      ],
+      "note": "Equal wall budgets, not equal transitions. Unity track seeds are not controlled. Episode bootstrap intervals do not capture between-training-seed uncertainty. Do not adopt a winner from overlapping intervals or one short scratch run."
+    }
+  },
+  "repair_smoke": {
+    "report": "reports/temporal_deliveryfix_12f_smoke_20261101_01/trial_report.json",
+    "result": {
+      "status": "COMPLETE",
+      "initialization": "scratch",
+      "requested_minutes": 0.3,
+      "budget_started_perf": 82350.135192,
+      "training_seconds": 26.44766890000028,
+      "learning_transitions": {
+        "collected_transitions": 256,
+        "optimized_transitions": 256,
+        "actor_transitions": 251,
+        "passive_transitions": 5,
+        "boundary_settlements": 2,
+        "completed_rollout_transitions": 256,
+        "optimizer_sample_presentations": 1280,
+        "discarded_partial_transitions": 0,
+        "stop_reason": "wall_time_at_optimized_rollout_boundary"
+      },
+      "audit": {
+        "status": "PASS_SETTLED_LEARNING",
+        "transitions": 256,
+        "processed_rollout_transitions": 256,
+        "unique_transitions_used_by_optimizer": 256,
+        "passive_resync_transitions": 1,
+        "terminal_transitions": 9,
+        "failures": []
+      },
+      "wall_seconds": 36.94311530000414,
+      "optimized_transitions": 256,
+      "optimized_per_second": 9.67949201753646,
+      "finalization_errors": [],
+      "reaction_latency": {
+        "window_samples": 208,
+        "metrics": {
+          "guard_capture_complete_to_command_ms": {
+            "count": 208,
+            "median_ms": 16.31220000126632,
+            "p95_ms": 17.20828500619973,
+            "max_ms": 18.628899997565895
+          },
+          "command_roundtrip_ms": {
+            "count": 208,
+            "median_ms": 15.946699997584801,
+            "p95_ms": 22.41903500398621,
+            "max_ms": 25.910900003509596
+          },
+          "policy_request_to_command_ms": {
+            "count": 208,
+            "median_ms": 34.75895000156015,
+            "p95_ms": 39.15239999332698,
+            "max_ms": 108.072799994261
+          },
+          "guard_image_reply_to_command_ms": {
+            "count": 208,
+            "median_ms": 19.67230000445852,
+            "p95_ms": 20.701334991463227,
+            "max_ms": 21.968899993225932
+          },
+          "guard_request_to_command_ms": {
+            "count": 208,
+            "median_ms": 34.601150000526104,
+            "p95_ms": 37.869484992552316,
+            "max_ms": 58.307700004661456
+          },
+          "policy_image_reply_to_command_ms": {
+            "count": 208,
+            "median_ms": 19.72209999075858,
+            "p95_ms": 21.063669996510722,
+            "max_ms": 94.74389998649713
+          },
+          "policy_capture_complete_to_command_ms": {
+            "count": 208,
+            "median_ms": 16.361100002541207,
+            "p95_ms": 17.582265002420165,
+            "max_ms": 92.53929999249522
+          }
+        },
+        "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+      },
+      "guard_hard_stopped": false
+    }
+  },
+  "verified_continuation_plan": {
+    "path": "reports\\temporal_batch_20261101_164312_920285\\plan.json",
+    "retained": [
+      "wide8_60_seed123 train",
+      "wide4_60_seed123 train",
+      "wide6_60_seed123 train"
+    ],
+    "pending": [
+      "wide12_60_seed123 train",
+      "short4_60_seed123 train",
+      "wide8_30_seed123 train",
+      "wide8_60_seed123 eval",
+      "wide4_60_seed123 eval",
+      "wide6_60_seed123 eval",
+      "wide12_60_seed123 eval",
+      "short4_60_seed123 eval",
+      "wide8_30_seed123 eval"
+    ]
+  },
+  "repair_evaluation": {
+    "report": "reports\\temporal_deliveryfix_12f_eval_20261101_01\\v61_eval_report.json",
+    "status": "COMPLETE",
+    "episodes": 2,
+    "completed_requested_episodes": true
+  },
+  "subsequent_batches_20261101": [
+    {
+      "path": "reports/temporal_batch_20261101_165534_645446/comparison.json",
+      "sha256": "3ea78fc346dc79cea25fea8a420ce9cdf595b62e3f658f16c4d6ca852e364efe",
+      "results": {
+        "rows": [
+          {
+            "name": "wide8_60_seed123",
+            "training_status": "COMPLETE",
+            "evaluation_status": "COMPLETE",
+            "optimized_transitions": 640,
+            "optimized_per_second": 9.980718141459398,
+            "training_seconds": 64.12364229999366,
+            "reaction_latency": {
+              "window_samples": 485,
+              "metrics": {
+                "command_roundtrip_ms": {
+                  "count": 485,
+                  "median_ms": 16.780699996161275,
+                  "p95_ms": 23.08690000209026,
+                  "max_ms": 28.73340000223834
+                },
+                "guard_image_reply_to_command_ms": {
+                  "count": 485,
+                  "median_ms": 18.66429999063257,
+                  "p95_ms": 21.309239996480756,
+                  "max_ms": 24.203000008128583
+                },
+                "policy_image_reply_to_command_ms": {
+                  "count": 485,
+                  "median_ms": 18.820500001311302,
+                  "p95_ms": 37.7154000103466,
+                  "max_ms": 94.02789999148808
+                },
+                "policy_request_to_command_ms": {
+                  "count": 485,
+                  "median_ms": 33.96210000209976,
+                  "p95_ms": 53.50655999500277,
+                  "max_ms": 103.60049999144394
+                },
+                "policy_capture_complete_to_command_ms": {
+                  "count": 485,
+                  "median_ms": 15.529200012679212,
+                  "p95_ms": 34.91658000857484,
+                  "max_ms": 91.94549999665469
+                },
+                "guard_capture_complete_to_command_ms": {
+                  "count": 485,
+                  "median_ms": 15.416299997013994,
+                  "p95_ms": 17.68393999664113,
+                  "max_ms": 19.931699993321672
+                },
+                "guard_request_to_command_ms": {
+                  "count": 485,
+                  "median_ms": 33.52390001236927,
+                  "p95_ms": 36.95735999790486,
+                  "max_ms": 67.76679999893531
+                }
+              },
+              "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+            },
+            "capture": {
+              "captures": 2702,
+              "wall_seconds": 67.85298670000338,
+              "achieved_capture_hz": 39.82138637384204,
+              "requested_capture_hz": 60.0,
+              "includes_pauses": true,
+              "packs": 681,
+              "valid_slot_fraction": 0.7571585903083701
+            },
+            "episodes": 3,
+            "mean_seconds": 1.41,
+            "median_seconds": 1.4,
+            "max_seconds": 1.4486940000060713,
+            "actions": {
+              "1": 74
+            },
+            "terminations": {
+              "death": 3
+            },
+            "mean_bootstrap_95pct_seconds": [
+              1.382603600010043,
+              1.4486940000060713
+            ],
+            "eligible_for_comparison": true
+          },
+          {
+            "name": "wide4_60_seed123",
+            "training_status": "COMPLETE",
+            "evaluation_status": "COMPLETE",
+            "optimized_transitions": 640,
+            "optimized_per_second": 10.470451059489383,
+            "training_seconds": 61.124396300001536,
+            "reaction_latency": {
+              "window_samples": 488,
+              "metrics": {
+                "guard_request_to_command_ms": {
+                  "count": 488,
+                  "median_ms": 32.18114999617683,
+                  "p95_ms": 36.11587500345195,
+                  "max_ms": 49.66489999787882
+                },
+                "policy_capture_complete_to_command_ms": {
+                  "count": 488,
+                  "median_ms": 13.876600001822226,
+                  "p95_ms": 54.50142999907257,
+                  "max_ms": 95.00560000014957
+                },
+                "policy_image_reply_to_command_ms": {
+                  "count": 488,
+                  "median_ms": 17.20529999874998,
+                  "p95_ms": 57.84634499941603,
+                  "max_ms": 97.04690000216942
+                },
+                "policy_request_to_command_ms": {
+                  "count": 488,
+                  "median_ms": 32.42649999447167,
+                  "p95_ms": 71.35094000041136,
+                  "max_ms": 113.9268999977503
+                },
+                "command_roundtrip_ms": {
+                  "count": 488,
+                  "median_ms": 18.11295000516111,
+                  "p95_ms": 23.347024999384303,
+                  "max_ms": 30.837999991490506
+                },
+                "guard_image_reply_to_command_ms": {
+                  "count": 488,
+                  "median_ms": 16.99240000016289,
+                  "p95_ms": 20.36678500007838,
+                  "max_ms": 23.058899998432025
+                },
+                "guard_capture_complete_to_command_ms": {
+                  "count": 488,
+                  "median_ms": 13.703450000321027,
+                  "p95_ms": 16.893559998425186,
+                  "max_ms": 19.968000007793307
+                }
+              },
+              "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+            },
+            "capture": {
+              "captures": 2699,
+              "wall_seconds": 63.61564650000946,
+              "achieved_capture_hz": 42.42666935719342,
+              "requested_capture_hz": 60.0,
+              "includes_pauses": true,
+              "packs": 679,
+              "valid_slot_fraction": 0.7801914580265096
+            },
+            "episodes": 3,
+            "mean_seconds": 4.75,
+            "median_seconds": 5.06,
+            "max_seconds": 5.485610400006408,
+            "actions": {
+              "3": 240
+            },
+            "terminations": {
+              "death": 3
+            },
+            "mean_bootstrap_95pct_seconds": [
+              3.7143169999908423,
+              5.485610400006408
+            ],
+            "eligible_for_comparison": true
+          },
+          {
+            "name": "wide6_60_seed123",
+            "training_status": "COMPLETE",
+            "evaluation_status": "COMPLETE",
+            "optimized_transitions": 640,
+            "optimized_per_second": 10.472163268668398,
+            "training_seconds": 61.11440240000957,
+            "reaction_latency": {
+              "window_samples": 513,
+              "metrics": {
+                "policy_image_reply_to_command_ms": {
+                  "count": 513,
+                  "median_ms": 17.102400001022033,
+                  "p95_ms": 41.138539998792076,
+                  "max_ms": 95.08309999364428
+                },
+                "guard_request_to_command_ms": {
+                  "count": 513,
+                  "median_ms": 31.941399996867403,
+                  "p95_ms": 36.34465999493841,
+                  "max_ms": 41.84970000642352
+                },
+                "guard_capture_complete_to_command_ms": {
+                  "count": 513,
+                  "median_ms": 13.68190000357572,
+                  "p95_ms": 16.97847999748774,
+                  "max_ms": 19.40679999825079
+                },
+                "guard_image_reply_to_command_ms": {
+                  "count": 513,
+                  "median_ms": 16.86679999693297,
+                  "p95_ms": 20.50786000036169,
+                  "max_ms": 22.550800000317395
+                },
+                "command_roundtrip_ms": {
+                  "count": 513,
+                  "median_ms": 16.97050000075251,
+                  "p95_ms": 22.84535999642685,
+                  "max_ms": 29.66680000827182
+                },
+                "policy_capture_complete_to_command_ms": {
+                  "count": 513,
+                  "median_ms": 13.879899997846223,
+                  "p95_ms": 38.772379996953504,
+                  "max_ms": 92.94810000574216
+                },
+                "policy_request_to_command_ms": {
+                  "count": 513,
+                  "median_ms": 32.325000007404014,
+                  "p95_ms": 51.56444000313053,
+                  "max_ms": 113.32930000207853
+                }
+              },
+              "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+            },
+            "capture": {
+              "captures": 2676,
+              "wall_seconds": 64.85175190000155,
+              "achieved_capture_hz": 41.26334172323163,
+              "requested_capture_hz": 60.0,
+              "includes_pauses": true,
+              "packs": 680,
+              "valid_slot_fraction": 0.7644607843137254
+            },
+            "episodes": 3,
+            "mean_seconds": 2.94,
+            "median_seconds": 2.95,
+            "max_seconds": 3.698338200003491,
+            "actions": {
+              "4": 151
+            },
+            "terminations": {
+              "death": 3
+            },
+            "mean_bootstrap_95pct_seconds": [
+              2.165227200006484,
+              3.698338200003491
+            ],
+            "eligible_for_comparison": true
+          },
+          {
+            "name": "wide12_60_seed123",
+            "training_status": "COMPLETE",
+            "evaluation_status": "COMPLETE",
+            "optimized_transitions": 640,
+            "optimized_per_second": 9.661917606705956,
+            "training_seconds": 66.2394387999957,
+            "reaction_latency": {
+              "window_samples": 495,
+              "metrics": {
+                "policy_capture_complete_to_command_ms": {
+                  "count": 495,
+                  "median_ms": 16.187999994144775,
+                  "p95_ms": 18.65692000137642,
+                  "max_ms": 92.91690000100061
+                },
+                "policy_image_reply_to_command_ms": {
+                  "count": 495,
+                  "median_ms": 19.56159999826923,
+                  "p95_ms": 21.881810002378188,
+                  "max_ms": 94.98120000353083
+                },
+                "policy_request_to_command_ms": {
+                  "count": 495,
+                  "median_ms": 34.60529999574646,
+                  "p95_ms": 39.52625999663722,
+                  "max_ms": 113.4790000069188
+                },
+                "guard_capture_complete_to_command_ms": {
+                  "count": 495,
+                  "median_ms": 16.125199996167794,
+                  "p95_ms": 17.4804500042228,
+                  "max_ms": 19.753200002014637
+                },
+                "guard_request_to_command_ms": {
+                  "count": 495,
+                  "median_ms": 34.483800001908094,
+                  "p95_ms": 37.40750000142725,
+                  "max_ms": 62.70080000103917
+                },
+                "command_roundtrip_ms": {
+                  "count": 495,
+                  "median_ms": 16.26749998831656,
+                  "p95_ms": 22.450880000542384,
+                  "max_ms": 26.85719999135472
+                },
+                "guard_image_reply_to_command_ms": {
+                  "count": 495,
+                  "median_ms": 19.486400007735938,
+                  "p95_ms": 20.971219998318695,
+                  "max_ms": 22.488900009193458
+                }
+              },
+              "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+            },
+            "capture": {
+              "captures": 2750,
+              "wall_seconds": 70.91821930000151,
+              "achieved_capture_hz": 38.77705936702702,
+              "requested_capture_hz": 60.0,
+              "includes_pauses": true,
+              "delivery_stale_discards": 0,
+              "delivery_stale_max_ms": 0.0,
+              "packs": 681,
+              "valid_slot_fraction": 0.7567302985805189
+            },
+            "episodes": 3,
+            "mean_seconds": 3.41,
+            "median_seconds": 3.73,
+            "max_seconds": 3.7881265000032727,
+            "actions": {
+              "3": 164
+            },
+            "terminations": {
+              "death": 3
+            },
+            "mean_bootstrap_95pct_seconds": [
+              2.714266299997689,
+              3.7881265000032727
+            ],
+            "eligible_for_comparison": true
+          },
+          {
+            "name": "short4_60_seed123",
+            "training_status": "COMPLETE",
+            "evaluation_status": "COMPLETE",
+            "optimized_transitions": 640,
+            "optimized_per_second": 10.343309371181983,
+            "training_seconds": 61.875747600002796,
+            "reaction_latency": {
+              "window_samples": 508,
+              "metrics": {
+                "command_roundtrip_ms": {
+                  "count": 508,
+                  "median_ms": 17.412299996067304,
+                  "p95_ms": 23.199614993063733,
+                  "max_ms": 28.1985000037821
+                },
+                "policy_image_reply_to_command_ms": {
+                  "count": 508,
+                  "median_ms": 15.444149998074863,
+                  "p95_ms": 58.64007999480235,
+                  "max_ms": 159.10869999788702
+                },
+                "guard_request_to_command_ms": {
+                  "count": 508,
+                  "median_ms": 30.361949997313786,
+                  "p95_ms": 34.53977500466862,
+                  "max_ms": 38.33850000228267
+                },
+                "guard_image_reply_to_command_ms": {
+                  "count": 508,
+                  "median_ms": 15.339949997724034,
+                  "p95_ms": 17.290690013032872,
+                  "max_ms": 22.469699993962422
+                },
+                "policy_capture_complete_to_command_ms": {
+                  "count": 508,
+                  "median_ms": 12.029949997668155,
+                  "p95_ms": 54.99044000025606,
+                  "max_ms": 155.95090000715572
+                },
+                "guard_capture_complete_to_command_ms": {
+                  "count": 508,
+                  "median_ms": 11.939750002056826,
+                  "p95_ms": 13.848480006708996,
+                  "max_ms": 19.30770000035409
+                },
+                "policy_request_to_command_ms": {
+                  "count": 508,
+                  "median_ms": 30.577949997677933,
+                  "p95_ms": 71.6732600070827,
+                  "max_ms": 173.99229999864474
+                }
+              },
+              "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+            },
+            "capture": {
+              "captures": 2688,
+              "wall_seconds": 66.04736210001283,
+              "achieved_capture_hz": 40.69806748571837,
+              "requested_capture_hz": 60.0,
+              "includes_pauses": true,
+              "delivery_stale_discards": 5,
+              "delivery_stale_max_ms": 83.25419999891892,
+              "packs": 681,
+              "valid_slot_fraction": 0.8961086637298091
+            },
+            "episodes": 3,
+            "mean_seconds": 4.86,
+            "median_seconds": 3.79,
+            "max_seconds": 7.083485399998608,
+            "actions": {
+              "3": 249
+            },
+            "terminations": {
+              "death": 3
+            },
+            "mean_bootstrap_95pct_seconds": [
+              3.7006524999887915,
+              7.083485399998608
+            ],
+            "eligible_for_comparison": true
+          },
+          {
+            "name": "wide8_30_seed123",
+            "training_status": "COMPLETE",
+            "evaluation_status": "COMPLETE",
+            "optimized_transitions": 512,
+            "optimized_per_second": 8.078174960411292,
+            "training_seconds": 63.38065249999636,
+            "reaction_latency": {
+              "window_samples": 405,
+              "metrics": {
+                "command_roundtrip_ms": {
+                  "count": 405,
+                  "median_ms": 15.205699994112365,
+                  "p95_ms": 22.074699989752844,
+                  "max_ms": 33.26569999626372
+                },
+                "guard_capture_complete_to_command_ms": {
+                  "count": 405,
+                  "median_ms": 13.639800003147684,
+                  "p95_ms": 15.30849999981001,
+                  "max_ms": 19.771399995079264
+                },
+                "policy_capture_complete_to_command_ms": {
+                  "count": 405,
+                  "median_ms": 13.725900003919378,
+                  "p95_ms": 19.731299998238672,
+                  "max_ms": 106.84110000147484
+                },
+                "policy_image_reply_to_command_ms": {
+                  "count": 405,
+                  "median_ms": 17.02490000752732,
+                  "p95_ms": 22.81776000163515,
+                  "max_ms": 110.14210000575986
+                },
+                "guard_image_reply_to_command_ms": {
+                  "count": 405,
+                  "median_ms": 16.958100008196197,
+                  "p95_ms": 18.762399998377074,
+                  "max_ms": 22.94870000332594
+                },
+                "guard_request_to_command_ms": {
+                  "count": 405,
+                  "median_ms": 31.081799999810755,
+                  "p95_ms": 37.29814000835176,
+                  "max_ms": 45.50779999408405
+                },
+                "policy_request_to_command_ms": {
+                  "count": 405,
+                  "median_ms": 31.563299999106675,
+                  "p95_ms": 44.54483999288619,
+                  "max_ms": 124.41499999840744
+                }
+              },
+              "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+            },
+            "capture": {
+              "captures": 1654,
+              "wall_seconds": 68.8448281000019,
+              "achieved_capture_hz": 24.025043647395705,
+              "requested_capture_hz": 30.0,
+              "includes_pauses": true,
+              "delivery_stale_discards": 0,
+              "delivery_stale_max_ms": 0.0,
+              "packs": 545,
+              "valid_slot_fraction": 0.7846330275229357
+            },
+            "episodes": 3,
+            "mean_seconds": 5.02,
+            "median_seconds": 5.62,
+            "max_seconds": 7.712450899998657,
+            "actions": {
+              "3": 193
+            },
+            "terminations": {
+              "death": 3
+            },
+            "mean_bootstrap_95pct_seconds": [
+              1.7175772000045981,
+              7.712450899998657
+            ],
+            "eligible_for_comparison": true
+          }
+        ],
+        "note": "Equal wall budgets, not equal transitions. Unity track seeds are not controlled. Episode bootstrap intervals do not capture between-training-seed uncertainty. Do not adopt a winner from overlapping intervals or one short scratch run."
+      }
+    },
+    {
+      "path": "reports/temporal_batch_20261101_170206_256137/comparison.json",
+      "sha256": "23707637af784db5e97770809debcbceff661e286a1e8e651d32fa018a62131d",
+      "results": {
+        "rows": [
+          {
+            "name": "wide8_60_seed123",
+            "training_status": "STOPPED",
+            "evaluation_status": "NOT_RUN",
+            "optimized_transitions": 7808,
+            "optimized_per_second": 10.321680504286034,
+            "training_seconds": null,
+            "reaction_latency": {
+              "window_samples": 1000,
+              "metrics": {
+                "command_roundtrip_ms": {
+                  "count": 1000,
+                  "median_ms": 17.386749997967854,
+                  "p95_ms": 22.454034999827854,
+                  "max_ms": 34.01219999068417
+                },
+                "policy_request_to_command_ms": {
+                  "count": 1000,
+                  "median_ms": 32.649300002958626,
+                  "p95_ms": 71.46835999883479,
+                  "max_ms": 90.30860000348184
+                },
+                "guard_capture_complete_to_command_ms": {
+                  "count": 1000,
+                  "median_ms": 14.31610000145156,
+                  "p95_ms": 17.474455003684852,
+                  "max_ms": 19.821699999738485
+                },
+                "policy_image_reply_to_command_ms": {
+                  "count": 1000,
+                  "median_ms": 17.86200000788085,
+                  "p95_ms": 58.36723000029451,
+                  "max_ms": 75.16670000040904
+                },
+                "policy_capture_complete_to_command_ms": {
+                  "count": 1000,
+                  "median_ms": 14.565949997631833,
+                  "p95_ms": 54.99816500741872,
+                  "max_ms": 71.91080000484362
+                },
+                "guard_request_to_command_ms": {
+                  "count": 1000,
+                  "median_ms": 32.37919999810401,
+                  "p95_ms": 36.266209994937526,
+                  "max_ms": 42.30760000064038
+                },
+                "guard_image_reply_to_command_ms": {
+                  "count": 1000,
+                  "median_ms": 17.5856499990914,
+                  "p95_ms": 20.789854993927293,
+                  "max_ms": 23.95329999853857
+                }
+              },
+              "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+            },
+            "capture": {
+              "captures": 30908,
+              "wall_seconds": 749.8009006999928,
+              "achieved_capture_hz": 41.22160959148645,
+              "requested_capture_hz": 60.0,
+              "includes_pauses": true,
+              "delivery_stale_discards": 8,
+              "delivery_stale_max_ms": 127.28549999883398,
+              "packs": 8370,
+              "valid_slot_fraction": 0.7820937873357228
+            },
+            "eligible_for_comparison": false
+          },
+          {
+            "name": "wide4_60_seed123",
+            "training_status": "NOT_RUN",
+            "evaluation_status": "NOT_RUN",
+            "eligible_for_comparison": false
+          },
+          {
+            "name": "wide6_60_seed123",
+            "training_status": "NOT_RUN",
+            "evaluation_status": "NOT_RUN",
+            "eligible_for_comparison": false
+          },
+          {
+            "name": "wide12_60_seed123",
+            "training_status": "NOT_RUN",
+            "evaluation_status": "NOT_RUN",
+            "eligible_for_comparison": false
+          },
+          {
+            "name": "short4_60_seed123",
+            "training_status": "NOT_RUN",
+            "evaluation_status": "NOT_RUN",
+            "eligible_for_comparison": false
+          },
+          {
+            "name": "wide8_30_seed123",
+            "training_status": "NOT_RUN",
+            "evaluation_status": "NOT_RUN",
+            "eligible_for_comparison": false
+          }
+        ],
+        "note": "Equal wall budgets, not equal transitions. Unity track seeds are not controlled. Episode bootstrap intervals do not capture between-training-seed uncertainty. Do not adopt a winner from overlapping intervals or one short scratch run."
+      }
+    }
+  ],
+  "latest_review": "reports/TEMPORAL_RECOVERY_REVIEW_20261101.md",
+  "source_recovery_smoke": {
+    "report": "reports\\temporal_source_recovery_smoke_20261101_01\\trial_report.json",
+    "result": {
+      "status": "COMPLETE",
+      "initialization": "scratch",
+      "requested_minutes": 0.5,
+      "budget_started_perf": 86993.7304361,
+      "training_seconds": 37.41543370000727,
+      "learning_transitions": {
+        "collected_transitions": 384,
+        "optimized_transitions": 384,
+        "actor_transitions": 380,
+        "passive_transitions": 4,
+        "boundary_settlements": 3,
+        "completed_rollout_transitions": 384,
+        "optimizer_sample_presentations": 1920,
+        "discarded_partial_transitions": 0,
+        "stop_reason": "wall_time_at_optimized_rollout_boundary"
+      },
+      "audit": {
+        "status": "PASS_SETTLED_LEARNING",
+        "transitions": 384,
+        "processed_rollout_transitions": 384,
+        "unique_transitions_used_by_optimizer": 384,
+        "passive_resync_transitions": 2,
+        "terminal_transitions": 13,
+        "failures": []
+      },
+      "wall_seconds": 47.696563200006494,
+      "optimized_transitions": 384,
+      "unoptimized_collected_transitions": 0,
+      "optimized_per_second": 10.263144430687847,
+      "finalization_errors": [],
+      "reaction_latency": {
+        "window_samples": 307,
+        "metrics": {
+          "policy_request_to_command_ms": {
+            "count": 307,
+            "median_ms": 33.48539999569766,
+            "p95_ms": 37.942869994731154,
+            "max_ms": 106.23469999700319
+          },
+          "command_roundtrip_ms": {
+            "count": 307,
+            "median_ms": 16.856299989740364,
+            "p95_ms": 22.296810004627332,
+            "max_ms": 31.745799991767853
+          },
+          "policy_image_reply_to_command_ms": {
+            "count": 307,
+            "median_ms": 18.403999987640418,
+            "p95_ms": 21.533960005035624,
+            "max_ms": 94.8017000046093
+          },
+          "guard_request_to_command_ms": {
+            "count": 307,
+            "median_ms": 33.36019998823758,
+            "p95_ms": 36.57947999163298,
+            "max_ms": 38.79449999658391
+          },
+          "policy_capture_complete_to_command_ms": {
+            "count": 307,
+            "median_ms": 14.863200005493127,
+            "p95_ms": 18.28168999345507,
+            "max_ms": 92.62080000189599
+          },
+          "guard_capture_complete_to_command_ms": {
+            "count": 307,
+            "median_ms": 14.78060000226833,
+            "p95_ms": 16.771280000102706,
+            "max_ms": 19.41110000188928
+          },
+          "guard_image_reply_to_command_ms": {
+            "count": 307,
+            "median_ms": 18.254499998874962,
+            "p95_ms": 20.379710002453066,
+            "max_ms": 22.617700000409968
+          }
+        },
+        "note": "Command issue time, not Unity response. Browser swap timing is available only for validated stream metadata; screenshot presentation time is otherwise unknown."
+      },
+      "guard_hard_stopped": false
+    }
+  }
+}

@@ -41,7 +41,14 @@ class ResyncWindow:
             return 'ABORT'
         # Candidate means "request independent confirmation", never terminal
         # acceptance. Early menu animation may have a weak template score.
-        self.menu_candidate = state == 'MENU' and p_menu >= conf
+        self.menu_candidate = (
+            (state == 'MENU' and p_menu >= conf) or
+            # An animated menu can fall just short of the classifier threshold
+            # (2026-11-01: UNCERTAIN, pm=.889, pg=.088, template=.656).
+            # This ONLY requests the existing bounded independent confirmation.
+            # It never accepts a terminal, packs a frame or permits an input.
+            (state == 'UNCERTAIN' and p_menu >= max(.80, conf*.90)
+             and p_game < .10 and score >= threshold*.80))
         if state == 'GAMEPLAY' and p_game >= conf and score < threshold*.85:
             self.accepted += 1
             self.last_reason = None
