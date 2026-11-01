@@ -37,21 +37,29 @@ It isolates encoder at 128 and 192, resolution within the spatial encoder, and
 spacing at road192. It cannot establish interactions between every spacing and
 every resolution. Confirm the promising combination later if needed.
 
-Each configuration uses seeds 123 and 456, a fresh model, 25 minutes of PPO and
-50 deterministic evaluation episodes (15-minute cap per evaluation). Timed-out
+Each configuration uses seeds 123 and 456, a fresh model, 30 minutes of PPO and
+300 deterministic evaluation episodes (90-minute cap per evaluation). Timed-out
 evaluations remain incomplete, not passing results. Training game-track seeds
 are not controlled. Two seeds improve screening but are not a definitive ranking.
 
 All use one worker, full-resolution gpu_100 capture, detector off, requested 60-Hz
 capture and maximum 30-Hz decisions, unchanged action timing/rewards/guards. No BC.
 Model weights and optimizer start fresh for every full trial, not from smoke or
-the latest production model. Defaults total 8h20 training, typically about 10-12h
-including smoke/evaluation/loading. The default `--max-hours 12` checks the budget
+the latest production model. Defaults total ten hours of training plus 6,000
+evaluation episodes, approximately 20-26 hours overall at recent episode/reset
+speeds; stronger policies may take longer. The default `--max-hours 0` disables
+the whole-batch time limit. An optional positive `--max-hours` checks the budget
 before each new stage, reserving its configured duration plus three minutes for
 startup/finalization. It stops with `BUDGET_LIMIT` and preserves completed work if
 there is insufficient time. It never kills a running process; pathological stalls
 can still exceed the estimate. Resume starts a new session budget with the saved
 plan. `batch_status.json` distinguishes complete, stopped and budget-limited runs.
+`COMPLETED_WITH_FAILURES` means all runnable stages were attempted, with failures
+preserved separately. Smoke failure stops immediately. Full-trial failures may
+continue only after recorded successful cleanup; missing cleanup evidence or user
+interruption stops the batch. Failed training is never evaluated. Even a zero
+process exit code does not override a failed report/audit. New budgets apply to
+new plans; resume deliberately preserves the original plan's settings.
 
 ## Exact history meaning
 

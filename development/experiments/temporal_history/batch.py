@@ -80,6 +80,9 @@ def summarize(plan):
                 'Do not adopt a winner from overlapping intervals or one short scratch run.')
 
 
+class StageFailures(RuntimeError):
+    """All runnable independent stages finished, but at least one failed."""
+
 def execute(plan,output,keep_going=False,before_job=None):
     expected=json.loads((output/'sources.json').read_text())
     if source_hashes()!=expected:raise RuntimeError('Sources changed since planning; make a new plan')
@@ -120,8 +123,13 @@ def execute(plan,output,keep_going=False,before_job=None):
                     print('Batch interrupted; waiting for trial finalization.',flush=True)
                     process.wait()
                     raise
-            if code:
-                failed.append(dict(name=job['name'],mode=job['mode'],exit_code=code,output=job['output']))
+            validation_error=None
+            if not code:
+                try:checked_result(job)
+                except (OSError,ValueError,KeyError,RuntimeError) as exc:validation_error=repr(exc)
+            if code or validation_error:
+                failed.append(dict(name=job['name'],mode=job['mode'],exit_code=code,output=job['output'],
+                                   validation_error=validation_error))
                 (output/'failed_stages.json').write_text(json.dumps(failed,indent=2))
                 # Only continue after the child recorded successful cleanup.
                 # Missing/malformed reports or cleanup errors may leave a live
@@ -130,18 +138,19 @@ def execute(plan,output,keep_going=False,before_job=None):
                 report_path=Path(job['output'])/report_name
                 report=json.loads(report_path.read_text()) if report_path.exists() else {}
                 interrupted=(code in (130,-1073741510,3221225786) or
-                             'KeyboardInterrupt' in report.get('error',''))
+                             'KeyboardInterrupt' in str(report.get('error') or '') or
+                             report.get('stop_reason')=='interrupted' or
+                             report.get('eval_stop_reason')=='interrupted')
                 if interrupted or not keep_going or report.get('finalization_errors')!=[]:
                     raise RuntimeError(f'{job["name"]} {job["mode"]} exited {code}; batch stopped')
                 if job['mode']=='train':failed_training.add(job['name'])
                 print(f'[FAILED] {job["name"]} {job["mode"]}; outputs preserved; continuing independent stages',flush=True)
                 continue
-            checked_result(job)
             completed.append(dict(name=job['name'],mode=job['mode']))
             (output/'completed_stages.json').write_text(json.dumps(completed,indent=2))
     finally:
         (output/'comparison.json').write_text(json.dumps(summarize(plan),indent=2))
-    if failed:raise RuntimeError(f'{len(failed)} stages failed; completed results preserved in {output}')
+    if failed:raise StageFailures(f'{len(failed)} stages failed; completed results preserved in {output}')
 
 
 def continue_smoke(parent_path,output,*,same_sources=False):

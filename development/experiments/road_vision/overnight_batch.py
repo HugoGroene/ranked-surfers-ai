@@ -39,16 +39,16 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--execute',action='store_true')
     p.add_argument('--smoke-only',action='store_true')
-    p.add_argument('--train-minutes',type=float,default=25)
-    p.add_argument('--eval-episodes',type=int,default=50)
-    p.add_argument('--eval-max-minutes',type=float,default=15)
-    p.add_argument('--max-hours',type=float,default=12)
+    p.add_argument('--train-minutes',type=float,default=30)
+    p.add_argument('--eval-episodes',type=int,default=300)
+    p.add_argument('--eval-max-minutes',type=float,default=90)
+    p.add_argument('--max-hours',type=float,default=0,help='Optional stage scheduling budget; zero disables it')
     p.add_argument('--seeds',type=int,nargs='+',default=[123,456])
     p.add_argument('--output',type=Path)
     p.add_argument('--resume',type=Path)
     a=p.parse_args()
-    if not 0<a.train_minutes<=120 or not 0<a.eval_max_minutes<=60 or a.eval_episodes<1:p.error('Invalid budgets')
-    if not math.isfinite(a.max_hours) or not 0<a.max_hours<=48:p.error('Invalid batch hours')
+    if not 0<a.train_minutes<=120 or not 0<a.eval_max_minutes<=2880 or a.eval_episodes<1:p.error('Invalid budgets')
+    if not math.isfinite(a.max_hours) or not 0<=a.max_hours<=168:p.error('Invalid batch hours')
     if not a.seeds or len(set(a.seeds))!=len(a.seeds) or any(not 0<=s<2**32 for s in a.seeds):p.error('Invalid seeds')
     folder=(a.output or ROOT/'reports'/('road_overnight_'+datetime.now().strftime('%Y%m%d_%H%M%S_%f'))).resolve()
     if not folder.is_relative_to(ROOT/'reports') or folder.exists():p.error('Use a new reports folder')
@@ -78,7 +78,9 @@ def main():
     write_json(folder/'plan.json',plan)
     print('OVERNIGHT PLAN:',folder/'plan.json',flush=True)
     print('All offline checks, then all 10 smoke training/evaluation pairs, then all full training, then evaluations.',flush=True)
-    print('Defaults: 20 fresh models x 25 minutes = 8h20 training; typically 10-12h total. Budget checked before each stage; completed stages are resumable.',flush=True)
+    count=len(plan['cases'])*len(plan['seeds'])
+    print(f"{count} fresh models x {plan['train_minutes']:g} minutes; {plan['eval_episodes']} evaluation episodes/model. "
+          f"Batch scheduling budget: {str(plan['max_hours'])+' hours' if plan['max_hours'] else 'disabled'}. Completed stages are resumable.",flush=True)
     if a.execute:
         for suite in ('temporal_history','capture_pipeline'):
             result=subprocess.run([sys.executable,'-B','-s','-m','unittest','discover','-s',

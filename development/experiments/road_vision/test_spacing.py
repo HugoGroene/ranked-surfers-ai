@@ -53,17 +53,37 @@ class SpacingTests(unittest.TestCase):
     def test_plan_is_controlled_and_training_precedes_eval(self):
         self.assertEqual(len(cases()),10)
         with tempfile.TemporaryDirectory() as tmp:
-            plan=phase_plan(Path(tmp),[123,456],25,50,6)
+            plan=phase_plan(Path(tmp),[123,456],30,300,90)
         jobs=plan['jobs'];self.assertEqual(len(jobs),40)
         self.assertEqual(len({j['output'] for j in jobs}),40)
         self.assertTrue(all(j['mode']=='train' for j in jobs[:20]))
         self.assertTrue(all(j['mode']=='eval' for j in jobs[20:]))
         for train,evaluation in zip(jobs[:20],jobs[20:]):
+            self.assertEqual(train['command'][train['command'].index('--minutes')+1],'30')
+            self.assertEqual(evaluation['command'][evaluation['command'].index('--episodes')+1],'300')
             self.assertEqual(train['name'],evaluation['name'])
             for flag in ('--arm','--spacing','--span-ms','--capture-backend','--seed'):
                 self.assertEqual(train['command'][train['command'].index(flag)+1],evaluation['command'][evaluation['command'].index(flag)+1])
             self.assertIn(str(Path(train['output'])/'latest.zip'),evaluation['command'])
             self.assertNotIn('--checkpoint',train['command'])
             self.assertNotIn('--bc-root',train['command'])
+
+    def test_smoke_failure_prevents_entire_full_phase(self):
+        import json
+        from types import SimpleNamespace
+        from road_batch import run
+        import batch as engine
+        with tempfile.TemporaryDirectory() as tmp:
+            folder=Path(tmp);(folder/'sources.json').write_text('{}')
+            for phase in ('smoke','trials'):
+                (folder/phase).mkdir();(folder/phase/'plan.json').write_text('{"jobs": []}')
+            with patch('road_batch.source_hashes',return_value={}), \
+                 patch('road_batch.subprocess.run',return_value=SimpleNamespace(returncode=0)), \
+                 patch.object(engine,'execute',side_effect=RuntimeError('smoke failed')) as execute, \
+                 patch.object(engine,'source_hashes',engine.source_hashes):
+                with self.assertRaisesRegex(RuntimeError,'smoke failed'):run({'max_hours':0},folder)
+                execute.assert_called_once()
+                self.assertFalse(execute.call_args.kwargs['keep_going'])
+            self.assertEqual(json.loads((folder/'batch_status.json').read_text())['status'],'STOPPED')
 
 if __name__=='__main__':unittest.main()

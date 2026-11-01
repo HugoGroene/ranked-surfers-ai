@@ -75,6 +75,9 @@ def run(plan,output,smoke_only=False):
     except BatchBudgetReached:
         status='BUDGET_LIMIT'
         raise
+    except engine.StageFailures:
+        status='COMPLETED_WITH_FAILURES'
+        raise
     except BaseException:
         status='STOPPED'
         raise

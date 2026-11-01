@@ -115,7 +115,13 @@ class ContinuationTests(unittest.TestCase):
     def test_keep_going_respects_user_cancellation(self):
         self.abort_case([],'KeyboardInterrupt()')
 
-    def abort_case(self, errors, error):
+    def test_smoke_failure_stops_even_with_successful_cleanup(self):
+        self.abort_case([],None,keep_going=False)
+
+    def test_interrupted_report_with_null_error_stops(self):
+        self.abort_case([],None,stop_reason='interrupted')
+
+    def abort_case(self, errors, error,keep_going=True,stop_reason='error'):
         from types import SimpleNamespace
         with tempfile.TemporaryDirectory() as temp:
             output=Path(temp);(output/'sources.json').write_text('{}')
@@ -123,10 +129,10 @@ class ContinuationTests(unittest.TestCase):
             def wait():
                 folder=Path(jobs[0]['output']);folder.mkdir(parents=True)
                 (folder/'trial_report.json').write_text(json.dumps(dict(status='STOPPED',
-                    finalization_errors=errors,error=error)))
+                    finalization_errors=errors,error=error,stop_reason=stop_reason)))
                 return 1
             with patch('batch.source_hashes',return_value={}),patch('batch.subprocess.Popen',return_value=SimpleNamespace(stdout=[],wait=wait)) as launch,patch('batch.summarize',return_value={}):
-                with self.assertRaisesRegex(RuntimeError,'batch stopped'):execute({'jobs':jobs},output,keep_going=True)
+                with self.assertRaisesRegex(RuntimeError,'batch stopped'):execute({'jobs':jobs},output,keep_going=keep_going)
                 self.assertEqual(launch.call_count,1)
 
     def test_full_continuation_requires_exact_sources(self):
@@ -143,6 +149,12 @@ class ContinuationTests(unittest.TestCase):
                     continue_smoke(path,root/'other',same_sources=True)
 
     def test_keep_going_skips_failed_model_eval_but_runs_other_arm(self):
+        self.keep_going_case(1)
+
+    def test_zero_exit_with_incomplete_report_still_skips_failed_model(self):
+        self.keep_going_case(0)
+
+    def keep_going_case(self,failed_exit):
         from types import SimpleNamespace
         with tempfile.TemporaryDirectory() as temp:
             output=Path(temp);(output/'sources.json').write_text('{}')
@@ -153,11 +165,11 @@ class ContinuationTests(unittest.TestCase):
                 def wait():
                     folder=Path(job['output']);folder.mkdir(parents=True)
                     fail=job is jobs[0]
-                    report=dict(status='STOPPED' if fail else 'COMPLETE',finalization_errors=[],
+                    report=dict(status='STOPPED' if fail else 'COMPLETE',finalization_errors=[],error=None,
                                 audit={'status':'PASS_SETTLED_LEARNING'},completed_requested_episodes=True)
                     name='trial_report.json' if job['mode']=='train' else 'v61_eval_report.json'
                     (folder/name).write_text(json.dumps(report));(folder/'latest.zip').write_bytes(b'fixture')
-                    return int(fail)
+                    return failed_exit if fail else 0
                 return SimpleNamespace(stdout=[],wait=wait)
             with patch('batch.source_hashes',return_value={}),patch('batch.subprocess.Popen',side_effect=child),patch('batch.summarize',return_value={}):
                 with self.assertRaisesRegex(RuntimeError,'1 stages failed'):execute({'jobs':jobs},output,keep_going=True)
