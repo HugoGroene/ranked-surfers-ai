@@ -40,7 +40,7 @@ def main():
     p.add_argument('--execute',action='store_true')
     p.add_argument('--smoke-only',action='store_true')
     p.add_argument('--train-minutes',type=float,default=30)
-    p.add_argument('--eval-episodes',type=int,default=300)
+    p.add_argument('--eval-episodes',type=int,default=200)
     p.add_argument('--eval-max-minutes',type=float,default=90)
     p.add_argument('--max-hours',type=float,default=0,help='Optional stage scheduling budget; zero disables it')
     p.add_argument('--seeds',type=int,nargs='+',default=[123,456])

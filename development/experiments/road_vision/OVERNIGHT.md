@@ -38,15 +38,15 @@ spacing at road192. It cannot establish interactions between every spacing and
 every resolution. Confirm the promising combination later if needed.
 
 Each configuration uses seeds 123 and 456, a fresh model, 30 minutes of PPO and
-300 deterministic evaluation episodes (90-minute cap per evaluation). Timed-out
+200 deterministic evaluation episodes (90-minute cap per evaluation). Timed-out
 evaluations remain incomplete, not passing results. Training game-track seeds
 are not controlled. Two seeds improve screening but are not a definitive ranking.
 
 All use one worker, full-resolution gpu_100 capture, detector off, requested 60-Hz
 capture and maximum 30-Hz decisions, unchanged action timing/rewards/guards. No BC.
 Model weights and optimizer start fresh for every full trial, not from smoke or
-the latest production model. Defaults total ten hours of training plus 6,000
-evaluation episodes, approximately 20-26 hours overall at recent episode/reset
+the latest production model. Defaults total ten hours of training plus 4,000
+evaluation episodes, approximately 17-22 hours overall at recent episode/reset
 speeds; stronger policies may take longer. The default `--max-hours 0` disables
 the whole-batch time limit. An optional positive `--max-hours` checks the budget
 before each new stage, reserving its configured duration plus three minutes for
@@ -60,6 +60,14 @@ continue only after recorded successful cleanup; missing cleanup evidence or use
 interruption stops the batch. Failed training is never evaluated. Even a zero
 process exit code does not override a failed report/audit. New budgets apply to
 new plans; resume deliberately preserves the original plan's settings.
+
+Terminal `[BATCH PROGRESS]` lines show stages finished out of 60 (20 smoke and
+40 full train/evaluation stages), passed/failed/skipped/retained counts, overall
+elapsed time, current configuration and stage wall time. During evaluation they
+also show episodes completed out of 200. Updates occur at stage boundaries and
+at most every 30 seconds while existing child output arrives; a silent/hung child
+does not produce heartbeats. Stage counts are not an estimate of elapsed-time
+percentage. No extra screenshots or game queries are added.
 
 ## Exact history meaning
 

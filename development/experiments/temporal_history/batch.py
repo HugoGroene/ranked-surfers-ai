@@ -83,7 +83,7 @@ def summarize(plan):
 class StageFailures(RuntimeError):
     """All runnable independent stages finished, but at least one failed."""
 
-def execute(plan,output,keep_going=False,before_job=None):
+def execute(plan,output,keep_going=False,before_job=None,progress=None):
     expected=json.loads((output/'sources.json').read_text())
     if source_hashes()!=expected:raise RuntimeError('Sources changed since planning; make a new plan')
     for job in plan['jobs']:
@@ -99,15 +99,18 @@ def execute(plan,output,keep_going=False,before_job=None):
                 if file_hash(retained['path'])!=retained['sha256']:raise RuntimeError('Retained smoke artifact changed')
             if job['mode']=='eval' and job['name'] in failed_training:
                 print(f'[SKIPPED] {job["name"]} eval: training incomplete',flush=True)
+                if progress:progress(job,'SKIPPED')
                 continue
             if job.get('reused'):
                 checked_result(job)
                 print(f'[RETAINED] {job["name"]} {job["mode"]}: {job["output"]}',flush=True)
                 completed.append(dict(name=job['name'],mode=job['mode'],reused=True))
+                if progress:progress(job,'RETAINED')
                 (output/'completed_stages.json').write_text(json.dumps(completed,indent=2))
                 continue
             log=output/f'{job["name"]}_{job["mode"]}.log'
             if before_job is not None:before_job(job)
+            if progress:progress(job,'START')
             print(f'[{job["mode"].upper()}] {job["name"]}; log: {log}',flush=True)
             with log.open('x',encoding='utf8') as handle:
                 process=subprocess.Popen(job['command'],cwd=ROOT,stdout=subprocess.PIPE,
@@ -116,6 +119,7 @@ def execute(plan,output,keep_going=False,before_job=None):
                     for line in process.stdout:
                         print(line,end='',flush=True)
                         handle.write(line);handle.flush()
+                        if progress:progress(job,'OUTPUT',line)
                     code=process.wait()
                 except BaseException:
                     # Parent and child share the terminal Ctrl+C. Wait for child's
@@ -128,6 +132,7 @@ def execute(plan,output,keep_going=False,before_job=None):
                 try:checked_result(job)
                 except (OSError,ValueError,KeyError,RuntimeError) as exc:validation_error=repr(exc)
             if code or validation_error:
+                if progress:progress(job,'FAILED')
                 failed.append(dict(name=job['name'],mode=job['mode'],exit_code=code,output=job['output'],
                                    validation_error=validation_error))
                 (output/'failed_stages.json').write_text(json.dumps(failed,indent=2))
@@ -147,6 +152,7 @@ def execute(plan,output,keep_going=False,before_job=None):
                 print(f'[FAILED] {job["name"]} {job["mode"]}; outputs preserved; continuing independent stages',flush=True)
                 continue
             completed.append(dict(name=job['name'],mode=job['mode']))
+            if progress:progress(job,'PASSED')
             (output/'completed_stages.json').write_text(json.dumps(completed,indent=2))
     finally:
         (output/'comparison.json').write_text(json.dumps(summarize(plan),indent=2))

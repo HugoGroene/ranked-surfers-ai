@@ -65,12 +65,15 @@ def run(plan,output,smoke_only=False):
         from road_bc import inspect_demos
         inspect_demos(plan['bc_root'],True)
     status='RUNNING'
+    from batch_progress import BatchProgress
+    phases=('smoke',) if smoke_only else ('smoke','trials')
+    progress=BatchProgress(sum(len(json.loads((output/phase/'plan.json').read_text())['jobs']) for phase in phases))
     try:
-        for phase in ('smoke','trials'):
-            if smoke_only and phase=='trials':break
+        for phase in phases:
+            progress.phase=phase
             folder=output/phase;phase_plan=json.loads((folder/'plan.json').read_text())
             engine.execute(phase_plan,folder,keep_going=(phase=='trials'),
-                           before_job=lambda job:check_stage_budget(job,deadline))
+                           before_job=lambda job:check_stage_budget(job,deadline),progress=progress)
         status='SMOKE_COMPLETE' if smoke_only else 'COMPLETE'
     except BatchBudgetReached:
         status='BUDGET_LIMIT'

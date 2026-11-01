@@ -53,14 +53,14 @@ class SpacingTests(unittest.TestCase):
     def test_plan_is_controlled_and_training_precedes_eval(self):
         self.assertEqual(len(cases()),10)
         with tempfile.TemporaryDirectory() as tmp:
-            plan=phase_plan(Path(tmp),[123,456],30,300,90)
+            plan=phase_plan(Path(tmp),[123,456],30,200,90)
         jobs=plan['jobs'];self.assertEqual(len(jobs),40)
         self.assertEqual(len({j['output'] for j in jobs}),40)
         self.assertTrue(all(j['mode']=='train' for j in jobs[:20]))
         self.assertTrue(all(j['mode']=='eval' for j in jobs[20:]))
         for train,evaluation in zip(jobs[:20],jobs[20:]):
             self.assertEqual(train['command'][train['command'].index('--minutes')+1],'30')
-            self.assertEqual(evaluation['command'][evaluation['command'].index('--episodes')+1],'300')
+            self.assertEqual(evaluation['command'][evaluation['command'].index('--episodes')+1],'200')
             self.assertEqual(train['name'],evaluation['name'])
             for flag in ('--arm','--spacing','--span-ms','--capture-backend','--seed'):
                 self.assertEqual(train['command'][train['command'].index(flag)+1],evaluation['command'][evaluation['command'].index(flag)+1])
