@@ -1,5 +1,49 @@
 # Ranked Surfers AI — Project Status, Development History, and Research Roadmap
 
+## Current handoff: 6 November 2026
+
+The sections below this handoff are historical. Use [README.md](README.md) for
+current commands and settings; the old branch/commit references and 557-aux,
+actor-only-BC recommendations below no longer describe the current workflow.
+
+Current branch: `headless-parallel`. Four headless workers split Halloween/Tokyo,
+384x384 RGB spatial encoder, fixed image ages [0, .05, .25, .75], 789 auxiliary
+values including 32 one-second command slots. Detector off; stateful guard on.
+Verified pauses retain history; uncertain continuity resets it. Shared PPO uses
+128 steps per worker, minibatch 32, five epochs. Latency optimizations preserve
+classifier input geometry and fresh-image checks; they are not evidence of better
+policy learning by themselves.
+
+The active classifier `multimap_20261106_221921_183521/candidate.pt` is selected
+through `development/experiments/multimap_classifier/maps.json`. It passed an
+86-second four-worker integration check with two updates and all worker audits;
+ordinary command latency 34.0/38.3 ms median/p95. Long-run reliability remains open.
+Baseline labels and snapshots are retained. See the classifier README for the
+known mislabeled validation image and validation limitations.
+
+PPO source used for the first current BC trial:
+`reports/multimap_stability_20261106_171018_244012/stability/train/latest.zip`,
+5,314,048 saved timesteps. This directly continues the 12:55 model by 61,440
+transitions. Neither recency nor the historical 171-second outlier proves it is
+better than earlier checkpoints.
+
+BC preparation is complete: 221 selected runs, 101,755 training examples and 8,214
+whole-session validation examples; three-second end trim; ~50.3 GB local export.
+Human-reviewed state corrections are checksummed and propagated without changing
+native recordings. BC updates encoder+actor, preserves critic-head weights, saves
+a separate candidate and is followed by ordinary PPO without a BC loss. At this
+publication snapshot, the first BC trial is running; do not claim BC improvement
+until validation and matched gameplay comparisons are reviewed.
+
+Next: finish BC, compare source and candidate on both maps, then decide which
+checkpoint to continue. Keep monitoring latency spikes, per-map survival,
+checkpoint integrity and guard recovery during longer runs. Adding new maps needs
+recording/label expansion and explicit worker-routing changes, not only a registry
+entry. Current checkpoints, recordings, map assets and generated reports stay local.
+
+---
+
+
 
 > **Status snapshot: 27 October 2026** | Active development branch: `demo-recorder-debug-20261027` | Last confirmed pre-documentation commit: `e0b1cf9` | RL: V6.1.2 PPO | Human demonstration recorder: V1.3
 >
@@ -13,7 +57,7 @@
 
 The ultimate stated ambition is to build an **AI gameplay bot (an “AI cheat”) for Ranked Surfers**, able to observe the game, understand approaching hazards and execute all five possible movements autonomously. The current implementation does **not** establish functionality or permission for automating the public ranked service: all documented training and testing is on the **local Practice copy**. Site rules may prohibit automation or cheating; review the current site terms and obtain authorization for any online experiments. Do not confuse a local PPO survival benchmark with competitive online capability. This document does not provide evasion or anti-cheat bypass instructions.
 
-## Executive summary
+## Historical executive summary (27 October)
 
 The repository is now at a fairly clear transition point: **the main problem is no longer “does PPO learn anything?”** The committed evidence shows that PPO did learn useful survival behavior, and the newer local continuation appears to have improved it further. The dominant technical failure is now **action collapse**: the policy has learned a strategy dominated by `JUMP`, `ROLL`, and `NONE`, while effectively abandoning `LEFT` and `RIGHT`. The newest documented 100-episode evaluation reports zero deterministic lateral actions despite nonzero lateral action probabilities. 
 

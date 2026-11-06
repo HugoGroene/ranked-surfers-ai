@@ -238,7 +238,12 @@ def build_env_class():
             self._learning_verified_duration = 0.
             self._learning_excluded_pause = 0.
             self._learning_pause_started = None
+            self._stateful_episode_verified = False
+            self._stateful_evidence = None
+            from tools.ppo_stateful_continuity import Continuity
+            self._stateful_continuity = Continuity()
             result = super().reset(seed=seed, options=options)
+            self._stateful_episode_verified = True
             self._learning_origin = time.perf_counter()
             return result
 
@@ -267,13 +272,28 @@ def build_env_class():
                     '.game-pause-panel[aria-label="Game paused"]')
                 paused_frame_skips = 0
                 window = ResyncWindow()
+                from tools.ppo_stateful_continuity import Continuity
+                self._stateful_continuity = Continuity()
+                self._stateful_evidence = None
                 self.native_history.clear()  # never mix pre-/post-optimizer frames
                 self.frame_intervals.clear()
                 self.previous_observation_at = None
                 observation = None
                 accepted_traces = []
+                resync_checks = []
                 previous_native_present = None
-                for attempt in range(MAX_RESYNC_CAPTURES):
+                from tools.ppo_resync_transient_v172 import completion_tail_frames
+                import os
+                continuity_enabled = os.environ.get('RS_STATEFUL_GUARD') == '1'
+                extra_captures = 0
+                for attempt in range(MAX_RESYNC_CAPTURES + 3):
+                    if attempt == MAX_RESYNC_CAPTURES:
+                        extra_captures = completion_tail_frames(window.accepted, continuity_enabled)
+                        if extra_captures:
+                            print(f'[PPO RESYNC TAIL] Completing {window.accepted}/4 accepted frames; '
+                                  f'at most {extra_captures} extra captures; NO keys.',flush=True)
+                    if attempt >= MAX_RESYNC_CAPTURES + extra_captures:
+                        break
                     if attempt:
                         await asyncio.sleep(.033)
                     # Only the foreground local Practice may feed the PPO image.
@@ -290,6 +310,7 @@ def build_env_class():
                     pause_visual, pause_difference = matches_prior_paused_panel(
                         self._v2_last_bgra, reference)
                     if pause_dom_before or pause_dom_after or pause_visual:
+                        resync_checks.append(dict(capture=attempt+1,state='PAUSED',decision='EXCLUDE'))
                         paused_frame_skips += 1
                         origin = ('DOM' if pause_dom_before or pause_dom_after
                                   else 'RENDERED_FRAME')
@@ -327,10 +348,20 @@ def build_env_class():
                     # even if the first animated template is weak. It cannot
                     # authorize a terminal/reset: the callback still requires
                     # four fresh, consecutive ML+template confirmations.
+                    import os
+                    continuity_enabled = os.environ.get('RS_STATEFUL_GUARD') == '1'
+                    continuity = False
+                    if continuity_enabled:
+                        from tools.ppo_stateful_continuity import verify
+                        continuity = await verify(self,state,probs,menu_score,resync=True)
                     decision = window.observe(
                         state=state, probs=probs, menu_score=menu_score,
                         confidence=self.state_confidence,
-                        menu_threshold=self.args.threshold)
+                        menu_threshold=self.args.threshold,
+                        continuity=continuity,continuity_pending=continuity_enabled)
+                    resync_checks.append(dict(capture=attempt+1,state=state,probabilities=probs,
+                        menu_score=float(menu_score),continuity=bool(continuity),decision=decision,
+                        accepted=window.accepted,skipped=window.skipped))
                     if (window.menu_candidate and
                             self._ppo_post_resume_menu_candidate is None):
                         self._ppo_post_resume_menu_candidate = (
@@ -393,8 +424,19 @@ def build_env_class():
                         for line in accepted_traces:
                             print(line, flush=True)
                         return observation, None
+                # Preserve the exhausted window too, not only explicit ABORTs.
+                # These diagnostics never grant an action or change a reward.
+                try:
+                    import json
+                    import cv2
+                    stem=self.output_dir/f'ppo_resync_exhausted_ep{self.episode_number:04d}'
+                    stem.with_suffix('.json').write_text(json.dumps(resync_checks,indent=2),encoding='utf8')
+                    if self._v2_last_bgra is not None:
+                        cv2.imwrite(str(stem.with_suffix('.jpg')),self._v2_last_bgra[:,:,:3])
+                except Exception as diagnostic_error:
+                    print(f'[PPO RESYNC] Exhaustion diagnostic unavailable: {diagnostic_error}',flush=True)
                 return None, (f'No four consecutive GAMEPLAY frames within '
-                              f'{MAX_RESYNC_CAPTURES} captures; '
+                              f'{MAX_RESYNC_CAPTURES + extra_captures} captures; '
                               f'transient_skips={window.skipped}; no keys sent')
 
             obs, reason = self._call(capture_fresh_stack(), timeout=15)
@@ -403,20 +445,31 @@ def build_env_class():
         def confirm_post_optimizer_menu(self):
             """Passively verify a death after PPO updates using four recent MENU frames.
 
-            Allow up to eight fresh captures to outlast a brief early animation dip.
+            Allow eight fresh captures, plus four only for a corroborated late menu.
             NEVER lower any guard threshold or restart based on ML alone.
             No keys are sent here; a separate inherited safe reset handles R.
             """
             import asyncio
+            import time
             from rs_v612_gameplay_guard import screen_gate
             from tools.ppo_menu_guard_alignment_v14 import (
-                accept_menu_after_transient, MAX_CONFIRM_CAPTURES)
+                accept_menu_after_transient, MAX_CONFIRM_CAPTURES,
+                MAX_EXTENDED_CONFIRM_CAPTURES, late_menu_confirmation_pending)
 
             async def confirm():
                 if self._guard_hard_stopped:
                     return False, 'gameplay guard already hard-stopped'
                 readings = []
-                for i in range(MAX_CONFIRM_CAPTURES):
+                limit = MAX_CONFIRM_CAPTURES
+                confirmed = False
+                track_candidate = getattr(self, '_ppo_post_resume_menu_candidate', None) is not None
+                for i in range(MAX_EXTENDED_CONFIRM_CAPTURES):
+                    if i == MAX_CONFIRM_CAPTURES:
+                        if not late_menu_confirmation_pending(readings):
+                            break
+                        limit = MAX_EXTENDED_CONFIRM_CAPTURES
+                        print('[PPO POST RESUME MENU] Corroborated late transition; '
+                              'up to four additional captures; NO movement.', flush=True)
                     if i:
                         await asyncio.sleep(.075)
                     # Focus can change while waiting. Do not authorize a reset
@@ -438,9 +491,20 @@ def build_env_class():
                         menu_threshold=float(self.args.threshold),
                         motion_threshold=self.startup_motion_threshold)
                     readings.append(reading)
+                    # A false initial MENU prediction can precede real gameplay.
+                    # Do not exclude that active interval as menu-idle time.
+                    if track_candidate:
+                        if reading.verdict == 'PLAY':
+                            self._ppo_post_resume_menu_candidate = None
+                        elif reading.ml_menu and self._ppo_post_resume_menu_candidate is None:
+                            self._ppo_post_resume_menu_candidate = (
+                                time.monotonic(), time.perf_counter(), time.time())
+                    if i >= MAX_CONFIRM_CAPTURES and (
+                            not reading.ml_menu or reading.visual_gameplay):
+                        break
                     # Requires 4 most recent independent captures to corroborate
                     # MENU. A weak or gameplay capture breaks the streak.
-                    if accept_menu_after_transient(readings, focused=focused):
+                    if accept_menu_after_transient(readings, focused=focused, max_captures=limit):
                         confirmed = True
                         break
                 else:
@@ -453,7 +517,7 @@ def build_env_class():
                          'corroborated': bool(r.ml_template_corroborated)}
                         for r in readings],
                     'required': '4 consecutive confident ML MENU + >=80% template corroboration',
-                    'max_checks': MAX_CONFIRM_CAPTURES,
+                    'max_checks': limit,
                 }
                 return confirmed, evidence
 
@@ -969,6 +1033,14 @@ def build_env_class():
                                       hud_pixels=hud_pixels,
                                       hud_changed_pixels=hud_changed_pixels,
                                       motion_threshold=self.startup_motion_threshold)
+                import os
+                if os.environ.get('RS_STATEFUL_GUARD') == '1':
+                    from tools.ppo_stateful_continuity import verify
+                    from dataclasses import replace
+                    allowed = await verify(self,state,probs,frame[1],
+                                           views=(hud,track) if shot is not None else None)
+                    if allowed and state == 'UNCERTAIN':
+                        reading = replace(reading,verdict='PLAY',visual_gameplay=True)
                 return frame, reading
 
             # A verified rollout-boundary MENU survives the optimizer unchanged.
@@ -1617,13 +1689,16 @@ def build_callback(a, output, raw=None):
                                 raise GuardUncertainError(
                                     '[PPO POST RESUME MENU] MENU not independently '
                                     f'confirmed: {evidence}; no inputs sent')
+                            # Confirmation may have seen genuine gameplay before
+                            # the eventual menu. Use its corrected candidate anchor.
+                            candidate = getattr(raw, '_ppo_post_resume_menu_candidate', None)
                             vec = self.model.env
                             if (self.model.n_envs != 1 or not hasattr(vec, 'envs') or
                                     len(vec.envs) != 1 or
                                     getattr(vec.envs[0], 'env', None) is not raw):
                                 raise GuardUncertainError(
                                     '[PPO POST RESUME MENU] Expected single Monitor(raw)')
-                            if len(candidate) != 3:
+                            if candidate is None or len(candidate) != 3:
                                 raise GuardUncertainError(
                                     '[PPO POST RESUME MENU] Missing first-menu time anchor')
                             from tools.ppo_optimizer_pause_clock import compensate_pause_clocks

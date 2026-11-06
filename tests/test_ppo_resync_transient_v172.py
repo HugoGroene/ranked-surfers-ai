@@ -150,8 +150,8 @@ class WindowTests(unittest.TestCase):
         self.assertEqual(env.actions_sent, 0)
         self.assertNotIn('[PPO RESYNC TRANSIENT]',log)
 
-    def test_uncertain_with_menu_probability_aborts(self):
-        suspect = frame('UNCERTAIN',.79,.11,.0)
+    def test_uncertain_with_dominant_menu_probability_aborts(self):
+        suspect = frame('UNCERTAIN',.39,.60,.0)
         env, obs, reason, _, _ = run_frames([suspect] + [GOOD]*4)
         self.assertIsNone(obs)
         self.assertIn('unsafe post-resume',reason)

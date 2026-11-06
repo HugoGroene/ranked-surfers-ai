@@ -1,0 +1,15 @@
+{
+  "offline_tests_passed": 12,
+  "cli_help_checks": [
+    "record",
+    "review",
+    "dataset",
+    "train"
+  ],
+  "live_recorder_tested": false,
+  "active_source_manifest": "reports\\multimap_stability_20261106_171018_244012\\stability\\train\\source_manifest.json",
+  "manifest_files_checked": 141,
+  "changed_manifest_files": [],
+  "edits_scope": "development/staged/multimap_bc_20261106 only",
+  "live_training_or_gpu_benchmark_started": false
+}

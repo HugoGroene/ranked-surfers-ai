@@ -2,3 +2,5 @@
 *.zip filter=lfs diff=lfs merge=lfs -text
 # Historical installer payloads are exact source snapshots; preserve their bytes.
 tools/_ppo_*_payload/*.txt -text -whitespace
+# Keep this historical recorder snapshot byte-identical to its provenance hash.
+development/staged/bc_recorder_20261102/recorder_snapshot.py -text -whitespace

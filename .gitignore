@@ -45,3 +45,13 @@ rankedsurfers-downloaded/cdn-cgi/
 /reports/**/electron/profile/
 /reports/**/pipeline_profile.jsonl
 /reports/**/decisions.jsonl
+
+# Current local datasets, downloaded maps, run artifacts and backups.
+# Already tracked historical reports remain versioned.
+/ai_data/multimap_bc_v1/
+/ai_data/multimap_screen_states/
+/rankedsurfers-maps/
+/reports/
+/development/patch_backups/
+/development/staged/audit_patch_20261031/
+/codex-evening-recovered-prompts.md

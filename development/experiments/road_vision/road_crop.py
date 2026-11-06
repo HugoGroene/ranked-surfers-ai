@@ -25,9 +25,9 @@ def recorded_observation(chw,config):
     # canvas_v1 letterboxes 1920x945 into 512x288: content is 512x252, y=18.
     return crop_rgb(chw[:,18:270,:].transpose(1,2,0),config)
 
-def preview(rgb,config,path):
+def preview(rgb,config,path,*,writer=None):
     """Save a diagnostic overlay on a copy; never consumed by a policy."""
     h,w=rgb.shape[:2];x0,y0,x1,y1=config['roi']
     out=cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR)
     cv2.rectangle(out,(round(x0*w),round(y0*h)),(round(x1*w)-1,round(y1*h)-1),(0,255,0),3)
-    if not cv2.imwrite(str(path),out):raise OSError('Preview write failed')
+    if not (writer or cv2.imwrite)(str(path),out):raise OSError('Preview write failed')

@@ -349,7 +349,8 @@ class BackgroundDisplayMixin:
             if not getattr(self,'_canvas_profile_preview_saved',False):
                 for name,bgr in [('canvas_v1_native.png',cv2.cvtColor(native,cv2.COLOR_RGB2BGR)),
                                  ('canvas_v1_policy.png',cv2.cvtColor(small.transpose(1,2,0),cv2.COLOR_RGB2BGR))]:
-                    if not cv2.imwrite(str(self.output_dir/name),bgr):
+                    writer=getattr(self,'_policy_preview_writer',cv2.imwrite)
+                    if not writer(str(self.output_dir/name),bgr):
                         raise RuntimeError('Could not save framing evidence')
                 (self.output_dir/'framing_profile.json').write_text(json.dumps(dict(
                     profile='canvas_v1',native_wh=self.native_image_wh,target_wh=self.target_wh,

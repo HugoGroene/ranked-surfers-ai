@@ -6,6 +6,24 @@
 const path=require('node:path');
 const koffi=require(path.resolve(__dirname,'../../local/electron_worker/node_modules/koffi'));
 const signatures=new Map();
+function copyMapped(copy,pixels,ptr,pitch,row,height,bulk=true) {
+  if(!ptr||!Number.isSafeInteger(row)||row<=0||!Number.isSafeInteger(height)||height<=0||
+     !Number.isSafeInteger(pitch)||pitch<row||pixels.length!==row*height)
+    throw Error('Invalid mapped texture copy layout');
+  // Padding is not image data. Only collapse copies when row pitch is exact.
+  if(bulk&&pitch===row){copy(pixels,ptr,pixels.length);return 1;}
+  for(let y=0;y<height;y++)copy(pixels.subarray(y*row,(y+1)*row),ptr+BigInt(y*pitch),row);
+  return height;
+}
+function copyMappedTo(copy,target,ptr,pitch,row,height) {
+  if(!target||typeof target.pointer!=='bigint'||target.pointer===0n||!ptr||
+     !Number.isSafeInteger(row)||row<=0||!Number.isSafeInteger(height)||height<=0||
+     !Number.isSafeInteger(pitch)||pitch<row||target.bytes!==row*height)
+    throw Error('Invalid mapped texture destination');
+  if(pitch===row){copy(target.pointer,ptr,target.bytes);return 1;}
+  for(let y=0;y<height;y++)copy(target.pointer+BigInt(y*row),ptr+BigInt(y*pitch),row);
+  return height;
+}
 function method(object,slot,result,params,...args) {
   if(!object)throw Error('Null COM object');
   const key=result+'('+params.join(',')+')';
@@ -74,7 +92,7 @@ class Bridge {
     }catch(e){this.close();throw e;}
   }
   texture(desc){const out=[null];check(method(this.device,5,'int32_t',['void *','void *','_Out_ void **'],desc,null,out),'CreateTexture2D');this.owned.push(out[0]);return out[0];}
-  read(info,sourceWidth,sourceHeight) {
+  read(info,sourceWidth,sourceHeight,target=null) {
     const trace=message=>{if(process.env.RS_GPU_TRACE==='1')require('node:fs').writeSync(2,message+'\n');};
     if(!['rgba','bgra'].includes(info.pixelFormat))throw Error('Unsupported shared format '+info.pixelFormat);
     const handle=info.handle.ntHandle;
@@ -108,13 +126,15 @@ class Bridge {
       // Blocking Map completes the GPU copy, keeping Electron's lease alive.
       trace('map');
       check(method(this.context,14,'int32_t',['void *','uint32_t','uint32_t','uint32_t','void *'],this.staging,0,1,0,map),'Map');mapped=true;
-      const afterMap=performance.now(),pixels=Buffer.allocUnsafe(this.width*this.height*4);
+      const afterMap=performance.now(),bytes=this.width*this.height*4,pixels=target?null:Buffer.allocUnsafe(bytes);
       const ptr=map.readBigUInt64LE(0),pitch=map.readUInt32LE(8),row=this.width*4;
       if(!ptr||pitch<row)throw Error('Invalid mapped texture pitch');
       trace('memcpy');
-      for(let y=0;y<this.height;y++)this.copy(pixels.subarray(y*row,(y+1)*row),ptr+BigInt(y*pitch),row);
-      return {pixels,profile:{gpu_submit_ms:beforeMap-start,gpu_map_wait_ms:afterMap-beforeMap,
-        mapped_copy_ms:performance.now()-afterMap,gpu_bridge_ms:performance.now()-start}};
+      const copyCalls=target?copyMappedTo(this.copy,target,ptr,pitch,row,this.height):
+        copyMapped(this.copy,pixels,ptr,pitch,row,this.height,process.env.RS_GPU_BULK_COPY!=='0');
+      return {pixels,byte_length:bytes,profile:{gpu_submit_ms:beforeMap-start,gpu_map_wait_ms:afterMap-beforeMap,
+        mapped_copy_ms:performance.now()-afterMap,gpu_bridge_ms:performance.now()-start,
+        mapped_row_pitch:pitch,mapped_copy_calls:copyCalls,direct_shared_readback:!!target}};
     } finally {
       if(mapped)method(this.context,15,'void',['void *','uint32_t'],this.staging,0);
       release(view);release(texture);
@@ -122,4 +142,4 @@ class Bridge {
   }
   close(){if(this.context)method(this.context,110,'void',[]);for(const p of this.owned.reverse())release(p);this.owned=[];this.context=null;}
 }
-module.exports={Bridge,guid};
+module.exports={Bridge,guid,copyMapped,copyMappedTo};

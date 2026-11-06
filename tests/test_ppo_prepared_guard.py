@@ -24,6 +24,52 @@ class PreparedGuardTests(unittest.TestCase):
 
 
 class ActualPreparedGuardTests(unittest.IsolatedAsyncioTestCase):
+    async def test_late_menu_transition_completes_or_stops_without_movement(self):
+        from tests.test_ppo_stream_menu_tail import late_menu_failure
+        from rs_v612_gameplay_guard import GuardUncertainError
+        for fresh_score,extra,terminal in [(.60,4,True),(.10,6,False)]:
+            with self.subTest(fresh_score=fresh_score):
+                env=self.environment();env._headless_backend='electron'
+                readings=late_menu_failure()
+                scores=[r.menu_score for r in readings]+[fresh_score]*extra
+                states=[(r.state,{'MENU':r.menu_probability,'GAMEPLAY':r.gameplay_probability})
+                        for r in readings]+[('MENU',{'MENU':1.})]*extra
+                env._capture=AsyncMock(side_effect=[(env._v2_last_chw,s,None) for s in scores])
+                env._read_screen_state=Mock(side_effect=states)
+                with patch('time.perf_counter',return_value=10.05),patch('asyncio.sleep',new=AsyncMock()):
+                    if terminal:await env._step_browser(1)
+                    else:
+                        with self.assertRaises(GuardUncertainError):await env._step_browser(1)
+                self.assertEqual(env._capture.await_count,6+extra)
+                self.assertEqual(env._guard_forced_terminal,terminal)
+                self.assertEqual(env._guard_hard_stopped,not terminal)
+                env.page.keyboard.press.assert_not_awaited()
+                env.action_context.note_action.assert_not_called()
+
+    async def test_ep2250_rechecks_without_sending_the_sampled_action(self):
+        from tests.test_ppo_stream_menu_tail import sustained_six_failure
+        from rs_v612_gameplay_guard import GuardUncertainError
+        for fresh_score,extra,terminal in [(.60,3,True),(.10,6,False)]:
+            with self.subTest(fresh_score=fresh_score):
+                env=self.environment()
+                env._headless_backend='electron'
+                readings=sustained_six_failure()
+                scores=[r.menu_score for r in readings]+[fresh_score]*extra
+                probabilities=[{'MENU':r.menu_probability,'GAMEPLAY':r.gameplay_probability}
+                               for r in readings]+[{'MENU':1.}]*extra
+                env._capture=AsyncMock(side_effect=[(env._v2_last_chw,s,None) for s in scores])
+                env._read_screen_state=Mock(side_effect=[('MENU',p) for p in probabilities])
+                with patch('time.perf_counter',return_value=10.05),patch('asyncio.sleep',new=AsyncMock()):
+                    if terminal:
+                        await env._step_browser(1)
+                    else:
+                        with self.assertRaises(GuardUncertainError):await env._step_browser(1)
+                self.assertEqual(env._capture.await_count,6+extra)
+                self.assertEqual(env._guard_forced_terminal,terminal)
+                self.assertEqual(env._guard_hard_stopped,not terminal)
+                env.page.keyboard.press.assert_not_awaited()
+                env.action_context.note_action.assert_not_called()
+
     async def test_recorded_two_dip_menu_uses_original_confirmation_without_movement(self):
         from tests.test_ppo_stream_menu_tail import two_dip_failure
         env=self.environment()

@@ -32,7 +32,8 @@ def install(trainer,config,*,crop_previews=False):
             def _native_frames(self):
                 small,native=super()._native_frames()
                 if not self._road_preview_saved:
-                    preview(native,config,self.output_dir/'road_crop_bounds.png')
+                    preview(native,config,self.output_dir/'road_crop_bounds.png',
+                            writer=getattr(self,'_policy_preview_writer',None))
                     from road_config import write_json
                     write_json(self.output_dir/'road_crop_manifest.json',dict(config=config,
                         guard_view='unchanged full canvas',candidate_not_visibility_validated=True))

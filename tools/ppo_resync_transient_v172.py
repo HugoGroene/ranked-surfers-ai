@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Conservative, observation-only transient window after the PPO optimizer.
 
-A classifier vote of UNCERTAIN is *never* a positive gameplay vote.
-PPO resumes only after four consecutive independent GAMEPLAY captures.
+PPO resumes only after four consecutive accepted fresh captures. The opt-in
+stateful guard may corroborate UNCERTAIN using independent visual continuity.
 """
 from __future__ import annotations
 import math
@@ -10,6 +10,15 @@ import math
 MAX_RESYNC_CAPTURES = 8
 MAX_TRANSIENT_SKIPS = 4
 REQUIRED_GAMEPLAY_FRAMES = 4
+
+
+def completion_tail_frames(accepted, enabled):
+    """One bounded opportunity to finish an already accepted partial stack.
+
+    No extra budget for zero evidence, and never enough for a new four-frame
+    sequence if another rejection occurs. Does not authorize keys or a terminal.
+    """
+    return REQUIRED_GAMEPLAY_FRAMES-accepted if enabled and 0<accepted<REQUIRED_GAMEPLAY_FRAMES else 0
 
 
 class ResyncWindow:
@@ -21,7 +30,8 @@ class ResyncWindow:
         self.last_reason = None
         self.menu_candidate = False
 
-    def observe(self, *, state, probs, menu_score, confidence, menu_threshold):
+    def observe(self, *, state, probs, menu_score, confidence, menu_threshold,
+                continuity=False, continuity_pending=False):
         """Return ACCEPT/DONE/RETRY/ABORT. Never authorizes an action directly."""
         self.observed += 1
         self.menu_candidate = False
@@ -49,7 +59,8 @@ class ResyncWindow:
             # It never accepts a terminal, packs a frame or permits an input.
             (state == 'UNCERTAIN' and p_menu >= max(.80, conf*.90)
              and p_game < .10 and score >= threshold*.80))
-        if state == 'GAMEPLAY' and p_game >= conf and score < threshold*.85:
+        if (state == 'GAMEPLAY' and p_game >= conf and score < threshold*.85) or (
+                continuity and state=='UNCERTAIN' and score<threshold*.30):
             self.accepted += 1
             self.last_reason = None
             return 'DONE' if self.accepted == REQUIRED_GAMEPLAY_FRAMES else 'ACCEPT'
@@ -59,9 +70,15 @@ class ResyncWindow:
         # In particular, a tunnel/camera transition can push p_game below .70.
         # Passive retries may wait for independent proof, but DO NOT permit a
         # movement key: four consecutive high-confidence GAMEPLAY captures are
-        # still required. MENU evidence, other states and exhausted retries
+        # still required. Strong template evidence, other states and exhausted retries
         # still abort. Never count an UNCERTAIN frame toward the image stack.
-        if (state == 'UNCERTAIN' and p_game < conf and p_menu < .10
+        # A catch/camera transition may mix GAMEPLAY and MENU probabilities
+        # (episode 1566: .649/.344, template .161). A majority GAMEPLAY vote
+        # with a weak template may also wait for fresh proof. It is NOT accepted
+        # as gameplay, and a subsequent confident MENU uses normal confirmation.
+        retry_probabilities = (continuity_pending or p_menu < .10 or
+                               (.50 < p_game < conf and p_menu < .50 and p_game > p_menu))
+        if (state == 'UNCERTAIN' and p_game < conf and retry_probabilities
                 and score < threshold * .30 and self.skipped < MAX_TRANSIENT_SKIPS):
             self.skipped += 1
             self.discarded_before_last_retry = self.accepted

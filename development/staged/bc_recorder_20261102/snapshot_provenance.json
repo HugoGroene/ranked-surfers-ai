@@ -1,0 +1,10 @@
+{
+  "source": "rs_v612_demo.py",
+  "source_sha256": "f7e0cc107e0e1ca01be9aaf6a183ef14d6b4527b8b72de1b137d3253617c7411",
+  "snapshot_sha256": "97c4d74a9d667b5e2b34f21975a92aa9689cb382c342497b95cbfb2e5f844959",
+  "changes": [
+    "lossless native PNG archive",
+    "separate output root",
+    "explicit offline visual approval"
+  ]
+}

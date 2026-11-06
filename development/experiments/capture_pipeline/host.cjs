@@ -74,18 +74,20 @@ app.whenReady().then(async()=>{
       // toBitmap is full-frame BGRA on Windows; tests check channels and corners.
       const request=socket.frameRequest;
       const bitmapStart=profileTimings?nowNs():null;
-      const converted=gpu?bridge.read(lease.textureInfo,width,height):null;
+      const direct=gpu&&shared&&process.env.RS_GPU_DIRECT_SHARED!=='0';
+      const converted=direct?shared.publishFrom(target=>bridge.read(lease.textureInfo,width,height,target),
+        serial,outputWidth,outputHeight):(gpu?bridge.read(lease.textureInfo,width,height):null);
       const pixels=gpu?converted.pixels:image.toBitmap();
       const bitmapEnd=profileTimings?nowNs():null;
       cancel(socket);
-      if (pixels.length!==outputWidth*outputHeight*4) {reply(socket,{error:'Unexpected bitmap length'});continue;}
+      if ((direct?converted.byte_length:pixels.length)!==outputWidth*outputHeight*4) {reply(socket,{error:'Unexpected bitmap length'});continue;}
       const metadata={width:outputWidth,height:outputHeight,channels:4,format:'BGRA',serial,paint_wall:paintWall,
-        byte_length:pixels.length,dirty,clock_kind:'Electron paint callback, not GPU presentation'};
+        byte_length:outputWidth*outputHeight*4,dirty,clock_kind:'Electron paint callback, not GPU presentation'};
       if(shared) {
         const copyStart=profileTimings?nowNs():null;
-        shared.publish(pixels,serial,outputWidth,outputHeight);
+        if(!direct)shared.publish(pixels,serial,outputWidth,outputHeight);
         metadata.transport='shared_memory';
-        metadata.shared_copy_ms=profileTimings?elapsedMs(nowNs(),copyStart):null;
+        metadata.shared_copy_ms=profileTimings?(direct?0:elapsedMs(nowNs(),copyStart)):null;
       }
       if(profileTimings)metadata.profile={...(converted?converted.profile:{}),
         node_request_to_paint_ms:elapsedMs(paintNs,request.receivedNs),

@@ -16,19 +16,38 @@ module.exports=function createSharedFrame(name,bytes) {
   const view=map(handle,2,0,0,bytes+64);
   if(!view){close(handle);throw Error('MapViewOfFile failed');}
   let closed=false;
+  function headerFor(serial,width,height) {
+    if(closed)throw Error('Shared mapping is closed');
+    if(!Number.isSafeInteger(serial)||serial<0||!Number.isSafeInteger(width)||width<=0||
+       !Number.isSafeInteger(height)||height<=0||width*height*4!==bytes)
+      throw Error('Invalid shared frame publication');
+    const header=Buffer.alloc(32);
+    header.writeUInt32LE(0x52534631,0);header.writeUInt32LE(1,4);
+    header.writeUInt32LE(width,8);header.writeUInt32LE(height,12);
+    header.writeBigUInt64LE(BigInt(serial),16);header.writeBigUInt64LE(BigInt(bytes),24);
+    return header;
+  }
   return {name,
     publish(pixels,serial,width,height) {
       if(closed)throw Error('Shared mapping is closed');
       if(pixels.length!==bytes)throw Error('Shared frame byte count changed');
-      const header=Buffer.alloc(32);
-      header.writeUInt32LE(0x52534631,0);header.writeUInt32LE(1,4);
-      header.writeUInt32LE(width,8);header.writeUInt32LE(height,12);
-      header.writeBigUInt64LE(BigInt(serial),16);header.writeBigUInt64LE(BigInt(bytes),24);
+      const header=headerFor(serial,width,height);
       // Invalidate publication before touching pixels, including protection
       // against an accidental concurrent request/reader.
       copy(view,Buffer.alloc(4),4);
       copy(view+64n,pixels,bytes);
       copy(view,header,header.length);
+    },
+    publishFrom(writer,serial,width,height) {
+      const header=headerFor(serial,width,height);
+      copy(view,Buffer.alloc(4),4);
+      // Synchronous writer owns this unpublished slot. On ANY error the magic
+      // stays invalid. Socket metadata is sent only after this method returns.
+      const result=writer({pointer:view+64n,bytes});
+      if(!result||result.byte_length!==bytes||typeof result.then==='function')
+        throw Error('Incomplete synchronous shared-frame write');
+      copy(view,header,header.length);
+      return result;
     },
     close(){if(!closed){closed=true;unmap(view);close(handle);}}
   };

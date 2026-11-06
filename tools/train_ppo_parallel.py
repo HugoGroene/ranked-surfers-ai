@@ -121,6 +121,19 @@ def worker_main(index, display, options, connection, abort, resources=None):
                         inference_client.digest=command['policy_hash']
                     install_policy(collector.policy, command['weights'], command['policy_hash'])
                     if not initialized:
+                        if options.get('exclude_first_episode'):
+                            from tools.ppo_startup_episode import discard_first_episode
+                            from stable_baselines3.common.utils import obs_as_tensor
+                            collector.policy.set_training_mode(False)
+                            def startup_action(observation):
+                                batch={key:value[np.newaxis] for key,value in observation.items()}
+                                with torch.no_grad():
+                                    sampled,_,_=collector.policy(obs_as_tensor(batch,collector.device))
+                                return int(sampled.cpu().numpy().reshape(-1)[0])
+                            # Bypass Monitor and every learning callback/buffer. _setup_learn
+                            # below performs the normal fresh episode/history reset afterwards.
+                            discard_first_episode(raw,startup_action,abort,output)
+                            collector._last_obs=None  # Force normal Monitor reset, never reuse warm-up endpoint.
                         callback = trainer.build_callback(args, output, raw=raw)
                         original_step = callback._on_step
                         episode_count = [0]
@@ -291,6 +304,8 @@ def main(argv=None):
                         help='Buffer per-decision capture/preprocessing/inference/guard timings for a short diagnostic')
     parser.add_argument('--electron-transport',choices=['socket','shared_memory'],default='socket')
     parser.add_argument('--reuse-frame-state',action='store_true',help='Reuse deterministic classification only for the identical capture/model/confidence')
+    parser.add_argument('--exclude-first-episode',action='store_true',
+                        help='Play one guarded episode per worker without collecting any PPO samples or learning statistics')
     parser.add_argument('--rollout-transport',choices=['pipe','shared_memory'],default='pipe')
     parser.add_argument('--compact-observations',action='store_true',help='Store exact unique RGB frames and reconstruct policy minibatches')
     parser.add_argument('--cache-detector-features',action='store_true')
@@ -308,6 +323,8 @@ def main(argv=None):
     parser.add_argument('--checkpoint', type=Path, required=True)
     parser.add_argument('--steps', type=int, default=65536, help='Total transitions across workers; complete cohorts only')
     parser.add_argument('--max-minutes', type=float, default=180.)
+    parser.add_argument('--wall-deadline',type=float,default=None,
+                        help='Optional Unix deadline shared by recovery attempts; stop at the next optimized boundary')
     parser.add_argument('--save-every-minutes', type=float, default=10.)
     parser.add_argument('--worker-timeout', type=float, default=180.)
     parser.add_argument('--state-model', type=Path, default=Path('checkpoints/v612_snapshot_20261021/screen_state_candidate_v2.pt'))
@@ -342,6 +359,8 @@ def main(argv=None):
         parser.error('Supports up to six headless workers or two dedicated displays')
     if not 0 < args.max_minutes <= 2880 or args.save_every_minutes <= 0 or args.worker_timeout < 15:
         parser.error('Invalid time limits')
+    if args.wall_deadline is not None and (not math.isfinite(args.wall_deadline) or args.wall_deadline<=0):
+        parser.error('wall-deadline must be a positive finite Unix timestamp')
     if args.preview_port is not None and not 1024 <= args.preview_port <= 65535:
         parser.error('Invalid preview port')
     for path in (args.checkpoint, args.state_model,*([args.detector] if args.detector_mode=='on' else [])):
@@ -476,7 +495,11 @@ def main(argv=None):
             if inference_host is not None:inference_host.install(version,weights,digest,args.worker_timeout)
             for connection in connections:
                 connection.send(dict(op='collect', version=version, weights=None if args.shared_inference else weights, policy_hash=digest))
-            packets = receive_all(connections, 'rollout', args.worker_timeout, abort)
+            # The first collection may include an entire untrained startup episode.
+            # Per-capture and guard timeouts stay unchanged; subsequent rounds use
+            # the usual worker timeout.
+            first_allowance=360 if version==0 and args.exclude_first_episode else 0
+            packets = receive_all(connections, 'rollout', args.worker_timeout+first_allowance, abort)
             if slots:packets=[slot.packet(packet,version,digest) for slot,packet in zip(slots,packets)]
             collection_seconds=time.perf_counter()-collection_started
             merge_rollouts(model.rollout_buffer, packets, worker_steps, version, digest)
@@ -512,7 +535,8 @@ def main(argv=None):
                 collection_seconds=collection_seconds,update_seconds=update_seconds,
                 training_stats=training_stats,total_timesteps=model.num_timesteps))
             done = (report['processed_transitions'] >= args.steps
-                    or time.perf_counter()-started >= args.max_minutes*60)
+                    or time.perf_counter()-started >= args.max_minutes*60
+                    or (args.wall_deadline is not None and time.time()>=args.wall_deadline))
             if not args.benchmark_only and (done or time.perf_counter()-last_save >= args.save_every_minutes*60):
                 save_atomic_checkpoint(model, args.report/'latest.zip')
                 import shutil

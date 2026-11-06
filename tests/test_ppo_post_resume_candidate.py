@@ -1,6 +1,7 @@
 """Replay the overnight weak-template MENU failure against current runtime."""
 import asyncio
 import types
+import time
 import unittest
 from unittest.mock import AsyncMock, patch
 
@@ -10,7 +11,7 @@ from tests import test_ppo_pause_runtime_v179 as refresh
 from tests import test_ppo_settled_learning as learning
 
 
-def confirm(sequence, *, focused=True):
+def confirm(sequence, *, focused=True, candidate=None):
     env=runtime.actual_class_method('confirm_post_optimizer_menu')()
     env.page=types.SimpleNamespace(evaluate=AsyncMock(return_value=focused))
     env._guard_hard_stopped=False
@@ -20,6 +21,7 @@ def confirm(sequence, *, focused=True):
     env.readings=iter(sequence)
     env.captures=0
     env.keys=[]
+    env._ppo_post_resume_menu_candidate=candidate
     async def capture():
         env.current=next(env.readings)
         env.captures+=1
@@ -41,6 +43,65 @@ def overnight_refresh():
 
 
 class CandidateTests(unittest.TestCase):
+    def test_callback_uses_reanchored_terminal_time_after_intervening_gameplay(self):
+        terminal_durations=[]
+        class ReanchoredProtocol(learning.ProtocolEnv):
+            def refresh_after_ppo_optimizer(self):
+                result=super().refresh_after_ppo_optimizer()
+                if self.mode=='post_resume_death' and self.boundaries==1:
+                    self.episode_start=time.monotonic()-5.
+                    self._ppo_post_resume_menu_candidate=(time.monotonic()-2.,
+                                                          time.perf_counter()-2.,time.time()-2.)
+                return result
+
+            def confirm_post_optimizer_menu(self):
+                # Real confirmation resets the false early anchor after PLAY.
+                self._ppo_post_resume_menu_candidate=(time.monotonic()-.01,
+                                                      time.perf_counter()-.01,time.time()-.01)
+                return True,{'checks':[{}]*11}
+
+            def step(self,action):
+                if self._ppo_boundary_menu_pending:
+                    terminal_durations.append(self._ppo_boundary_menu_duration_at)
+                return super().step(action)
+
+        with patch.object(learning,'ProtocolEnv',ReanchoredProtocol):
+            learning.SettledTests().run_case('post_resume_death')
+        self.assertEqual(len(terminal_durations),1)
+        self.assertGreater(terminal_durations[0],4.5)
+        self.assertLess(terminal_durations[0],5.5)
+
+    def test_late_menu_replays_failure_and_requires_three_more_corroborations(self):
+        original=[('GAMEPLAY',0.)]*5+[('MENU',.99948),('MENU',.54292),('MENU',.56709)]
+        env,(accepted,evidence)=confirm(original+[('MENU',.60)]*3,candidate=(1.,1.,1.))
+        self.assertTrue(accepted)
+        self.assertEqual(env.captures,11)
+        self.assertEqual(evidence['max_checks'],12)
+        self.assertTrue(all(r['corroborated'] for r in evidence['checks'][-4:]))
+        self.assertGreater(env._ppo_post_resume_menu_candidate[0],1.)
+        self.assertEqual(env.keys,[])
+
+    def test_late_menu_weak_continuation_stops_at_twelve(self):
+        original=[('GAMEPLAY',0.)]*5+[('MENU',.99948),('MENU',.54292),('MENU',.56709)]
+        env,(accepted,evidence)=confirm(original+[('MENU',.10)]*4)
+        self.assertFalse(accepted)
+        self.assertEqual(env.captures,12)
+        self.assertEqual(env.keys,[])
+
+    def test_late_extension_conflict_stops_without_input(self):
+        original=[('GAMEPLAY',0.)]*5+[('MENU',.99948),('MENU',.54292),('MENU',.56709)]
+        for state in ('GAMEPLAY','UNCERTAIN','LOADING'):
+            with self.subTest(state=state):
+                env,(accepted,_)=confirm(original+[(state,0.)])
+                self.assertFalse(accepted)
+                self.assertEqual(env.captures,9)
+                self.assertEqual(env.keys,[])
+
+    def test_false_candidate_does_not_keep_early_menu_idle_anchor(self):
+        env,(accepted,_)=confirm([('GAMEPLAY',0.)]*8,candidate=(1.,1.,1.))
+        self.assertFalse(accepted)
+        self.assertIsNone(env._ppo_post_resume_menu_candidate)
+
     def test_exact_overnight_frame_requests_confirmation_without_gameplay_vote(self):
         env,obs,reason,log=overnight_refresh()
         self.assertIsNone(obs)

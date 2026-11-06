@@ -159,6 +159,77 @@ class FakeSource:
 
 
 class PumpTests(unittest.IsolatedAsyncioTestCase):
+    async def test_threaded_preprocessing_leaves_browser_loop_responsive(self):
+        import threading
+        entered=threading.Event();release=threading.Event();threads=[]
+        def prepare(image,stamp,generation):
+            threads.append(threading.get_ident());entered.set()
+            if not release.wait(1):raise RuntimeError('Browser loop could not release callback')
+            return image.copy(),image.copy()
+        source=FakeSource()
+        pump=CapturePump(source,prepare,120,lambda:1,threaded_preprocess=True)
+        request=asyncio.create_task(pump.capture())
+        try:
+            for _ in range(100):
+                if entered.is_set():break
+                await asyncio.sleep(.001)
+            self.assertTrue(entered.is_set())
+            self.assertIsNone(pump.latest) # Never publish an unprocessed image.
+            release.set()
+            frame=await asyncio.wait_for(request,1)
+            self.assertNotEqual(threads[0],threading.get_ident())
+            self.assertTrue(np.array_equal(frame,pump.delivered_prepared[2][0]))
+            self.assertEqual(int(frame[0,0,0]),pump.last_timing['electron_serial'])
+            self.assertEqual(source.max_active,1)
+        finally:
+            release.set();await pump.close()
+        self.assertTrue(all(not thread.is_alive() for thread in pump.preprocess_pool._threads))
+
+    async def test_threaded_callback_error_fails_closed(self):
+        def prepare(*args):raise ValueError('bad crop')
+        pump=CapturePump(FakeSource(),prepare,60,lambda:1,threaded_preprocess=True)
+        try:
+            with self.assertRaisesRegex(ValueError,'bad crop'):await pump.capture()
+            self.assertIsNone(pump.delivered_prepared)
+        finally:await pump.close()
+
+    async def test_reset_rejects_history_from_inflight_preprocessing(self):
+        import threading
+        history=ContextHistory(4,.5)
+        history.observation(np.zeros((3,2,2),np.uint8),time.perf_counter())
+        entered=threading.Event();release=threading.Event()
+        def prepare(image,stamp,generation):
+            entered.set()
+            if not release.wait(1):raise RuntimeError('callback not released')
+            history.add(image[:,:,:3].transpose(2,0,1),stamp,generation)
+        pump=CapturePump(FakeSource(),prepare,60,history.token,threaded_preprocess=True)
+        request=asyncio.create_task(pump.capture())
+        try:
+            for _ in range(100):
+                if entered.is_set():break
+                await asyncio.sleep(.001)
+            self.assertTrue(entered.is_set())
+            history.clear()
+            release.set()
+            await asyncio.wait_for(request,1)
+            self.assertEqual(len(history.items),0)
+        finally:
+            release.set();await pump.close()
+
+    async def test_prepared_crop_stays_with_delivered_frame(self):
+        source=FakeSource()
+        def prepare(image,stamp,generation):return image.copy(),image.copy()
+        pump=CapturePump(source,prepare,120,lambda:1)
+        try:
+            frame=await pump.capture()
+            prepared=pump.delivered_prepared
+            self.assertEqual(prepared[1],int(frame[0,0,0]))
+            self.assertTrue(np.array_equal(prepared[2][0],frame))
+            await asyncio.sleep(.025)
+            self.assertIs(pump.delivered_prepared,prepared)
+            self.assertGreater(pump.source.serial,prepared[1])
+        finally:await pump.close()
+
     async def test_serial_and_timing_belong_to_delivered_pixels(self):
         source=FakeSource()
         pump=CapturePump(source,lambda *args:None,120,lambda:1)

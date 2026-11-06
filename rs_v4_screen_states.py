@@ -175,6 +175,8 @@ def cmd_label(a):
     print('Only label frames you are sure about. Transition frames can be OTHER.')
     keys = {ord('m'):'MENU', ord('l'):'LOADING', ord('g'):'GAMEPLAY', ord('o'):'OTHER'}
     i = 0
+    if getattr(a,'resume',False):
+        i=next((n for n,file in enumerate(frames) if file.name not in labels),len(frames))
     last_label = None
     while i < len(frames):
         f = frames[i]
@@ -231,6 +233,7 @@ def cmd_label(a):
         copied[label] += 1
     print(f'[LABEL] Copied {dict(copied)} from session {session}. Decisions: {decision_file}')
     print('[NOTE] Need at least TWO separate recordings with all main states before training.')
+    return i>=len(frames)
 
 
 def load_dataset(root):
@@ -397,6 +400,7 @@ def parser():
     r.add_argument('--monitor',type=int,default=1)
     l=sub.add_parser('label'); common(l)
     l.add_argument('--session',type=Path,required=True)
+    l.add_argument('--resume',action='store_true',help='Start at the first unlabelled frame')
     ing=sub.add_parser('ingest'); common(ing)
     ing.add_argument('--source',type=Path,required=True)
     ing.add_argument('--class-name',choices=CLASSES,required=True)

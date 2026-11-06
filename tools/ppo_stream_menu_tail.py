@@ -2,39 +2,42 @@
 from rs_v612_gameplay_guard import sequence_decision
 
 
+def _menu_suffix(readings):
+    """Evidence after the most recent conflicting state, capped at six frames."""
+    tail=[]
+    for reading in reversed(readings[-6:]):
+        if reading.state!='MENU' or not reading.ml_menu or reading.visual_gameplay:
+            break
+        tail.append(reading)
+    return list(reversed(tail))
+
+
 def pending_menu_tail(readings):
-    tail=readings[-5:]
-    if (len(readings)<6 or len(tail)!=5 or
-            not all(r.ml_menu and not r.visual_gameplay for r in tail)):
+    # A transition can start partway through the original capture budget.
+    # Count only the uninterrupted MENU suffix, never evidence across gameplay.
+    # This admits observation only: a fresh capture must still satisfy the
+    # unchanged terminal rules. One final animation dip is permitted.
+    tail=_menu_suffix(readings)
+    if len(readings)<6 or len(tail)<4:
         return False
     strong=sum(r.menu_evidence for r in tail)
     corroborated=sum(r.ml_template_corroborated for r in tail)
-    # Keep the existing route. Episode 0112 also had five confident MENU
-    # readings and two strong template hits, but two animation dips left
-    # only three moderate corroborations. Let that candidate request fresh
-    # evidence only when BOTH final frames have template support again.
-    # This predicate never confirms death: confirm_menu_tail still requires
-    # a new capture and the unchanged sequence_decision terminal rules.
-    return ((strong>=1 and corroborated>=4) or
-            (strong>=2 and corroborated>=3 and
-             all(r.ml_template_corroborated for r in tail[-2:])) or
-            # One further independent moderate vote can complete the existing
-            # four-consecutive rule after a menu animation dip. Repeated
-            # moderate template evidence is required even without a strong hit.
-            (corroborated>=4 and
-             all(r.ml_template_corroborated for r in tail[-3:])))
+    return (any(r.ml_template_corroborated for r in tail[-2:]) and
+            ((strong>=1 and corroborated>=3) or corroborated>=4))
 
 
 async def confirm_menu_tail(readings,sample,wait):
     frame=None
     if not pending_menu_tail(readings):
         return frame,'ABORT'
+    evidence=_menu_suffix(readings)
     for _ in range(6):
         await wait(.045)
         frame,reading=await sample()
         readings.append(reading)
-        if not reading.ml_menu or reading.visual_gameplay:
+        if reading.state!='MENU' or not reading.ml_menu or reading.visual_gameplay:
             return frame,'ABORT'
-        if sequence_decision(readings[-6:],max_frames=6)=='TERMINAL':
+        evidence.append(reading)
+        if sequence_decision(evidence[-6:],max_frames=6)=='TERMINAL':
             return frame,'TERMINAL'
     return frame,'ABORT'

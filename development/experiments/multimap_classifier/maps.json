@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "maps": {
+    "halloween": {
+      "root": "rankedsurfers-downloaded",
+      "release": "ae44e7782a4c8bbe5b10",
+      "legacy_id": "original",
+      "status": "classifier_short_live_validated"
+    },
+    "tokyo": {
+      "root": "rankedsurfers-maps/current_20261102",
+      "release": "c4df9560f722c362f2c4",
+      "status": "classifier_short_live_validated"
+    }
+  },
+  "active_classifier": "ai_data/multimap_screen_states/candidates/multimap_20261106_221921_183521/candidate.pt",
+  "continuation_checkpoint": "reports/command_history_resume_20261104_093033/train/latest.zip",
+  "dataset_root": "ai_data/multimap_screen_states",
+  "candidate_root": "ai_data/multimap_screen_states/candidates",
+  "promotion": "Shared selection for current multimap training, evaluation and recording. Prior checkpoints and classifiers are preserved.",
+  "active_classifier_sha256": "b58f8d5771fab31a8a55b67c387c7425397d8a24ab93e79fe6fdb94fd2306fd7"
+}

@@ -159,11 +159,18 @@ class SettledPPO(PPO):
                 if not passive:
                     actions = sampled.cpu().numpy()
             if profiler is not None:profiler.policy_ready(profile_row)
+            env_step_started=time.perf_counter() if profiler is not None else None
             new_obs,rewards,dones,infos = (
                 self._passive_step(env,'resync') if passive else env.step(actions))
+            if profiler is not None:
+                profiler.record(dict(kind='env_step_total',start=env_step_started,end=time.perf_counter(),
+                                     transition=int(self.num_timesteps)+1))
             info = infos[0]
             dispatched = info.get('learning_dispatched_key')
             dispatch_at = info.get('learning_dispatch_at')
+            latency_spike=(profiler.command_diagnostic(profile_row,info.get('reaction_latency'),
+                dispatch_at,episode_start=bool(self._last_episode_starts[0]))
+                if profiler is not None else None)
             parts = [dict(duration=info['reward_duration_s'],
                 died=bool(dones[0] and not info.get('TimeLimit.truncated',False)),
                 reward=float(rewards[0]), pieces={k:info['reward_'+k] for k in ('survival','milestones','death')})]
@@ -203,7 +210,12 @@ class SettledPPO(PPO):
                 dones=dones,infos=infos))
             # The existing callback logs statistics but corrected wall-time
             # stops happen only AFTER a full rollout has been optimized.
-            if not callback.on_step():
+            callback_started=time.perf_counter() if profiler is not None else None
+            continue_collection=callback.on_step()
+            if profiler is not None:
+                profiler.record(dict(kind='step_callback',start=callback_started,end=time.perf_counter(),
+                                     transition=int(self.num_timesteps)))
+            if not continue_collection:
                 self._settled_stats['discarded_partial_transitions'] += i
                 self._settled_stats['stop_reason'] = 'callback_stop_before_buffer_add'
                 return False
@@ -217,19 +229,28 @@ class SettledPPO(PPO):
                 rewards[0] += self.gamma**(dt/self.settled_reference_seconds)*terminal_value
             buffer.active_seconds[i] = dt
             buffer.actor_masks[i] = float(actor)
+            buffer_started=time.perf_counter() if profiler is not None else None
             buffer.add(old_obs,actions.reshape(-1,1),rewards,self._last_episode_starts,values,log_probs)
+            if profiler is not None:
+                profiler.record(dict(kind='rollout_buffer_add',start=buffer_started,end=time.perf_counter(),
+                                     transition=int(self.num_timesteps)))
+            record_started=time.perf_counter() if profiler is not None else None
             self._record(dict(event='collected',transition=int(self.num_timesteps),
                 rollout=self._settled_trained_this_run//self.n_steps+1,index=i,
                 episode=episode_before,kind='passive_resync' if passive else 'policy',
                 sampled_action=None if passive else int(actions[0]),
                 actor_mask=actor,command=dispatched,dispatch_at=dispatch_at,source_capture=prior_capture,
                 reaction_latency=info.get('reaction_latency'),
+                latency_spike=latency_spike,
                 next_capture=getattr(raw,'_learning_observation_capture',None),
                 active_seconds=dt,discount=self.gamma**(dt/self.settled_reference_seconds),
                 environment_reward=raw_reward,buffer_reward=float(rewards[0]),
                 done=bool(dones[0]),truncated=bool(infos[0].get('TimeLimit.truncated',False)),
                 terminal_evidence_source=infos[0].get('terminal_evidence_source'),
                 reward_substeps=parts))
+            if profiler is not None:
+                profiler.record(dict(kind='transition_ledger',start=record_started,end=time.perf_counter(),
+                                     transition=int(self.num_timesteps)))
             self._settled_stats['collected_transitions'] += 1
             self._settled_stats['actor_transitions' if actor else 'passive_transitions'] += 1
             self._last_obs,self._last_episode_starts = new_obs,dones

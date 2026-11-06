@@ -39,8 +39,8 @@ class CurrentRefreshTests(unittest.TestCase):
         self.assertIsNotNone(e._ppo_post_resume_menu_candidate)
         self.assertEqual(e.keys,[])
 
-    def test_suspicious_menu_ml_probability_refuses_retry(self):
-        e,obs,reason,log=run([f('UNCERTAIN',.547,.11,0.)])
+    def test_dominant_menu_ml_probability_refuses_retry(self):
+        e,obs,reason,log=run([f('UNCERTAIN',.39,.60,0.)])
         self.assertIsNone(obs)
         self.assertEqual(e.index,1)
 

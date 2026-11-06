@@ -66,18 +66,23 @@ class ContextHistory:
 
 class CapturePump:
     """One capture in flight, one latest frame; no unbounded frame FIFO."""
-    def __init__(self, source, callback, hz, token=lambda: None):
+    def __init__(self, source, callback, hz, token=lambda: None, *, threaded_preprocess=False):
         if not math.isfinite(hz) or not 1 <= hz <= 120:
             raise ValueError('Capture Hz must be 1..120')
         self.source = source
         self.token = token
         self.callback = callback
+        self.preprocess_pool = None
+        if threaded_preprocess:
+            from concurrent.futures import ThreadPoolExecutor
+            self.preprocess_pool = ThreadPoolExecutor(max_workers=1,thread_name_prefix='temporal-crop')
         self.period = 1/hz
         self.condition = asyncio.Condition()
         self.wanted = asyncio.Event()
         self.latest = None
         self.error = None
         self.last_timing = {}
+        self.delivered_prepared = None
         self.delivery_serial = -1
         self.count = 0
         self.delivery_stale_discards = 0
@@ -107,9 +112,18 @@ class CapturePump:
                 stamp = timing['request_started_at']
                 if not math.isfinite(stamp) or not began <= stamp <= time.perf_counter():
                     raise ValueError('Capture source timestamp outside request')
-                self.callback(image,stamp,generation)
+                prepare_started=time.perf_counter()
+                if self.preprocess_pool is not None and generation is not None:
+                    # Exactly one callback in flight. Keep the browser event
+                    # loop available for commands while OpenCV processes pixels.
+                    prepared = await asyncio.get_running_loop().run_in_executor(
+                        self.preprocess_pool,self.callback,image,stamp,generation)
+                else:
+                    prepared = self.callback(image,stamp,generation)
+                timing['temporal_prepare_ms']=(time.perf_counter()-prepare_started)*1000
+                if self.stopping:break
                 async with self.condition:
-                    self.latest = (stamp,image,timing)
+                    self.latest = (stamp,image,timing,prepared)
                     self.count += 1
                     self.condition.notify_all()
                 await asyncio.sleep(max(0,self.period-(time.perf_counter()-began)))
@@ -149,7 +163,7 @@ class CapturePump:
                 await asyncio.wait_for(self.condition.wait_for(
                     lambda: self.error is not None or (self.latest is not None and self.latest[0]>=requested)),5)
                 if self.error is not None: raise self.error
-                stamp,image,timing = self.latest
+                stamp,image,timing,prepared = self.latest
                 age=time.perf_counter()-stamp
                 if not math.isfinite(age) or age<0:raise ValueError('Invalid temporal delivery clock')
                 if timing['electron_serial'] <= self.delivery_serial:
@@ -161,6 +175,7 @@ class CapturePump:
                     self.delivery_stale_max_ms=max(self.delivery_stale_max_ms,age*1000)
                     continue
                 self.delivery_serial = timing['electron_serial']
+                self.delivered_prepared = (stamp,self.delivery_serial,prepared)
                 self.last_timing = copy.deepcopy(timing)
                 self.last_timing.update(temporal_consumer_requested_at=original_request,
                     temporal_delivery_retries=attempt,temporal_delivery_age_ms=age*1000)
@@ -174,7 +189,12 @@ class CapturePump:
         self.stopping = True
         self.wanted.set()
         self.task.cancel()
-        with contextlib.suppress(asyncio.CancelledError): await self.task
+        try:
+            with contextlib.suppress(asyncio.CancelledError): await self.task
+        finally:
+            if self.preprocess_pool is not None:
+                # Drain the bounded pixel callback before closing its source.
+                self.preprocess_pool.shutdown(wait=True,cancel_futures=True)
 
 
 def install(trainer, config):
@@ -223,11 +243,16 @@ def install(trainer, config):
                 import cv2
                 def record(image,stamp,generation):
                     if generation is not None:
-                        frame,_ = canvas_observation(image,self.target_wh,
+                        frame,native = canvas_observation(image,self.target_wh,
                             cv2.INTER_AREA if self.resize_method=='area' else cv2.INTER_LINEAR)
                         self.temporal.add(frame,stamp,generation)
+                        import os
+                        if os.environ.get('RS_REUSE_PUMP_CROP')=='1':
+                            return frame,native
                 source = self._headless_source
-                self.pump = CapturePump(source,record,config['capture_hz'],self.temporal.token)
+                import os
+                self.pump = CapturePump(source,record,config['capture_hz'],self.temporal.token,
+                    threaded_preprocess=os.environ.get('RS_PUMP_PREPROCESS_THREAD')=='1')
                 # Keep delivery timing separate from the producer's next capture.
                 self._headless_source = self.pump
 
