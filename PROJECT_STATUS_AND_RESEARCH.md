@@ -1,6 +1,33 @@
 # Ranked Surfers AI — Project Status, Development History, and Research Roadmap
 
-## Current handoff: 6 November 2026
+## Current handoff: 7 November 2026
+
+Use the root README for the current ten-hour continuation command. The latest
+selected checkpoint is `reports/multimap_stability_20261107_035054_502059/stability/train/latest.zip`
+(5,424,128 steps, RGB 384x384, four frames, aux 789). Specify it explicitly: its
+completed 15-minute run was diagnostic-only and is excluded from automatic selection.
+It follows the repaired BC actor and 30-minute PPO continuation; it is not a proven
+best policy. Training remains four headless workers, two Halloween/two Tokyo,
+dashboard off, stateful guard, no detector, no ongoing BC. The resume wrapper starts
+both map servers, requires a smoke pass, supports three bounded safety restarts,
+and shows per-map graphs after cleanup.
+
+Measured defaults now include redundant-stack removal, bounded pinned transfers,
+precise decision-cap waits, plain-Adam CPU step-counter restoration and corrected
+post-resume capture spacing. Architecture, classifier thresholds, four-frame resume
+verification and learning settings are unchanged. Five-worker scaling, channels-last,
+fused Adam, alternate capture pacing, GPU rollout caching and deferred metrics are
+not enabled. Native GPU capture restructuring remains deferred.
+
+The 15-minute run passed all four learning audits and cleanup, with 40.96 optimized
+transitions/s and ordinary dispatch latency 33.44 ms median / 37.71 ms p95. The later
+resume fix reduced median verification from roughly 293 to 195 ms in matched short
+checks. Rare capture stalls still occur; neither timings nor short checks prove
+overnight reliability or learning improvement. See
+[latency evidence](development/experiments/latency_tail_20261107/README.md) and
+[publication checks](PUBLICATION_CHECKS_20261107.md).
+
+## Previous handoff: 6 November 2026
 
 The sections below this handoff are historical. Use [README.md](README.md) for
 current commands and settings; the old branch/commit references and 557-aux,

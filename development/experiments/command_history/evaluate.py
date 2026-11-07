@@ -4,6 +4,9 @@ import os
 
 if __name__=='__main__':
     trainer=install()
+    if os.environ.get('RS_RATE_WAIT'):
+        from development.experiments.latency_tail_20261107.pacing import install as install_pacing
+        install_pacing(trainer,os.environ['RS_RATE_WAIT'])
     if os.environ.get('RS_DEFER_STARTUP_PREVIEWS')=='1':
         from development.experiments.multimap_classifier.deferred_previews import install as install_previews
         install_previews(trainer)

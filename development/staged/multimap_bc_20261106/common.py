@@ -63,7 +63,7 @@ def require_idle(*,allow_classifier_training=False):
             break
     active=[]
     names={'train_ppo_parallel.py','stability_case.py','run_training.py','evaluate.py',
-           'evaluate_model.py','latency_probe.py','stability.py','record.py','train.py'}
+           'evaluate_model.py','latency_probe.py','stability.py','record.py','train.py','train_balanced.py','actor_patch.py','repair_actor.py','verify_repair.py'}
     for p in psutil.process_iter(['pid','name','cmdline']):
         if p.pid in own or 'python' not in (p.info['name'] or '').lower():continue
         args=p.info['cmdline'] or []

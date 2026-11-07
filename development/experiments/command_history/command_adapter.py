@@ -153,11 +153,17 @@ def install():
         return value
     trainer.shape_description = shape
     trainer._command_history_ready = True
+    from development.experiments.latency_tail_20261107.runtime import install as install_fast_path
+    install_fast_path(trainer)
     return trainer
 
 
 def sources():
     result = base.sources()
+    for file in [*(ROOT/'development/experiments/latency_tail_20261107').glob('*.py'),
+                 ROOT/'development/staged/pipeline_optimizations_20261106/observation.py',
+                 ROOT/'development/staged/pipeline_optimizations_20261106/transfers.py']:
+        result[file.relative_to(ROOT).as_posix()]=hashlib.sha256(file.read_bytes()).hexdigest()
     for file in HERE.glob('*.py'):
         result[file.relative_to(ROOT).as_posix()] = hashlib.sha256(file.read_bytes()).hexdigest()
     if os.environ.get('RS_REUSE_PUMP_CROP')=='1':
@@ -170,7 +176,8 @@ def sources():
 
 
 def configuration():
-    return dict(base.configuration(), command_history=dict(SCHEMA))
+    from development.experiments.latency_tail_20261107.runtime import settings
+    return dict(base.configuration(), command_history=dict(SCHEMA),pipeline_runtime=settings())
 
 
 def contract():

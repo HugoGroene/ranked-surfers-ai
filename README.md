@@ -1,6 +1,6 @@
 # Ranked Surfers AI: multimap PPO and behavioral cloning
 
-Updated 6 November 2026. Development branch: **headless-parallel**.
+Updated 7 November 2026. Development branch: **headless-parallel**.
 
 Train a visual policy for the Subway Surfers No Coin challenge using local Unity
 WebGL Practice copies. Current work supports **Halloween and Tokyo**, four
@@ -56,15 +56,17 @@ new machine. Development targets the local Practice copies.
 ## Continue PPO training
 
 Use a compatible four-frame, 789-aux checkpoint with retained-pause history semantics.
-The explicit source below was the successful 30-minute diagnostic and the BC source.
-It remains local and is not a claim that it is the best evaluated policy.
+The explicit source below is the latest completed 15-minute continuation of the
+30-minute post-BC run (5,424,128 cumulative transitions). It remains local and is
+not a claim that it is the best evaluated policy. Because this run was marked
+diagnostic-only, specify it explicitly rather than relying on automatic selection.
 
 ```powershell
 cd "$HOME\Documents\ranked-surfers-ai-claude\ranked-surfers-ai-new"
 $py = "$HOME\Documents\ranked-surfers-ai\.venv\Scripts\python.exe"
-$checkpoint = "reports\multimap_stability_20261106_171018_244012\stability\train\latest.zip"
+$checkpoint = "reports\multimap_stability_20261107_035054_502059\stability\train\latest.zip"
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\development\experiments\multimap_classifier\resume.ps1 -Checkpoint $checkpoint -Minutes 120 -MaxRestarts 3
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\development\experiments\multimap_classifier\resume.ps1 -Checkpoint $checkpoint -Hours 10 -MaxRestarts 3
 ```
 
 This starts its own local map servers (ports 8000 and 8010), runs a two-minute
@@ -72,6 +74,8 @@ smoke check, then the requested training window. Smoke failure stops everything.
 During training, only recognized capture/guard failures can trigger bounded
 recovery from a verified checkpoint. Integrity failures, unknown errors and Ctrl+C
 stop recovery. Each invocation writes a new report/checkpoint; the source is preserved.
+Three restarts means at most three additional attempts after the initial attempt,
+not three separate ten-hour runs. Repeated early failures can stop recovery sooner.
 The budget includes training-attempt startup and recovery; smoke/setup and final
 optimizer-boundary cleanup add time. Graphs and chronological quarter means are
 reported per map. Close plot windows before starting another session.
@@ -104,20 +108,19 @@ separate validation runs (8,214 examples). Selected runs were at least 12 second
 with the last three seconds removed. All five action classes are present, but
 NONE dominates; matching validation labels alone does not prove better gameplay.
 
-```powershell
-$bc = ".\development\staged\multimap_bc_20261106"
-$dataset = "ai_data\multimap_bc_v1\exports\20261106_223203_345469"
-& $py -B -s -u "$bc\train.py" --dataset $dataset --checkpoint $checkpoint --epochs 20 --minutes 60
-```
+BC is offline GPU training, not four running games. The original full-encoder BC
+and balanced retries remain available for research, but are not the source of the
+current continuation. The selected repair uses a fresh actor with fixed feature
+normalization, leaving the encoder and critic unchanged during BC. It resets PPO
+optimizer moments and saves a separate checkpoint. See the workflow's actor-repair
+section for the exact training and verification commands.
 
-BC is offline GPU training, batch size 16, not four running games. It updates the
-shared encoder and actor, freezes critic-head weights, balances map sampling and
-uses correctly mirrored actions/history. Changed shared features can still change
-critic predictions. It selects by held-out map/class-balanced loss and saves a
-separate `bc_best.zip`; the source remains a fallback. PPO optimizer moments are
-reset. Dataset checksumming and baseline validation happen before epoch output;
-there may be several quiet minutes before the first printed epoch. Validation and
-saving add time beyond the optimization budget.
+The selected local candidate was
+`reports/bc_actor_repair_20261107_014610_719776/bc_best.zip`; the current checkpoint
+continues it through 30 and 15 minutes of ordinary PPO. PPO trains normally again,
+including the encoder and critic. Visual inspection was encouraging, but this does
+not establish an improvement over the older PPO policy. The last diagnostic's
+training means were 3.54 seconds on Halloween and 3.72 seconds on Tokyo.
 
 Evaluate BC and source checkpoints on both maps using matched settings before
 continuing PPO. Subsequent PPO has **no ongoing BC loss or demonstration replay**.
@@ -147,6 +150,26 @@ tails were higher. This measures command dispatch, not Unity response, and does 
 establish overnight reliability or policy improvement.
 
 ## Validation and development
+
+Normal training now skips the redundant legacy frame-stack allocation, reuses
+bounded pinned transfer buffers, uses precise decision-cap waits, restores plain
+Adam step counters to CPU after checkpoint loading, and spaces post-resume captures
+without an extra sleep after every capture. Four verification frames are still
+required. Evaluation shares the observation, pacing and resume changes.
+
+The completed 15-minute run passed all four learning audits and cleanup checks:
+40.96 optimized transitions/s, ordinary request-to-command median 33.44 ms and
+p95 37.71 ms. A subsequent short four-worker test reduced median post-resume
+verification from about 293 to 195 ms while preserving the checks. These are
+different timing windows; command dispatch does not measure Unity's visible response.
+Rare capture stalls remain: four workers are preferred to the five-worker probe,
+which gained about 9% throughput but had a 40.46 ms p95 and a 256 ms outlier.
+
+GPU rollout caching, deferred optimizer metrics, channels-last layouts, fused Adam
+and the alternative capture-pump timer remain experimental and disabled. Native
+GPU crop/resize and asynchronous readback have not been implemented. See
+[measured changes, limits and rollback](development/experiments/latency_tail_20261107/README.md)
+and [publication checks](PUBLICATION_CHECKS_20261107.md).
 
 See [publication checks and known historical test failures](PUBLICATION_CHECKS_20261106.md).
 The full legacy test discovery is not green; the same failing cases reproduce on

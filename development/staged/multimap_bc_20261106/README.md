@@ -1,12 +1,19 @@
 # Multimap demonstrations â†’ separate BC phase â†’ ordinary PPO
 
+Current selection (7 November): use the fresh normalized actor repair documented
+below, not the original full-encoder trainer, to reproduce the selected BC candidate.
+The current PPO checkpoint has already continued that candidate for 30 + 15 minutes:
+`reports/multimap_stability_20261107_035054_502059/stability/train/latest.zip`.
+Encoder/critic freezing applies only to the repair phase; subsequent PPO trains
+normally without a BC loss. Comparative gameplay benefit remains unproven.
+
 This is isolated development code. It does not change the running trainer, classifier,
 guard, checkpoints, or older recorder. The recorder has completed live sessions on both maps. The current dataset export
 and its integrity audit are complete; BC gameplay benefit remains unproven.
 
 The video creator trains a supervised image/action CNN, rather than mixing BC into
 PPO: [source](https://github.com/nikp06/subwAI/blob/main/ai.py). Our older demo patch
-froze the feature extractor. This BC phase instead updates the shared visual/auxiliary
+froze the feature extractor. The original `train.py` phase updates the shared visual/auxiliary
 extractor and actor on a checkpoint copy. Critic-head weights stay fixed, but their
 predictions change as shared features change. Evaluate before continuing PPO.
 
@@ -221,6 +228,190 @@ detects changed recordings/reviews/exports. `dataset.json` is written only after
 successful completion; incomplete exports cannot be trained.
 
 ## BC, evaluation, then PPO
+
+### Balanced retry (7 November)
+
+Use `train_balanced.py` for the next candidate. The first `train.py` run selected
+an almost constant policy: all validation argmax predictions were NONE. Its
+checkpoint must not be used as the retry source. The pre-BC PPO checkpoint and
+the existing export are retained; no new recordings or export copies are needed.
+
+The read-only retry audit checked all 109,969 exported examples against source
+key events and frame indices: zero mismatches/future frames, 3,483 movement labels,
+median action-after-capture delay 17.4 ms (p95 36.4 ms). This does not measure when
+Unity accepts inputs or establish optimal human action timing.
+
+```powershell
+$dataset = "ai_data\multimap_bc_v1\exports\20261106_223203_345469"
+$checkpoint = "reports\multimap_stability_20261106_171018_244012\stability\train\latest.zip"
+& $py -B -s -u "$bc\train_balanced.py" --dataset $dataset --checkpoint $checkpoint --minutes 10 --updates 1200 --validate-every 200
+```
+
+- Each 16-sample batch has eight NONE and two examples of each movement before
+  optional mirroring, balanced across maps. No extra inverse-frequency weighting.
+- Encoder learning rate 0.000001; actor learning rate 0.00001. Both are trained;
+  critic-head weights remain fixed, but shared-feature changes affect values.
+- Full original validation sessions remain untouched and keep natural class ratios.
+- Validation every 200 updates; progress approximately every ten seconds. The
+  10-minute budget includes updates and periodic validation, starts AFTER export
+  checksum verification and baseline validation, and may overrun for a final check.
+- A candidate needs improved map/class-balanced loss plus nonconstant predictions,
+  at least 10% NONE recall and 5% mean movement recall on EACH map. These are minimum
+  offline rejection rules, not proof of gameplay quality. Only eligible candidates
+  produce `bc_best.zip`; otherwise the report says NO_ACCEPTABLE_CANDIDATE.
+- At most two frame mappings per split, with a 2 GiB aggregate mapped-frame cap.
+  Training mappings are dropped before validation and validation mappings afterward.
+  Small aux/label arrays remain mapped. OS file caching and Torch allocations mean
+  this is not a cap on total system RAM or GPU memory.
+- All dataset checksums and label/frame causality are checked before training.
+  The source checkpoint is never overwritten. Candidates use a new report folder.
+
+Eight new offline tests cover sampling, memory-map eviction/lifetimes, validation,
+collapse rejection, encoder updates, fixed critic heads and PPO-compatible saves.
+Run `python -m unittest discover -s development/staged/multimap_bc_20261106 -p test_retry.py`.
+Real gameplay comparison is still required before promoting any candidate.
+
+All 35 BC tests passed after this change. A 30.3-second real-checkpoint CUDA smoke
+performed 20 balanced updates, verified files for 138 selected runs, preserved
+critic weights and the source checkpoint, and saved no candidate. Peak sampled
+process RSS was 1.91 GiB with two frame mappings; peak Torch CUDA allocation was
+0.34 GiB. The 20 selected validation observations retained varying action
+probabilities. This is a wiring/resource check, not evidence of improved learning
+or a long-run memory guarantee. Evidence: `reports/bc_retry_checks_20261107/`.
+
+### Actor-only diagnostic and conservative trial (7 November)
+
+`actor_patch.py` preserves the visual encoder, auxiliary encoder and critic. It
+trains only `mlp_extractor.policy_net` and `action_net`. Frozen features are cached
+once in memory (not another large image export). The trial uses a separate BC
+optimizer, a KL penalty against the source on natural-frequency training examples,
+and per-map held-out mean/p95 KL budgets of 0.02/0.1. These limits apply to sampled
+demonstration states, not every possible game state. Nothing is promoted automatically.
+
+Balanced sampling is importance-corrected to each map's actual class proportions,
+with an explicit 3x movement weight (maximum 4x), rather than silently changing the
+objective to 50% movement. No mirroring is used in this diagnostic trial. Saving
+requires at least 5% macro-loss improvement per map, minimum recall for EVERY action,
+and limited recall regression against the source. A rejected trial saves no candidate.
+Only actor optimizer moments are cleared when saving; the frozen parameter state is
+preserved. Subsequent PPO uses normal trainability and no BC objective.
+
+**Current source did NOT pass the small memorization prerequisite. Do not launch
+another long BC trial against it yet.** On 20 stratified training examples, 5,000
+unconstrained actor-only updates reached 40% accuracy. All inspected first-layer
+Tanh activations had absolute value above 0.99 before training; mean absolute
+preactivation was 289.3. A separate freshly initialized actor on standardized frozen
+features memorized the same 20 examples at 100% accuracy. That is a learnability
+control, not a proposed checkpoint, held-out result, or proof that the labels are
+optimal. No model was saved from either diagnostic. The source, encoders and critic
+were verified unchanged. Investigate actor saturation before longer BC training.
+
+Evidence: `reports/bc_actor_20261107_013345_668612/actor_report.json` and
+`input_review.jpg` (exact four policy frames per example, oldest to newest).
+The expanded timestamp audit in `reports/bc_actor_20261107_013215_536258/label_audit.json`
+checks 109,969 examples with no recorded-event/frame mismatch. Median exported
+decision interval is 47.95ms (~20.9Hz), with typically 21 command-history entries.
+Thus the configured 30Hz is a target, not the achieved cadence. The audit does not
+measure Unity acceptance or prove equivalence to PPO's live decision intervals.
+
+Reproduce the diagnostic (no game launched, no checkpoint saved):
+
+```powershell
+& $py -B -s -u "$bc\actor_patch.py" --dataset $dataset --checkpoint $checkpoint --diagnostic --seconds 100
+```
+
+The `--seconds` budget is checked between verification/feature/optimizer operations;
+it is not an OS-enforced kill deadline. The observed diagnostic took 13.6 seconds.
+A larger trial requires `--diagnostic-report PATH_TO_PASSING_actor_report.json` from
+the exact same checkpoint and dataset; the current source's report will be rejected.
+Trial `--minutes` includes checksum verification and feature preparation.
+
+Four new tests check KL direction and budgets, per-action candidate rejection,
+importance correction, cached-vs-live policy equivalence, unchanged encoder/critic
+outputs, and a PPO-compatible save/reload. Existing recordings and exports are reused.
+
+### Fresh actor repair (isolated, 7 November)
+
+`repair_actor.py` tests a new actor on the unchanged PPO visual/auxiliary encoders.
+Unlike `actor_patch.py`, this intentionally replaces the old action head; it does
+not constrain the candidate to reproduce the degraded source policy. The critic's
+parameters and outputs are preserved during BC. Its value estimates are not
+automatically correct for the new policy and must adapt if PPO resumes later.
+
+`normalized_actor.py` supplies a serializable SB3 policy class. Fixed per-feature
+means and standard deviations are computed ONLY from selected training examples,
+then applied ONLY to the actor input. The critic uses the original features.
+The statistics are saved as model buffers, remain fixed during PPO, and are not
+re-estimated from validation/evaluation frames. This adds 192 subtract/divide
+operations per decision, not extra images. Retain this module with any candidate:
+ordinary evaluation and worker `PPO.load` import it by its full package name.
+
+The source checkpoint, observation contract and recording/export files stay
+unchanged. Candidates have a fresh PPO optimizer state and normal trainability.
+Tests cover identical critic predictions, exact save/load actor predictions and
+normalization buffers, and a subsequent synthetic PPO update.
+
+The short trial uses up to 1,200 examples per movement/map and 3,000 NONE examples
+per map, while validating all 8,214 separate-session samples. Files used are
+checksum-verified. The 50%-NONE sampling proposal is importance-corrected to each
+map's original action frequencies with a 3x movement multiplier. This is an explicit
+tradeoff, not a claim of an optimal weighting. `--movement-weight 0` reproduces the
+earlier uncorrected balanced-loss experiment.
+
+Saving requires, on EACH map: improvement over the source and a constant-prior
+classifier in macro loss, at least 50% NONE recall, 10% recall for every movement,
+and 5% exact-label movement precision. These are screening heuristics, not proof
+of gameplay quality. A trial can legitimately produce no checkpoint. Validation
+is used for model selection; live evaluations remain necessary before continuation.
+
+```powershell
+& $py -B -s -u "$bc\repair_actor.py" --dataset $dataset --checkpoint $checkpoint --seconds 105 --per-group 1200 --none-per-map 3000 --movement-weight 3 --updates 3000
+```
+
+The time budget covers verification, feature extraction and fitting, checked
+between operations. Output is a new `reports/bc_actor_repair_*` folder. Only
+`CANDIDATE_SAVED` produces a checkpoint intended for evaluation. Never substitute
+an earlier failed BC checkpoint as its source.
+
+Verified trial: `reports/bc_actor_repair_20261107_014610_719776/bc_best.zip`, selected
+at update 4,000 using 9,239 training examples and all 8,214 validation examples.
+This run hit a NumPy-boolean JSON serialization bug AFTER checkpoint save/reload.
+The bug is fixed and regression-tested. The partial `repair_report.json` is retained
+as failure evidence; **`verified_candidate.json` is the complete independent check
+of the saved checkpoint**. `verify_repair.py --run REPORT_FOLDER` recomputes it from
+the checkpoint and validation data (writes a new file, does not overwrite an
+existing verification report). Existing evaluator `--check-only` also passed.
+
+Saved-candidate validation recalls in NONE/LEFT/RIGHT/JUMP/ROLL order:
+
+- Halloween: 95.3 / 21.2 / 19.4 / 47.2 / 33.3 percent.
+- Tokyo: 94.6 / 19.2 / 41.9 / 33.3 / 28.6 percent.
+
+Macro cross-entropies: 1.848 / 1.992. Exact-label movement precision: 17.9 / 14.0
+percent. These metrics do not establish survival improvement; none of the game's
+evaluation rounds have been run automatically for this candidate. Validation was
+used repeatedly for model selection, so it is not an independent final test.
+
+The independent check verified exact frozen encoder/critic weights, identical
+critic predictions, cached/live policy parity, normal PPO trainability and empty
+optimizer moments. On the inspected first 2,048 validation examples, Tanh saturation
+fell from 99.93% to 21.58%. A separate same-ten-example comparison found 96.875%
+saturation in the older `command_history_resume_20261104_093033` checkpoint and
+100% in the newer PPO source. This does not establish the cause of regression or
+prove that the delayed pipeline caused saturation.
+
+Evaluate visibly on both maps before using it for PPO:
+
+```powershell
+$episodes = 15
+$candidate = "reports\bc_actor_repair_20261107_014610_719776\bc_best.zip"
+& $py -B -s -u .\development\experiments\multimap_classifier\evaluate_both.py --checkpoint $candidate --episodes $episodes
+```
+
+The evaluator starts its own map servers and has no dashboard. The source PPO
+checkpoint remains `reports/multimap_stability_20261106_171018_244012/stability/train/latest.zip`.
+
+### Original trainer (retained for reproducibility)
 
 Set `$dataset` to the **folder containing** the printed `dataset.json`:
 

@@ -59,6 +59,8 @@ def main():
     p.add_argument('--minutes',type=float,default=20)
     p.add_argument('--workers',type=int,choices=(2,4),default=2)
     p.add_argument('--dashboard',action='store_true')
+    p.add_argument('--diagnostic-only',action='store_true',
+                   help='Exclude this run from automatic checkpoint selection in resume.ps1')
     p.add_argument('--stateful-guard',action='store_true')
     p.add_argument('--max-restarts',type=int,default=3,
                    help='Automatic recovery attempts for known guard stops after smoke passes; 0 disables')
@@ -101,7 +103,7 @@ def main():
     (output/'plan.json').write_text(json.dumps(dict(checkpoint=str(checkpoint),classifier=str(model),
         workers={str(i):('halloween' if a.map_mode=='halloween' or i%2==0 else 'tokyo') for i in range(a.workers)},minutes=a.minutes,map_mode=a.map_mode,
         dashboard=a.dashboard,stateful_guard=a.stateful_guard,visible_worker=a.visible_worker,
-        diagnostic_only=a.visible_worker is not None,reuse_pump_crop=a.reuse_pump_crop,
+        diagnostic_only=a.diagnostic_only or a.visible_worker is not None,reuse_pump_crop=a.reuse_pump_crop,
         threaded_preprocess=a.threaded_preprocess,defer_startup_previews=a.defer_startup_previews,
         exclude_first_episode=a.exclude_first_episode,
         max_restarts=a.max_restarts,renderer_fps=60,automatic_promotion=False),indent=2))
@@ -155,7 +157,7 @@ def main():
                 metadata=dest/'train/hybrid_benchmark.json'
                 if metadata.exists():
                     value=json.loads(metadata.read_text());value.update(dashboard=a.dashboard,
-                        visible_worker=a.visible_worker,diagnostic_only=a.visible_worker is not None,
+                        visible_worker=a.visible_worker,diagnostic_only=a.diagnostic_only or a.visible_worker is not None,
                         reuse_pump_crop=a.reuse_pump_crop,threaded_preprocess=a.threaded_preprocess,
                         defer_startup_previews=a.defer_startup_previews,
                         exclude_first_episode=a.exclude_first_episode,

@@ -96,3 +96,20 @@ on both maps, pause/history restoration on every worker, passing learning audits
 and no forced cleanup or leaked workers. Ordinary command latency was 34.0 ms
 median / 38.3 ms p95. This is a short integration check, not an overnight reliability
 claim. The original PPO checkpoint and prior classifier were preserved.
+
+## Current continuation (7 November 2026)
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\development\experiments\multimap_classifier\resume.ps1 -Checkpoint "reports\multimap_stability_20261107_035054_502059\stability\train\latest.zip" -Hours 10 -MaxRestarts 3
+```
+
+This selects the completed 15-minute post-BC continuation explicitly. Diagnostic
+runs (`--diagnostic-only`) and visible-worker probes are excluded from automatic
+latest-checkpoint selection. The wrapper uses four headless workers, dashboard off,
+its own map servers and graphs at the end. Three restarts are additional attempts
+within the shared ten-hour budget; smoke/setup/finalization add wall time. Safety
+recovery does not bypass freshness checks or retry arbitrary errors.
+
+The current measured runtime and remaining rare capture stalls are documented in
+[the latency review](../latency_tail_20261107/README.md). No classifier was changed
+as part of these latency optimizations.
